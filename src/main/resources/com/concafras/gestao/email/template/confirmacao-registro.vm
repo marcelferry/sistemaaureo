@@ -1,0 +1,23 @@
+<html>
+<body>
+<h3>Olá ${usuario.pessoa.nome}, que a paz de nosso senhor Jesus Cristo esteja com você.</h3>
+
+<div>Conforme sua solicitação estamos enviando sua senha de acesso: </div>
+<br/>	
+<div>
+   Seu email para acesso é:  <a href="mailto:${usuario.username}">${usuario.username}</a>.
+</div>
+<div>
+   Sua senha temporária de acesso é:  ${senha}
+</div>
+<br/>	
+<div>
+   Acesse o site através do endereço:  <a href="http://sistemademetas.concafras.com">http://sistemademetas.concafras.com</a>.
+</div>
+<div>
+   No seu primeiro acesso, será solicitado o cadastro de uma nova senha à sua escolha.
+</div>
+
+</body>
+
+</html>

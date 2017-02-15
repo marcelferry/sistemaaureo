@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    
+    <global-method-security secured-annotations="enabled" />
+	
+   	<http pattern="/css/**" 			security="none"/>
+    <http pattern="/js/**" 				security="none"/>
+    <http pattern="/fonts/**" 			security="none"/>
+    <http pattern="/font-awesome/**" 	security="none"/>
+    <http pattern="/api/v1/usuarios/authenticate" security="none" />
+    
+    <!-- Rest authentication entry point configuration -->
+	<http pattern="/api/**" 
+	    realm="Protected API" 
+	    use-expressions="true" 
+	    auto-config="false" 
+	    create-session="stateless"
+		entry-point-ref="restAuthenticationEntryPoint"
+		authentication-manager-ref="authenticationManager">
+		
+	    <intercept-url pattern="/v1/usuarios/authenticate*" access="permitAll" />
+		
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
+	    
+		<custom-filter ref="restAuthenticationTokenProcessingFilter" position="FORM_LOGIN_FILTER" />
+
+        <logout />
+	</http>
+    
+    <http auto-config="true" use-expressions="true"> 
+        <headers>
+			<cache-control />
+		</headers>
+        
+		<access-denied-handler error-page="/gestao/home/403" />
+		
+		<intercept-url pattern="/gestao/home/login*" access="permitAll"/>
+	    <intercept-url pattern="/gestao/userprofile/recuperarsenha*" access="permitAll"/>
+	    <intercept-url pattern="/gestao/graphicData/**" access="permitAll"/>
+		<intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/gestao/**" access="isAuthenticated()" />
+        
+        <form-login
+                login-processing-url="/authentication"
+                login-page="/gestao/home/login"
+                authentication-success-handler-ref="myAuthenticationSuccessHandler"
+                authentication-failure-handler-ref="myCustomAuthenticationFailureHandler"
+                authentication-failure-url="/gestao//home/login?error=true"
+                always-use-default-target="false" />
+                
+        <!-- default-target-url="/home/roles/false" -->
+        <remember-me user-service-ref="userDetailsService"/>
+        
+        <logout logout-url="/gestao/logout"
+                logout-success-url="/"
+                delete-cookies="JSESSIONID" />
+        
+    </http>
+    
+    <beans:bean id="myAuthenticationSuccessHandler"
+        class="com.concafras.gestao.security.RoleBasedAuthenticationSuccessHandler">
+        <beans:property name="useReferer" value="true" />
+	    <beans:property name="defaultRedirectUrl" value="/gestao/home/roles/false"/>
+	</beans:bean>
+	
+    <beans:bean id="myCustomAuthenticationFailureHandler"
+        class="com.concafras.gestao.security.CustomAuthenticationFailureHandler">
+	    <beans:constructor-arg type="java.lang.String" value="/gestao/home/login?error=true"/>
+    </beans:bean>
+    
+    <authentication-manager alias="authenticationManager">
+		<!--authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select username,password, enabled from users where username=?"
+				authorities-by-username-query="select username, role from user_roles where username =?  " />
+		</authentication-provider-->
+		<authentication-provider user-service-ref="userDetailsService" >
+		    <password-encoder hash="sha-256"/>
+		</authentication-provider>
+		<!-- authentication-provider ref="customAuthenticationProvider">
+		     <password-encoder hash="sha-256"/>
+		</authentication-provider-->
+		<authentication-provider user-service-ref="customUserDetailsService">
+		    <password-encoder hash="sha-256"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+	<beans:bean name="customUserDetailsService" 
+	    class="com.concafras.gestao.security.UserDetailServiceImpl" />
+	<!-- beans:bean name="customAuthenticationProvider" 
+	    class="com.concafras.gestao.security.CustomAuthenticationProvider" /-->
+    
+
+    <user-service id="userDetailsService">
+        <user name="admin" 			password="a29b8f527fd387d7a7fac6cc223917bf2844c47c2ca9c746cbf5f88f731619bf" authorities="ROLE_ADMIN,ROLE_AUREO"/>
+        <!-- user name="facilitador" 	password="6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" authorities="ROLE_METAS_FACILITADOR"/-->
+        <user name="secretaria" 	password="a29b8f527fd387d7a7fac6cc223917bf2844c47c2ca9c746cbf5f88f731619bf" authorities="ROLE_METAS_SECRETARIA"/>
+        <!-- user name="presidente" 	password="6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" authorities="ROLE_METAS_PRESIDENTE"/-->
+        <!--user name="coordenador" 	password="6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" authorities="ROLE_METAS_COORDENADOR"/-->
+        <!--user name="grupofraterno" 	password="6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" authorities="ROLE_METAS_GRUPOFRATERNO"/-->
+        <!--user name="dirigente" 		password="6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" authorities="ROLE_METAS_DIRIGENTE"/-->
+        <user name="conselho" 		password="a29b8f527fd387d7a7fac6cc223917bf2844c47c2ca9c746cbf5f88f731619bf" authorities="ROLE_METAS_CONSELHO"/>
+    </user-service>
+</beans:beans>

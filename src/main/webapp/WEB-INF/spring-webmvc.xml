@@ -1,0 +1,161 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.concafras.gestao.web" />
+    <context:component-scan base-package="com.concafras.gestao.rest" />
+    
+    <mvc:annotation-driven/>
+    
+    <mvc:default-servlet-handler/>
+   
+    <mvc:resources location="/img/" mapping="/img/**" /> 
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/fonts/" mapping="/fonts/**"/>
+    <mvc:resources location="/font-awesome/" mapping="/font-awesome/**"/>
+	
+	 <!-- Login Interceptor -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/fonts/**"/>
+            <mvc:exclude-mapping path="/font-awesome/**"/>
+            <mvc:exclude-mapping path="/img/**"/>
+            <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/gestao/userprofile/recuperarsenha*"/>
+            <mvc:exclude-mapping path="/gestao/userprofile/trocarsenha*"/>
+            <mvc:exclude-mapping path="/gestao/userprofile/password/change*"/>
+            <mvc:exclude-mapping path="/gestao/home/roles*"/>
+            <mvc:exclude-mapping path="/gestao/home/roles/**"/>
+            <mvc:exclude-mapping path="/gestao/home/login*"/>
+            
+            <bean class="com.concafras.gestao.security.SecurityInterceptor"/>
+        </mvc:interceptor>
+        <!-- workaround to fix IE8 problem -->
+        <bean id="webContentInterceptor"
+              class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+        </bean>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		    <property name="paramName" value="lang"/>
+		</bean>
+    </mvc:interceptors>
+	
+	<bean id="httpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+				<value>*/*</value>
+			</list>
+		</property>
+		<property name="writeAcceptCharset" value="false"/>
+	</bean>
+	
+	<bean id="defaultMessageConverters" class="java.util.ArrayList">
+		<constructor-arg>
+	        <list>
+				<ref bean="httpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+	        </list>
+	    </constructor-arg>   
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" >
+		<property name="ignoreDefaultModelOnRedirect" value="true"/>
+		 <property name="messageConverters" ref="defaultMessageConverters"/>
+		 <property name="cacheSeconds" value="0"/>  
+	</bean>
+	
+	<!-- bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="classpath:/reports/jasper-views.xml" />
+		<property name="order" value="0"  />  
+	</bean--> 
+	
+	<!-- View Handler -->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="favorPathExtension" value="true"/>
+        <property name="mediaTypes">
+            <map>
+                <entry key="xml" value="text/xml"/>
+                <entry key="json" value="application/json"/>
+                <entry key="html" value="text/html"/>
+                <entry key="less" value="text/html"/>
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    				<property name="requestContextAttribute" value="requestContext"/>
+					<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+				</bean>
+		        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			        <property name="prefix" value="/" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+	
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
+
+    
+    <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <bean id="planoMetasFormValidator" class="com.concafras.gestao.form.validator.PlanoMetasFormValidator" />
+    <bean id="cicloFormValidator" class="com.concafras.gestao.form.validator.CicloFormValidator" />
+    <bean id="facilitadorFormValidator" class="com.concafras.gestao.form.validator.FacilitadorFormValidator" />
+    <bean id="entidadeFormValidator" class="com.concafras.gestao.form.validator.EntidadeFormValidator" />
+    <bean id="passwordFormValidator" class="com.concafras.gestao.form.validator.PasswordValidator" />
+    
+    <!-- bind your messages.properties -->
+	<bean class="org.springframework.context.support.ResourceBundleMessageSource"
+		id="messageSource">
+		<property name="basename" value="messages" />
+	</bean>
+   
+	<bean id="compositeExceptionResolver" class="org.springframework.web.servlet.handler.HandlerExceptionResolverComposite">
+		<property name="exceptionResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+					<property name="messageConverters">
+						<ref bean="defaultMessageConverters"/>
+					</property>
+  				</bean>
+  				<bean class="org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver"/>
+  				<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+					<property name="exceptionMappings">
+						<props>
+							<prop key="java.lang.ClassNotFoundException">classNotFoundException</prop>
+							<prop key="java.lang.CloneNotSupportedException">cloneNotSupportedException</prop>
+						</props>
+					</property>
+  				</bean>
+  			</list>
+		</property>
+		<property name="order" value="0"/>
+	</bean>
+
+</beans>

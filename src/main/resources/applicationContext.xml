@@ -1,0 +1,155 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <import resource="classpath:/applicationContext-security.xml"/>
+    
+    <context:annotation-config />
+    
+    <context:component-scan base-package="com.concafras.gestao.service" />
+    <context:component-scan base-package="com.concafras.gestao.form" />
+    <context:component-scan base-package="com.concafras.gestao.web" />
+    <context:component-scan base-package="com.concafras.gestao.rest" />
+    <context:component-scan base-package="com.concafras.gestao.security" />
+    
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+	
+    <!-- bind your messages.properties -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+    
+    <tx:annotation-driven />
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="sistemadegestaodemetas@gmail.com" />
+		<property name="password" value="autadesouza" />
+
+		<property name="javaMailProperties">
+			<props>
+				<!-- prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop-->
+				<prop key="mail.smtp.host">smtp.gmail.com</prop> <!--//SMTP Host -->
+				 <prop key="mail.smtp.socketFactory.port">465</prop> <!--//SSL Port -->
+				 <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop> <!--//SSL Factory Class -->
+				 <prop key="mail.smtp.auth">true</prop> <!--//Enabling SMTP Authentication -->
+				 <prop key="mail.smtp.port">465</prop> <!--//SMTP Port -->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+      <property name="velocityProperties">
+         <value>
+          resource.loader=class
+          class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+         </value>
+      </property>
+   </bean>
+   
+    <beans profile="default">
+        <!--jdbc:embedded-database id="dataSource"/-->
+        <!-- Adiciona esse bloco  -->
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost/aureo"/>
+            <property name="username" value="marcelo"/>
+            <property name="password" value=""/>
+            
+            
+        </bean>
+        <!-- fim do adiciona  -->
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+            </property>
+            <property name="jpaProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.hbm2ddl.auto">none</prop>
+                    <prop key="default_batch_fetch_size">4</prop>
+                </props>
+            </property>
+        </bean>
+    </beans>
+    
+    <beans profile="hom">
+        <!--jdbc:embedded-database id="dataSource"/-->
+        <!-- Adiciona esse bloco  -->
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value=""/>
+            
+            
+        </bean>
+        <!-- fim do adiciona  -->
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+            </property>
+            <property name="jpaProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.hbm2ddl.auto">none</prop>
+                    <prop key="default_batch_fetch_size">4</prop>
+                </props>
+            </property>
+        </bean>
+    </beans>
+
+    <beans profile="prod">
+        <bean class="java.net.URI" id="dbUrl">
+            <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
+        </bean>
+
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+            <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+            <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+        </bean>
+        
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+            </property>
+            <property name="jpaProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                    <prop key="hibernate.show_sql">false</prop>
+                    <!-- change this to 'verify' before running as a production app -->
+                    <prop key="hibernate.hbm2ddl.auto">verify</prop>
+                </props>
+            </property>
+        </bean>
+    </beans>
+
+</beans>

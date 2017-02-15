@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioMetasEntidadeInstituto" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     ENTIDADE.id AS ENTIDADE_id,
+     ENTIDADE.razaoSocial AS ENTIDADE_razaoSocial,
+     ENTIDADE.tipoEntidade AS ENTIDADE_tipoEntidade,
+     ENTIDADE.idEndereco AS ENTIDADE_idEndereco,
+     ENTIDADE.idPresidente AS ENTIDADE_idPresidente,
+     ENTIDADE.cnpj AS ENTIDADE_cnpj,
+     Presidente.id AS Presidente_id,
+     Presidente.ativo AS Presidente_ativo,
+     Presidente.idTrabalhador AS Presidente_idTrabalhador,
+     Pessoa.id AS Pessoa_id,
+     Pessoa.nomeCompleto AS Pessoa_nomeCompleto,
+     Endereco.id AS Endereco_id,
+     Endereco.bairro AS Endereco_bairro,
+     Endereco.cep AS Endereco_cep,
+     Endereco.complemento AS Endereco_complemento,
+     Endereco.logradouro AS Endereco_logradouro,
+     Endereco.numero AS Endereco_numero,
+     Endereco.idCidade AS Endereco_idEstado,
+     Cidade.id AS Cidade_id,
+     Cidade.nome AS Cidade_nome,
+     Cidade.idEstado AS Cidade_idEstado,
+     Estado.sigla AS Estado_sigla
+FROM
+     ENTIDADES ENTIDADE LEFT OUTER JOIN PRESIDENTES_ENTIDADE Presidente  ON Presidente.id = ENTIDADE.idPresidente
+     LEFT OUTER JOIN Enderecos Endereco ON ENTIDADE.idEndereco = Endereco.id
+     LEFT OUTER JOIN Cidades Cidade ON Endereco.idCidade = Cidade.id
+     LEFT OUTER JOIN Estados Estado ON Cidade.idEstado = Estado.id
+     LEFT OUTER JOIN Pessoas Pessoa ON Presidente.idTrabalhador = Pessoa.id
+ORDER by ENTIDADE_razaoSocial asc]]>
+	</queryString>
+	<field name="ENTIDADE_id" class="java.lang.Integer"/>
+	<field name="ENTIDADE_razaoSocial" class="java.lang.String"/>
+	<field name="ENTIDADE_tipoEntidade" class="java.lang.Integer"/>
+	<field name="ENTIDADE_idEndereco" class="java.lang.Integer"/>
+	<field name="ENTIDADE_idPresidente" class="java.lang.Integer"/>
+	<field name="ENTIDADE_cnpj" class="java.lang.String"/>
+	<field name="Presidente_id" class="java.lang.Integer"/>
+	<field name="Presidente_ativo" class="java.lang.Boolean"/>
+	<field name="Presidente_idTrabalhador" class="java.lang.Integer"/>
+	<field name="Pessoa_id" class="java.lang.Integer"/>
+	<field name="Pessoa_nomeCompleto" class="java.lang.String"/>
+	<field name="Endereco_id" class="java.lang.Integer"/>
+	<field name="Endereco_bairro" class="java.lang.String"/>
+	<field name="Endereco_cep" class="java.lang.String"/>
+	<field name="Endereco_complemento" class="java.lang.String"/>
+	<field name="Endereco_logradouro" class="java.lang.String"/>
+	<field name="Endereco_numero" class="java.lang.String"/>
+	<field name="Endereco_idEstado" class="java.lang.Integer"/>
+	<field name="Cidade_id" class="java.lang.Integer"/>
+	<field name="Cidade_nome" class="java.lang.String"/>
+	<field name="Cidade_idEstado" class="java.lang.Integer"/>
+	<field name="Estado_sigla" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="134">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="154" backcolor="#006699"/>
+				<staticText>
+					<reportElement x="167" y="20" width="408" height="43" forecolor="#FFFFFF"/>
+					<textElement lineSpacing="Single">
+						<font size="28" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SISTEMA GESTÃO DE METAS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="167" y="88" width="408" height="31" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" lineSpacing="Single">
+						<font size="24" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Entidades presentes no Rodízio]]></text>
+				</staticText>
+				<ellipse>
+					<reportElement x="18" y="18" width="129" height="129"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</ellipse>
+				<image>
+					<reportElement x="20" y="20" width="147" height="125"/>
+					<imageExpression class="java.lang.String"><![CDATA["/Users/marcelo/git/heroku/aureo/src/main/resources/reports/photo.png"]]></imageExpression>
+				</image>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="113">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="26" width="134" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[( $F{ENTIDADE_tipoEntidade} == 0 ? "Casa Espírita":
+ ( $F{ENTIDADE_tipoEntidade} == 1 ? "Posto de Assistência":
+ ( $F{ENTIDADE_tipoEntidade} == 2 ? "Obra Social":
+ ( $F{ENTIDADE_tipoEntidade} == 3 ? "Creche":
+ ( $F{ENTIDADE_tipoEntidade} == 4 ? "Escola":
+ ( $F{ENTIDADE_tipoEntidade} == 5 ? "Lar":
+ ( $F{ENTIDADE_tipoEntidade} == 6 ? "Asilo":
+ ( $F{ENTIDADE_tipoEntidade} == 7 ? "Albergue":
+ ( $F{ENTIDADE_tipoEntidade} == 8 ? "Livraria":"")))))))))]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="339" y="26" width="183" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ENTIDADE_cnpj}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="46" width="327" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Endereco_logradouro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="488" y="46" width="61" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Endereco_numero}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="66" width="144" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Endereco_bairro}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="339" y="66" width="210" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Cidade_nome} + "/" + $F{Estado_sigla}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="86" width="449" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Pessoa_nomeCompleto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="6" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Entidade: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="26" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="279" y="26" width="50" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CNPJ:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="46" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Rua: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="427" y="46" width="61" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Núm.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="66" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Bairro: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="268" y="66" width="61" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="0" y="86" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Presidente: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="6" width="449" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Helvetica" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ENTIDADE_razaoSocial}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-20" y="112" width="595" height="1" forecolor="#666666"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right" lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy">
+				<reportElement x="0" y="4" width="100" height="13"/>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
