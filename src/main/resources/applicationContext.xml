@@ -93,11 +93,9 @@
                 </props>
             </property>
         </bean>
-    </beans>
+    <!-- /beans -->
     
-    <beans profile="hom">
-        <!--jdbc:embedded-database id="dataSource"/-->
-        <!-- Adiciona esse bloco  -->
+    <!-- beans profile="hom">
         <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
             
             <property name="driverClassName" value="org.postgresql.Driver"/>
@@ -107,7 +105,6 @@
             
             
         </bean>
-        <!-- fim do adiciona  -->
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
             <property name="dataSource" ref="dataSource"/>
             <property name="jpaVendorAdapter">
@@ -122,9 +119,9 @@
                 </props>
             </property>
         </bean>
-    </beans>
+    </beans -->
 
-    <beans profile="prod">
+    <!--  beans profile="prod" -->
         <bean class="java.net.URI" id="dbUrl">
             <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL']/systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
         </bean>
