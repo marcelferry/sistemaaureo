@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
-import com.concafras.gestao.model.Anotacao;
+import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
@@ -270,15 +270,18 @@ public class MetaForm {
     this.setTipoMeta(metaEntidade.getTipoMeta());
     this.setAtividade(metaEntidade.getMeta());
     
+    MetasHelper helper = new MetasHelper();
+    HistoricoMetaEntidade atual = helper.getUltimoHistorico(metaEntidade.getHistorico());
+    
     // Estado Atual 
-    this.responsavel = new PessoaOptionForm(metaEntidade.getResponsavel());
-    this.tipoSituacao = metaEntidade.getTipoSituacao();
-    this.dataSituacao = metaEntidade.getDataSituacao();
-    this.situacao = metaEntidade.getSituacao();
-    this.previsao = metaEntidade.getPrevisao();
-    this.previsto = metaEntidade.getPrevisto();
-    this.conclusao = metaEntidade.getConclusao();
-    this.realizado = metaEntidade.getRealizado();
+    this.responsavel = new PessoaOptionForm(atual.getResponsavel());
+    this.tipoSituacao = atual.getTipoSituacao();
+    this.dataSituacao = atual.getDataSituacao();
+    this.situacao = atual.getSituacao();
+    this.previsao = atual.getPrevisao();
+    this.previsto = atual.getPrevisto();
+    this.conclusao = atual.getConclusao();
+    this.realizado = atual.getRealizado();
     
     this.setObservacoes(new ArrayList<AnotacaoVO>());
     if (metaEntidade.getAnotacoes() != null) {
