@@ -208,10 +208,12 @@ public class MetaController {
 
     form.setDescricaoCompleta(rota);
     
-    if(meta.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR || 
-        meta.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR || 
-        meta.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR_PARCIALMENTE ||
-        meta.getTipoSituacao() == TipoSituacaoMeta.CANCELAR) {
+    HistoricoMetaEntidade hmeAtual = new MetasHelper().getUltimoHistorico(historicoAtual);
+    
+    if(hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR || 
+        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR || 
+        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR_PARCIALMENTE ||
+        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CANCELAR) {
       editMode = false;
     }
 
