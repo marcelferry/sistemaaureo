@@ -123,7 +123,7 @@
 
     <!--  beans profile="prod" -->
         <bean class="java.net.URI" id="dbUrl">
-            <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL']/systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
+            <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL'] + '/' + systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
         </bean>
 
         <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
