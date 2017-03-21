@@ -129,7 +129,7 @@ ALTER TABLE entidade_contato ADD PRIMARY KEY(identidade, idcontato);
 ALTER TABLE entidade_instituto ADD PRIMARY KEY(identidade, idinstituto);
 ALTER TABLE entidade_presidente ADD PRIMARY KEY(identidade, idpresidente);
 ALTER TABLE entidade_telefone ADD PRIMARY KEY(identidade, idtelefone);
-ALTER TABLE entidade_trabalhador ADD PRIMARY KEY(identidade, idpessoa);
+-- ALTER TABLE entidade_trabalhador ADD PRIMARY KEY(identidade, idpessoa);
 ALTER TABLE metas_dependencias ADD PRIMARY KEY(idmeta, iddependencia);	
 ALTER TABLE pessoa_anotacao ADD PRIMARY KEY(idpessoa, idanotacao);
 ALTER TABLE pessoa_contato ADD PRIMARY KEY(idpessoa, idcontato);
