@@ -1,5 +1,0 @@
-#!/bin/sh
-echo "############"
-export JAVA_OPTS_EXT="-Dspring.profiles.active=prod"
-echo $JAVA_OPTS_EXT
-echo "############"

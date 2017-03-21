@@ -52,7 +52,7 @@
 							        </c:forEach>
 									</select>
                                 </div>
-                                
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                 <!-- Change this to a button or input when using this as a form -->
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Selecionar</button>
                             </fieldset>

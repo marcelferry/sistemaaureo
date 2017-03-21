@@ -30,6 +30,43 @@ $.validator.setDefaults({
     }
 });
 
+$(function () {
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
+	//$(document).ajaxStart(exibirModalAguarde).ajaxStop(concluirModalAguarde);
+	//$(document).ajaxStop(concluirModalAguarde);
+	
+	$(document).ajaxSend(function(e, xhr, options) {
+		xhr.setRequestHeader(header, token);
+	});
+	
+	$(document).ajaxError(
+        function(e,request) {
+            if (request.status == 403) {
+                window.location.reload();
+                //window.location.href = "/myapp/login";
+            }
+        }
+    );
+	        
+	
+	//setup ajax error handling
+    $.ajaxSetup({
+        error: function (x, status, error) {
+        	if (globalVars.unloaded)
+                return;
+            if (x.status == 403) {
+                alert("Sorry, your session has expired. Please login again to continue");
+                window.location.href ="/login.html";
+            }
+            else {
+                alert("An error occurred: " + status + "nError: " + error);
+            }
+        }
+    });
+});
+
 function limparOcultos(campo, oculto){
     if(campo.value == ''){
     	$(oculto).val('');

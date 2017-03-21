@@ -42,66 +42,52 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-    <properties>
-        <org.springframework.version>3.2.8.RELEASE</org.springframework.version>
-        <spring.security.version>3.2.5.RELEASE</spring.security.version>
+	<properties>
+        <org.springframework.version>4.1.6.RELEASE</org.springframework.version>
+        <spring.security.version>4.0.2.RELEASE</spring.security.version>
 		<org.aspectj-version>1.7.0</org.aspectj-version>
 		<org.slf4j-version>1.7.2</org.slf4j-version>
-        <jackson.version>1.4.2</jackson.version>
+		<jackson.version>2.2.0</jackson.version>
+		<tiles-version>2.2.2</tiles-version>
         <hibernate.version>4.2.11.Final</hibernate.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+        <java.version>1.7</java.version>
+	</properties>
 
     <dependencies>
-        <!-- Hibernate -->
         <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+	        <groupId>org.hibernate.javax.persistence</groupId>
+	        <artifactId>hibernate-jpa-2.1-api</artifactId>
+	        <version>1.0.0.Final</version>
+	    </dependency>   
+	    <dependency>
+	        <groupId>org.hibernate</groupId>
+	        <artifactId>hibernate-validator</artifactId>
+	        <version>4.3.2.Final</version>
+	        <exclusions>
+	            <exclusion>
+	                <groupId>org.slf4j</groupId>
+	                <artifactId>slf4j-api</artifactId>
+	            </exclusion>
+	        </exclusions>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.hibernate</groupId>
+	        <artifactId>hibernate-entitymanager</artifactId>
+	        <version>4.3.6.Final</version>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.hibernate</groupId>
+	        <artifactId>hibernate-ehcache</artifactId>
+	        <version>4.3.6.Final</version>
+	    </dependency>
         
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        
-         <dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
-		</dependency>
-	
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
 		
-		<!-- connection pooling with c3p0 -->
-        <dependency>
-            <groupId>c3p0</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.1.2</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
-        </dependency>
-
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -143,11 +129,16 @@
         
         <!-- Jackson -->
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+				
 		<!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -247,7 +238,7 @@
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-core</artifactId>
-			<version>2.2.2</version>
+			<version>${tiles-version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 			<exclusions>
@@ -261,21 +252,21 @@
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-template</artifactId>
-			<version>2.2.2</version>
+			<version>${tiles-version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-jsp</artifactId>
-			<version>2.2.2</version>
+			<version>${tiles-version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-servlet</artifactId>
-			<version>2.2.2</version>
+			<version>${tiles-version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

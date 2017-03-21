@@ -22,7 +22,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,6 +47,7 @@ import com.concafras.gestao.service.AtividadeService;
 import com.concafras.gestao.service.BaseInstitutoService;
 import com.concafras.gestao.service.InstitutoService;
 import com.concafras.gestao.util.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/gestao/atividade")

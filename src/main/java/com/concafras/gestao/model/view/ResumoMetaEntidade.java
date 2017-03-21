@@ -3,7 +3,8 @@ package com.concafras.gestao.model.view;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 
 @JsonAutoDetect
 public class ResumoMetaEntidade {

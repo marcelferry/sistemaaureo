@@ -239,7 +239,8 @@ $(document).ready(function() {
 
  		$('#impPdf').append('<input type="hidden" id="content" name="content" value="" />');
  		$('#impPdf').append('<input type="hidden" id="filename" name="filename" value="" />');
- 	 	
+ 		$('#impPdf').append('<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />');
+ 		     
  		$('#content').val(conteudo);
  		$('#filename').val("${planoMetasForm.instituto.descricao}");
  		

@@ -150,7 +150,7 @@
 			<div id="institutochart" class="row"></div>
 
 			<jsp:useBean id="now" class="java.util.Date"/>
-            <c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }">
+            <!--  c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }"-->
 				<!-- Termino Graficos Institutos -->
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-default">
@@ -191,7 +191,7 @@
 					</div>
 					<!-- /.panel -->
 				</div>
-			</c:if>
+			<!-- /c:if-->
 		</c:if>
 	</div>
 </div>
@@ -362,7 +362,7 @@
 	    });
 
 
-        <c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }">
+        <!-- c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }" -->
         $.ajax({
             type: "GET",
             contentType: 'application/json; charset=utf-8',
@@ -443,7 +443,7 @@
             
         });
 
-        </c:if><!-- Periodo de Metas -->
+        <!--/c:if--><!-- Periodo de Metas -->
         </c:if><!-- Presidente -->
 
         <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">

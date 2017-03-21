@@ -34,6 +34,7 @@
 										<td>
 											<a href="javascript:void(0);" onclick="$(this).next('form').submit();">Fichas</a>
 			                                <form id="fichas${instituto.id}" method="post" action="/gestao/planodemetas/imprimePreFichaBranco" target="_blank" >
+											     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 											     <input type="hidden" name="fase" value="1"/>
 											     <input type="hidden" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
 												 <input type="hidden" name="instituto.id" value="${instituto.id}"/>

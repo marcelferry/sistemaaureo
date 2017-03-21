@@ -114,6 +114,7 @@
 </div>
 
 <form method="post" action="/gestao/planodemetas/imprimeFichaRodizio" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
      <input type="hidden" id="fase" name="fase" value="1"/>
      <input type="hidden" id="rodizio.id" name="rodizio.id"/>
 	 <input type="hidden" id="instituto.id" name="instituto.id"/>

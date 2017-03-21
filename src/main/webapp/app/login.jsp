@@ -43,12 +43,12 @@
                         <form  action="/authentication" method="POST" role="form" class="validado">
                             <fieldset>
                                 <div class="form-group">
-                                    <input id="j_username" name="j_username" class="form-control" placeholder="E-mail" autofocus
+                                    <input id="username" name="username" class="form-control" placeholder="E-mail" autofocus
                                     data-msg-required="Usuário obrigatório."
                                     data-rule-required="true" >
                                 </div>
                                 <div class="form-group">
-                                    <input id="j_password" name="j_password" class="form-control" placeholder="Senha" type="password" value=""
+                                    <input id="password" name="password" class="form-control" placeholder="Senha" type="password" value=""
                                     data-msg-required="Senha obrigatória."
                                     data-rule-required="true" >
                                 </div>
@@ -58,6 +58,7 @@
                                     </label>
                                 </div-->
                                 <!-- Change this to a button or input when using this as a form -->
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Entrar</button>
                             </fieldset>
                             

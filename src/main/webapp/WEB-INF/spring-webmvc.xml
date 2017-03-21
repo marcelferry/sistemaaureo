@@ -69,7 +69,7 @@
 		<constructor-arg>
 	        <list>
 				<ref bean="httpMessageConverter"/>
-				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
                 <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
 	        </list>
 	    </constructor-arg>   

@@ -57,14 +57,6 @@ public class RestRememberMeServices extends AbstractRememberMeServices {
     private int seriesLength = DEFAULT_SERIES_LENGTH;
     private int tokenLength = DEFAULT_TOKEN_LENGTH;
 
-    /**
-     * @deprecated Use constructor injection
-     */
-    @Deprecated
-    public RestRememberMeServices() {
-        random = new SecureRandom();
-    }
-
     public RestRememberMeServices(String key, UserDetailsService userDetailsService,
                                                   PersistentTokenRepository tokenRepository) {
         super(key, userDetailsService);
