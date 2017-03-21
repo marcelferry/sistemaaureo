@@ -122,6 +122,8 @@ ALTER TABLE entidade_telefone DROP CONSTRAINT fkf2df082ddaa17618;
 ALTER TABLE entidade_trabalhador DROP CONSTRAINT fkf3abd82156ce34ed;
 ALTER TABLE entidade_trabalhador DROP CONSTRAINT fkf3abd821880c0092;
 
+ALTER TABLE metas_dependencias RENAME id TO idemeta;
+
 ALTER TABLE contrato_metas_anotacoes ADD PRIMARY KEY(idplanometas, idanotacao);
 ALTER TABLE entidade_anotacao ADD PRIMARY KEY(identidade, idanotacao);
 ALTER TABLE entidade_ciclo ADD PRIMARY KEY(idciclo, identidade);
