@@ -12,6 +12,12 @@
 		                	<form:input path="descricao"  cssClass="form-control"/>
 		                </div>
 		            </div>
+		         <div class="form-group">
+		                <form:label class="col-sm-2 control-label" path="nome">Abreviação</form:label>
+		                <div class="col-sm-10">
+		                	<form:input path="nome" cssClass="form-control"/>
+		                </div>
+		            </div>
                 <div class="form-group">
 		                <form:label class="col-sm-2 control-label" path="objetivo">Objetivo</form:label>
 		                <div class="col-sm-10">

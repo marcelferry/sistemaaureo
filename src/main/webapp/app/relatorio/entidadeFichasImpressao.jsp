@@ -77,7 +77,7 @@
                 { "mData": "descricao" },
                 {  "mData": null,
 	  	              "mRender": function(data, type, full){
-	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ficha</button>';   // replace this with button 
+	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ver Ficha</button><button type="button" class="btn btn-primary btn-xs xls" data-instituto="' + full.id + '">XLS</button>';   // replace this with button 
 	                      }
                		},
             ]
@@ -89,6 +89,17 @@
 			$('#entidade\\.id').val(entidade);
 			//$('#facilitador\\.id').val();
 			$('#evento').val('PRERODIZIO');
+			$('#planoMetasForm').attr("action", "/gestao/planodemetas/imprimeFichaRodizio");
+			$('#planoMetasForm').submit();
+		} );
+		
+		$('#tableInstituto tbody').on( 'click', '.xls', function() { 
+			$('#rodizio\\.id').val(ciclo);
+			$('#instituto\\.id').val( $(this).data('instituto') );
+			$('#entidade\\.id').val(entidade);
+			//$('#facilitador\\.id').val();
+			$('#evento').val('PRERODIZIO');
+			$('#planoMetasForm').attr("action","/gestao/planodemetas/imprimeFichaRodizio/XLS");
 			$('#planoMetasForm').submit();
 		} );
 	});

@@ -253,7 +253,7 @@
                         </sec:authorize>
                         <li><a href="/gestao/home/roles/false"><i class="fa fa-sign-out fa-fw"></i> Trocar Perfil</a>
                         <li><a href="/gestao/userprofile/trocarsenha"><i class="fa fa-lock fa-fw"></i> Trocar Senha</a>
-                        <li><a href="/gestao/logout"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                        <li><a href="#" onclick="formLogoutSubmit();"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->

@@ -28,6 +28,12 @@
 		                </div>
 		            </div>
 		            <div class="form-group">
+		                <form:label class="col-sm-2 control-label" path="nome">Abreviação</form:label>
+		                <div class="col-sm-10">
+		                	<form:input path="nome" cssClass="form-control"/>
+		                </div>
+		            </div>
+		            <div class="form-group">
 		                <form:label  class="col-sm-2 control-label" path="objetivo">Objetivo</form:label>
 		                <div class="col-sm-10">
 		                	<form:textarea path="objetivo" cssClass="form-control" />
@@ -57,7 +63,7 @@
 	                </div>
 	                <div class="form-group">
 					    <div class="col-sm-offset-2 col-sm-10">
-					      <input type="submit" value="Salvar Comiss�o" class="btn btn-primary"/>
+					      <input type="submit" value="Salvar Comiss�o" class="btn btn-primary"/>
 					    </div>
 					  </div>
 	                

@@ -113,6 +113,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
     	
     	c.multiselect(
     			root.get("id"), 
+    			root.get("nome"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
     			pessoa.get("nomeCompleto")
@@ -141,6 +142,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
     	
     	c.multiselect(
     			root.get("id"), 
+    			root.get("nome"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
     			pessoa.get("nomeCompleto")
@@ -172,6 +174,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
 		
 		c.multiselect(
 				root.get("id"), 
+				root.get("nome"), 
 				root.get("descricao"), 
 				pessoa.get("id"),
 				pessoa.get("nomeCompleto")
@@ -204,6 +207,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
 		
 		c.multiselect(
 				root.get("id"), 
+				root.get("nome"), 
 				root.get("descricao"), 
 				pessoa.get("id"),
 				pessoa.get("nomeCompleto")

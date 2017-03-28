@@ -49,6 +49,30 @@
 							
 						</div>
 					</div>
+					
+					<div class="form-group">
+		                <form:label   class="col-sm-2 control-label"  path="cicloAnterior.id">Ciclo Anterior</form:label>
+		                <div class="col-sm-3">
+							<form:select path="cicloAnterior.id" class="form-control">
+							    <option value=""></option>
+							    <form:options items="${rodizioList}" itemValue="id" itemLabel="ciclo"/>
+							</form:select>
+							
+						</div>
+					</div>
+					
+					<div class="form-group">
+		                <form:label   class="col-sm-2 control-label"  path="ativo">Ciclo Atual</form:label>
+		                <div class="col-sm-3">
+							<form:select path="ativo"  cssClass="form-control">
+								<form:option value="false">Não</form:option>
+								<form:option value="true">Sim</form:option>
+							</form:select>
+							
+						</div>
+					</div>
+					
+					
 		            
 	                <div class="form-group">
 					    <div class="col-sm-offset-2 col-sm-10">

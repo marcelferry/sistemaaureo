@@ -8,6 +8,7 @@ public class InstitutoOptionForm {
 	
 	private Integer id;
 	private String descricao;
+	private String nome;
 	private PessoaOptionForm dirigenteNacional;
 	private Integer idPlano;
 	private String status;
@@ -20,6 +21,7 @@ public class InstitutoOptionForm {
 	public InstitutoOptionForm(BaseInstituto instituto) {
 	  this.id = instituto.getId();
 	  this.descricao = instituto.getDescricao();
+	  this.nome = instituto.getNome();
 	  this.dirigenteNacional = new PessoaOptionForm( instituto.getDirigenteNacional());
   }
 
@@ -38,6 +40,14 @@ public class InstitutoOptionForm {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public String getNome() {
+    return nome;
+  }
+	
+	public void setNome(String nome) {
+    this.nome = nome;
+  }
 	
 	public PessoaOptionForm getDirigenteNacional() {
 		return dirigenteNacional;

@@ -2,19 +2,19 @@ package com.concafras.gestao.enums;
 
 public enum TipoSituacaoMeta {
 	/** Primeira participação do rodizio */
-	INICIAL,
+	INICIAL, //0
 	/** MetaEntidade ativa sem contratação feita no pre rodizio ou rodizio */
-	PRECONTRATAR,
+	PRECONTRATAR, //1
 	/** MetaEntidade contratada planejada ou não planejada no rodizio */
-	CONTRATAR,
+	CONTRATAR, //2
 	/** MetaEntidade replanejada pelo dirigente - posrodizio */
-	REPLANEJAR,
+	REPLANEJAR, //3
 	/** MetaEntidade concluida pelo dirigente - posrodizio */
-	CONCLUIR,
+	CONCLUIR, //4
 	/** MetaEntidade concluida parcialmente pelo dirigente - posrodizio */
-	CONCLUIR_PARCIALMENTE,
+	CONCLUIR_PARCIALMENTE, //5
 	/** MetaEntidade cancelada pelo dirigente - posrodizio */
-	CANCELAR,
+	CANCELAR, //6
 	/** Avaliação do resultado prerodizio e rodizio */
-	AVALIAR
+	AVALIAR //7
 }

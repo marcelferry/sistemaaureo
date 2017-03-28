@@ -36,6 +36,7 @@
 		                            <td>${terminoAjustes}</td>
 		                            <td>
 		                            	<form action="edit/${rodizio.id}" method="post">
+		                            		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			                            	<button type="button" onclick="this.form.action = 'edit/${rodizio.id}';submit();" class="btn btn-success btn-xs" >Editar</button>&nbsp
 			                            	<button type="button" onclick="this.form.action = 'delete/${rodizio.id}';submit();" class="btn btn-danger btn-xs" >Excluir</button>
 		                            	</form>

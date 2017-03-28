@@ -357,7 +357,7 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
           idInstituto = idAux;
           institutoAtual.setStatusValor(new ArrayList<StatusValor>());
         }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[3],  ((BigInteger)resultElement[4] ).intValue()));
         
         idAux = null;
       }

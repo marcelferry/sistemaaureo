@@ -157,12 +157,12 @@
 						<div class="panel-heading">
 							<h4 class="panel-title">
 								<a data-toggle="collapse" data-target="#collapseOne"
-									href="#collapseOne" class="collapsed"> <spring:message
+									href="#collapseOne" class=""> <spring:message
 										code="titulo.preenchimento.situacao.atual" />
 								</a>
 							</h4>
 						</div>
-						<div id="collapseOne" class="panel-collapse collapse">
+						<div id="collapseOne" class="panel-collapse">
 							<!-- /.panel-heading -->
 							<div class="panel-body">
 								<div id="presidentechart" class="row"></div>
@@ -176,13 +176,13 @@
 						<div class="panel-heading">
 							<h4 class="panel-title">
 								<a data-toggle="collapse" data-target="#collapseTwo"
-									href="#collapseTwo" class="collapsed"> <spring:message
+									href="#collapseTwo" class=""> <spring:message
 										code="titulo.preenchimento.situacao.desejada" />
 								</a>
 							</h4>
 						</div>
 						<!-- /.panel-heading -->
-						<div id="collapseTwo" class="panel-collapse collapse">
+						<div id="collapseTwo" class="panel-collapse">
 							<div class="panel-body">
 								<div id="presidentedesejadachart" class="row"></div>
 								<!-- /.panel-body -->
@@ -319,6 +319,12 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             url: '/gestao/graphicData/statusContratadoPorInstitutoEntidadeGraphicData/${CICLO_CONTROLE.id}',
+            beforeSend: function(){
+            	$("#institutochart").block({ message: 'Carregando...'});
+            },
+			complete: function(){
+            	$("#institutochart").unblock();            	
+            },
             error: function () {
                 alert("An error occurred.");
             },
@@ -345,7 +351,7 @@
                         	 cor = "#afd8f8";
                         	
                         }
-                        situacao = situacao + "( " + status.quantidade + " )";
+                        situacao = situacao + " ( " + status.quantidade + " )";
                         var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
                         return bItem;//JSON.stringify(bItem);
                     });
@@ -368,6 +374,12 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             url: '/gestao/graphicData/statusAtualInstitutoGraphicData',
+            beforeSend: function(){
+            	$("#presidentechart").block({ message: 'Carregando...'});
+            },
+			complete: function(){
+            	$("#presidentechart").unblock();            	
+            },
             error: function () {
                 alert("An error occurred.");
             },
@@ -390,6 +402,7 @@
                         	situacao = "<spring:message code="label.situacao.implantadaparcial"/>";
                         	cor =  "#edc240";
                         }
+                        situacao = situacao + " ( " + status.quantidade + " )";
                         var bItem = { label: situacao, data: status.quantidade, color: cor };
                         return bItem;//JSON.stringify(bItem);
                     });
@@ -409,6 +422,12 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             url: '/gestao/graphicData/statusPropostoInstitutoGraphicData',
+            beforeSend: function(){
+            	$("#presidentedesejadachart").block({ message: 'Carregando...'});
+            },
+			complete: function(){
+            	$("#presidentedesejadachart").unblock();            	
+            },
             error: function () {
                 alert("An error occurred.");
             },
@@ -417,20 +436,35 @@
             		var resultList = item.statusValor.map(function (status) {
                         var situacao = status.situacao;
                         var cor = '#fff';
+                        var colors = ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2b3e50', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
                         
                         if(situacao == 'NAOPLANEJADA'){
 	                        situacao = "<spring:message code="label.situacao.naoplanejada"/>";
-	                        cor = "#afd8f8";
+	                        cor = colors[0];
 	                    } else if(situacao == 'IMPLANTADA'){
 	                    	situacao = "<spring:message code="label.situacao.implantada"/>";
-	                    	cor = "#4da74d";
+	                    	cor = colors[1];;
 	                    } else if(situacao == 'NAOINFORMADA'){
 	                    	situacao = "<spring:message code="label.situacao.naoinformada"/>";
-	                    	cor = "#cb4b4b";
+	                    	cor = colors[2];;
 	                    } else if(situacao == 'PLANEJADA'){
 	                    	situacao = "<spring:message code="label.situacao.planejada"/>";
-	                    	cor =  "#edc240";
-	                    }
+	                    	cor = colors[3];;
+	                    } else if(situacao == 'CANCELADA'){
+	                    	situacao = "<spring:message code="label.situacao.planejadacancelada"/>";
+	                    	cor = colors[4];;
+	                    } else if(situacao == 'NAOIMPLANTADA'){
+	                    	situacao = "<spring:message code="label.situacao.naoimplantada"/>";
+	                    	cor = colors[5];;
+	                    } else if(situacao == 'REPLANEJADA'){
+	                    	situacao = "<spring:message code="label.situacao.replanejada"/>";
+	                    	cor = colors[6];;
+	                    } else if(situacao == 'IMPLPARCIAL'){
+                        	situacao = "<spring:message code="label.situacao.implantadaparcial"/>";
+                        	cor = colors[7];;
+                        }
+                        
+                        situacao = situacao + " ( " + status.quantidade + " )";
                         var bItem = { label: situacao, data: status.quantidade, color: cor };
                         return bItem;//JSON.stringify(bItem);
                     });
@@ -457,6 +491,12 @@
             <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
             url: '/gestao/graphicData/statusContratadoGeralGraphicData/${CICLO_CONTROLE.id}',
             </c:if>
+            beforeSend: function(){
+            	$("#flot-pie-chart-brasil").block({ message: 'Carregando...'});
+            },
+			complete: function(){
+            	$("#flot-pie-chart-brasil").unblock();            	
+            },
             error: function () {
                 alert("An error occurred.");
             },
@@ -465,25 +505,26 @@
             		var resultList = item.statusValor.map(function (status) {
                         var situacao = status.situacao;
                         var cor = '#fff';
-                        
+                        var colors = ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2b3e50', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
+
                         if(situacao == 'ATRASADO'){
                             situacao = "<spring:message code="label.situacao.atrasado"/>";
-                        	cor = "#cb4b4b";
+                            cor = colors[0];
                         } else if(situacao == 'FEITO'){
                         	situacao = "<spring:message code="label.situacao.implantada"/>";
-                        	cor = "#4da74d";
+                        	cor = colors[1];
                         } else if(situacao == 'NO PRAZO'){
                         	situacao = "<spring:message code="label.situacao.noprazo"/>";
-                        	cor =  "#edc240";
+                        	cor = colors[2];
                         } else if(situacao == 'INDEFINIDO'){
                         	situacao = "<spring:message code="label.situacao.datanaoinformada"/>";
-                        	cor = "#cb4bcc";
+                        	cor = colors[3];
                         } else if(situacao == 'A VENCER'){
                         	situacao = "<spring:message code="label.situacao.avencer"/>";
-                        	 cor = "#afd8f8";
+                        	cor = colors[4];
                         	
                         }
-                        situacao = situacao + "( " + status.quantidade + " )";
+                        situacao = situacao + " ( " + status.quantidade + " )";
                         var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
                         return bItem;//JSON.stringify(bItem);
                     });
@@ -541,7 +582,7 @@
                             	 cor = "#afd8f8";
                             	
                             }
-                            situacao = situacao + "( " + status.quantidade + " )";
+                            situacao = situacao + " ( " + status.quantidade + " )";
                             var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
                             return bItem;//JSON.stringify(bItem);
                         });

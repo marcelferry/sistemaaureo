@@ -54,6 +54,10 @@ $(function () {
 	//setup ajax error handling
     $.ajaxSetup({
         error: function (x, status, error) {
+        	if (x.readyState < 4){
+        		x.abort();
+        	}
+        		
         	if (globalVars.unloaded)
                 return;
             if (x.status == 403) {

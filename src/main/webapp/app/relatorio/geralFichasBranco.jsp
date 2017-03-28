@@ -47,6 +47,10 @@
 							</tbody>
 						</table>
 				</div>
+					<a class="btn btn-primary" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /></a>
+	            	<form method="post" action="/gestao/planodemetas/imprimeTodasFichaBrancoXLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+						<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
+					</form>
 			</div>
 		</div>
 	</c:if>

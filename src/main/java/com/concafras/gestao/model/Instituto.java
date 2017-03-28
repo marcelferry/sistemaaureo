@@ -18,8 +18,8 @@ public class Instituto extends BaseInstituto {
   public Instituto() {
 	}
 	
-	public Instituto(Integer id, String descricao, Integer idDirigenteNacional, String dirigenteNacional) {
-		super(id, descricao, idDirigenteNacional, dirigenteNacional);
+	public Instituto(Integer id, String nome, String descricao, Integer idDirigenteNacional, String dirigenteNacional) {
+		super(id, nome, descricao,idDirigenteNacional, dirigenteNacional);
 	}
 
 }

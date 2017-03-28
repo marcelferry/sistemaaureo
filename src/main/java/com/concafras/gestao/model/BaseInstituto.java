@@ -36,6 +36,11 @@ public class BaseInstituto extends ObjetoGerenciado {
   private Integer id;
 
   /**
+   * Nome
+   */
+  private String nome;
+
+  /**
    * Descricao
    */
   private String descricao;
@@ -59,10 +64,11 @@ public class BaseInstituto extends ObjetoGerenciado {
     // TODO Auto-generated constructor stub
   }
 
-  public BaseInstituto(Integer id, String descricao,
+  public BaseInstituto(Integer id, String nome, String descricao,
       Integer idDirigenteNacional, String dirigenteNacional) {
     super();
     this.id = id;
+    this.nome = nome;
     this.descricao = descricao;
     this.dirigenteNacional = new Pessoa(idDirigenteNacional, dirigenteNacional);
   }
@@ -79,6 +85,14 @@ public class BaseInstituto extends ObjetoGerenciado {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+  
+  public String getNome() {
+    return nome;
+  }
+  
+  public void setNome(String nome) {
+    this.nome = nome;
   }
 
   public String getDescricao() {

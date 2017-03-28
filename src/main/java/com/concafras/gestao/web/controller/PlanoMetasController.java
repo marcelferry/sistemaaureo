@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,8 +18,29 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.PrintSetup;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -1478,53 +1500,9 @@ public class PlanoMetasController {
    */
 	@RequestMapping("/imprimeFichaRodizio")
 	public ModelAndView showMetas(@ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm) {
-		
-	  Rodizio rodizio = restauraRodizio(planoMetasForm);
-    BaseInstituto instituto = restauraInstituto(planoMetasForm);
-    BaseEntidade entidade = restauraEntidade(planoMetasForm);
-    restauraFacilitador(planoMetasForm);
-    
-    	
-		List<MetaForm> metasForm = null;
-		
-		List<MetaInstituto> metasIntituto =  metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
-		
-		PlanoMetas planoMetasAtual =  planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
-		
-		List<MetaEntidade> listaMetas =  metaService.findByEntidadeIdAndInstitutoId(entidade.getId(), instituto.getId());
-		
-		if(planoMetasAtual != null){
-      planoMetasForm.setId(planoMetasAtual.getId());
-      planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
-      planoMetasForm.setContratante(planoMetasAtual.getContratante());
-      Pessoa presidente = pessoaService.getPessoa(planoMetasAtual.getEntidade().getPresidente().getPessoa().getId());
-      planoMetasForm.setPresidente(presidente);
-
-      planoMetasAtual.setListaMetas(listaMetas);
-      planoMetasAtual.setEvento(planoMetasForm.getEvento());
-		}
-		
-		if(planoMetasAtual == null){
-	    	metasForm = processaMetaInstitutoToMetaForm(metasIntituto, 
-	    	    planoMetasForm.getFacilitador(), 
-	    	    planoMetasForm.getContratante(), 
-	    	    planoMetasForm.getEvento(),
-	    	    planoMetasForm.getRodizio());	  
-	    	
-		} else if(planoMetasAtual.getListaMetas().size() > 0) {
-			metasForm = processaMetaToMetaForm(metasIntituto, planoMetasAtual);
-		} else {
-			metasForm = new ArrayList<MetaForm>();
-		}
-		
-  	planoMetasForm.setDependencias(metasForm);
   	
-  	planoMetasForm.setFase(3);
-  	
-  	 List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
+  	 List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
      
-     lista.add(planoMetasForm);
-
      ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
 
      model.addObject("planoList", lista);
@@ -1534,8 +1512,41 @@ public class PlanoMetasController {
     	
 		return model;
 	}
-
+	
 	/**
+	 * Impressão da ficha preenchida
+	 * 
+	 * @param planoMetasForm
+	 * @return
+	 */
+	@RequestMapping("/imprimeFichaRodizio/XLS")
+	public void showMetasXLS(
+	    HttpServletRequest request, 
+      HttpServletResponse response,
+	    @ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm) {
+	  
+	  List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
+	  
+	  Workbook wb = new XSSFWorkbook();
+
+    styles = createStyles(wb);
+
+    geraPlanilha(wb, lista);
+
+    // Write the output to a file
+    response.setHeader("Content-disposition", "attachment; filename=test.xlsx");
+    try {
+      wb.write( response.getOutputStream() );
+      wb.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+	}
+
+
+
+  /**
 	 * Metodo responsavel pela preparação do dados para impressão da ficha em branco.
 	 * 
 	 * @param request
@@ -1603,9 +1614,132 @@ public class PlanoMetasController {
    * @return
    */
   @RequestMapping("/imprimeTodasFichaBranco")
-  public ModelAndView todasShowMetasBranco(HttpServletRequest request,
-      @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
+  public ModelAndView todasShowMetasBranco(HttpServletRequest request, 
+      @PathVariable("formato") String formato, @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
 
+    BaseEntidade entidade = null;
+    
+    if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
+      entidade = (BaseEntidade) request.getSession().getAttribute(
+          "INSTITUICAO_CONTROLE");
+      entidade = entidadeService.findByIdOverview(entidade.getId());
+      
+    }
+
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm, entidade);
+
+    ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
+
+    model.addObject("planoList", lista);
+
+    List<SituacaoMeta> situacaoList = new ArrayList<SituacaoMeta>(
+        Arrays.asList(SituacaoMeta.values()));
+    model.addObject("situacaoList", situacaoList);
+    
+    model.addObject("branco", true);
+
+    return model;
+    
+  }
+  
+  private static SimpleDateFormat fmt = new SimpleDateFormat("MM/yy");
+  private Map<String, CellStyle> styles;
+  
+  /**
+   * Metodo responsavel pela preparação do dados para impressão da ficha em branco.
+   * 
+   * @param request
+   * @param planoMetasForm
+   * @return
+   */
+  @RequestMapping("/imprimeTodasFichaBranco/XLS")
+  public void todasShowMetasBrancoXLS(
+       HttpServletRequest request, 
+       HttpServletResponse response,
+       @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
+    
+    BaseEntidade entidade = null;
+    
+    if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
+      entidade = (BaseEntidade) request.getSession().getAttribute(
+          "INSTITUICAO_CONTROLE");
+      entidade = entidadeService.findByIdOverview(entidade.getId());
+      
+    }
+
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm, entidade);
+
+    Workbook wb = new XSSFWorkbook();
+
+    styles = createStyles(wb);
+
+    geraPlanilha(wb, lista);
+
+    // Write the output to a file
+    response.setHeader("Content-disposition", "attachment; filename=test.xlsx");
+    try {
+      wb.write( response.getOutputStream() );
+      wb.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }
+  
+  private List<PlanoMetasForm> obtemDadosTodosInstitutos(
+      PlanoMetasForm planoMetasForm) {
+    Rodizio rodizio = restauraRodizio(planoMetasForm);
+    BaseInstituto instituto = restauraInstituto(planoMetasForm);
+    BaseEntidade entidade = restauraEntidade(planoMetasForm);
+    restauraFacilitador(planoMetasForm);
+    
+    
+    List<MetaForm> metasForm = null;
+    
+    List<MetaInstituto> metasIntituto =  metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
+    
+    PlanoMetas planoMetasAtual =  planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
+    
+    List<MetaEntidade> listaMetas =  metaService.findByEntidadeIdAndInstitutoId(entidade.getId(), instituto.getId());
+    
+    if(planoMetasAtual != null){
+      planoMetasForm.setId(planoMetasAtual.getId());
+      planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
+      planoMetasForm.setContratante(planoMetasAtual.getContratante());
+      Pessoa presidente = pessoaService.getPessoa(planoMetasAtual.getEntidade().getPresidente().getPessoa().getId());
+      planoMetasForm.setPresidente(presidente);
+      
+      planoMetasAtual.setListaMetas(listaMetas);
+      planoMetasAtual.setEvento(planoMetasForm.getEvento());
+    }
+    
+    if(planoMetasAtual == null){
+      metasForm = processaMetaInstitutoToMetaForm(metasIntituto, 
+          planoMetasForm.getFacilitador(), 
+          planoMetasForm.getContratante(), 
+          planoMetasForm.getEvento(),
+          planoMetasForm.getRodizio());   
+      
+    } else if(planoMetasAtual.getListaMetas().size() > 0) {
+      metasForm = processaMetaToMetaForm(metasIntituto, planoMetasAtual);
+    } else {
+      metasForm = new ArrayList<MetaForm>();
+    }
+    
+    planoMetasForm.setDependencias(metasForm);
+    
+    planoMetasForm.setFase(3);
+    
+    List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
+    
+    lista.add(planoMetasForm);
+    
+    return lista;
+  }
+  
+  private List<PlanoMetasForm> obtemDadosTodosInstitutos(
+      PlanoMetasForm planoMetasForm, BaseEntidade entidade) {
     List<BaseInstituto> listaInstituto = baseInstitutoService.findByRodizioOverview(true);
     
     List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
@@ -1617,13 +1751,8 @@ public class PlanoMetasController {
       Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio()
           .getId());
       
-      if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
-        BaseEntidade base = (BaseEntidade) request.getSession().getAttribute(
-            "INSTITUICAO_CONTROLE");
-        BaseEntidade entidade = entidadeService.findByIdOverview(base.getId());
-       
+      if (entidade != null) {
         planoMeta.setEntidade(entidade);
-        
       }
       
       if (planoMetasForm.getFacilitador() != null
@@ -1661,21 +1790,145 @@ public class PlanoMetasController {
       planoMeta = null;
       
     }
-
-    ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
-
-    model.addObject("planoList", lista);
-
-    List<SituacaoMeta> situacaoList = new ArrayList<SituacaoMeta>(
-        Arrays.asList(SituacaoMeta.values()));
-    model.addObject("situacaoList", situacaoList);
     
-    model.addObject("branco", true);
+    return lista;
+  }
 
-    return model;
+  private void geraPlanilha(Workbook wb, List<PlanoMetasForm> lista) {
+for (PlanoMetasForm plan : lista) {
+      
+      Sheet sheet = wb.createSheet(plan.getInstituto().getNome());
+      sheet.protectSheet("password");
+      
+      //turn off gridlines
+      sheet.setDisplayGridlines(false);
+      sheet.setPrintGridlines(false);
+      sheet.setFitToPage(true);
+      sheet.setHorizontallyCenter(true);
+      PrintSetup printSetup = sheet.getPrintSetup();
+      printSetup.setLandscape(true);
+  
+      //the following three statements are required only for HSSF
+      sheet.setAutobreaks(true);
+      printSetup.setFitHeight((short)1);
+      printSetup.setFitWidth((short)1);
+      
+      String[] titles = {"ID", "Atividade", "Status", ""};
+      
+    //the header row: centered text in 48pt font
+      Row headerRow = sheet.createRow(0);
+      headerRow.setHeightInPoints(12.75f);
+      for (int i = 0; i < titles.length; i++) {
+          Cell cell = headerRow.createCell(i);
+          cell.setCellValue(titles[i]);
+          cell.setCellStyle(styles.get("header"));
+      }
+      
+    //columns for 11 weeks starting from 9-Jul
+      Calendar calendar = Calendar.getInstance();
+      int year = calendar.get(Calendar.YEAR);
+
+      try {
+        calendar.setTime(fmt.parse("04/17"));
+      } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      calendar.set(Calendar.YEAR, year);
+      for (int i = 0; i < 11; i++) {
+          Cell cell = headerRow.createCell(titles.length + i);
+          cell.setCellValue(calendar);
+          cell.setCellStyle(styles.get("header_date"));
+          calendar.roll(Calendar.MONTH, true);
+      }
+      //freeze the first row
+      sheet.createFreezePane(0, 1);
+      
+      
+      
+      Row row;
+      Cell cell;
+      int rownum = 1;
+      int nivel = 1;
+      for (int i = 0; i < plan.getDependencias().size(); i++, rownum++, nivel++) {
+          rownum = processaLinha(sheet, plan.getDependencias().get(i), rownum, nivel + ".");
+      }
+      
+      
+    //set column widths, the width is measured in units of 1/256th of a character width
+      sheet.setColumnWidth(0, 256*6);
+      sheet.setColumnWidth(1, 256*65);
+      sheet.setColumnWidth(2, 256*20);
+      sheet.setColumnWidth(3, 256*20);
+      //sheet.setZoom(75); //75% scale
+      
+    }
+  }
+
+  private int processaLinha(Sheet sheet, MetaForm met, int rownum, String nivel) {
+    Row row;
+    Cell cell;
+    String styleName;
+    row = sheet.createRow(rownum);
+    
+    cell = row.createCell(0);
+    styleName = "cell_normal";
+    cell.setCellValue( nivel  );
+    cell.setCellStyle(styles.get(styleName));
+    
+    
+    cell = row.createCell(1);
+    styleName = "cell_bb";
+    cell.setCellValue( met.getAtividade().getDescricao() );
+    cell.setCellStyle(styles.get(styleName));
+
+    cell = row.createCell(2);
+    styleName = "cell_normal";
+    //cell.setCellValue( met.getSituacaoAtual().getSituacao().getSituacao() );
+    cell.setCellValue("");
+    cell.setCellStyle(styles.get(styleName));
+
+    cell = row.createCell(3);
+    styleName = "cell_normal_unlock";
+    cell.setCellValue("");
+    cell.setCellStyle(styles.get(styleName));
+    
+    if(TipoMeta.META_EXECUCAO.equals( met.getAtividade().getTipoMeta() ) ){
+      adicionaComboStatusExecucao(sheet, cell);
+    } else if ( TipoMeta.META_IMPLANTACAO.equals( met.getAtividade().getTipoMeta() ) ){
+      adicionaComboStatusImplantacao(sheet, cell);
+    }
+    
+    int subNivel = 1;
+    if(met.getDependencias() != null && met.getDependencias().size() > 0){
+      rownum++;
+      for (int i = 0; i < met.getDependencias().size(); i++, rownum++, subNivel++ ) {
+        rownum = processaLinha(sheet, met.getDependencias().get(i), rownum, nivel + subNivel + ".");
+      }
+    }
+    
+    return rownum;
     
   }
+
+  private void adicionaComboStatusImplantacao(Sheet sheet, Cell cell) {
+    DataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet)sheet);
+    DataValidationConstraint dvConstraint =  dvHelper.createExplicitListConstraint(new String[]{"Implantada", "Parcialmente", "Não Implantada"});
+    CellRangeAddressList addressList = new CellRangeAddressList(cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
+    DataValidation validation = dvHelper.createValidation( dvConstraint, addressList );
+    validation.setShowErrorBox(true);
+    sheet.addValidationData(validation);
+  }
   
+  private void adicionaComboStatusExecucao(Sheet sheet, Cell cell) {
+    DataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet)sheet);
+    DataValidationConstraint dvConstraint =  dvHelper.createExplicitListConstraint(new String[]{"Realizada", "Não Realizada"});
+    CellRangeAddressList addressList = new CellRangeAddressList(cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(), cell.getColumnIndex());
+    DataValidation validation = dvHelper.createValidation( dvConstraint, addressList );
+    validation.setShowErrorBox(true);
+    sheet.addValidationData(validation);
+  }
+
   @RequestMapping(value = "/common/reportgenerator/generatePDF")
   public void  generatePdf(HttpServletRequest req, HttpServletResponse res)
   {
@@ -1818,6 +2071,142 @@ public class PlanoMetasController {
       planoMetasForm.setContratante(null);
       return null;
     } 
+  }
+  
+  /**
+   * create a library of cell styles
+   */
+  private static Map<String, CellStyle> createStyles(Workbook wb){
+      Map<String, CellStyle> styles = new HashMap<String, CellStyle>();
+      DataFormat df = wb.createDataFormat();
+
+      CellStyle style;
+      Font headerFont = wb.createFont();
+      headerFont.setBold(true);
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setFont(headerFont);
+      styles.put("header", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setFont(headerFont);
+      style.setDataFormat(df.getFormat("mmm/yy"));
+      styles.put("header_date", style);
+
+      Font font1 = wb.createFont();
+      font1.setBold(true);
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setFont(font1);
+      styles.put("cell_b", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setFont(font1);
+      styles.put("cell_b_centered", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.RIGHT);
+      style.setFont(font1);
+      style.setDataFormat(df.getFormat("mmm/yy"));
+      styles.put("cell_b_date", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.RIGHT);
+      style.setFont(font1);
+      style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setDataFormat(df.getFormat("d-mmm"));
+      styles.put("cell_g", style);
+
+      Font font2 = wb.createFont();
+      font2.setColor(IndexedColors.BLUE.getIndex());
+      font2.setBold(true);
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setFont(font2);
+      styles.put("cell_bb", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.RIGHT);
+      style.setFont(font1);
+      style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      style.setDataFormat(df.getFormat("d-mmm"));
+      styles.put("cell_bg", style);
+
+      Font font3 = wb.createFont();
+      font3.setFontHeightInPoints((short)14);
+      font3.setColor(IndexedColors.DARK_BLUE.getIndex());
+      font3.setBold(true);
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setFont(font3);
+      style.setWrapText(true);
+      styles.put("cell_h", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setWrapText(true);
+      styles.put("cell_normal", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.CENTER);
+      style.setWrapText(true);
+      styles.put("cell_normal_centered", style);
+      
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setWrapText(true);
+      style.setLocked(false);
+      styles.put("cell_normal_unlock", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.RIGHT);
+      style.setWrapText(true);
+      style.setDataFormat(df.getFormat("d-mmm"));
+      styles.put("cell_normal_date", style);
+
+      style = createBorderedStyle(wb);
+      style.setAlignment(HorizontalAlignment.LEFT);
+      style.setIndention((short)1);
+      style.setWrapText(true);
+      styles.put("cell_indented", style);
+
+      style = createBorderedStyle(wb);
+      style.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+      style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+      styles.put("cell_blue", style);
+
+      
+
+      return styles;
+  }
+  
+  private static CellStyle createBorderedStyle(Workbook wb){
+    BorderStyle thin = BorderStyle.THIN;
+    short black = IndexedColors.BLACK.getIndex();
+    
+    CellStyle style = wb.createCellStyle();
+    style.setBorderRight(thin);
+    style.setRightBorderColor(black);
+    style.setBorderBottom(thin);
+    style.setBottomBorderColor(black);
+    style.setBorderLeft(thin);
+    style.setLeftBorderColor(black);
+    style.setBorderTop(thin);
+    style.setTopBorderColor(black);
+    return style;
+  }
+  
+  @Scheduled(initialDelay=60000, fixedRate=86400000)
+  private void enviarAlertaVencimentoMeta(){
+    
   }
 
 

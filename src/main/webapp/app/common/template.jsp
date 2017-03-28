@@ -38,6 +38,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/js/plugins/moment/moment.min.js"></script>
+    <script src="/js/plugins/blockui/jquery.blockUI.js"></script>
     <script src="/js/bootstrap3-typeahead.min.js"></script>
     <script src="/js/bootstrap-datepicker.js"></script>
     <script src="/js/i18n/datepicker-pt-BR.js"></script>    
@@ -69,6 +70,16 @@
     <!-- /#wrapper -->
 
     <tiles:insertAttribute name="footerPage" />
+    
+	<form action="/gestao/logout" method="post" id="logoutForm">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+	</form>
+	<script>
+		function formLogoutSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+	</script>
 
 </body>
 </html>

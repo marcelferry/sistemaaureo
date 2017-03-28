@@ -57,6 +57,8 @@
                 authentication-failure-url="/gestao//home/login?error=true"
                 always-use-default-target="false" />
                 
+        <csrf disabled="true"/>
+                
         <!-- default-target-url="/home/roles/false" -->
         <remember-me user-service-ref="userDetailsService"/>
         
