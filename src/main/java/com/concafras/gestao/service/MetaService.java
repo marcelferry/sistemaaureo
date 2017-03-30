@@ -29,12 +29,20 @@ public interface MetaService {
       Integer metaentidade, Integer rodizio);
 
   HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioId(
+      Integer metaentidade, Integer rodizio, boolean atual);
+  
+  HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioIdPreAvaliar(
       Integer metaentidade, Integer rodizio);
+  
+  HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioIdAndTipoSituacao(
+      Integer idmeta, Integer ciclo, Integer tipoSituacao, boolean atual);
 
   String getCaminhoMeta(Integer id);
 
   void saveAnotacao(Anotacao anotacao);
 
   void saveMetaAnotacao(MetaEntidadeAnotacao metaEntidadeAnotacao);
+
+  
 
 }

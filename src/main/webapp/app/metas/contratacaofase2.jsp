@@ -13,41 +13,6 @@
     border: solid gray 1px;
 }
 
-
-/*
-		#datatableMetas table {
-            width: 100%;
-        }
-
-        #datatableMetas thead, #datatableMetas tbody, #datatableMetas tr, #datatableMetas td, #datatableMetas th { display: block; }
-
-        #datatableMetas tr:after {
-            content: ' ';
-            display: block;
-            visibility: hidden;
-            clear: both;
-        }
-
-        #datatableMetas thead th {
-            height: 30px;
-        }
-
-        #datatableMetas tbody {
-            height: 390px;
-            overflow-y: auto;
-        }
-
-        #datatableMetas thead {
-        }
-
-
-        #datatableMetas tbody td, #datatableMetas thead th {
-            float: left;
-        }
-       #datatableMetas  tbody td {
-        	height: 130px;
-        }*/
-
 .panel-group .panel-heading + .panel-collapse > .panel-body {
   border: 1px solid #ddd;
 }
@@ -170,29 +135,31 @@
 
 </style>
 
-<div class="row">
-	<form:form method="post" action="add" commandName="planoMetasForm" class="form-vertical validado" role="form">
-				<form:hidden path="id"/>
-				<form:hidden path="fase"/>
-				<form:hidden path="rodizio.id"/>
-				<form:hidden path="instituto.id"/>
-				<form:hidden path="facilitador.id"/>
-				<form:hidden path="coordenador.id"/>
-				<form:hidden path="nomeCoordenador"/>
-				<form:hidden path="emailCoordenador"/>
-				<form:hidden path="telefoneCoordenador"/>
-				<form:hidden path="presidente.id"/>
-				<form:hidden path="outro.id"/>
-				<form:hidden path="contratante.id"/>
-				<form:hidden path="nomeContratante"/>
-				<form:hidden path="telefoneContratante"/>
-				<form:hidden path="emailContratante"/>
-				<form:hidden path="tipoContratante"/>
-				<form:hidden path="evento"/>
-				<form:hidden path="finalizado"/>
-				<form:hidden path="validado"/>
-				<fieldset>
-					<legend>Instituto</legend>
+<form:form method="post" action="add" commandName="planoMetasForm" class="form-vertical validado" role="form">
+	<form:hidden path="id"/>
+	<form:hidden path="fase"/>
+	<form:hidden path="rodizio.id"/>
+	<form:hidden path="instituto.id"/>
+	<form:hidden path="facilitador.id"/>
+	<form:hidden path="coordenador.id"/>
+	<form:hidden path="nomeCoordenador"/>
+	<form:hidden path="emailCoordenador"/>
+	<form:hidden path="telefoneCoordenador"/>
+	<form:hidden path="presidente.id"/>
+	<form:hidden path="outro.id"/>
+	<form:hidden path="contratante.id"/>
+	<form:hidden path="nomeContratante"/>
+	<form:hidden path="telefoneContratante"/>
+	<form:hidden path="emailContratante"/>
+	<form:hidden path="tipoContratante"/>
+	<form:hidden path="evento"/>
+	<form:hidden path="finalizado"/>
+	<form:hidden path="validado"/>
+
+	<div class="row">
+		<div class="col-md-12">
+			<fieldset>
+				<legend>Instituto</legend>
 				<div id="div_entidade" class="col-sm-12 small">
 					<label class="col-sm-2 col-xs-3 control-label">Ano:</label>
 					<div class="col-sm-3 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.rodizio.ciclo}</div>
@@ -207,15 +174,15 @@
 					<label class="col-sm-2 col-xs-3 control-label">Dirigente Nacional:</label>
 					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.dirigenteNacional.nomeCompleto}</div>
 				</div>
-				</fieldset>
-				<fieldset>
-					<legend>Entidade</legend>
+			</fieldset>
+			<fieldset>
+				<legend>Entidade</legend>
 				<div id="div_entidade" class="col-sm-12 small">
 		            <label class="col-sm-2 col-xs-3 control-label" for="entidade.razaoSocial">Entidade:</label>
-                	<div class="col-sm-6 col-xs-9 control-label" style="text-align: left;">
-                	    <form:hidden path="entidade.id" />
-                	    <form:hidden path="entidade.razaoSocial" />
-                	    <span id="entidade.razaoSocial">${planoMetasForm.entidade.razaoSocial} - ${planoMetasForm.entidade.endereco.cidade.nome}/${planoMetasForm.entidade.endereco.cidade.estado.sigla}</span>
+	               	<div class="col-sm-6 col-xs-9 control-label" style="text-align: left;">
+	               	    <form:hidden path="entidade.id" />
+	               	    <form:hidden path="entidade.razaoSocial" />
+	               	    <span id="entidade.razaoSocial">${planoMetasForm.entidade.razaoSocial} - ${planoMetasForm.entidade.endereco.cidade.nome}/${planoMetasForm.entidade.endereco.cidade.estado.sigla}</span>
 	                </div>
 	            </div>
 				<div id="div_endereco" class="col-sm-12 small">
@@ -227,132 +194,129 @@
 	            <c:if test="${ ! empty planoMetasForm.presidente.nomeCompleto}">
 	            <div id="div_presidente" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="presidente.nome">Presidente:</label>
-                	<div class="col-sm-6 control-label" style="text-align: left;">
-                		<form:hidden path="presidente.id" />
-                		<form:hidden path="presidente.nomeCompleto" />
-                		<span id="presidente.nomeCompleto">${planoMetasForm.presidente.nomeCompleto}</span>
+	               	<div class="col-sm-6 control-label" style="text-align: left;">
+	               		<form:hidden path="presidente.id" />
+	               		<form:hidden path="presidente.nomeCompleto" />
+	               		<span id="presidente.nomeCompleto">${planoMetasForm.presidente.nomeCompleto}</span>
 	                </div>
 	            </div>
 	            </c:if>
 	            <c:if test="${ ! empty planoMetasForm.coordenador.nomeCompleto}">
 	            <div id="div_coordenador" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="coordenador.nome">Coordenador:</label>
-                	<div class="col-sm-6 control-label" style="text-align: left;">
-                		<form:hidden path="coordenador.nomeCompleto" />
-                		<span id="coordenador.nomeCompleto">${planoMetasForm.nomeCoordenador}</span>
+	               	<div class="col-sm-6 control-label" style="text-align: left;">
+	               		<form:hidden path="coordenador.nomeCompleto" />
+	               		<span id="coordenador.nomeCompleto">${planoMetasForm.nomeCoordenador}</span>
 	                </div>
 	            </div>
 	            </c:if>
 	            <c:if test="${ empty planoMetasForm.coordenador.nomeCompleto && ! empty planoMetasForm.nomeCoordenador}">
 	            <div id="div_coordenador" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="coordenador.nome">Coordenador:</label>
-                	<div class="col-sm-6 control-label" style="text-align: left;">
-                		<span id="coordenador.nomeCoordenador">${planoMetasForm.nomeCoordenador}</span>
+	               	<div class="col-sm-6 control-label" style="text-align: left;">
+	               		<span id="coordenador.nomeCoordenador">${planoMetasForm.nomeCoordenador}</span>
 	                </div>
 	            </div>
 	            </c:if>
 	            
 	            <div id="div_outros" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="outro.nome">Contratante:</label>
-                	<div class="col-sm-6 control-label" style="text-align: left;">
-      					<form:hidden path="tipoContratante"/>
-      					<c:if test="${ planoMetasForm.tipoContratante == 'PRESIDENTE' }">Presidente</c:if>
-      					<c:if test="${ planoMetasForm.tipoContratante == 'COORDENADOR' }">Coordenador</c:if>
-                		<c:if test="${ ! empty planoMetasForm.outro.nomeCompleto}">
-                			<form:hidden path="outro.id" />
-                			<form:hidden path="outro.nomeCompleto" />
-                			<b>Trabalhador</b> - ${planoMetasForm.outro.nomeCompleto}
-                		</c:if>
+	               	<div class="col-sm-6 control-label" style="text-align: left;">
+	     					<form:hidden path="tipoContratante"/>
+	     					<c:if test="${ planoMetasForm.tipoContratante == 'PRESIDENTE' }">Presidente</c:if>
+	     					<c:if test="${ planoMetasForm.tipoContratante == 'COORDENADOR' }">Coordenador</c:if>
+	               		<c:if test="${ ! empty planoMetasForm.outro.nomeCompleto}">
+	               			<form:hidden path="outro.id" />
+	               			<form:hidden path="outro.nomeCompleto" />
+	               			<b>Trabalhador</b> - ${planoMetasForm.outro.nomeCompleto}
+	               		</c:if>
 	                </div>
 	            </div>
-	            </fieldset>
+       		</fieldset>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<fieldset>
+				<legend>Plano de Metas</legend>
+	            <div class="form-group">
+	            	<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
+	            </div>
+	              
+	            <div class="panel-group" id="accordion">
+	               <c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
+	                		 	<template:itemMeta meta="${meta}" index="${status.index}" count="${status.count}"/>
+	                 	</c:forEach>
+	                 	</div>
+	                 	<div class="form-group">
+					<div class="col-md-12">
+						<c:set var="indexAnot" value="${fn:length(planoMetasForm.anotacoes)}" scope="request"/>
+						<c:if test="${indexAnot > 0}">
+						<script>
+							var nivel = 1;
+							var indexAnot = ${fn:length(planoMetasForm.anotacoes)};
+						</script>
+						<ul class="list-group" id="anotacoes">
+						  <c:forEach items="${planoMetasForm.anotacoes}" var="anotacao" varStatus="idAnot">
+						  	<c:if test="${(idAnot.count - 1) > idAnot.index}">
+						  	<c:if test="${anotacao.sinalizador == 'VERDE'}">
+						  		<li class="list-group-item list-group-item-success" title="${anotacao.texto}">
+						  	</c:if>
+						  	<c:if test="${anotacao.sinalizador == 'AMARELO'}">
+						  		<li class="list-group-item list-group-item-warning" title="${anotacao.texto}">
+						  	</c:if>
+						  	<c:if test="${anotacao.sinalizador == 'VERMELHO'}}">
+						  		<li class="list-group-item list-group-item-danger" title="${anotacao.texto}">
+						  	</c:if>
+						  		<form:hidden path="anotacoes[${idAnot.index}].id" />
+							  	<form:hidden path="anotacoes[${idAnot.index}].remove" />
+							  	<form:hidden path="anotacoes[${idAnot.index}].responsavel.id" />
+							  	<form:hidden path="anotacoes[${idAnot.index}].texto" />
+							  	<form:hidden path="anotacoes[${idAnot.index}].data" />
+							  	<form:hidden path="anotacoes[${idAnot.index}].sinalizador" />
+						  		${anotacao.texto}
+						  	</li>
+						  	</c:if>
+						  </c:forEach>
+						</ul>
+						</c:if>
+					</div>
+					<div class="col-md-12">
+							<form:hidden path="anotacoes[${indexAnot}].id" />
+						  	<form:hidden path="anotacoes[${indexAnot}].remove" />
+						  	<form:hidden path="anotacoes[${indexAnot}].nivel" />
+						  	<form:hidden path="anotacoes[${indexAnot}].responsavel.id" />
+						  	<form:hidden path="anotacoes[${indexAnot}].data" />
+						  	<form:hidden path="anotacoes[${indexAnot}].sinalizador" />
+						  	<form:label path="anotacoes[${indexAnot}].texto"><spring:message code="label.comentarios" />:</form:label>
+							<form:textarea path="anotacoes[${indexAnot}].texto" rows="8" class="form-control col-md-12 input-sm"/>
+					</div>
+					<!--  div class="col-md-1">
+						<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${meta.id}">
+									<span class="glyphicon glyphicon-plus">
+									</span>
+						</button>
+						<!-- button type="button" class="btn btn-warning btn-xs btnAnotacaoWarning" data-toggle="modal" data-id="${meta.id}">
+									<span class="glyphicon glyphicon-plus">
+									</span>
+						</button>
+						<button type="button" class="btn btn-danger btn-xs btnAnotacaoDanger" data-toggle="modal" data-id="${meta.id}">
+									<span class="glyphicon glyphicon-plus">
+									</span>
+						</button>
+					</div-->
+				</div>
 				<br />
-				
-				<fieldset>
-					<legend>Plano de Metas</legend>
-				
-				<!-- <div id="div_planometas" class="panel panel-default small">
-	                <div class="panel-heading">
-	                    Plano de Metas
-	                </div -- >
-	                <!-- /.panel-heading -->
-	                <!--  div class="panel-body" -->
-	                
-	                	<div class="form-group">
-	                		<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
-	                	</div>
-	                
-	                	<div class="panel-group" id="accordion">
-		                <c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
-                   		 	<template:itemMeta meta="${meta}" index="${status.index}" count="${status.count}"/>
-                    	</c:forEach>
-                    	</div>
-                    	<div class="form-group">
-							<div class="col-md-12">
-								<c:set var="indexAnot" value="${fn:length(planoMetasForm.anotacoes)}" scope="request"/>
-								<c:if test="${indexAnot > 0}">
-								<ul class="list-group" id="anotacoes">
-									<script>
-										var nivel = 1;
-										var indexAnot = ${fn:length(planoMetasForm.anotacoes)};
-									</script>
-								  <c:forEach items="${planoMetasForm.anotacoes}" var="anotacao" varStatus="idAnot">
-								  	<c:if test="${(idAnot.count - 1) > idAnot.index}">
-								  	<c:if test="${anotacao.sinalizador == 'VERDE'}">
-								  		<li class="list-group-item list-group-item-success" title="${anotacao.texto}">
-								  	</c:if>
-								  	<c:if test="${anotacao.sinalizador == 'AMARELO'}">
-								  		<li class="list-group-item list-group-item-warning" title="${anotacao.texto}">
-								  	</c:if>
-								  	<c:if test="${anotacao.sinalizador == 'VERMELHO'}}">
-								  		<li class="list-group-item list-group-item-danger" title="${anotacao.texto}">
-								  	</c:if>
-								  		<form:hidden path="anotacoes[${idAnot.index}].id" />
-									  	<form:hidden path="anotacoes[${idAnot.index}].remove" />
-									  	<form:hidden path="anotacoes[${idAnot.index}].responsavel.id" />
-									  	<form:hidden path="anotacoes[${idAnot.index}].texto" />
-									  	<form:hidden path="anotacoes[${idAnot.index}].data" />
-									  	<form:hidden path="anotacoes[${idAnot.index}].sinalizador" />
-								  		${anotacao.texto}
-								  	</li>
-								  	</c:if>
-								  </c:forEach>
-								</ul>
-								</c:if>
-								<div class="form-group">
-									<form:hidden path="anotacoes[${indexAnot}].id" />
-								  	<form:hidden path="anotacoes[${indexAnot}].remove" />
-								  	<form:hidden path="anotacoes[${indexAnot}].nivel" />
-								  	<form:hidden path="anotacoes[${indexAnot}].responsavel.id" />
-								  	<form:hidden path="anotacoes[${indexAnot}].data" />
-								  	<form:hidden path="anotacoes[${indexAnot}].sinalizador" />
-								  	<div class="col-md-12">
-								  	<form:label path="anotacoes[${indexAnot}].texto"><spring:message code="label.comentarios" />:</form:label>
-									<form:textarea path="anotacoes[${indexAnot}].texto" rows="8" class="form-control col-md-12 input-sm"/>
-								  	</div>
-								</div>
-							</div>
-							<!--  div class="col-md-1">
-								<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${meta.id}">
-											<span class="glyphicon glyphicon-plus">
-											</span>
-								</button>
-								<!-- button type="button" class="btn btn-warning btn-xs btnAnotacaoWarning" data-toggle="modal" data-id="${meta.id}">
-											<span class="glyphicon glyphicon-plus">
-											</span>
-								</button>
-								<button type="button" class="btn btn-danger btn-xs btnAnotacaoDanger" data-toggle="modal" data-id="${meta.id}">
-											<span class="glyphicon glyphicon-plus">
-											</span>
-								</button>
-							</div-->
-						</div>
-						<form:errors element="div" path="anotacoes" cssClass="error"/>
-			         
-			         <!-- /div --><!-- /div panel-body -->
-			        
-		        	<!-- div class="panel-footer"-->
-		        	<div class="form-group pull-right">
+				<form:errors element="div" path="anotacoes" cssClass="error"/>
+			</fieldset>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<fieldset>
+	       		<div class="form-group pull-right">
 		        		<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR'}">
 	                	<button type="button" class="btn btn-primary" onclick="finalizar();">Finalizar</button>
 	                	</c:if>
@@ -366,87 +330,84 @@
 						<!-- button type="button" class="btn btn-success" onclick="fichaBranco();">Imprimir Ficha em Branco</button-->
 						</c:if>
 						<button type="button" class="btn btn-default" onclick="voltar();">Voltar</button>
-		        		</div>
-		        		
-		        		</fieldset>
-	                <!-- /div -->
-		        <!--  /div --><!-- /div panel -->
-		        
-            </form:form>
-            
-            <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
-            <form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="post" action="inicio" commandName="planoMetasForm" class="form-horizontal">
-			     <form:hidden path="fase" value="1"/>
-			     <form:hidden path="rodizio.id"/>
-				 <form:hidden path="instituto.id"/>
-				 <form:hidden path="facilitador.id"/>
-			</form:form>
-			</c:if>
-            
-            <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE' }">
-            <form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="get" action="/gestao/planodemetas/" commandName="planoMetasForm" class="form-horizontal">
-			</form:form>
-			</c:if>
-            
-            <div class="modal fade" id="addAnotacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		        <div class="modal-dialog  modal-sm">
-		            <form method="post" action="add" class="form-horizontal" role="form">
-		                <div class="modal-content">
-		                    <div class="modal-header">
-		                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                        <h4 class="modal-title" id="myModalLabel">Nova Anotação - <span id="tipoAnotacao"></span></h4>
-		                    </div>
-		                    <div class="modal-body">
-		                        <input id="metaId" type="hidden" name="id" placeholder="Id" value=""/>
-		                        <div class="form-group">
-		                            <label for="dataHora">Data/Hora:</label>
-		                            <input id="dataHora" name="dataHora" class="form-control input-sm"  value="21/04/2014 - 13:30" readonly="readonly"/>
-		                        </div>
-		                        <div class="form-group">
-		                            <label for="pessoa">Por:</label>
-		                            <input id="pessoa" name="pessoa" class="form-control input-sm" value="<sec:authentication property="principal.pessoa.nome" />" readonly="readonly"/>
-		                        </div>
-		                        <div class="form-group">
-		                            <label for="comentario">Comentário:</label>
-		                            <textarea id="comentario" name="comentario" class="form-control input-sm" placeholder="Seu Comentário" rows="3"></textarea>
-		                        </div>
-		                    </div>
-		                    <div class="modal-footer">
-		                        <button type="button" class="btn btn-primary btn-sm" id="createAnotacao">Salvar</button>
-		                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-		                    </div>
-		                </div><!-- /.modal-content -->
-		            </form>
-		        </div><!-- /.modal-dialog -->
-		    </div><!-- /.modal -->
-	
-			<div class='modal fade' id='modalFinalizacao' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-				<div class="modal-dialog modal-sm">
-					 <div class="modal-content">
-						<div class='modal-header'>
-							<button type='button' class='close' data-dismiss='modal'
-								aria-hidden='true'>×</button>
-							<h3 id='myModalLabel'>Confirmação de envio de ficha incompleta</h3>
-						</div>
-						<div class='modal-body'>
-							<p class='error-text'>Você confirma o envio da ficha de metas sem o preenchimento completo de todos os itens obrigatórios?</p>
-							<!-- div class="form-group">
-								<input type="checkbox" name="confirmCheck" value=""/> Sim, confirmo.
-							</div-->
-						</div>
-						<div class='modal-footer'>
-							<button class='btn btn-danger' data-dismiss='modal'
-								aria-hidden='true'>Cancelar</button>
-							<button class='btn btn-success' data-dismiss='modal'>SIM</button>
-						</div>
-					</div>
-				</div>
+	       		</div>
+	       	</fieldset>
+	    </div>
+	</div>
+</form:form>
+          
+<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
+<form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="post" action="inicio" commandName="planoMetasForm" class="form-horizontal">
+     <form:hidden path="fase" value="1"/>
+     <form:hidden path="rodizio.id"/>
+	 <form:hidden path="instituto.id"/>
+	 <form:hidden path="facilitador.id"/>
+</form:form>
+</c:if>
+          
+<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE' }">
+<form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="get" action="/gestao/planodemetas/" commandName="planoMetasForm" class="form-horizontal">
+</form:form>
+</c:if>
+          
+<div class="modal fade" id="addAnotacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog  modal-sm">
+       <form method="post" action="add" class="form-horizontal" role="form">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                   <h4 class="modal-title" id="myModalLabel">Nova Anotação - <span id="tipoAnotacao"></span></h4>
+               </div>
+               <div class="modal-body">
+                   <input id="metaId" type="hidden" name="id" placeholder="Id" value=""/>
+                   <div class="form-group">
+                       <label for="dataHora">Data/Hora:</label>
+                       <input id="dataHora" name="dataHora" class="form-control input-sm"  value="21/04/2014 - 13:30" readonly="readonly"/>
+                   </div>
+                   <div class="form-group">
+                       <label for="pessoa">Por:</label>
+                       <input id="pessoa" name="pessoa" class="form-control input-sm" value="<sec:authentication property="principal.pessoa.nome" />" readonly="readonly"/>
+                   </div>
+                   <div class="form-group">
+                       <label for="comentario">Comentário:</label>
+                       <textarea id="comentario" name="comentario" class="form-control input-sm" placeholder="Seu Comentário" rows="3"></textarea>
+                   </div>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-primary btn-sm" id="createAnotacao">Salvar</button>
+                   <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+               </div>
+           </div><!-- /.modal-content -->
+       </form>
+   </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class='modal fade' id='modalFinalizacao' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+	<div class="modal-dialog modal-sm">
+		 <div class="modal-content">
+			<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal'
+					aria-hidden='true'>×</button>
+				<h3 id='myModalLabel'>Confirmação de envio de ficha incompleta</h3>
 			</div>
+			<div class='modal-body'>
+				<p class='error-text'>Você confirma o envio da ficha de metas sem o preenchimento completo de todos os itens obrigatórios?</p>
+				<!-- div class="form-group">
+					<input type="checkbox" name="confirmCheck" value=""/> Sim, confirmo.
+				</div-->
+			</div>
+			<div class='modal-footer'>
+				<button class='btn btn-danger' data-dismiss='modal'
+					aria-hidden='true'>Cancelar</button>
+				<button class='btn btn-success' data-dismiss='modal'>SIM</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script src="/js/jquery.ui.monthpicker.js"></script>
-    <script>
+<script src="/js/jquery.ui.monthpicker.js"></script>
+<script>
     var somethingChanged = false;
 
     function enviar(){
@@ -463,7 +424,7 @@
     }
 
     function fichaBranco(){
-    	document.getElementById('planoMetasForm').action = 'imprimePreFichaBranco';
+    	document.getElementById('planoMetasForm').action = '/gestao/relatorio/imprimePreFichaBranco';
     	document.getElementById('planoMetasForm').target = '_blank';
     	document.getElementById('planoMetasForm').submit();
     }

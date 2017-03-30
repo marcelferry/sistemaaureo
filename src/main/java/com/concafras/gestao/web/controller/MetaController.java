@@ -208,7 +208,7 @@ public class MetaController {
 
     form.setDescricaoCompleta(rota);
     
-    HistoricoMetaEntidade hmeAtual = new MetasHelper().getUltimoHistorico(historicoAtual);
+    HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService).getUltimoHistorico(meta.getId(), plano.getRodizio().getId(), true);
     
     if(hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR || 
         hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR || 
@@ -217,7 +217,7 @@ public class MetaController {
       editMode = false;
     }
 
-    form = new MetasHelper().processaMetaEntidade(meta, 
+    form = new MetasHelper(metaService).processaMetaEntidade(meta, 
         form, 
         historicoAtual,
         historicoAnterior,

@@ -41,7 +41,7 @@
 	</div>
 </div>
 
-<form method="post" action="/gestao/planodemetas/imprimeFichaRodizio" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+<form method="post" action="/gestao/relatorio/imprimeFichaRodizio" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
      <input type="hidden" id="fase" name="fase" value="1"/>
      <input type="hidden" id="rodizio.id" name="rodizio.id"/>
@@ -77,7 +77,7 @@
                 { "mData": "descricao" },
                 {  "mData": null,
 	  	              "mRender": function(data, type, full){
-	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ver Ficha</button><button type="button" class="btn btn-primary btn-xs xls" data-instituto="' + full.id + '">XLS</button>';   // replace this with button 
+	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ver Ficha</button><button type="button" class="btn btn-warn btn-xs xls" data-instituto="' + full.id + '">Excel</button>';   // replace this with button 
 	                      }
                		},
             ]
@@ -89,7 +89,7 @@
 			$('#entidade\\.id').val(entidade);
 			//$('#facilitador\\.id').val();
 			$('#evento').val('PRERODIZIO');
-			$('#planoMetasForm').attr("action", "/gestao/planodemetas/imprimeFichaRodizio");
+			$('#planoMetasForm').attr("action", "/gestao/relatorio/imprimeFichaRodizio");
 			$('#planoMetasForm').submit();
 		} );
 		
@@ -99,7 +99,7 @@
 			$('#entidade\\.id').val(entidade);
 			//$('#facilitador\\.id').val();
 			$('#evento').val('PRERODIZIO');
-			$('#planoMetasForm').attr("action","/gestao/planodemetas/imprimeFichaRodizio/XLS");
+			$('#planoMetasForm').attr("action","/gestao/relatorio/imprimeFichaRodizio/XLS");
 			$('#planoMetasForm').submit();
 		} );
 	});

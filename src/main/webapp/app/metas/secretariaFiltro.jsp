@@ -281,9 +281,6 @@
 			        contentType: 'application/json; charset=utf-8',
 			        dataType: 'json',
 			        url: '/gestao/graphicData/statusAtualInstitutoGraphicData/' + rodizio + '/' + $(this).data('entidade'),
-			        error: function () {
-			            alert("An error occurred.");
-			        },
 			        success: function (data) {
 			        	console.log(data);
 			        	$("#presidentechart").empty();
@@ -494,11 +491,15 @@
 	    }
 
 	 function handleAjaxError( xhr, textStatus, error ) {
-		    if ( textStatus === 'timeout' ) {
-		        alert( 'The server took too long to send the data.' );
-		    }
-		    else {
-		        alert( 'An error occurred on the server. Please try again in a minute.' );
+			if (xhr.readyState < 4){
+				xhr.abort();
+		    } else if (xhr.status == 403) {
+                alert("Sorry, your session has expired. Please login again to continue");
+                window.location.href ="/login.html";
+            } else if ( textStatus === 'timeout' ) {
+		        alert( 'O servidor demorou muito para responder.' );
+		    } else {
+		        alert( 'Ocorreu um erro no servidor, tente novamente mais tarde. : ' + textStatus + ' Erro: ' + error );
 		    }
 		    myDataTable.fnProcessingIndicator( false );
 		}

@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -214,15 +216,18 @@ public class MetaServiceImpl implements MetaService {
     return retorno;
   }
   
+  @Transactional
   public HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioId(
-      Integer idmeta, Integer ciclo){
-    String sql = " select idmeta, idrodizio, max(tipo_situacao) as tipo_situacao from historico_metas_entidade where 1 = 1 "
-        +  ( ciclo != null ? " and idrodizio = " + ciclo : " " )
-        +  ( idmeta != null ? " and idmeta = " + idmeta : " " )
-        + " group by idmeta, idrodizio ";
+      Integer idmeta, Integer ciclo, boolean atual){
     
-    Query query = em
-        .createNativeQuery(sql);
+    StoredProcedureQuery query = em.createStoredProcedureQuery("sp_ultima_historico_meta");
+    query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
+    query.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(4, Boolean.class, ParameterMode.IN);
+    query.setParameter(2, idmeta);
+    query.setParameter(3, ciclo);
+    query.setParameter(4, atual);
     
     List<Object[]> result = query.getResultList();
     
@@ -234,36 +239,71 @@ public class MetaServiceImpl implements MetaService {
       throw new IllegalStateException("Resultado maior que 1");
     }
     
-    TipoSituacaoMeta situacao = TipoSituacaoMeta.values()[(Integer)result.get(0)[2]] ;
+    Integer idhme = (Integer)result.get(0)[0];
+
+    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
     
-    MetaEntidade meta = em.find(MetaEntidade.class, idmeta);
-    Rodizio rodizio  = em.find(Rodizio.class, ciclo);
+    return hme;
+  }
+  
+  @Transactional
+  public HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioIdPreAvaliar(
+      Integer idmeta, Integer ciclo){
     
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<HistoricoMetaEntidade> c = cb.createQuery(HistoricoMetaEntidade.class);
-    Root<HistoricoMetaEntidade> emp = c.from(HistoricoMetaEntidade.class);
+    StoredProcedureQuery query = em.createStoredProcedureQuery("sp_ultima_historico_meta_pre_avaliar");
+    query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
+    query.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
+    query.setParameter(2, idmeta);
+    query.setParameter(3, ciclo);
     
-    List<Predicate> criteria = new ArrayList<Predicate>();
-    criteria.add( cb.equal( emp.<MetaEntidade>get("meta") , meta ));
-    criteria.add( cb.equal( emp.<Rodizio>get("rodizio") , rodizio ));
-    criteria.add( cb.equal( emp.<TipoSituacaoMeta>get("tipoSituacao") , situacao ));
-    c.where(criteria.toArray(new Predicate[]{}));
+    List<Object[]> result = query.getResultList();
     
-    c.orderBy(cb.asc(emp.<Date> get("dataSituacao")));
-    
-    CriteriaQuery<HistoricoMetaEntidade> select = c.select(emp);
-    
-    List<HistoricoMetaEntidade> retorno = em.createQuery(select).getResultList();
-    
-    if(retorno == null || result.size() == 0){
+    if(result == null || result.size() == 0){
       return null;
     }
     
-    if(retorno.size() > 1) {
+    if(result.size() > 1) {
       throw new IllegalStateException("Resultado maior que 1");
     }
     
-    return retorno.get(0);
+    Integer idhme = (Integer)result.get(0)[0];
+
+    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
+    
+    return hme;
+  }
+  
+  @Transactional
+  public HistoricoMetaEntidade findLastByMetaEntidadeIdAndRodizioIdAndTipoSituacao(
+      Integer idmeta, Integer ciclo, Integer tipoSituacao, boolean atual){
+    
+    StoredProcedureQuery query = em.createStoredProcedureQuery("sp_ultima_historico_meta_tipo");
+    query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
+    query.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(4, Integer.class, ParameterMode.IN);
+    query.registerStoredProcedureParameter(5, Boolean.class, ParameterMode.IN);
+    query.setParameter(2, idmeta);
+    query.setParameter(3, tipoSituacao);
+    query.setParameter(4, ciclo);
+    query.setParameter(5, atual);
+    
+    List<Object[]> result = query.getResultList();
+    
+    if(result == null || result.size() == 0){
+      return null;
+    }
+    
+    if(result.size() > 1) {
+      throw new IllegalStateException("Resultado maior que 1");
+    }
+    
+    Integer idhme = (Integer)result.get(0)[0];
+    
+    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
+    
+    return hme;
   }
   
   public List<HistoricoMetaEntidade> findByMetaEntidadeIdAndRodizioId(Integer metaentidade, Integer ciclo){

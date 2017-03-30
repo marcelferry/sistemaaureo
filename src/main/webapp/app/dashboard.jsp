@@ -325,9 +325,6 @@
 			complete: function(){
             	$("#institutochart").unblock();            	
             },
-            error: function () {
-                alert("An error occurred.");
-            },
             success: function (data) {
             	$.each( data, function( key, item ) {
             		var resultList = item.statusValor.map(function (status) {
@@ -380,9 +377,6 @@
 			complete: function(){
             	$("#presidentechart").unblock();            	
             },
-            error: function () {
-                alert("An error occurred.");
-            },
             success: function (data) {
             	$.each( data, function( key, item ) {
             		var resultList = item.statusValor.map(function (status) {
@@ -427,9 +421,6 @@
             },
 			complete: function(){
             	$("#presidentedesejadachart").unblock();            	
-            },
-            error: function () {
-                alert("An error occurred.");
             },
             success: function (data) {
             	$.each( data, function( key, item ) {
@@ -497,9 +488,6 @@
 			complete: function(){
             	$("#flot-pie-chart-brasil").unblock();            	
             },
-            error: function () {
-                alert("An error occurred.");
-            },
             success: function (data) {
             	$.each( data, function( key, item ) {
             		var resultList = item.statusValor.map(function (status) {
@@ -555,9 +543,6 @@
                 <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
                 url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/${CICLO_CONTROLE.id}',
                 </c:if>
-                error: function () {
-                    alert("An error occurred.");
-                },
                 success: function (data) {
                 	$.each( data, function( key, item ) {
                 		var resultList = item.statusValor.map(function (status) {
@@ -608,9 +593,6 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 url: '/gestao/graphicData/statusContratadoPorInstitutoGraphicData/${CICLO_CONTROLE.id}',
-                error: function () {
-                    alert("An error occurred.");
-                },
                 success: function (data) {
                 	$.each( data, function( key, item ) {
                 		var resultList = item.statusValor.map(function (status) {

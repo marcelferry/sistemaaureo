@@ -1,5 +1,7 @@
 package com.concafras.gestao.model.security;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,9 +11,14 @@ import javax.persistence.Table;
 
 @Entity()
 @Table(name="ALCADAS")
-public class AlcadaUsuario {
+public class AlcadaUsuario  implements Serializable {
 	
-	@Id
+	/**
+   * 
+   */
+  private static final long serialVersionUID = 629553407676454155L;
+
+  @Id
     @SequenceGenerator(name = "userroles_id_seq_name", sequenceName = "userroles_id_seq", allocationSize = 1, initialValue = 1)
 	@GeneratedValue(generator = "userroles_id_seq_name", strategy = GenerationType.SEQUENCE)
     private Integer id;

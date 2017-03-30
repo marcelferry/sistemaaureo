@@ -113,7 +113,7 @@
 	</c:if>
 </div>
 
-<form method="post" action="/gestao/planodemetas/imprimeFichaRodizio" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+<form method="post" action="/gestao/relatorio/imprimeFichaRodizio" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
      <input type="hidden" id="fase" name="fase" value="1"/>
      <input type="hidden" id="rodizio.id" name="rodizio.id"/>
@@ -268,9 +268,6 @@
 			        contentType: 'application/json; charset=utf-8',
 			        dataType: 'json',
 			        url: '/gestao/graphicData/statusAtualInstitutoGraphicData/' + ciclo + '/' + $(this).data('entidade'),
-			        error: function () {
-			            alert("An error occurred.");
-			        },
 			        success: function (data) {
 			        	console.log(data);
 			        	$("#presidentechart").empty();
@@ -317,9 +314,6 @@
 			        contentType: 'application/json; charset=utf-8',
 			        dataType: 'json',
 			        url: '/gestao/graphicData/statusPropostoInstitutoGraphicData/' + ciclo + '/' + $(this).data('entidade'),
-			        error: function () {
-			            alert("An error occurred.");
-			        },
 			        success: function (data) {
 			        	console.log(data);
 			        	$("#presidentedesejadachart").empty();

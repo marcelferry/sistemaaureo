@@ -231,7 +231,7 @@ $(document).ready(function() {
 });
 </script>
 
-<form id="impPdf" onsubmit="imprimirPdf()" action="/gestao/planodemetas/common/reportgenerator/generatePDF" method="post">
+<form id="impPdf" onsubmit="imprimirPdf()" action="/gestao/relatorio/common/reportgenerator/generatePDF" method="post">
  <script>
  	function imprimirPdf(){
 

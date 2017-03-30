@@ -1,8 +1,8 @@
 package com.concafras.gestao.model.security;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,8 +18,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "LOGIN_HISTORY")
-public class LoginHistory {
+public class LoginHistory implements Serializable{
   
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -4781517662150342495L;
+
   @Id
   @SequenceGenerator(name = "login_history_id_seq_name", sequenceName = "login_history_id_seq", allocationSize = 1, initialValue = 1)
   @GeneratedValue(generator = "login_history_id_seq_name", strategy = GenerationType.SEQUENCE)

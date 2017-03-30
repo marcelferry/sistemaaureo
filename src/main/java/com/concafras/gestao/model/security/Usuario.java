@@ -1,7 +1,7 @@
 package com.concafras.gestao.model.security;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,13 +22,16 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.hibernate.annotations.IndexColumn;
-
 import com.concafras.gestao.model.Pessoa;
 
 @Entity
 @Table(name = "USUARIOS")
-public class Usuario {
+public class Usuario implements Serializable {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -5440504272126246939L;
 
   @Id
   @SequenceGenerator(name = "userprofile_id_seq_name", sequenceName = "userprofile_id_seq", allocationSize = 1, initialValue = 1)

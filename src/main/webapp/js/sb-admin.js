@@ -53,19 +53,18 @@ $(function () {
 	
 	//setup ajax error handling
     $.ajaxSetup({
-        error: function (x, status, error) {
-        	if (x.readyState < 4){
-        		x.abort();
-        	}
-        		
-        	if (globalVars.unloaded)
+        error: function (xhr, textStatus, error) {
+        	if (xhr.readyState < 4){
+        		xhr.abort();
+        	} else if (globalVars.unloaded) {
                 return;
-            if (x.status == 403) {
+        	} else if (xhr.status == 403) {
                 alert("Sorry, your session has expired. Please login again to continue");
                 window.location.href ="/login.html";
-            }
-            else {
-                alert("An error occurred: " + status + "nError: " + error);
+            } else if ( textStatus === 'timeout' ) {
+		        alert("O servidor demorou muito para responder.");
+		    } else {
+                alert("Ocorreu um erro inesperado: " + textStatus + " Erro: " + error);
             }
         }
     });

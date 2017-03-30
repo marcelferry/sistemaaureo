@@ -106,9 +106,6 @@
 		        contentType: 'application/json; charset=utf-8',
 		        dataType: 'json',
 		        url: '/gestao/graphicData/statusValidadoGeralGraphicData/2015',
-		        error: function () {
-		            alert("An error occurred.");
-		        },
 		        success: function (data) {
 		        	console.log(data);
 		        	$.each( data, function( key, item ) {

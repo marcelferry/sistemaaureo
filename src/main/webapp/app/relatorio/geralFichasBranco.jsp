@@ -33,7 +33,7 @@
 										<td>${instituto.descricao}</td>
 										<td>
 											<a href="javascript:void(0);" onclick="$(this).next('form').submit();">Fichas</a>
-			                                <form id="fichas${instituto.id}" method="post" action="/gestao/planodemetas/imprimePreFichaBranco" target="_blank" >
+			                                <form id="fichas${instituto.id}" method="post" action="/gestao/relatorio/imprimePreFichaBranco" target="_blank" >
 											     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 											     <input type="hidden" name="fase" value="1"/>
 											     <input type="hidden" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
@@ -48,7 +48,7 @@
 						</table>
 				</div>
 					<a class="btn btn-primary" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /></a>
-	            	<form method="post" action="/gestao/planodemetas/imprimeTodasFichaBrancoXLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+	            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco/XLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
 						<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
 					</form>
 			</div>

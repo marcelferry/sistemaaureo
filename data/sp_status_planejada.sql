@@ -6,7 +6,9 @@ $BODY$
 DECLARE
     ref refcursor;
 BEGIN
-  OPEN ref FOR SELECT i.id, i.descricao, hme.tipo_situacao, hme.situacao,
+  OPEN ref FOR SELECT i.id, i.descricao, 
+			-- hme.tipo_situacao, 
+			hme.situacao,
 		    CASE 
                      WHEN hme.situacao is not null THEN 
                        hme.situacao 
@@ -28,8 +30,10 @@ BEGIN
 			  ) hmefiltro ON hme.id =  hmefiltro.id   
               where me.tipo_meta != 'GRUPO_METAS' and 
                 ( pEntidade = 0 OR me.identidade = pEntidade ) and 
-                ( pCiclo = 0 OR hme.idrodizio = pCiclo ) 
-                group by i.id, i.descricao, hme.tipo_situacao, hme.situacao   
+                ( pCiclo = 0 OR hme.idrodizio <= pCiclo ) 
+                group by i.id, i.descricao, 
+			-- hme.tipo_situacao, 
+			hme.situacao   
               order by i.descricao;
     
   RETURN ref;
