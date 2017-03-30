@@ -32,7 +32,7 @@
         		</span>
         	</div>
             <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Solicitar senha</h3>
                     </div>
@@ -50,7 +50,7 @@
                                 </div>
                                 
                                 <!-- Change this to a button or input when using this as a form -->
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Solicitar</button>
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">Solicitar</button>
                             </fieldset>
                             <c:if test="${not empty error}">
                             <br/>

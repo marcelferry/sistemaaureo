@@ -35,7 +35,7 @@
         		</span>
         	</div>
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 ">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Efetuar Login</h3>
                     </div>
@@ -59,7 +59,7 @@
                                 </div-->
                                 <!-- Change this to a button or input when using this as a form -->
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Entrar</button>
+                                <button type="submit" class="btn btn-lg btn-primary btn-block">Entrar</button>
                             </fieldset>
                             
                             <c:if test="${not empty error}">
