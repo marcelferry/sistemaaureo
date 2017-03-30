@@ -123,28 +123,28 @@
 				"mData" : null,
 				"mRender" : function(data, type, full) {
 					if (full.presidente != undefined && full.presidente.id != undefined) {
-						return '<form action="edit/' + full.id + '" method="post">'
+						return '<form id="formActions" action="edit/' + full.id + '" method="post">'
 								+ '<div class="btn-group pull-right">'
 								+ '<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">'
 								+ '    <i class="glyphicon glyphicon-fire"></i> Ações <span class="caret"></span>'
 								+ '</button>'
 					    		+ '<ul class="dropdown-menu" role="menu">'
-								+ '<li><a type="button" class="btn-sm" onclick="this.form.action = \'edit/' + full.id + '\';submit();" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
-								+ '<li><a type="button" class="btn-sm" onclick="this.form.action = \'delete/' + full.id + '\';submit();" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
+								+ '<li><a type="button" class="btn-sm" onclick="$(\'#formActions\').attr( \'action\', \'edit/' + full.id + '\');submit();" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
+								+ '<li><a type="button" class="btn-sm" onclick="$(\'#formActions\').attr( \'action\', \'delete/' + full.id + '\');submit();" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
 								+ '<li><a type="button" class="btn-sm email" data-id="' + full.presidente.id + '" data-entidade="' + full.id + '" title="Enviar convite de acesso para o presidente." alt="Enviar convite de acesso para o presidente."><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar convite</a></li>'
 								+ '<li><a type="button" class="btn-sm senha" data-id="' + full.presidente.id + '" title="Redefinir senha do presidente para 12345" alt="Redefinir senha do presidente para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Redefinir senha</a></li>'
 								+ '</ul>'
 								+ '</div>'
 							 + '</form>'; // replace this with button 
 					} else {
-						return '<form action="edit/' + full.id + '" method="post">'
+						return '<form id="formActions" action="edit/' + full.id + '" method="post">'
 								+ '<div class="btn-group pull-right">'
 								+ '<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">'
 								+ '    <i class="glyphicon glyphicon-fire"></i> Ações <span class="caret"></span>'
 								+ '</button>'
 					    		+ '<ul class="dropdown-menu" role="menu">'
-								+ '<li><a type="button" onclick="this.form.action = \'edit/' + full.id + '\';submit();" class="btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</button>'
-								+ '<li><a type="button" onclick="this.form.action = \'delete/' + full.id  + '\';submit();" class="btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</button>'
+								+ '<li><a type="button" onclick="$(\'#formActions\').attr( \'action\', \'edit/' + full.id + '\');submit();" class="btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</button>'
+								+ '<li><a type="button" onclick="$(\'#formActions\').attr( \'action\', \'delete/' + full.id  + '\');submit();" class="btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</button>'
 								+ '</ul>'
 								+ '</div>'
 							+ '</form>'; // replace this with button 
