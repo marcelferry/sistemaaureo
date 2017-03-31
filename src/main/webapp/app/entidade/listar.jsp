@@ -4,45 +4,47 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div class="row" id="target">
-	<div class="panel panel-default">
-		<div class="panel-heading">Entidades Cadastrados</div>
-		<!-- /.panel-heading -->
-		<div class="panel-body">
-			<div class="">
-				<table id="example"
-					class="display table table-bordered table-striped table-hover">
-					<thead>
-						<tr>
-							<th class="col-md-1">Cód</th>
-							<th class="col-md-4">Nome</th>
-							<th class="col-md-4">Presidente</th>
-							<th class="col-md-2">Cidade</th>
-							<th class="col-md-1">&nbsp;</th>
-						</tr>
-					</thead>
-
-					<tfoot>
-						<tr>
-							<th>Cód</th>
-							<th>Nome</th>
-							<th>Presidente</th>
-							<th>Cidade</th>
-							<th>&nbsp;</th>
-						</tr>
-					</tfoot>
-				</table>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">Entidades Cadastrados</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div class="small">
+					<table id="example" class="display table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th class="col-md-1">Cód</th>
+								<th class="col-md-4">Nome</th>
+								<th class="col-md-4">Presidente</th>
+								<th class="col-md-2">Cidade</th>
+								<th class="col-md-1">&nbsp;</th>
+							</tr>
+						</thead>
+	
+						<tfoot>
+							<tr>
+								<th>Cód</th>
+								<th>Nome</th>
+								<th>Presidente</th>
+								<th>Cidade</th>
+								<th>&nbsp;</th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	<form action="" method="get">
-		<button type="button" onclick="this.form.action = 'add';submit();"
-			class="btn btn-primary">Novo</button>
-		<button type="button" onclick="this.form.action = 'addBase';submit();"
-			class="btn btn-primary">Rápido</button>
-		<button type="button" onclick="this.form.action = 'envio';submit();" 
-			class="btn btn-primary">Enviar email</button>
+		<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
+		<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
+		<button type="button" onclick="this.form.action = 'envio';submit();" class="btn btn-primary">Enviar email</button>
 	</form>
+	
+	<form id="formActions" action="" method="post">
+	</form>
+	
 </div>
 
 
@@ -123,34 +125,40 @@
 				"mData" : null,
 				"mRender" : function(data, type, full) {
 					if (full.presidente != undefined && full.presidente.id != undefined) {
-						return '<form id="formActions" action="edit/' + full.id + '" method="post">'
-								+ '<div class="btn-group pull-right">'
+						return '<div class="btn-group pull-right">'
 								+ '<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">'
 								+ '    <i class="glyphicon glyphicon-fire"></i> Ações <span class="caret"></span>'
 								+ '</button>'
 					    		+ '<ul class="dropdown-menu" role="menu">'
-								+ '<li><a type="button" class="btn-sm" onclick="$(\'#formActions\').attr( \'action\', \'edit/' + full.id + '\');submit();" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
-								+ '<li><a type="button" class="btn-sm" onclick="$(\'#formActions\').attr( \'action\', \'delete/' + full.id + '\');submit();" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
+								+ '<li><a type="button" class="btn-sm edit" data-id="' + full.id + '" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
+								+ '<li><a type="button" class="btn-sm delete" data-id="' + full.id  + '" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
 								+ '<li><a type="button" class="btn-sm email" data-id="' + full.presidente.id + '" data-entidade="' + full.id + '" title="Enviar convite de acesso para o presidente." alt="Enviar convite de acesso para o presidente."><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar convite</a></li>'
 								+ '<li><a type="button" class="btn-sm senha" data-id="' + full.presidente.id + '" title="Redefinir senha do presidente para 12345" alt="Redefinir senha do presidente para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Redefinir senha</a></li>'
 								+ '</ul>'
-								+ '</div>'
-							 + '</form>'; // replace this with button 
+							+ '</div>'; // replace this with button 
 					} else {
-						return '<form id="formActions" action="edit/' + full.id + '" method="post">'
-								+ '<div class="btn-group pull-right">'
+						return '<div class="btn-group pull-right">'
 								+ '<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">'
 								+ '    <i class="glyphicon glyphicon-fire"></i> Ações <span class="caret"></span>'
 								+ '</button>'
 					    		+ '<ul class="dropdown-menu" role="menu">'
-								+ '<li><a type="button" onclick="$(\'#formActions\').attr( \'action\', \'edit/' + full.id + '\');submit();" class="btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</button>'
-								+ '<li><a type="button" onclick="$(\'#formActions\').attr( \'action\', \'delete/' + full.id  + '\');submit();" class="btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</button>'
+					    		+ '<li><a type="button" class="btn-sm edit" data-id="' + full.id + '" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
+								+ '<li><a type="button" class="btn-sm delete" data-id="' + full.id  + '" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
 								+ '</ul>'
-								+ '</div>'
-							+ '</form>'; // replace this with button 
+							+ '</div>'; // replace this with button 
 					}
 				}
 			} ],
+		});
+		
+		$('#example tbody').on('click','.edit', function() {
+			$('#formActions').attr( 'action', 'edit/' + $(this).data('id') );
+			$('#formActions').submit();
+		});
+		
+		$('#example tbody').on('click','.delete', function() {
+			$('#formActions').attr( 'action', 'delete/' + $(this).data('id') );
+			$('#formActions').submit();
 		});
 
 		$('#example tbody') .on('click','.email', function() {
