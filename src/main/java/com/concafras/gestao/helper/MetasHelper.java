@@ -96,12 +96,7 @@ public class MetasHelper {
       MetaEntidade metaEntidade = searchMeta(metas, planometas.getEntidade(), planometas.getInstituto(), metaInstituto);
       
       if(metaEntidade != null){
-        // Carregar avaliacao pre-salva
-        HistoricoMetaEntidade situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), planometas.getRodizio().getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
-        if(situacaoAtualSalva != null)
-          meta.setSituacaoAtual(new HistoricoMetaEntidadeVO(situacaoAtualSalva));
-  
-          return processaMetasAnteriores2(meta, metaEntidade, planometas, situacaoAtualSalva, true);         
+          return processaMetasAnteriores1(meta, metaEntidade, planometas.getRodizio());         
       } 
     } 
 
@@ -110,6 +105,67 @@ public class MetasHelper {
     meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
 
     return meta;                                                               
+  }
+  
+  private MetaForm processaMetasAnteriores1(MetaForm meta, MetaEntidade metaEntidade, Rodizio cicloAtual) {
+    // Carregar avaliacao pre-salva
+    HistoricoMetaEntidade situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+    
+    HistoricoMetaEntidade historico = getHistoricoPreAvaliacao( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId() );
+    if(historico != null){
+      System.out.println("\n========================================================");
+      System.out.println(metaEntidade.getDescricao());
+      System.out.println(cicloAtual.getCicloAnterior().getCiclo());
+      System.out.println("========================================================");
+      System.out.println("RECUPERADO: " + historico.getTipoSituacao() + " - "  + historico.getSituacao()  + " - "  + historico.getRodizio());
+      System.out.println("========================================================");
+      
+      TipoSituacaoMeta tipoSituacao = historico.getTipoSituacao();
+      SituacaoMeta situacao = historico.getSituacao();
+      Rodizio ciclo = historico.getRodizio();
+      
+      HistoricoMetaEntidadeVO situacaoAnterior = new HistoricoMetaEntidadeVO(historico);
+      
+      if( situacao == SituacaoMeta.NAOPLANEJADA ){
+        HistoricoMetaEntidade preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getId(), TipoSituacaoMeta.INICIAL, true);
+        if(preHistorico == null && ciclo.getCicloAnterior() != null){
+          preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+        }
+        
+        if(preHistorico != null) {
+          situacaoAnterior.setSituacao(preHistorico.getSituacao());
+        }  
+      }
+      
+      meta.setSituacaoAnterior(situacaoAnterior);
+      System.out.println("ANTERIOR: " + situacaoAnterior.getTipoSituacao() + " - "  + situacaoAnterior.getSituacao() + " - "  + situacaoAnterior.getCiclo());
+      System.out.println("========================================================");
+      
+      HistoricoMetaEntidadeVO situacaoAtual = null;
+      if(situacaoAtualSalva == null){
+        situacaoAtual = new HistoricoMetaEntidadeVO();
+        situacaoAtual.setCiclo(new RodizioVO( cicloAtual.getCicloAnterior() ));
+        situacaoAtual.setSituacao( situacaoAnterior.getSituacao() );
+        situacaoAtual.setTipoSituacao(TipoSituacaoMeta.AVALIAR);
+      } else {
+        situacaoAtual = new HistoricoMetaEntidadeVO(situacaoAtualSalva);
+      }
+      
+      System.out.println("ATUAL: " + situacaoAtual.getTipoSituacao() + " - "  + situacaoAtual.getSituacao() + " - "  + situacaoAtual.getCiclo());
+      System.out.println("========================================================\n");
+      
+      meta.setSituacaoAtual(situacaoAtual);
+      
+      return meta;
+    } 
+    
+    if(situacaoAtualSalva == null){
+      meta.setSituacaoAnterior(null);
+      meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
+      meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
+    }
+    
+    return meta; 
   }
   
   private MetaForm processaMetasAnteriores2(MetaForm meta, MetaEntidade metaEntidade, PlanoMetas planometas, HistoricoMetaEntidade situacaoAtualSalva, boolean atual) {
