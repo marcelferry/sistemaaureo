@@ -12,9 +12,9 @@ BEGIN
 		WHERE 
 		(
 			( hme.idrodizio = pCiclo AND hme.tipo_situacao != 7) OR
-			( pCiclo = 0 OR hme.idrodizio < pCiclo ) 
+			( hme.idrodizio < pCiclo ) 
 		) AND
-		( pMeta = 0 OR hme.idmeta = pMeta ) 
+		( hme.idmeta = pMeta ) 
 		ORDER by hme.idmeta, hme.idrodizio desc, hme.tipo_situacao DESC;
     
   RETURN ref;

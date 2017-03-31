@@ -1,7 +1,8 @@
 CREATE OR REPLACE FUNCTION sp_ultima_historico_meta_tipo(
 		pMeta integer DEFAULT 0, 
 		pTipoSituacao integer DEFAULT -1, 
-		pCiclo integer DEFAULT 0)
+		pCiclo integer DEFAULT 0,
+		pAtual boolean DEFAULT false)
   RETURNS refcursor AS
 $BODY$
 DECLARE
@@ -11,9 +12,12 @@ BEGIN
 		FROM historico_metas_entidade hme
 		INNER JOIN metas_entidade me ON me.id = hme.idmeta 
 		WHERE 
-		( pMeta = 0 OR hme.idmeta = pMeta ) and
-		( pTipoSituacao = -1 OR hme.tipo_situacao = pTipoSituacao ) and
-		( pCiclo = 0 OR hme.idrodizio <= pCiclo )
+		hme.idmeta = pMeta and
+		hme.tipo_situacao = pTipoSituacao and
+		(
+			( pAtual = false AND hme.idrodizio <= pCiclo ) OR
+			( pAtual = true AND hme.idrodizio = pCiclo ) 
+		)
 		ORDER by hme.idmeta, hme.idrodizio desc, hme.tipo_situacao DESC;
     
   RETURN ref;

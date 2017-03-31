@@ -60,6 +60,7 @@ import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
+import com.concafras.gestao.model.view.PreContrato;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.rest.utils.RestUtils;
@@ -358,17 +359,28 @@ public class PlanoMetasController {
           .findAllOverview();
       BaseEntidade entidade = (BaseEntidade) request.getSession()
           .getAttribute("INSTITUICAO_CONTROLE");
+      List<PreContrato> listaSelecao = new ArrayList<PreContrato>();
       for (BaseInstituto instituto : listaInstituto) {
         PlanoMetas plano = planoMetasService
             .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
                 instituto.getId(), ciclo);
-        if (plano != null && plano.getFacilitador() != null) {
-          instituto.setRodizio(true);
+        PreContrato preContrato = new PreContrato();
+        preContrato.setInstituto(instituto);
+        if (plano != null) {
+          preContrato.setInicializado(true);
         } else {
-          instituto.setRodizio(false);
+          preContrato.setInicializado(false);
         }
+
+        if (plano != null && plano.getFacilitador() != null) {
+          preContrato.setFinalizadoRodizio(true);
+        } else {
+          preContrato.setFinalizadoRodizio(false);
+        }
+        listaSelecao.add(preContrato);
       }
       map.put("institutoList", listaInstituto);
+      map.put("preContratoList", listaSelecao);
     }
 
     List<Facilitador> listaFacilitador = facilitadorService.listFacilitador();

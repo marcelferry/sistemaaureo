@@ -544,7 +544,11 @@
   $(function() {
 	  $('#cnpj').mask('00.000.000/0000-00', {reverse: true});
 	  $('.cep').mask('00000-000');
-      $('.datepicker').datepicker({ dateFormat: 'dd/mm/yy' });
+      $('.datepicker').datepicker({
+			format: "dd/mm/yyyy",
+			autoclose: true,
+			language: 'pt-BR'
+		});
 
 
       completePessoa($('#presidente\\.pessoa\\.nome'), $("#presidente\\.pessoa\\.id"), baseUrl );
@@ -772,7 +776,11 @@
 	  		    }
 	  		});
 
-          $('.datepicker').datepicker();
+          $('.datepicker').datepicker({
+				format: "dd/mm/yyyy",
+				autoclose: true,
+				language: 'pt-BR'
+			});
           
           indexPresidentes++;
           return false;
@@ -824,7 +832,11 @@
           completePessoa($('#dirigentes' + indexDirigentes + '\\.trabalhador\\.nome'), $("#dirigentes" + indexDirigentes + "\\.trabalhador\\.id"), baseUrl);
           completeInstituto($('#dirigentes' + indexDirigentes + '\\.instituto\\.descricao'), $("#dirigentes" + indexDirigentes + "\\.instituto\\.id"), baseUrl);
 
-          $('.datepicker').datepicker();
+          $('.datepicker').datepicker({
+				format: "dd/mm/yyyy",
+				autoclose: true,
+				language: 'pt-BR'
+			});
           
           indexDirigentes++;
           return false;

@@ -3,7 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
       <div class="row">
 				<c:if  test="${!empty estadoList}">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Estados Cadastrados
 	                </div>
@@ -42,7 +42,7 @@
 		        </div>
 	            </c:if>
 	            <c:if  test="${empty estadoList}">
-            	<div class="panel panel-default">
+            	<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Mensagem
 	                </div>

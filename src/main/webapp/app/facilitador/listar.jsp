@@ -10,7 +10,7 @@
       		<form:form method="get" action="add" commandName="facilitadorForm" class="form-horizontal" role="form">
       			<form:hidden path="rodizio.id" />
 				<form:hidden path="instituto.id" />
-      			<div class="panel panel-default">
+      			<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Dados Gerais 
 	                </div>
@@ -26,7 +26,7 @@
 						</div>
 	                </div>
 	            </div>
-	            <div class="panel panel-default">
+	            <div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Facilitadores
 	                </div>

@@ -7,7 +7,7 @@
 
     	<div class="row">
             <c:if  test="${!empty planoModeloList}">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <spring:message code="label.institutos.cadastrados" />
                 </div>
@@ -44,7 +44,7 @@
 	        </div>
             </c:if>
             <c:if  test="${empty planoModeloList}">
-            	<div class="panel panel-default">
+            	<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Mensagem
 	                </div>

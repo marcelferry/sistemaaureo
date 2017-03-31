@@ -13,7 +13,7 @@
 </style>
 <div class="row">
 	<c:if test="${!empty rodizioList}">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">Rodízios</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -46,7 +46,7 @@
 		</div>
 	</c:if>
 	<c:if test="${empty rodizioList}">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">Mensagem</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">Não há Rodízios cadastradas.</div>

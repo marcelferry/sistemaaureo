@@ -346,7 +346,7 @@
 </c:if>
           
 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE' }">
-<form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="get" action="/gestao/planodemetas/" commandName="planoMetasForm" class="form-horizontal">
+<form:form id="planoMetasFormVoltar" name="planoMetasFormVoltar" method="get" action="/gestao/planodemetas/ciclo/${ CICLO_CONTROLE.id }" commandName="planoMetasForm" class="form-horizontal">
 </form:form>
 </c:if>
           

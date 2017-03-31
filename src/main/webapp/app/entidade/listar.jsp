@@ -5,7 +5,7 @@
 
 <div class="row" id="target">
 	<div class="col-md-12">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">Entidades Cadastrados</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -36,15 +36,16 @@
 		</div>
 	</div>
 
-	<form action="" method="get">
-		<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
-		<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
-		<button type="button" onclick="this.form.action = 'envio';submit();" class="btn btn-primary">Enviar email</button>
-	</form>
+	<div class="col-md-12 pull-right">
+		<form action="" method="get">
+			<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
+			<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
+			<button type="button" onclick="this.form.action = 'envio';submit();" class="btn btn-primary">Enviar email</button>
+		</form>
+	</div>
 	
 	<form id="formActions" action="" method="post">
 	</form>
-	
 </div>
 
 
@@ -138,7 +139,7 @@
 							+ '</div>'; // replace this with button 
 					} else {
 						return '<div class="btn-group pull-right">'
-								+ '<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">'
+								+ '<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">'
 								+ '    <i class="glyphicon glyphicon-fire"></i> Ações <span class="caret"></span>'
 								+ '</button>'
 					    		+ '<ul class="dropdown-menu" role="menu">'

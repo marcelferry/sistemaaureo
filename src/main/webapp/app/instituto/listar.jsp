@@ -5,7 +5,7 @@
 
     	<div class="row">
             <c:if  test="${!empty institutoList}">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     Institutos Cadastrados
                 </div>
@@ -42,7 +42,7 @@
 	        </div>
             </c:if>
             <c:if  test="${empty institutoList}">
-            	<div class="panel panel-default">
+            	<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Mensagem
 	                </div>

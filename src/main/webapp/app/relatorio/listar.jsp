@@ -4,7 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
       <div class="row"  id="target">
-      		<div class="panel panel-default">
+      		<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Entidades
 	                </div>

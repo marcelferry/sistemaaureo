@@ -3,9 +3,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
       <div class="row">
 	            <c:if  test="${!empty comissaoList}">
-	            <div class="panel panel-default">
+	            <div class="panel panel-primary">
 	                <div class="panel-heading">
-	                    Comissões Cadastrados
+	                    Comissï¿½es Cadastrados
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
@@ -26,7 +26,7 @@
 		                            <td>${comissao.id}</td>
 		                            <td>${comissao.descricao}</td>
 		                            <td>${comissao.instituto.descricao}</td>
-		                            <td>${comissao.rodizio?"Sim":"Não"}</td>
+		                            <td>${comissao.rodizio?"Sim":"Nï¿½o"}</td>
 		                            <td>
 		                            	<form action="edit/${comissao.id}" method="post">
 			                            	<input type="button" onclick="this.form.action = 'edit/${comissao.id}';submit();" class="btn btn-success btn-xs" value="Editar"/>&nbsp
@@ -42,13 +42,13 @@
 		        </div>
 	            </c:if>
 	            <c:if  test="${empty comissaoList}">
-            	<div class="panel panel-default">
+            	<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Mensagem
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
-		                Não há Comissões cadastradas.
+		                Nï¿½o hï¿½ Comissï¿½es cadastradas.
 		            </div>
 		        </div>
             </c:if>

@@ -6,7 +6,7 @@
 
     	<div class="row">
             <c:if  test="${!empty institutoList}">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                    	<spring:message code="label.institutos.cadastrados" />
                 </div>
@@ -19,7 +19,7 @@
 		                    <thead>
 			                    <tr>
 			                    	<sec:authorize access="hasRole('ROLE_ADMIN')">
-			                        <th class="col-md-1">Cód.</th>
+			                        <th class="col-md-1">Cï¿½d.</th>
 			                        </sec:authorize>
 			                        <th class="col-md-9">Nome</th>
 			                    </tr>
@@ -43,13 +43,13 @@
 	        </div>
             </c:if>
             <c:if  test="${empty institutoList}">
-            	<div class="panel panel-default">
+            	<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Mensagem
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
-		                Não há Institutos/Comissões cadastradas.
+		                Nï¿½o hï¿½ Institutos/Comissï¿½es cadastradas.
 		            </div>
 		        </div>
             </c:if>
