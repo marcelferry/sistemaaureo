@@ -57,16 +57,7 @@ public class MetaController {
   private PlanoMetasService planoMetasService;
 
   @Autowired
-  private InstitutoService institutoService;
-
-  @Autowired
   private PessoaService pessoaService;
-
-  @Autowired
-  private RodizioService rodizioService;
-
-  @Autowired
-  private EntidadeService entidadeService;
 
   /**
    * Bind date.

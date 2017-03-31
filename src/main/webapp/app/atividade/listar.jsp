@@ -17,7 +17,7 @@
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
-	                	<form:label path="instituto.descricao">Instituto/Comissï¿½o:</form:label>
+	                	<form:label path="instituto.descricao">Instituto/Comissão:</form:label>
 	                	<form:input path="instituto.descricao" cssClass="form-control" readonly="true"/>
 	                </div>
 	            </div>
@@ -32,10 +32,10 @@
 			                    <thead>
 		                    <tr>
 		                        <th class="col-md-5">ID - Atividade</th>
-		                        <th class="col-md-2">Frequï¿½ncia</th>
+		                        <th class="col-md-2">Frequência</th>
 		                        <th class="col-md-2">Dia Semana</th>
 		                        <sec:authorize access="hasRole('ROLE_AUREO')">
-			                        <th class="col-md-1">Hora Inï¿½cio</th>
+			                        <th class="col-md-1">Hora Início</th>
 			                        <th class="col-md-1">Hora Fim</th>
 		                        </sec:authorize>
 		                        <th class="col-md-1"></th>

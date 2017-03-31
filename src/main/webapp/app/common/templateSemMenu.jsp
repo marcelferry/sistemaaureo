@@ -64,6 +64,16 @@
     <!-- /#wrapper -->
 
     <tiles:insertAttribute name="footerPage" />
+    
+    <form action="/gestao/logout" method="post" id="logoutForm">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+	</form>
+	<script>
+		function formLogoutSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+	</script>
 
 </body>
 </html>

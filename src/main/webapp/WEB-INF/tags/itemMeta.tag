@@ -294,7 +294,52 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA' && meta.atividade.tipoMeta == 'META_QUANTITATIVA' }">
+			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA'}">
+				<div class="col-sm-2">
+					<!--  Coluna 2 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
+						<div class="form-group">
+							<label class="control-label warning">
+								<font color="#800000">Planejada/Cancelada!</font>
+							</label>
+						</div>
+					</div><!-- /Coluna 2 -->
+				</div>
+			
+				<div class="col-sm-2">
+					<!-- Coluna 3 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como está Hoje?</strong></label>
+						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
+						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						    <option value=""></option>
+							<form:option value="IMPLANTADA">Implantada</form:option>
+							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
+							<form:option value="NAOIMPLANTADA">Não Implantada</form:option>
+						</form:select>
+						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
+					</div>
+					<div  id="bloco_dataimplantado_${meta.id}"  class="form-group dateimplantado">
+						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
+						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+						<div class="input-group">
+							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+								class="date-picker form-control "/>
+							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
+						</div>
+						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
+					</div>
+					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
+					<script type="text/javascript">
+						$("#bloco_dataimplantado_${meta.id}").show();
+					</script>
+					</c:if>
+				<!-- /Coluna 3 -->
+				</div>
+			</c:if>
+			
+			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_QUANTITATIVA' }">
 				<div class="col-sm-2">
 					<!-- Coluna 2 -->
 					<div class="form-group">
@@ -328,14 +373,21 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA' && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' ) && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
 				<div class="col-sm-2">
 					<!-- Coluna 2 -->
 					<div class="form-group">
 						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
 						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
 						<label class="control-label">
-							<font color="#800000">Planejado</font> para: 
+							<font color="#800000">
+								<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA'}">
+									Planejado
+								</c:if>
+								<c:if test="${meta.situacaoAnterior.situacao == 'REPLANEJADA'}">
+									Replanejado
+								</c:if>
+							</font> para: 
 							<c:if test="${meta.situacaoAnterior.previsao != null}">
 								<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
 								<form:hidden path="dependencias[${index}].situacaoAnterior.previsao" value="${previsao}"/>
@@ -393,14 +445,21 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA' && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
+			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
 				<div class="col-sm-2">
 					<!-- Coluna 2 -->
 					<div class="form-group">
 						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
 						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
 						<label class="control-label">
-							<font color="#800000">Planejado</font> para: 
+							<font color="#800000">
+								<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA'}">
+									Planejado
+								</c:if>
+								<c:if test="${meta.situacaoAnterior.situacao == 'REPLANEJADA'}">
+									Replanejado
+								</c:if>
+							</font> para:  
 							<c:if test="${meta.situacaoAnterior.previsao != null}">
 								<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
 								<form:hidden path="dependencias[${index}].situacaoAnterior.previsao" value="${previsao}"/>

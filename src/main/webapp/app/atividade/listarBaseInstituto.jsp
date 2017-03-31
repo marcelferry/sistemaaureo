@@ -19,7 +19,7 @@
 		                    <thead>
 			                    <tr>
 			                    	<sec:authorize access="hasRole('ROLE_ADMIN')">
-			                        <th class="col-md-1">Cï¿½d.</th>
+			                        <th class="col-md-1">Cód.</th>
 			                        </sec:authorize>
 			                        <th class="col-md-9">Nome</th>
 			                    </tr>
@@ -49,7 +49,7 @@
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
-		                Nï¿½o hï¿½ Institutos/Comissï¿½es cadastradas.
+		                Nãoo há Institutos/Comissções cadastradas.
 		            </div>
 		        </div>
             </c:if>
