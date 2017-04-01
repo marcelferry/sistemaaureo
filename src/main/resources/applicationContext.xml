@@ -37,22 +37,22 @@
     <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
-
+	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="sistemadegestaodemetas@gmail.com" />
-		<property name="password" value="autadesouza" />
-
+		<property name="host" value="smtp.gmail.com"/>
+		<property name="port" value="587"/>
+		<property name="username" value="sistemadegestaodemetas@gmail.com"/>
 		<property name="javaMailProperties">
 			<props>
-				<!-- prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop-->
-				<prop key="mail.smtp.host">smtp.gmail.com</prop> <!--//SMTP Host -->
-				 <prop key="mail.smtp.socketFactory.port">465</prop> <!--//SSL Port -->
-				 <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop> <!--//SSL Factory Class -->
-				 <prop key="mail.smtp.auth">true</prop> <!--//Enabling SMTP Authentication -->
-				 <prop key="mail.smtp.port">465</prop> <!--//SMTP Port -->
+				<!-- Use SMTP transport protocol -->
+				<prop key="mail.transport.protocol">smtp</prop>
+				<!-- Use SMTP-AUTH to authenticate to SMTP server -->
+				<prop key="mail.smtp.auth">true</prop>
+				<!-- GMail requires OAuth to not be considered "low-security" -->
+				<prop key="mail.smtp.auth.mechanisms">XOAUTH2</prop>
+				<!-- Use TLS to encrypt communication with SMTP server -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
 			</props>
 		</property>
 	</bean>
@@ -96,15 +96,17 @@
     </beans>
     
     <beans profile="hom">
-        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-            
-            <property name="driverClassName" value="org.postgresql.Driver"/>
-            <property name="url" value="jdbc:postgresql://localhost/postgres"/>
-            <property name="username" value="postgres"/>
-            <property name="password" value=""/>
-            
-            
+        <bean class="java.net.URI" id="dbUrl">
+            <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL'] + '/' + systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
         </bean>
+
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+            <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+            <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+        </bean>
+        
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
             <property name="dataSource" ref="dataSource"/>
             <property name="jpaVendorAdapter">
@@ -113,9 +115,9 @@
             <property name="jpaProperties">
                 <props>
                     <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.show_sql">false</prop>
+                    <!-- change this to 'verify' before running as a production app -->
                     <prop key="hibernate.hbm2ddl.auto">none</prop>
-                    <prop key="default_batch_fetch_size">4</prop>
                 </props>
             </property>
         </bean>

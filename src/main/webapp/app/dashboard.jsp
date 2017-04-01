@@ -24,11 +24,19 @@
 </style>
 <div class="row">
 	<div class="col-md-12">
+		<jsp:useBean id="now" class="java.util.Date"/>
 		<c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 					<div class="panel panel-default" style="height: 610px;">
-						<div class="panel-heading">Brasil</div>
+						<div class="panel-heading">
+						<c:if test="${CICLO_CONTROLE.dataAprovacao > now }" >
+				        	Brasil ${CICLO_CONTROLE.cicloAnterior.ciclo}
+				        </c:if>
+				        <c:if test="${CICLO_CONTROLE.dataAprovacao <= now }" >
+				        	Brasil ${CICLO_CONTROLE.ciclo}
+				        </c:if>
+						</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
 							<div class="flot-chart">
@@ -149,7 +157,6 @@
 			<!-- Início Graficos Institutos -->
 			<div id="institutochart" class="row"></div>
 
-			<jsp:useBean id="now" class="java.util.Date"/>
             <!--  c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }"-->
 				<!-- Termino Graficos Institutos -->
 				<div class="panel-group" id="accordion">
@@ -472,15 +479,23 @@
         </c:if><!-- Presidente -->
 
         <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
+        
+        <c:if test="${CICLO_CONTROLE.dataAprovacao > now }" >
+        var cicloChartBrasil = ${CICLO_CONTROLE.cicloAnterior.id};
+        </c:if>
+        <c:if test="${CICLO_CONTROLE.dataAprovacao <= now }" >
+        var cicloChartBrasil = ${CICLO_CONTROLE.id};
+        </c:if>
+
         $.ajax({
             type: "GET",
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
-            url: '/gestao/graphicData/statusContratadoGeralGraphicData/${CICLO_CONTROLE.id}/${INSTITUTO_CONTROLE.id}',
+            url: '/gestao/graphicData/statusContratadoGeralGraphicData/' + cicloChartBrasil + '/${INSTITUTO_CONTROLE.id}',
             </c:if>
             <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
-            url: '/gestao/graphicData/statusContratadoGeralGraphicData/${CICLO_CONTROLE.id}',
+            url: '/gestao/graphicData/statusContratadoGeralGraphicData/' + cicloChartBrasil,
             </c:if>
             beforeSend: function(){
             	$("#flot-pie-chart-brasil").block({ message: 'Carregando...'});
@@ -538,10 +553,10 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
-                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/${CICLO_CONTROLE.id}/' + ${INSTITUTO_CONTROLE.id},
+                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil + '/${INSTITUTO_CONTROLE.id}',
                 </c:if>
                 <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
-                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/${CICLO_CONTROLE.id}',
+                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil,
                 </c:if>
                 success: function (data) {
                 	$.each( data, function( key, item ) {
@@ -592,7 +607,7 @@
                 type: "GET",
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
-                url: '/gestao/graphicData/statusContratadoPorInstitutoGraphicData/${CICLO_CONTROLE.id}',
+                url: '/gestao/graphicData/statusContratadoPorInstitutoGraphicData/' + cicloChartBrasil,
                 success: function (data) {
                 	$.each( data, function( key, item ) {
                 		var resultList = item.statusValor.map(function (status) {

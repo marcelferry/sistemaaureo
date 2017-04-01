@@ -46,6 +46,8 @@ public class MetaInstituto extends ObjetoGerenciado {
 	
 	private int viewOrder;
 	
+	private Integer prioridade;
+	
 	/**
 	 * Rodizio no qual foi inserido
 	 */
@@ -132,6 +134,14 @@ public class MetaInstituto extends ObjetoGerenciado {
 	public void setViewOrder(int viewOrder) {
 		this.viewOrder = viewOrder;
 	}
+	
+	public Integer getPrioridade() {
+    return prioridade;
+  }
+	
+	public void setPrioridade(Integer prioridade) {
+    this.prioridade = prioridade;
+  }
 
 	public Atividade getAtividade() {
 		return atividade;

@@ -53,12 +53,16 @@
         template="/app/selecionaentidade.jsp">
     </definition>
     
-    <definition name="erro_persistencia" 
-        template="/app/erro_persistencia.jsp">
+    <definition name="erro_persistencia" extends="nomenu.definition">
+        <put-attribute name="title" value="Metas :: Erro Geral" />
+        <put-attribute name="header" value="Erro na Base de DADOS" />
+        <put-attribute name="bodyPage" value="/app/erro_persistencia.jsp" />
     </definition>
     
-    <definition name="erro_generico" 
-        template="/app/erro_generico.jsp">
+    <definition name="erro_generico" extends="nomenu.definition">
+        <put-attribute name="title" value="Metas :: Erro Geral" />
+        <put-attribute name="header" value="Erro na Geral" />
+        <put-attribute name="bodyPage" value="/app/erro_generico.jsp" />
     </definition>
     
     <definition name="403" 

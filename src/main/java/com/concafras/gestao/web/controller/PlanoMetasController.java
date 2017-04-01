@@ -1213,7 +1213,7 @@ public class PlanoMetasController {
       // planejado
       if (situacaoDesejada.getSituacao() == null
           && TipoMeta.META_QUANTITATIVA.equals(metaForm.getTipoMeta())
-          && situacaoDesejada.getPrevisto() != null) {
+          && situacaoDesejada.getPrevisto() != null) { 
         situacaoDesejada.setSituacao(SituacaoMeta.PLANEJADA);
       }
 

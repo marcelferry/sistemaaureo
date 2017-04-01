@@ -76,7 +76,7 @@
 var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 $(function(){
 
-		$('.summernote').summernote({
+		$('#mensagem').summernote({
 			 height: 300
 		});
 			
@@ -172,7 +172,7 @@ $(function(){
 		        var formData = {
 		            'entidadeId'        : $('input[name=entidadeId]').val(),
 		            'assunto'           : $('input[name=assunto]').val(),
-		            'mensagem'          : $('textarea[name=mensagem]').val()
+		            'mensagem'          : $('#mensagem').summernote('code')
 		        };
 				
 				$.ajax({
@@ -180,7 +180,7 @@ $(function(){
 					contentType : 'application/json; charset=utf-8',
 					dataType : 'json',
 					data : formData,
-					url : '/gestao/entidade/enviar/',
+					url : '/gestao/email/entidade/enviar/',
 					error : function(jqXHR, textStatus, errorThrown) {
 						$('#target').loadingOverlay('remove');
 						var exceptionVO = jQuery.parseJSON(jqXHR.responseText);

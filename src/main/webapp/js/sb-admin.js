@@ -1,3 +1,5 @@
+window.setInterval("atualizarInfo()", 300000);
+
 $.validator.setDefaults({
 	highlight: function (element, errorClass, validClass) {
         if (element.type === "radio") {
@@ -69,6 +71,17 @@ $(function () {
         }
     });
 });
+
+
+function atualizarInfo(){
+	time = new Date();
+	$.get("/gestao/healthCheck/ping", {"time": time.getTime()},
+    function(r){
+      	time = new Date();
+      	intervalo = time.getTime() - r;
+    } );
+}
+
 
 function limparOcultos(campo, oculto){
     if(campo.value == ''){
@@ -441,7 +454,7 @@ if(typeof escapeHtmlEntities == 'undefined') {
 
 
 $(function() {
-
+	
     $('#side-menu').metisMenu();
     
     //$('input[type=text]').keyup(function(){

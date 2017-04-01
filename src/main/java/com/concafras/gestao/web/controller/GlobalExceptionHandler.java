@@ -117,7 +117,7 @@ public class GlobalExceptionHandler {
         }
       };
       
-      this.mailSender.send(preparator);
+      EmailController.sendMessage(this.mailSender, preparator);
       
     } catch (Exception e) {
       // TODO: handle exception

@@ -40,7 +40,7 @@
 		<form action="" method="get">
 			<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
 			<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
-			<button type="button" onclick="this.form.action = 'envio';submit();" class="btn btn-primary">Enviar email</button>
+			<button type="button" onclick="this.form.action = '/gestao/email/entidade/envio';submit();" class="btn btn-primary">Enviar email</button>
 		</form>
 	</div>
 	
@@ -171,7 +171,7 @@
 				contentType : 'application/json; charset=utf-8',
 				dataType : 'json',
 				context : $(this),
-				url : '/gestao/entidade/sendConvite/' + $(this).data('id') + '/' + escape($(this).data('entidade')),
+				url : '/gestao/email/entidade/sendConvite/' + $(this).data('id') + '/' + escape($(this).data('entidade')),
 				error : function(jqXHR, textStatus, errorThrown) {
 					$('#target').loadingOverlay('remove');
 					var exceptionVO = jQuery.parseJSON(jqXHR.responseText);

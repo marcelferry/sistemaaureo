@@ -477,7 +477,7 @@ public class UserProfileController {
         message.setText(text, true);
       }
     };
-    this.mailSender.send(preparator);
+    EmailController.sendMessage(this.mailSender, preparator);
   }
   
   /**

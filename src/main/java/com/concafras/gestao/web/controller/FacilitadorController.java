@@ -5,20 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
@@ -28,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,12 +27,9 @@ import com.concafras.gestao.form.FacilitadorForm;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Instituto;
-import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.Rodizio;
-import com.concafras.gestao.service.AtividadeService;
 import com.concafras.gestao.service.BaseInstitutoService;
 import com.concafras.gestao.service.FacilitadorService;
-import com.concafras.gestao.service.PessoaService;
 import com.concafras.gestao.service.RodizioService;
 
 @Controller
@@ -56,18 +44,6 @@ public class FacilitadorController {
 
     @Autowired
     private RodizioService rodizioService;
-    
-    @Autowired
-    private AtividadeService atividadeService;
-    
-    @Autowired
-    private PessoaService pessoaService;
-    
-    @Autowired
-    private JavaMailSender mailSender;
-    
-    @Autowired
-    private VelocityEngine velocityEngine;
     
     @Autowired
     @Qualifier("facilitadorFormValidator")
@@ -260,45 +236,5 @@ public class FacilitadorController {
 
     return "redirect:/gestao/facilitador/listar";
   }
-    
-    @RequestMapping("/sendConvite/{pessoaId}")
-    public @ResponseBody
-    boolean enviarConvite(@PathVariable("pessoaId") Integer pessoaId) {
-
-        Pessoa pessoa = pessoaService.getPessoa(pessoaId);
-        
-        List<Facilitador> facilitadores = facilitadorService.getFacilitador(pessoa);
-        for (Facilitador facilitador : facilitadores) {
-          sendInviteEmail(pessoa, facilitador.getInstituto().getDescricao());
-        }
-
-        return true;
-    }
-    
-    
-    private void sendInviteEmail(final Pessoa pessoa, final String instituto) {
-      MimeMessagePreparator preparator = new MimeMessagePreparator() {
-         public void prepare(MimeMessage mimeMessage) throws Exception {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-            message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um convite muito especial.");
-            message.setTo(new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-            message.setBcc(new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
-            message.setFrom(new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
-            
-            ClassPathResource file = new ClassPathResource("com/concafras/gestao/email/attachment/manual_do_facilitador.pdf");
-            message.addAttachment(file.getFilename(), file);
-            
-            Map<String, Object> model = new HashMap<String, Object>();
-            model.put("nome", pessoa.getPrimeiroNome());
-            model.put("instituto", instituto);
-            model.put("email", pessoa.getPrimeiroEmail());
-            
-            String text = VelocityEngineUtils.mergeTemplateIntoString(
-               velocityEngine, "com/concafras/gestao/email/template/convite-facilitador.vm", model);
-            message.setText(text, true);
-         }
-      };
-      this.mailSender.send(preparator);
-   }
     
 }

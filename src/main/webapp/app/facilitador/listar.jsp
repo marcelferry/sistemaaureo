@@ -103,7 +103,7 @@
 		        contentType: 'application/json; charset=utf-8',
 		        dataType: 'json',
 		        context: $(this),
-		        url: '/gestao/facilitador/sendConvite/' + $(this).data('id') ,
+		        url: '/gestao/email/facilitador/sendConvite/' + $(this).data('id') ,
 		        error: function(jqXHR, textStatus, errorThrown) 
 				{
 		        	$('#target').loadingOverlay('remove');

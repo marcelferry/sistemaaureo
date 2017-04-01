@@ -25,7 +25,7 @@ public class AcompanhamentoController {
       throws IOException {
     List<StatusAtualInstitutoGraphicData> retorno = null;
     
-    BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
+    //BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
     
     //retorno = planoMetasService.getStatusAtualGraphicData("2015", base.getId());
     
@@ -43,7 +43,7 @@ public class AcompanhamentoController {
       throws IOException {
     List<StatusAtualInstitutoGraphicData> retorno = null;
     
-    BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
+    //BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
     
     //retorno = planoMetasService.getStatusAtualGraphicData("2015", base.getId());
     
@@ -61,7 +61,7 @@ public class AcompanhamentoController {
       throws IOException {
     List<StatusAtualInstitutoGraphicData> retorno = null;
     
-    BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
+    //BaseEntidade base = (BaseEntidade)request.getSession().getAttribute("INSTITUICAO_CONTROLE");
     
     //retorno = planoMetasService.getStatusAtualGraphicData("2015", base.getId());
     

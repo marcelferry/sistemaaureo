@@ -3,20 +3,15 @@ package com.concafras.gestao.web.controller;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -25,17 +20,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
-import org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.util.AutoPopulatingList;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -64,9 +50,7 @@ import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Presidente;
 import com.concafras.gestao.model.Telefone;
-import com.concafras.gestao.model.exception.JqueryBussinessException;
 import com.concafras.gestao.model.view.EntidadeExcel;
-import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.rest.utils.RestUtils;
 import com.concafras.gestao.service.CidadeService;
 import com.concafras.gestao.service.DirigenteService;
@@ -105,12 +89,6 @@ public class EntidadeController {
   
   @Autowired
   private PlanoMetasService planoMetasService;
-  
-  @Autowired
-  private JavaMailSender mailSender;
-  
-  @Autowired
-  private VelocityEngine velocityEngine;
 
 	@RequestMapping("/")
 	public String listEntidade(Map<String, Object> map) {
@@ -874,158 +852,5 @@ public class EntidadeController {
     return atividadeImportada;
 
   }
-  
-  @RequestMapping("/envio")
-  public String envioEmail(Map<String, Object> map) {
-    map.put("basicos", true);
-    return "entidade.enviar";
-  }
-  
-  @RequestMapping("/enviar")
-  public @ResponseBody
-  boolean enviarConvite(@RequestParam("entidadeId") Integer entidadeId, @RequestParam("assunto") String assunto, @RequestParam("mensagem") String mensagem ) {
-
-      if(entidadeId != null){
-        Entidade entidade = entidadeService.findById(entidadeId);
-        if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null){
-          Integer pessoaId = entidade.getPresidente().getPessoa().getId();
-          Pessoa pessoa = pessoaService.getPessoa(pessoaId);
-          if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
-            throw new JqueryBussinessException("Pessoa não possui email cadastrado.");
-          }
-          sendEmail(pessoa, entidade, assunto, mensagem);
-        }
-      } else {
-        List<Entidade> entidades = entidadeService.listEntidade();
-        for (Entidade entidade : entidades) {
-          if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null){
-            Integer pessoaId = entidade.getPresidente().getPessoa().getId();
-            Pessoa pessoa = pessoaService.getPessoa(pessoaId);
-            if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
-              continue;
-            }
-            try{
-              sendEmail(pessoa, entidade, assunto, mensagem);
-            }catch(Exception e){
-              e.printStackTrace();
-            }
-            try {
-              Thread.sleep(100);
-            } catch (InterruptedException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
-            }
-          }
-        }
-      }
-
-      return true;
-  }
-  
-  @RequestMapping("/sendConvite/{pessoaId}/{entidadeId}")
-  public @ResponseBody
-  boolean enviarConvite(@PathVariable("pessoaId") Integer pessoaId, @PathVariable("entidadeId") Integer entidadeId) {
-
-      Pessoa pessoa = pessoaService.getPessoa(pessoaId);
-      Entidade entidade = entidadeService.findById(entidadeId);
-      
-      if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
-        throw new JqueryBussinessException("Pessoa não possui email cadastrado.");
-      }
-      
-      sendInviteEmail(pessoa, entidade);
-
-      return true;
-  }
-  
-  
-  private void sendInviteEmail(final Pessoa pessoa, final Entidade entidade) {
-    MimeMessagePreparator preparator = new MimeMessagePreparator() {
-       public void prepare(MimeMessage mimeMessage) throws Exception {
-          MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-          message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um convite muito especial.");
-          message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-          message.setBcc(  new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
-          message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
-          
-          //ClassPathResource file = new ClassPathResource("com/concafras/gestao/email/attachment/manual_do_facilitador.pdf");
-          //message.addAttachment(file.getFilename(), file);
-          
-          Map<String, Object> model = new HashMap<String, Object>();
-          model.put("presidente" , pessoa );
-          model.put("entidade"   , entidade );
-          model.put("email"      , pessoa.getPrimeiroEmail());
-          
-          String text = VelocityEngineUtils.mergeTemplateIntoString(
-             velocityEngine, "com/concafras/gestao/email/template/convite-presidente.vm", "UTF-8", model);
-          message.setText(text, true);
-       }
-    };
-    this.mailSender.send(preparator);
- }
-
-  
-  private void sendEmail(final Pessoa pessoa, final Entidade entidade, final String assunto, final String mensagem) {
-    
-    final Properties config = new Properties(); 
-    
-    config.put("resource.loader", "string"); 
-    config.put("string.resource.loader.description", "Velocity StringResource loader"); 
-    config.put("string.resource.loader.class", StringResourceLoader.class.getName()); 
-    config.put("string.resource.loader.repository.class", StringResourceRepositoryImpl.class.getName()); 
-    config.put("string.resource.loader.repository.name", EntidadeController.class.getName()); 
-
-    MimeMessagePreparator preparator = new MimeMessagePreparator() {
-       public void prepare(MimeMessage mimeMessage) throws Exception {
-          MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-          message.setSubject(assunto);
-          message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-          //message.setBcc(  new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
-          message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
-          
-          //ClassPathResource file = new ClassPathResource("com/concafras/gestao/email/attachment/manual_do_facilitador.pdf");
-          //message.addAttachment(file.getFilename(), file);
-          
-          VelocityContext model = new VelocityContext();
-          model.put("presidente" , pessoa );
-          model.put("entidade"   , entidade );
-          model.put("email"      , pessoa.getPrimeiroEmail());
-          
-          final VelocityEngine ve = new VelocityEngine();
-          ve.init(config);
-          final String templText = mensagem; 
-          StringResourceLoader.getRepository(EntidadeController.class.getName()).putStringResource("my_template", templText, "UTF-8"); 
-          final Template t = ve.getTemplate("my_template"); 
-          final StringWriter writer = new StringWriter(); 
-          t.merge(model, writer); 
-          String text = writer.toString(); 
-          message.setText(text, true);
-       }
-    };
-    this.mailSender.send(preparator);
- }
-  
-  private void sendRememberEmail(final Pessoa pessoa, final Entidade entidade, final List<ResumoMetaEntidade> metas) {
-    MimeMessagePreparator preparator = new MimeMessagePreparator() {
-       public void prepare(MimeMessage mimeMessage) throws Exception {
-          MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
-          message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um lembrete.");
-          message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-          message.setBcc(  new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
-          message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
-          
-          Map<String, Object> model = new HashMap<String, Object>();
-          model.put("presidente" , pessoa );
-          model.put("entidade"   , entidade );
-          model.put("metas"      , metas );
-          model.put("email"      , pessoa.getPrimeiroEmail());
-          
-          String text = VelocityEngineUtils.mergeTemplateIntoString(
-             velocityEngine, "com/concafras/gestao/email/template/lembrete-presidente.vm", "UTF-8", model);
-          message.setText(text, true);
-       }
-    };
-    this.mailSender.send(preparator);
- }
 	
 }
