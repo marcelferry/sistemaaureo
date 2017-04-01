@@ -20,7 +20,13 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/cupertino/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">    
     <link href="/css/plugins/tooltipster/tooltipster.css" rel="stylesheet" type="text/css" />
-    <link href="/css/plugins/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    
+    <link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/DataTables-1.10.13/css/dataTables.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Buttons-1.2.4/css/buttons.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Responsive-2.1.1/css/responsive.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Select-1.2.0/css/select.bootstrap.css"/>
+    
+    <link href="/js/plugins/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <!-- link href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" /-->
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/css/datepicker3.css" rel="stylesheet">
@@ -38,6 +44,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/js/plugins/moment/moment.min.js"></script>
+    <script src="/js/plugins/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="/js/plugins/blockui/jquery.blockUI.js"></script>
     <script src="/js/bootstrap3-typeahead.min.js"></script>
     <script src="/js/bootstrap-datepicker.js"></script>

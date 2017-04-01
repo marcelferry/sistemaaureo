@@ -344,7 +344,7 @@ public class RelatorioController {
     geraPlanilha(wb, lista);
 
     // Write the output to a file
-    response.setHeader("Content-disposition", "attachment; filename=test.xlsx");
+    response.setHeader("Content-disposition", "attachment; filename=METAS_TODOS_INSTITUTOS.xlsx");
     try {
       wb.write(response.getOutputStream());
       wb.close();
@@ -487,7 +487,7 @@ public class RelatorioController {
     geraPlanilha(wb, lista);
 
     // Write the output to a file
-    response.setHeader("Content-disposition", "attachment; filename=test.xlsx");
+    response.setHeader("Content-disposition", "attachment; filename=FICHAS_TODOS_INSTITUTOS.xlsx");
     try {
       wb.write(response.getOutputStream());
       wb.close();
@@ -625,13 +625,13 @@ public class RelatorioController {
       printSetup.setFitHeight((short) 1);
       printSetup.setFitWidth((short) 1);
 
-      String[] titles = { "ID", "Nível", "Atividade", "Ultima Ação",
-          "Data/Quant.", "Status Atual", "Data/Quant." };
+      String[] titles = { "ID", "Nível", "Atividade", "Como estava?",
+          "Data/Quant.", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
 
       // the header row: centered text in 48pt font
       Row headerRow = sheet.createRow(0);
       headerRow.setHeightInPoints(12.75f);
-      for (int i = 0; i < titles.length; i++) {
+      for (int i = 1; i < titles.length; i++) {
         Cell cell = headerRow.createCell(i);
         cell.setCellValue(titles[i]);
         cell.setCellStyle(styles.get("header"));
@@ -676,6 +676,8 @@ public class RelatorioController {
       sheet.setColumnWidth(4, 256 * 12);
       sheet.setColumnWidth(5, 256 * 20);
       sheet.setColumnWidth(6, 256 * 12);
+      sheet.setColumnWidth(7, 256 * 20);
+      sheet.setColumnWidth(8, 256 * 12);
       // sheet.setZoom(75); //75% scale
 
     }
@@ -705,8 +707,8 @@ public class RelatorioController {
 
     MetaExcel meta = preparaMeta(metaForm);
 
-    int cellnum = 0;
-    cell = row.createCell(0);
+    int cellnum = 1;
+    cell = row.createCell(cellnum);
     styleName = "cell_normal";
     cell.setCellValue(meta.id);
     cell.setCellStyle(styles.get(styleName));

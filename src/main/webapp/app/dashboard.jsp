@@ -22,6 +22,7 @@
 }
 -->
 </style>
+
 <div class="row">
 	<div class="col-md-12">
 		<jsp:useBean id="now" class="java.util.Date"/>
@@ -49,7 +50,7 @@
 					<!-- /.panel -->
 				</div>
 			</div>
-			<ul class="nav nav-tabs" id="tabpessoa" role="tablist">
+			<ul class="nav nav-tabs" id="tabsecretaria" role="tablist">
 				<li class="active"><a href="#regioes" role="tab"
 					data-toggle="tab"><spring:message code="label.regioes" /></a></li>
 				<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE' }">
@@ -154,50 +155,32 @@
 
 		<!-- Visão Presidente -->
 		<c:if test="${not empty INSTITUICAO_CONTROLE}">
-			<!-- Início Graficos Institutos -->
-			<div id="institutochart" class="row"></div>
+			<ul class="nav nav-tabs" id="tabpresidente" role="tablist">
+				<li class="active"><a href="#metascontratadas" role="tab" data-toggle="tab">Metas Contratadas</a></li>
+				<li><a href="#situacaoatual" role="tab" data-toggle="tab">Situação Atual</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="metascontratadas">
+					<div class="col-md-12">
+						<h4>Situação das Metas Contratadas</h4>
+						<div id="institutochart"></div>
+					</div>
+				</div>
+				<div class="tab-pane" id="situacaoatual">
+					<div class="col-md-12">
+						<h4>Situação Atual das Atividades</h4>
+						<div id="presidentedesejadachart"></div>
+					</div>
+				</div>
+				<div class="tab-pane hidden" id="#situacaodesejada">
+					<div class="col-md-12">
+						<h4><spring:message code="titulo.preenchimento.situacao.atual" /></h4>
+						<div id="presidentechart"></div>
+					</div>
+				</div>
+			</div>
 
             <!--  c:if test="${CICLO_CONTROLE.inicioAjustes <= now && CICLO_CONTROLE.terminoAjustes >= now }"-->
-				<!-- Termino Graficos Institutos -->
-				<div class="panel-group" id="accordion">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-target="#collapseOne"
-									href="#collapseOne" class=""> <spring:message
-										code="titulo.preenchimento.situacao.atual" />
-								</a>
-							</h4>
-						</div>
-						<div id="collapseOne" class="panel-collapse">
-							<!-- /.panel-heading -->
-							<div class="panel-body">
-								<div id="presidentechart" class="row"></div>
-								<!-- /.panel-body -->
-							</div>
-						</div>
-						<!-- /.panel -->
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-target="#collapseTwo"
-									href="#collapseTwo" class=""> <spring:message
-										code="titulo.preenchimento.situacao.desejada" />
-								</a>
-							</h4>
-						</div>
-						<!-- /.panel-heading -->
-						<div id="collapseTwo" class="panel-collapse">
-							<div class="panel-body">
-								<div id="presidentedesejadachart" class="row"></div>
-								<!-- /.panel-body -->
-							</div>
-						</div>
-					</div>
-					<!-- /.panel -->
-				</div>
 			<!-- /c:if-->
 		</c:if>
 	</div>
@@ -258,9 +241,18 @@
 	<script src="/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/js/plugins/morris/morris.js"></script>
 
-	<!-- Page-Level Plugin Scripts - Tables -->
-	<script src="/js/plugins/dataTables/jquery.dataTables.js"></script>
-	<script src="/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!-- Page-Level Plugin Scripts - Tables -->
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
 
 	<!-- Page-Level Plugin Scripts - Flot -->
 	<!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
@@ -368,6 +360,13 @@
 
                 	});
                 });
+            	if($.isEmptyObject(data)){
+            		$("#institutochart").html(
+            				'<div class="alert alert-danger alert-dismissable">'+ 
+            					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+  								'<h4>Não há dados para o período selecionado</h4>' + 
+							'</div>');
+            	}
             }        
 	    });
 
@@ -658,7 +657,7 @@
 
     function template(instituto, tipo, indice){
         var html = '\
-       	<div class="col-md-4">\
+       	<div class="col-lg-4 col-md-6 col-sm-12"">\
             <div class="panel panel-default" style="height: 450px;">\
                 <div class="panel-heading">\
                     ' + instituto + '\

@@ -108,13 +108,22 @@
 	    
 	    
 <!-- Page-Level Plugin Scripts - Tables -->
-<script src="/js/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
-	$(document).ready(function() {
-
+$(document).ready(function() {
+	exibirModalAguarde();
  	$("#example").dataTable( {
  		"order": [[ 1, "asc" ]],
  		"language": {
@@ -164,7 +173,7 @@
 		],
      } );
     
-     $('#dataTables-example').dataTable({
+     $('#dataTables-example').DataTable({
          "language": {
              "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
          }

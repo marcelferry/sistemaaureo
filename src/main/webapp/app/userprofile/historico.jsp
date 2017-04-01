@@ -43,9 +43,19 @@
 	<div id="ajax-modal" class="modal fade" tabindex="-1" data-width="760"
 		style="display: none;"></div>
 
-	<!-- Page-Level Plugin Scripts - Tables -->
-	<script src="/js/plugins/dataTables/jquery.dataTables.js"></script>
-	<script src="/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!-- Page-Level Plugin Scripts - Tables -->
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
+
 	<!-- script src="https://cdn.datatables.net/buttons/1.1.0/js/dataTables.buttons.min.js"></script-->
 
 	<script src="/js/plugins/bootstrap-modal/bootstrap-modalmanager.js"></script>

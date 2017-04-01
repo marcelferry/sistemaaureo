@@ -76,7 +76,7 @@ public class MetaInstituto extends ObjetoGerenciado {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="METAS_DEPENDENCIAS",
-    joinColumns = @JoinColumn(name = "id", 
+    joinColumns = @JoinColumn(name = "idMeta", 
                               referencedColumnName = "id"), 
     inverseJoinColumns = @JoinColumn(name = "idDependencia", 
                               referencedColumnName = "id"))

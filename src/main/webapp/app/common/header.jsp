@@ -37,7 +37,7 @@
                 	${INSTITUICAO_CONTROLE.razaoSocial} - 
                 	</c:if>
                 </sec:authorize>
-            	<sec:authorize access="hasRole('ROLE_METAS_DIRIGENTE')">
+            	<sec:authorize access="hasRole('ROLE_METAS_DIRIGENTE') || hasRole('ROLE_METAS_FACILITADOR') ">
             		<c:if test="${not empty INSTITUTO_CONTROLE}">
                 	${INSTITUTO_CONTROLE.descricao} - 
                 	</c:if>
@@ -47,6 +47,17 @@
                 <c:set var="nomeUsuario" value="${fn:split(nomeUsuarioLogado, ' ')}" />
                             ${nomeUsuario[0]} 
                 </sec:authorize>
+           		<c:if test="${not empty ROLE_CONTROLE}">
+           			<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
+               			<sup>(Facilitador)</sup>
+               		</c:if>
+               		<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE' }">
+               			<sup>(Presidente)</sup>
+               		</c:if>
+               		<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE' }">
+               			<sup>(Dirigente)</sup>
+               		</c:if>
+               	</c:if>
             	<sec:authorize access="hasRole('ROLE_ADMIN')">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

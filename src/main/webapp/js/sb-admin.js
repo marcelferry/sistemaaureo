@@ -1,4 +1,4 @@
-window.setInterval("atualizarInfo()", 300000);
+window.setInterval("atualizarInfo()", 10000);
 
 $.validator.setDefaults({
 	highlight: function (element, errorClass, validClass) {
@@ -32,26 +32,86 @@ $.validator.setDefaults({
     }
 });
 
+function ajaxBlockUI(){
+	$.blockUI({ message: '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' }); 
+}
+
+/**
+ * Exibe uma janela Modal com botão "OK"
+ */
+function exibirModal(texto){
+
+	  BootstrapDialog.show({
+	        title: 'Aten&ccedil;&atilde;o',
+	        type: BootstrapDialog.TYPE_DANGER,
+	        message: texto,
+	        size: BootstrapDialog.SIZE_SMALL,
+	        buttons: [{
+                label: 'OK',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+	    });
+}
+
+/**
+ * Exibe uma janela Modal com botão "OK", com tamanho dinâmico
+ */
+function exibirModalResizable(texto, altura, largura){
+
+	  BootstrapDialog.show({
+	        title: 'Extrato',
+	        type: BootstrapDialog.TYPE_DANGER,
+	        message: texto,
+	        size: BootstrapDialog.SIZE_SMALL,
+	        buttons: [{
+              label: 'OK',
+              action: function(dialogRef){
+                  dialogRef.close();
+              }
+          }]
+	    });
+}
+
+function exibirModalAguarde(){
+
+    BootstrapDialog.show({
+        title: 'Aguarde',
+        message: '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>',
+        closeable: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        size: BootstrapDialog.SIZE_SMALL
+        
+    });
+}
+
+
+
+function concluirModalAguarde(){
+	 $.each(BootstrapDialog.dialogs, function(id, dialog){
+         dialog.close();
+     });
+}
+
+function fecharModalAguarde(){
+	 $.each(BootstrapDialog.dialogs, function(id, dialog){
+         dialog.close();
+     });
+}
+
+
 $(function () {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	
-	//$(document).ajaxStart(exibirModalAguarde).ajaxStop(concluirModalAguarde);
+	$(document).ajaxStart(exibirModalAguarde).ajaxStop(concluirModalAguarde);
 	//$(document).ajaxStop(concluirModalAguarde);
 	
 	$(document).ajaxSend(function(e, xhr, options) {
 		xhr.setRequestHeader(header, token);
 	});
-	
-	$(document).ajaxError(
-        function(e,request) {
-            if (request.status == 403) {
-                window.location.reload();
-                //window.location.href = "/myapp/login";
-            }
-        }
-    );
-	        
 	
 	//setup ajax error handling
     $.ajaxSetup({
@@ -62,7 +122,7 @@ $(function () {
                 return;
         	} else if (xhr.status == 403) {
                 alert("Sorry, your session has expired. Please login again to continue");
-                window.location.href ="/login.html";
+                window.location.reload();
             } else if ( textStatus === 'timeout' ) {
 		        alert("O servidor demorou muito para responder.");
 		    } else {
@@ -75,11 +135,18 @@ $(function () {
 
 function atualizarInfo(){
 	time = new Date();
-	$.get("/gestao/healthCheck/ping", {"time": time.getTime()},
-    function(r){
-      	time = new Date();
-      	intervalo = time.getTime() - r;
-    } );
+	$.ajax({
+		global: false, 
+        type: "GET",
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        url: '/gestao/healthCheck/ping',
+        data: {"time": time.getTime()},
+        success: function (data) {
+        	time = new Date();
+          	intervalo = time.getTime() - data;
+        }
+	});	
 }
 
 
