@@ -89,7 +89,7 @@ $(document).ready(function() {
 		},
 		"bProcessing" : false,
 		"bServerSide" : true,
-		"searchDelay": 350,
+		"searchDelay": 500,
 		"sort" : "position",
 		//bStateSave variable you can use to save state on client cookies: set value "true" 
 		"bStateSave" : false,

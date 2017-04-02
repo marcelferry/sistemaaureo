@@ -10,6 +10,7 @@ function completeEntidade(nameField, idField, baseUrl, callbackUpdater){
 	            type: 'Get',
 	            data: { maxRows: 6, query: query },
 	            dataType: 'json',
+	            global: false,
 	            error: function(jqXHR, textStatus, errorThrown) 
 	    		{
 	    			var exceptionVO = jQuery.parseJSON(jqXHR.responseText);

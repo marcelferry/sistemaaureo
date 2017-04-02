@@ -17,6 +17,7 @@ function completeCidade(nameField, idField, baseUrl, callbackUpdater, rodizio){
 		            type: 'Get',
 		            data: { maxRows: 50, query: removeDiacritics (query), rodizio: rodizio },
 		            dataType: 'json',
+		            global: false,
 		            error: function(jqXHR, textStatus, errorThrown) 
 		    		{
 		    			var exceptionVO = jQuery.parseJSON(jqXHR.responseText);
