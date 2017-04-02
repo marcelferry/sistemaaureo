@@ -7,16 +7,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.Presidente;
-import com.concafras.gestao.service.EstadoService;
 import com.concafras.gestao.service.PresidenteService;
 
 @Service
@@ -25,9 +25,6 @@ public class PresidenteServiceImpl implements PresidenteService {
     @PersistenceContext
     EntityManager em;
     
-    @Autowired
-    EstadoService estadoService;
-        
     @Transactional
     public void addPresidente(Presidente presidente) {
         em.persist(presidente);
@@ -86,5 +83,5 @@ public class PresidenteServiceImpl implements PresidenteService {
 
         return em.createQuery(c).getResultList();
 	}
-        
+    
 }

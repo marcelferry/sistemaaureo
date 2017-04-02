@@ -3,7 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       <div class="row">
-       <div class="panel panel-default">
+       <div class="panel panel-primary">
                 <div class="panel-heading">
                     Dados Gerais
                 </div>
@@ -17,7 +17,7 @@
             </div>
           <c:if  test="${!empty listaMetas}">
          
-          <div class="panel panel-default">
+          <div class="panel panel-primary">
               <div class="panel-heading">
                   Entidades
               </div>
@@ -101,7 +101,7 @@
        </div>
           </c:if>
           <c:if  test="${empty listaMetas}">
-         	<div class="panel panel-default">
+         	<div class="panel panel-primary">
               <div class="panel-heading">
                   Mensagem
               </div>

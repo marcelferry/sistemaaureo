@@ -6,7 +6,7 @@
 
 <div class="row">
 	<c:if test="${!empty institutoList}">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<spring:message code="label.institutos.cadastrados" />
 			</div>

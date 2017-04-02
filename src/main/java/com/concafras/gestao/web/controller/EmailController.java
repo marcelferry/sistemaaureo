@@ -42,6 +42,7 @@ import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.FacilitadorService;
 import com.concafras.gestao.service.PessoaService;
+import com.concafras.gestao.service.impl.PresidenteServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

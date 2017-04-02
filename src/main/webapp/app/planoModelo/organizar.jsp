@@ -14,7 +14,7 @@ tr.shown td.detais-controls {
 
 </style>
       <div class="row">
-       			<div class="panel panel-default">
+       			<div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Dados Gerais 
 	                </div>
@@ -24,7 +24,7 @@ tr.shown td.detais-controls {
 	                	<form:input path="instituto.descricao" cssClass="form-control" readonly="true"/>
 	                </div>
 	            </div>
-	            <div class="panel panel-default">
+	            <div class="panel panel-primary">
 	                <div class="panel-heading">
 	                    Metas
 	                </div>

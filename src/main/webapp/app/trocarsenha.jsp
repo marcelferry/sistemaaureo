@@ -33,7 +33,7 @@
         		</span>
         	</div>
             <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Redefinição de senha</h3>
                     </div>

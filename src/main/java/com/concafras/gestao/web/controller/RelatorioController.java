@@ -631,8 +631,8 @@ public class RelatorioController {
       // the header row: centered text in 48pt font
       Row headerRow = sheet.createRow(0);
       headerRow.setHeightInPoints(12.75f);
-      for (int i = 1; i < titles.length; i++) {
-        Cell cell = headerRow.createCell(i);
+      for (int i = 0; i < titles.length; i++) {
+        Cell cell = headerRow.createCell(i+1);
         cell.setCellValue(titles[i]);
         cell.setCellStyle(styles.get("header"));
       }
@@ -669,15 +669,15 @@ public class RelatorioController {
 
       // set column widths, the width is measured in units of 1/256th of a
       // character width
-      sheet.setColumnWidth(0, 256 * 6);
       sheet.setColumnWidth(1, 256 * 6);
-      sheet.setColumnWidth(2, 256 * 65);
-      sheet.setColumnWidth(3, 256 * 20);
-      sheet.setColumnWidth(4, 256 * 12);
-      sheet.setColumnWidth(5, 256 * 20);
-      sheet.setColumnWidth(6, 256 * 12);
-      sheet.setColumnWidth(7, 256 * 20);
-      sheet.setColumnWidth(8, 256 * 12);
+      sheet.setColumnWidth(2, 256 * 6);
+      sheet.setColumnWidth(3, 256 * 65);
+      sheet.setColumnWidth(4, 256 * 20);
+      sheet.setColumnWidth(5, 256 * 12);
+      sheet.setColumnWidth(6, 256 * 20);
+      sheet.setColumnWidth(7, 256 * 12);
+      sheet.setColumnWidth(8, 256 * 20);
+      sheet.setColumnWidth(9, 256 * 12);
       // sheet.setZoom(75); //75% scale
 
     }

@@ -52,7 +52,7 @@
 		<div class="form-group">
 			<form:hidden path="instituto.id"/>
 			<c:if  test="${!empty institutoList}">
-		          <div class="panel panel-default">
+		          <div class="panel panel-primary">
 		              <div class="panel-heading">
 		                  Institutos Cadastrados
 		              </div>
@@ -116,7 +116,7 @@
 	    <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 		    	<div class="col-sm-2">
-			      <input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
+			      <!-- input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/ -->
 			      </div>
 			     
 		    </div>

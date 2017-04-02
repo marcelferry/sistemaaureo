@@ -13,7 +13,7 @@
 </style>
 <div class="row">
 	<c:if test="${!empty rodizioList}">
-		<div class="panel panel-default" id="panelRodizio">
+		<div class="panel panel-primary" id="panelRodizio">
 			<div class="panel-heading"><spring:message code="label.rodizio" /></div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -43,7 +43,7 @@
 			</div>
 		</div>
 	</c:if>
-			<div class="panel panel-default hidden" id="panelEntidade">
+			<div class="panel panel-primary hidden" id="panelEntidade">
 	                <div class="panel-heading">
 	                    Entidades
 	                </div>
@@ -76,7 +76,7 @@
 		        	</div>
 		        </div>
 		        
-		        <div class="panel panel-default hidden" id="panelInstituto">
+		        <div class="panel panel-primary hidden" id="panelInstituto">
 	                <div class="panel-heading">
 	                    Institutos
 	                </div>
@@ -103,7 +103,7 @@
 			             </div>
 		        	</div>
 		        </div>
-		        <div class="panel panel-default hidden" id="panelMetas">
+		        <div class="panel panel-primary hidden" id="panelMetas">
 	                <div class="panel-heading">
 	                    Metas
 	                </div>
@@ -138,7 +138,7 @@
 		        </div>
 		        
 	<c:if test="${empty rodizioList}">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">Mensagem</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">Não há Rodízios cadastradas.</div>
@@ -568,7 +568,7 @@
 	 function template(instituto, tipo, indice){
 	        var html = '\
 	       	<div class="col-md-4">\
-	            <div class="panel panel-default" style="height: 420px;">\
+	            <div class="panel panel-primary" style="height: 420px;">\
 	                <div class="panel-heading">\
 	                    ' + instituto + '\
 	                </div>\

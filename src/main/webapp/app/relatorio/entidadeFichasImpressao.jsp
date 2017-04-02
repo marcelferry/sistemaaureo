@@ -13,7 +13,7 @@
 </style>
 <div class="row">
 
-	<div class="panel panel-default" id="panelInstituto">
+	<div class="panel panel-primary" id="panelInstituto">
 		<div class="panel-heading">Institutos</div>
 		<!-- /.panel-heading -->
 		<div class="panel-body">

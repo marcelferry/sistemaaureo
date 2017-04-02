@@ -29,7 +29,7 @@
 		<c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
-					<div class="panel panel-default" style="height: 610px;">
+					<div class="panel panel-primary" style="height: 610px;">
 						<div class="panel-heading">
 						<c:if test="${CICLO_CONTROLE.dataAprovacao > now }" >
 				        	Brasil ${CICLO_CONTROLE.cicloAnterior.ciclo}
@@ -64,7 +64,7 @@
 					<!-- Inicio Graficos Regioes -->
 					<div class="row ">
 						<div class="col-md-4">
-							<div class="panel panel-default" style="height: 450px;">
+							<div class="panel panel-primary" style="height: 450px;">
 								<div class="panel-heading">Norte</div>
 								<!-- /.panel-heading -->
 								<div class="panel-body">
@@ -78,7 +78,7 @@
 							<!-- /.panel -->
 						</div>
 						<div class="col-md-4">
-							<div class="panel panel-default" style="height: 450px;">
+							<div class="panel panel-primary" style="height: 450px;">
 								<div class="panel-heading">Nordeste</div>
 								<!-- /.panel-heading -->
 								<div class="panel-body">
@@ -93,7 +93,7 @@
 						</div>
 
 						<div class="col-md-4">
-							<div class="panel panel-default" style="height: 450px;">
+							<div class="panel panel-primary" style="height: 450px;">
 								<div class="panel-heading">Centro Oeste</div>
 								<!-- /.panel-heading -->
 								<div class="panel-body">
@@ -110,7 +110,7 @@
 					<div class="row ">
 
 						<div class="col-md-4  col-md-offset-2">
-							<div class="panel panel-default" style="height: 450px;">
+							<div class="panel panel-primary" style="height: 450px;">
 								<div class="panel-heading">Sudeste</div>
 								<!-- /.panel-heading -->
 								<div class="panel-body">
@@ -125,7 +125,7 @@
 						</div>
 
 						<div class="col-md-4">
-							<div class="panel panel-default" style="height: 450px;">
+							<div class="panel panel-primary" style="height: 450px;">
 								<div class="panel-heading">Sul</div>
 								<!-- /.panel-heading -->
 								<div class="panel-body">
@@ -658,7 +658,7 @@
     function template(instituto, tipo, indice){
         var html = '\
        	<div class="col-lg-4 col-md-6 col-sm-12"">\
-            <div class="panel panel-default" style="height: 450px;">\
+            <div class="panel panel-primary" style="height: 450px;">\
                 <div class="panel-heading">\
                     ' + instituto + '\
                 </div>\

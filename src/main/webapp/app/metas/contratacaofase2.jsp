@@ -45,6 +45,13 @@
   background: #668bb1;
   color: inherit;
 }
+
+.panel-group .panel-heading a.collapsed.priority {
+  /* background: #f0ad4e; */
+  background: #335599;
+  color: inherit;
+}
+
 .panel-group .panel-heading a:after {
   content: '-';
   position: absolute;
@@ -238,12 +245,22 @@
 	
 	<div class="row">
 		<div class="col-md-12">
+			<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR'}">
 			<fieldset>
-				<legend>Plano de Metas</legend>
+				<legend>Plano de Metas (Prioridades)</legend>
 	            <div class="form-group">
 	            	<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
 	            </div>
 	              
+	            <div class="panel-group" id="accordion">
+	            	<c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
+	                		 	<template:itemMetaPrioridade meta="${meta}" index="${status.index}" count="${status.count}" priority="true"/>
+	                 	</c:forEach>
+	            </div>
+	      	</fieldset>
+	      	</c:if>
+	      	<fieldset>
+				<legend>Plano de Metas Completo</legend>
 	            <div class="panel-group" id="accordion">
 	               <c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
 	                		 	<template:itemMeta meta="${meta}" index="${status.index}" count="${status.count}"/>

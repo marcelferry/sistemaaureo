@@ -36,7 +36,7 @@
         		</span>
         	</div>
             <div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4">
-                <div class="panel panel-default" style="height: 550px; margin-top: 50px;">
+                <div class="panel panel-primary" style="height: 550px; margin-top: 50px;">
                     <div class="panel-heading">
                         <h3 class="panel-title">Progresso do Sistema</h3>
                     </div>

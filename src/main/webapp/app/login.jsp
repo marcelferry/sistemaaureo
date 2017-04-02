@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Fechado para o Rodízio</h3>
                     </div>
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Sistema em manutenção</h3>
                     </div>

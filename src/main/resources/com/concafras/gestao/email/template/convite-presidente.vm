@@ -1,18 +1,13 @@
 <html>
 <body>
 
-<h3>IMPORTANTE:</h3>
-<h4>Este email se destina ao PRESIDENTE da instituição ${entidade.razaoSocial}, caso você não seja o presidente peço gentilmente que direcione para ele o quanto antes. Gratos.</h4>
- 
-<hr/>
-
 <h4>Caro Presidente, que a paz de Jesus esteja com você.</h4>
 
 <p>Está se aproximando nossa reunião nacional da semana santa.</p>
 
 <p>Neste ano utilizaremos o sistema de metas que nos possibilitará o acesso aos resultados e um controle continuo e seguro de todas as informações.</p>
 
-<p>Para que o processo do rodizio fique mais fácil, será muito importante que você preencha as fichas previamente e você fara isto online, seguindo o passo a passo que se encontra no link: https://www.youtube.com/watch?v=D81OaF6mirE</p>
+<!-- p>Para que o processo do rodizio fique mais fácil, será muito importante que você preencha as fichas previamente e você fara isto online, seguindo o passo a passo que se encontra no link: https://www.youtube.com/watch?v=D81OaF6mirE</p-->
 
 <p>O preenchimento pode ser feito por você ou pelos seus dirigentes de instituto, desde que utilizem o seu login e a sua senha.</p>
 
@@ -63,6 +58,13 @@
 <p>&nbsp;</p>
 
 <p>&nbsp;</p>
+
+<h3>IMPORTANTE:</h3>
+
+<h4>Este email se destina ao PRESIDENTE da instituição ${entidade.razaoSocial}, caso você não seja o presidente peço gentilmente que direcione para ele o quanto antes. Gratos.</h4>
+ 
+<hr/>
+
 
 </body>
 
