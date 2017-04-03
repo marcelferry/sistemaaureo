@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
          (request.getQueryString() != null ? "?" +
           request.getQueryString() : ""); // "?" + "lastname=Fox&age=30"
       
-      sb.append("<b>Site URL<b><br/>");
+      sb.append("<b>Site URL</b><br/>");
       
       sb.append(uri);
       
