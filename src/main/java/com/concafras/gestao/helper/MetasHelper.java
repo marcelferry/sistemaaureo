@@ -109,9 +109,13 @@ public class MetasHelper {
   
   private MetaForm processaMetasAnteriores1(MetaForm meta, MetaEntidade metaEntidade, Rodizio cicloAtual) {
     // Carregar avaliacao pre-salva
-    HistoricoMetaEntidade situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+    HistoricoMetaEntidade situacaoAtualSalva = null;
+    HistoricoMetaEntidade historico = null;
+    if( cicloAtual.getCicloAnterior() != null ){
+      situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+      historico = getHistoricoPreAvaliacao( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId() );
+    }
     
-    HistoricoMetaEntidade historico = getHistoricoPreAvaliacao( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId() );
     if(historico != null){
       System.out.println("\n========================================================");
       System.out.println(metaEntidade.getDescricao());
