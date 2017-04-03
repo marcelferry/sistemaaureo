@@ -57,8 +57,21 @@ public class GlobalExceptionHandler {
     try {
 
       final StringBuffer sb = new StringBuffer();
+      
+      String uri = request.getScheme() + "://" +   // "http" + "://
+          request.getServerName() +       // "myhost"
+          ":" + request.getServerPort() + // ":" + "8080"
+          request.getRequestURI() +       // "/people"
+         (request.getQueryString() != null ? "?" +
+          request.getQueryString() : ""); // "?" + "lastname=Fox&age=30"
+      
+      sb.append("<b>Site URL<b><br/>");
+      
+      sb.append(uri);
+      
+      sb.append("<br/>");
   
-      sb.append("Variaveis de Sessão\r\n");
+      sb.append("<b>Variaveis de Sessão</b><br/>");
   
       Enumeration<String> sParameters = request.getSession().getAttributeNames();
   
@@ -67,12 +80,12 @@ public class GlobalExceptionHandler {
         sb.append(key);
         sb.append("=");
         sb.append(request.getSession().getAttribute(key));
-        sb.append("\r\n");
+        sb.append("<br/>");
       }
   
-      sb.append("\r\n");
+      sb.append("<br/>");
   
-      sb.append("Variaveis de Requisição\r\n");
+      sb.append("<b>Variaveis de Requisição</b><br/>");
   
       Map<String, String[]> parameters = request.getParameterMap();
   
@@ -85,7 +98,7 @@ public class GlobalExceptionHandler {
           sb.append(string);
           sb.append(" | ");
         }
-        sb.append("\r\n");
+        sb.append("<br/>");
       }
   
       Enumeration<String> rParameters = request.getSession().getAttributeNames();
@@ -95,14 +108,14 @@ public class GlobalExceptionHandler {
         sb.append(key);
         sb.append("=");
         sb.append(request.getSession().getAttribute(key));
-        sb.append("\r\n");
+        sb.append("<br/>");
       }
       
       StackTraceElement[] elements = exception.getStackTrace();
   
       for (StackTraceElement stackTraceElement : elements) {
         sb.append(stackTraceElement.toString());
-        sb.append("\r\n");
+        sb.append("<br/>");
       }
       
       MimeMessagePreparator preparator = new MimeMessagePreparator() {
