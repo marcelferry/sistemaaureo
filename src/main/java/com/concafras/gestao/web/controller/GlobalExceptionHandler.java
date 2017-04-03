@@ -120,6 +120,14 @@ public class GlobalExceptionHandler {
       
       sb.append("<b>Exceção</b><br/>");
   
+      sb.append(exception.getMessage());
+      
+      sb.append("<br/>");
+      
+      sb.append(exception.getCause());
+      
+      sb.append("<br/>");
+      
       
       StackTraceElement[] elements = exception.getStackTrace();
   
