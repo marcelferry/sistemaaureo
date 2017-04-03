@@ -341,7 +341,7 @@ public class RelatorioController {
 
     styles = createStyles(wb);
 
-    geraPlanilha(wb, lista);
+    geraPlanilha(wb, lista, false);
 
     // Write the output to a file
     response.setHeader("Content-disposition", "attachment; filename=METAS_TODOS_INSTITUTOS.xlsx");
@@ -423,7 +423,6 @@ public class RelatorioController {
    */
   @RequestMapping("/imprimeTodasFichaBranco")
   public ModelAndView todasShowMetasBranco(HttpServletRequest request,
-      @PathVariable("formato") String formato,
       @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
 
     BaseEntidade entidade = null;
@@ -484,7 +483,7 @@ public class RelatorioController {
 
     styles = createStyles(wb);
 
-    geraPlanilha(wb, lista);
+    geraPlanilha(wb, lista, true);
 
     // Write the output to a file
     response.setHeader("Content-disposition", "attachment; filename=FICHAS_TODOS_INSTITUTOS.xlsx");
@@ -606,7 +605,7 @@ public class RelatorioController {
     return lista;
   }
 
-  private void geraPlanilha(Workbook wb, List<PlanoMetasForm> lista) {
+  private void geraPlanilha(Workbook wb, List<PlanoMetasForm> lista, boolean branco) {
     for (PlanoMetasForm plan : lista) {
 
       Sheet sheet = wb.createSheet(plan.getInstituto().getNome());
@@ -625,8 +624,13 @@ public class RelatorioController {
       printSetup.setFitHeight((short) 1);
       printSetup.setFitWidth((short) 1);
 
-      String[] titles = { "ID", "Nível", "Atividade", "Como estava?",
-          "Data/Quant.", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
+      String[] titles;
+      if(branco){
+        titles = new String[]{ "ID", "Nível", "Atividade", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
+      } else {
+        titles = new String[]{ "ID", "Nível", "Atividade", "Como estava?",
+            "Data/Quant.", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
+      }
 
       // the header row: centered text in 48pt font
       Row headerRow = sheet.createRow(0);
@@ -664,7 +668,7 @@ public class RelatorioController {
       for (int i = 0; i < plan.getDependencias()
           .size(); i++, rownum++, nivel++) {
         rownum = processaLinha(sheet, plan.getDependencias().get(i), rownum,
-            nivel + ".");
+            nivel + ".", branco);
       }
 
       // set column widths, the width is measured in units of 1/256th of a
@@ -699,7 +703,7 @@ public class RelatorioController {
   }
 
   private int processaLinha(Sheet sheet, MetaForm metaForm, int rownum,
-      String nivel) {
+      String nivel, boolean branco) {
     Row row;
     Cell cell;
     String styleName;
@@ -710,7 +714,11 @@ public class RelatorioController {
     int cellnum = 1;
     cell = row.createCell(cellnum);
     styleName = "cell_normal";
-    cell.setCellValue(meta.id);
+    if(meta.id != null){
+      cell.setCellValue(meta.id);
+    } else {
+      cell.setCellValue("");      
+    }
     cell.setCellStyle(styles.get(styleName));
 
     cellnum++;
@@ -725,30 +733,48 @@ public class RelatorioController {
     cell.setCellValue(meta.descricao);
     cell.setCellStyle(styles.get(styleName));
 
+    if(!branco){
+      cellnum++;
+      cell = row.createCell(cellnum);
+      styleName = "cell_bb";
+      cell.setCellValue(meta.situacaoAnterior == null ? ""
+          : meta.situacaoAnterior.getSituacao());
+      cell.setCellStyle(styles.get(styleName));
+      
+      if (TipoMeta.META_EXECUCAO.equals(meta.tipoMeta)) {
+        adicionaComboStatusExecucao(sheet, cell);
+      } else if (TipoMeta.META_IMPLANTACAO.equals(meta.tipoMeta)) {
+        adicionaComboStatusImplantacao(sheet, cell);
+      }
+  
+      cellnum++;
+      cell = row.createCell(cellnum);
+      styleName = "cell_b_date";
+      if(meta.conclusaoAnterior != null){
+        cell.setCellValue(meta.conclusaoAnterior  );
+      } 
+      cell.setCellStyle(styles.get(styleName));
+      
+    }
     cellnum++;
     cell = row.createCell(cellnum);
-    styleName = "cell_bb";
-    cell.setCellValue(meta.situacaoAnterior == null ? ""
-        : meta.situacaoAnterior.getSituacao());
-    cell.setCellStyle(styles.get(styleName));
-
-    cellnum++;
-    cell = row.createCell(cellnum);
-    styleName = "cell_b_date";
-    cell.setCellValue(meta.conclusaoAnterior);
-    cell.setCellStyle(styles.get(styleName));
-
-    cellnum++;
-    cell = row.createCell(cellnum);
-    styleName = "cell_bb";
+    styleName = "cell_normal_unlock";
     cell.setCellValue(
         meta.situacaoAtual == null ? "" : meta.situacaoAtual.getSituacao());
     cell.setCellStyle(styles.get(styleName));
+    
+    if (TipoMeta.META_EXECUCAO.equals(meta.tipoMeta)) {
+      adicionaComboStatusExecucao(sheet, cell);
+    } else if (TipoMeta.META_IMPLANTACAO.equals(meta.tipoMeta)) {
+      adicionaComboStatusImplantacao(sheet, cell);
+    }
 
     cellnum++;
     cell = row.createCell(cellnum);
-    styleName = "cell_b_date";
-    cell.setCellValue(meta.conclusaoAtual);
+    styleName = "cell_bu_date";
+    if(meta.conclusaoAtual != null){
+      cell.setCellValue(meta.conclusaoAtual);
+    }
     cell.setCellStyle(styles.get(styleName));
 
     cellnum++;
@@ -757,11 +783,7 @@ public class RelatorioController {
     cell.setCellValue("");
     cell.setCellStyle(styles.get(styleName));
 
-    if (TipoMeta.META_EXECUCAO.equals(meta.tipoMeta)) {
-      adicionaComboStatusExecucao(sheet, cell);
-    } else if (TipoMeta.META_IMPLANTACAO.equals(meta.tipoMeta)) {
-      adicionaComboStatusImplantacao(sheet, cell);
-    }
+    adicionaComboStatusPlanejado(sheet, cell);
 
     cellnum++;
     cell = row.createCell(cellnum);
@@ -776,7 +798,7 @@ public class RelatorioController {
       for (int i = 0; i < metaForm.getDependencias()
           .size(); i++, rownum++, subNivel++) {
         rownum = processaLinha(sheet, metaForm.getDependencias().get(i), rownum,
-            nivel + subNivel + ".");
+            nivel + subNivel + ".", branco);
       }
     }
 
@@ -852,6 +874,21 @@ public class RelatorioController {
     DataValidationConstraint dvConstraint = dvHelper
         .createExplicitListConstraint(
             new String[] { "Realizada", "Não Realizada" });
+    CellRangeAddressList addressList = new CellRangeAddressList(
+        cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(),
+        cell.getColumnIndex());
+    DataValidation validation = dvHelper.createValidation(dvConstraint,
+        addressList);
+    validation.setShowErrorBox(true);
+    sheet.addValidationData(validation);
+  }
+  
+  private void adicionaComboStatusPlanejado(Sheet sheet, Cell cell) {
+    DataValidationHelper dvHelper = new XSSFDataValidationHelper(
+        (XSSFSheet) sheet);
+    DataValidationConstraint dvConstraint = dvHelper
+        .createExplicitListConstraint(
+            new String[] { "Planejado", "Não Planejado" });
     CellRangeAddressList addressList = new CellRangeAddressList(
         cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(),
         cell.getColumnIndex());
@@ -974,6 +1011,14 @@ public class RelatorioController {
     style.setAlignment(HorizontalAlignment.LEFT);
     style.setFont(font2);
     styles.put("cell_bb", style);
+    
+    font2.setColor(IndexedColors.BLUE.getIndex());
+    font2.setBold(true);
+    style = createBorderedStyle(wb);
+    style.setAlignment(HorizontalAlignment.LEFT);
+    style.setFont(font2);
+    style.setLocked(false);
+    styles.put("cell_bb_unlock", style);
 
     style = createBorderedStyle(wb);
     style.setAlignment(HorizontalAlignment.RIGHT);

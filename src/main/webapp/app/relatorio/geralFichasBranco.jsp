@@ -5,6 +5,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div class="row">
+	<div class="col-md-12">
 	<c:if test="${!empty institutoList}">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -46,14 +47,21 @@
 								</c:forEach>
 							</tbody>
 						</table>
+						<a class="btn btn-primary col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> HTML/PDF</a>
+		            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+							<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
+						</form>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<a class="btn btn-primary col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> XLS</a>
+		            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco/XLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+							<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
+						</form>
+						</sec:authorize>
 				</div>
-					<a class="btn btn-primary" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /></a>
-	            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco/XLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
-						<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
-					</form>
 			</div>
 		</div>
 	</c:if>
+	</div>
 </div>
 
 <!-- Page-Level Plugin Scripts - Tables -->
