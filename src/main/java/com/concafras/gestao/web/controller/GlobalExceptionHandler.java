@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
   
       sb.append("<br/>");
   
-      sb.append("<b>Variaveis de Requisição</b><br/>");
+      sb.append("<b>Parametros de Requisição</b><br/>");
   
       Map<String, String[]> parameters = request.getParameterMap();
   
@@ -103,17 +103,18 @@ public class GlobalExceptionHandler {
   
       sb.append("<br/>");
       
-      sb.append("<b>Variaveis de Sessão</b><br/>");
+      sb.append("<b>Variaveis de Requisição</b><br/>");
       
-      Enumeration<String> rParameters = request.getSession().getAttributeNames();
+      Enumeration<String> rParameters = request.getAttributeNames();
   
       while (rParameters.hasMoreElements()) {
         String key = rParameters.nextElement();
         sb.append(key);
         sb.append("=");
-        sb.append(request.getSession().getAttribute(key));
+        sb.append(request.getAttribute(key));
         sb.append("<br/>");
       }
+      
       
       sb.append("<br/>");
       

@@ -146,4 +146,15 @@ public class Usuario implements Serializable {
     this.loginHistory = loginHistory;
   }
 
+  @Override
+  public String toString() {
+    return "Usuario [id=" + id + ", username=" + username + ", password="
+        + password + ", confirmPassword=" + confirmPassword + ", pessoa="
+        + pessoa + ", userRoles=" + userRoles + ", passwordExpired="
+        + passwordExpired + ", lastLogin=" + lastLogin + ", loginHistory="
+        + loginHistory + "]";
+  }
+  
+  
+
 }
