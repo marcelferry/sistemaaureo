@@ -101,6 +101,10 @@ public class GlobalExceptionHandler {
         sb.append("<br/>");
       }
   
+      sb.append("<br/>");
+      
+      sb.append("<b>Variaveis de Sessão</b><br/>");
+      
       Enumeration<String> rParameters = request.getSession().getAttributeNames();
   
       while (rParameters.hasMoreElements()) {
@@ -110,6 +114,11 @@ public class GlobalExceptionHandler {
         sb.append(request.getSession().getAttribute(key));
         sb.append("<br/>");
       }
+      
+      sb.append("<br/>");
+      
+      sb.append("<b>Exceção</b><br/>");
+  
       
       StackTraceElement[] elements = exception.getStackTrace();
   
