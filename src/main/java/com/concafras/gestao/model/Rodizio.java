@@ -18,8 +18,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 @Entity
 @Table(name="CICLOS_AVALIACAO")
 @Access(AccessType.FIELD)

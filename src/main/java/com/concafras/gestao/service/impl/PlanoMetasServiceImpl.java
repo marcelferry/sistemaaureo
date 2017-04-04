@@ -306,27 +306,32 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       query.setParameter(3, ciclo);
       //query.execute();
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
+
+      if( query.hasMoreResults() ){
       
-      StatusAtualInstitutoGraphicData institutoAtual = null;
-      Integer idInstituto = null;
-      
-      for (Object[] resultElement : result2) {
-        Integer idAux = (Integer)resultElement[0];
-        if( idAux != idInstituto ){
-          if(institutoAtual != null)
-            result.add(institutoAtual);
-          institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
-          idInstituto = idAux;
-          institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+        List<Object[]> result2 = query.getResultList();
+        
+        StatusAtualInstitutoGraphicData institutoAtual = null;
+        Integer idInstituto = null;
+        
+        for (Object[] resultElement : result2) {
+          Integer idAux = (Integer)resultElement[0];
+          if( idAux != idInstituto ){
+            if(institutoAtual != null)
+              result.add(institutoAtual);
+            institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
+            idInstituto = idAux;
+            institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+          }
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+          idAux = null;
         }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
-        idAux = null;
+        
+        if(institutoAtual != null) {
+          result.add(institutoAtual);
+        }
       }
-      if(institutoAtual != null)
-        result.add(institutoAtual);
       
       
       return result;
@@ -341,28 +346,34 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       query.setParameter(2, entidade);
       query.setParameter(3, ciclo);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
       
-      StatusAtualInstitutoGraphicData institutoAtual = null;
-      Integer idInstituto = null;
+      if( query.hasMoreResults() ){
       
-      for (Object[] resultElement : result2) {
-        Integer idAux = (Integer)resultElement[0];
-        if( idAux != idInstituto ){
-          if(institutoAtual != null)
-            result.add(institutoAtual);
-          institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
-          idInstituto = idAux;
-          institutoAtual.setStatusValor(new ArrayList<StatusValor>());
-        }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[3],  ((BigInteger)resultElement[4] ).intValue()));
+        List<Object[]> result2 = query.getResultList();
         
-        idAux = null;
+        StatusAtualInstitutoGraphicData institutoAtual = null;
+
+        Integer idInstituto = null;
+        
+        for (Object[] resultElement : result2) {
+          Integer idAux = (Integer)resultElement[0];
+          if( idAux != idInstituto ){
+            if(institutoAtual != null)
+              result.add(institutoAtual);
+            institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
+            idInstituto = idAux;
+            institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+          }
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[3],  ((BigInteger)resultElement[4] ).intValue()));
+          
+          idAux = null;
+        }
+        if(institutoAtual != null) {
+          result.add(institutoAtual);
+        }
+      
       }
-      if(institutoAtual != null)
-        result.add(institutoAtual);
       
       
       return result;
@@ -378,29 +389,33 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       query.setParameter(2, entidade);
       query.setParameter(3, ciclo);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
-      
-      StatusAtualInstitutoGraphicData institutoAtual = null;
-      Integer idInstituto = null;
-      
-      for (Object[] resultElement : result2) {
-        Integer idAux = (Integer)resultElement[0];
-        if( idAux != idInstituto ){
-          if(institutoAtual != null)
-            result.add(institutoAtual);
-          institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
-          idInstituto = idAux;
-          institutoAtual.setStatusValor(new ArrayList<StatusValor>());
-        }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+
+      if( query.hasMoreResults() ){
         
-        idAux = null;
-      }
-      if(institutoAtual != null)
-        result.add(institutoAtual);
+        List<Object[]> result2 = query.getResultList();
+        
+        StatusAtualInstitutoGraphicData institutoAtual = null;
+        Integer idInstituto = null;
+        
+        for (Object[] resultElement : result2) {
+          Integer idAux = (Integer)resultElement[0];
+          if( idAux != idInstituto ){
+            if(institutoAtual != null)
+              result.add(institutoAtual);
+            institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
+            idInstituto = idAux;
+            institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+          }
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+          
+          idAux = null;
+        }
+        if(institutoAtual != null){
+          result.add(institutoAtual);
+        }
       
+      }
       
       return result;
     }
@@ -578,18 +593,23 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       else 
         query.setParameter(3, 0);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
+
+      if( query.hasMoreResults() ){
       
-      StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos");
-      institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+        List<Object[]> result2 = query.getResultList();
+        
+        
+        StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos");
+        institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+        
+        for (Object[] resultElement : result2) {
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[0],  ((BigInteger)resultElement[1] ).intValue()));
+        }
+        
+        result.add(institutoAtual);
       
-      for (Object[] resultElement : result2) {
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[0],  ((BigInteger)resultElement[1] ).intValue()));
       }
-      
-      result.add(institutoAtual);
       
       return result;
     }
@@ -629,44 +649,47 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       else 
         query.setParameter(6, 0);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<ResumoMetaEntidade> result = new ArrayList<ResumoMetaEntidade>();
-      
-      ResumoMetaEntidade institutoAtual = null;
-      
-      for (Object[] resultElement : result2) {
-        institutoAtual = new ResumoMetaEntidade();
-        institutoAtual.setIdEntidade((Integer)resultElement[0]);
-        institutoAtual.setEntidade((String)resultElement[1]);
-        institutoAtual.setCidade((String)resultElement[2]);
-        institutoAtual.setUf((String)resultElement[3]);
-        institutoAtual.setIdCiclo((Integer)resultElement[4]);
-        institutoAtual.setCiclo((String)resultElement[5]);
-        institutoAtual.setIdInstituto((Integer)resultElement[6]);
-        institutoAtual.setInstituto((String)resultElement[7]);
-        institutoAtual.setIdMeta((Integer)resultElement[8]);
-        institutoAtual.setMeta((String)resultElement[9]);
-        institutoAtual.setAcao(TipoSituacaoMeta.values()[(Integer)resultElement[10]].toString());
-        institutoAtual.setPrevisao((Date)resultElement[11]);
-        institutoAtual.setConclusao((Date)resultElement[12]);
-        BigDecimal previsto = (BigDecimal)resultElement[13];
-        if(previsto != null){
-          institutoAtual.setPrevisto(previsto.intValue());
-        }
-        BigDecimal realizado = (BigDecimal)resultElement[14];
-        if(realizado != null){
-          institutoAtual.setRealizado(realizado.intValue());
-        }
-        institutoAtual.setSituacao((String)resultElement[15]);
-        institutoAtual.setIdRegiao((Integer)resultElement[16]);
-        institutoAtual.setRegiao((String)resultElement[17]);
-        institutoAtual.setStatus((String)resultElement[18]);
-        institutoAtual.setTipoMeta((String)resultElement[19]);
+
+      if( query.hasMoreResults() ){
+              
+        List<Object[]> result2 = query.getResultList();
         
-        result.add(institutoAtual);
-      }
+        ResumoMetaEntidade institutoAtual = null;
+        
+        for (Object[] resultElement : result2) {
+          institutoAtual = new ResumoMetaEntidade();
+          institutoAtual.setIdEntidade((Integer)resultElement[0]);
+          institutoAtual.setEntidade((String)resultElement[1]);
+          institutoAtual.setCidade((String)resultElement[2]);
+          institutoAtual.setUf((String)resultElement[3]);
+          institutoAtual.setIdCiclo((Integer)resultElement[4]);
+          institutoAtual.setCiclo((String)resultElement[5]);
+          institutoAtual.setIdInstituto((Integer)resultElement[6]);
+          institutoAtual.setInstituto((String)resultElement[7]);
+          institutoAtual.setIdMeta((Integer)resultElement[8]);
+          institutoAtual.setMeta((String)resultElement[9]);
+          institutoAtual.setAcao(TipoSituacaoMeta.values()[(Integer)resultElement[10]].toString());
+          institutoAtual.setPrevisao((Date)resultElement[11]);
+          institutoAtual.setConclusao((Date)resultElement[12]);
+          BigDecimal previsto = (BigDecimal)resultElement[13];
+          if(previsto != null){
+            institutoAtual.setPrevisto(previsto.intValue());
+          }
+          BigDecimal realizado = (BigDecimal)resultElement[14];
+          if(realizado != null){
+            institutoAtual.setRealizado(realizado.intValue());
+          }
+          institutoAtual.setSituacao((String)resultElement[15]);
+          institutoAtual.setIdRegiao((Integer)resultElement[16]);
+          institutoAtual.setRegiao((String)resultElement[17]);
+          institutoAtual.setStatus((String)resultElement[18]);
+          institutoAtual.setTipoMeta((String)resultElement[19]);
+          
+          result.add(institutoAtual);
+        }
       
+      }
       
       return result;
     }
@@ -688,28 +711,33 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       else 
         query.setParameter(3, 0);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
       
-      StatusAtualInstitutoGraphicData institutoAtual = null;
-      Integer idInstituto = null;
-      
-      for (Object[] resultElement : result2) {
-        Integer idAux = (Integer)resultElement[0];
-        if( idAux != idInstituto ){
-          if(institutoAtual != null)
-            result.add(institutoAtual);
-          institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
-          idInstituto = idAux;
-          institutoAtual.setStatusValor(new ArrayList<StatusValor>());
-        }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+      if( query.hasMoreResults() ){
         
-        idAux = null;
+        List<Object[]> result2 = query.getResultList();
+        
+        StatusAtualInstitutoGraphicData institutoAtual = null;
+        Integer idInstituto = null;
+        
+        for (Object[] resultElement : result2) {
+          Integer idAux = (Integer)resultElement[0];
+          if( idAux != idInstituto ){
+            if(institutoAtual != null)
+              result.add(institutoAtual);
+            institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
+            idInstituto = idAux;
+            institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+          }
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+          
+          idAux = null;
+        }
+        if(institutoAtual != null){
+          result.add(institutoAtual);
+        }
+      
       }
-      if(institutoAtual != null)
-        result.add(institutoAtual);
       
       
       return result;

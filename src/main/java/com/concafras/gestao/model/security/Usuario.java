@@ -151,8 +151,7 @@ public class Usuario implements Serializable {
     return "Usuario [id=" + id + ", username=" + username + ", password="
         + password + ", confirmPassword=" + confirmPassword + ", pessoa="
         + pessoa + ", userRoles=" + userRoles + ", passwordExpired="
-        + passwordExpired + ", lastLogin=" + lastLogin + ", loginHistory="
-        + loginHistory + "]";
+        + passwordExpired + ", lastLogin=" + lastLogin + "]";
   }
   
   

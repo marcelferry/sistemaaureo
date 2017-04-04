@@ -33,6 +33,7 @@
 	<c:set var="cssIn" value="in"/>
 </c:if>
 
+<c:if test="${meta.atividade.prioridade > 0}">
 <div class="panel panel-green">
 
 	<form:hidden path="dependencias[${index}].id" value="${meta.id}"/>
@@ -55,10 +56,10 @@
 	<form:hidden path="dependencias[${index}].situacaoDesejada.responsavel.id" value="${meta.situacaoDesejada.responsavel.id}"/>
 	<form:hidden path="dependencias[${index}].situacaoDesejada.responsavel.nome" value="${meta.situacaoDesejada.responsavel.nome}"/>
 	
-	<div class="panel-heading ${ priority ? 'priority' : '' }">
+	<div class="panel-heading">
 		<h4 class="panel-title small">
-			<a data-toggle="collapse" data-target="#collapse${meta.id}-pri" class="collapsed small">
-				${prefix}${index + 1} - ${meta.atividade.descricao}
+			<a data-toggle="collapse" data-target="#collapse${meta.id}-pri" class="collapsed priority small">
+				${prefix}${index + 1} - ${meta.descricaoCompleta}
 			</a>
 		</h4>
 	</div>
@@ -713,18 +714,17 @@
 			</div>	
 		</div>
 		</c:if>
-		
-		<c:if test="${fn:length(meta.dependencias) > 0}">
-			<c:set var="paiAtual" value="${posicao}" scope="page" />
-			<div class="panel-group" id="accordion${posicao}">
-			<spring:nestedPath path="dependencias[${index}]">
-			    <c:forEach items="${meta.dependencias}" var="dependencia" varStatus="status">
-			        <template:itemMeta meta="${dependencia}" index="${status.index}" count="${status.count}" pai="${paiAtual}" prefix="${prefix}${index+1}."/>
-			    </c:forEach>
-		    </spring:nestedPath>
-		    </div>
-		</c:if>
-		
 		</div><!-- /div panel-body -->
 	</div><!-- /dev collapse -->
 </div>
+</c:if>
+<c:if test="${fn:length(meta.dependencias) > 0}">
+	<c:set var="paiAtual" value="${posicao}" scope="page" />
+	<!-- div class="panel-group" id="accordion${posicao}" -->
+	<spring:nestedPath path="dependencias[${index}]">
+	    <c:forEach items="${meta.dependencias}" var="dependencia" varStatus="status">
+	        <template:itemMetaPrioridade meta="${dependencia}" index="${status.index}" count="${status.count}" pai="${paiAtual}" prefix="${prefix}${index+1}."/>
+	    </c:forEach>
+    </spring:nestedPath>
+    <!-- /div -->
+</c:if>

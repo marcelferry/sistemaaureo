@@ -95,11 +95,12 @@ public class MetaInstituto extends ObjetoGerenciado {
 		// TODO Auto-generated constructor stub
 	}
 
-	public MetaInstituto(Integer id, String descricao, TipoMeta tipoMeta, int viewOrder) {
+	public MetaInstituto(Integer id, String descricao, TipoMeta tipoMeta, Integer prioridade, int viewOrder) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
 		this.tipoMeta = tipoMeta;
+		this.prioridade = prioridade;
 		this.viewOrder = viewOrder;
 	}
 

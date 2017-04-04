@@ -229,19 +229,25 @@ public class MetaServiceImpl implements MetaService {
     query.setParameter(3, ciclo);
     query.setParameter(4, atual);
     
-    List<Object[]> result = query.getResultList();
+    HistoricoMetaEntidade hme = null;
     
-    if(result == null || result.size() == 0){
-      return null;
-    }
-    
-    if(result.size() > 1) {
-      throw new IllegalStateException("Resultado maior que 1");
-    }
-    
-    Integer idhme = (Integer)result.get(0)[0];
+    if( query.hasMoreResults() ){
+      
+      List<Object[]> result = query.getResultList();
+      
+      if(result == null || result.size() == 0){
+        return null;
+      }
+      
+      if(result.size() > 1) {
+        throw new IllegalStateException("Resultado maior que 1");
+      }
+      
+      Integer idhme = (Integer)result.get(0)[0];
+  
+      hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
 
-    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
+    }
     
     return hme;
   }
@@ -257,20 +263,25 @@ public class MetaServiceImpl implements MetaService {
     query.setParameter(2, idmeta);
     query.setParameter(3, ciclo);
     
-    List<Object[]> result = query.getResultList();
+    HistoricoMetaEntidade hme = null;
     
-    if(result == null || result.size() == 0){
-      return null;
+    if( query.hasMoreResults() ){
+    
+      List<Object[]> result = query.getResultList();
+      
+      if(result == null || result.size() == 0){
+        return null;
+      }
+      
+      if(result.size() > 1) {
+        throw new IllegalStateException("Resultado maior que 1");
+      }
+      
+      Integer idhme = (Integer)result.get(0)[0];
+  
+      hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
+      
     }
-    
-    if(result.size() > 1) {
-      throw new IllegalStateException("Resultado maior que 1");
-    }
-    
-    Integer idhme = (Integer)result.get(0)[0];
-
-    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
-    
     return hme;
   }
   
@@ -289,19 +300,25 @@ public class MetaServiceImpl implements MetaService {
     query.setParameter(4, ciclo);
     query.setParameter(5, atual);
     
-    List<Object[]> result = query.getResultList();
+    HistoricoMetaEntidade hme = null;
     
-    if(result == null || result.size() == 0){
-      return null;
+    if( query.hasMoreResults() ){
+    
+      List<Object[]> result = query.getResultList();
+      
+      if(result == null || result.size() == 0){
+        return null;
+      }
+      
+      if(result.size() > 1) {
+        throw new IllegalStateException("Resultado maior que 1");
+      }
+      
+      Integer idhme = (Integer)result.get(0)[0];
+      
+      hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
+    
     }
-    
-    if(result.size() > 1) {
-      throw new IllegalStateException("Resultado maior que 1");
-    }
-    
-    Integer idhme = (Integer)result.get(0)[0];
-    
-    HistoricoMetaEntidade hme = em.find(HistoricoMetaEntidade.class, new Long(idhme));
     
     return hme;
   }

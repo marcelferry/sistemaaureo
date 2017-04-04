@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.PrintSetup;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -386,7 +387,7 @@ public class RelatorioController {
     PlanoMetas planoMetasAtual = null;
 
     if (planoMetasAtual == null) {
-      metasForm = new MetasHelper(metaService).processaMetaInstitutoToMetaForm(metasIntituto,
+      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto,
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
           planoMetasForm.getEvento(), planoMetasForm.getRodizio());
     }
@@ -529,7 +530,7 @@ public class RelatorioController {
     }
 
     if (planoMetasAtual == null) {
-      metasForm = new MetasHelper(metaService).processaMetaInstitutoToMetaForm(metasIntituto,
+      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto,
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
           planoMetasForm.getEvento(), planoMetasForm.getRodizio());
 
@@ -587,7 +588,7 @@ public class RelatorioController {
       PlanoMetas planoMetasAtual = null;
 
       if (planoMetasAtual == null) {
-        metasForm = new MetasHelper(metaService).processaMetaInstitutoToMetaForm(metasIntituto,
+        metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto,
             planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
             planoMetasForm.getEvento(), planoMetasForm.getRodizio());
       }
@@ -623,17 +624,34 @@ public class RelatorioController {
       sheet.setAutobreaks(true);
       printSetup.setFitHeight((short) 1);
       printSetup.setFitWidth((short) 1);
+      
+      Row row1 = sheet.createRow((short) 0);
+      Cell cell1 = row1.createCell((short) 2);
+      cell1.setCellValue("PLANO DE METAS DO CENTRO ESPÍRITA");
+
+      
+      CellRangeAddress cellRangeAddress = new CellRangeAddress(
+          0, //first row (0-based)
+          0, //last row  (0-based)
+          2, //first column (0-based)
+          10  //last column  (0-based)
+      );
+      sheet.addMergedRegion(cellRangeAddress);
+      
+      
+      //
+
 
       String[] titles;
       if(branco){
-        titles = new String[]{ "ID", "Nível", "Atividade", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
+        titles = new String[]{ "ID", "Nível", "Atividade", "Como está?", "Data/Quant.", "Como será?", "Data/Quant.", "Observações" };
       } else {
         titles = new String[]{ "ID", "Nível", "Atividade", "Como estava?",
-            "Data/Quant.", "Como está?", "Data/Quant.", "Como será?", "Data/Quant." };
+            "Data/Quant.", "Como está?", "Data/Quant.", "Como será?", "Data/Quant.", "Observações" };
       }
 
       // the header row: centered text in 48pt font
-      Row headerRow = sheet.createRow(0);
+      Row headerRow = sheet.createRow(5);
       headerRow.setHeightInPoints(12.75f);
       for (int i = 0; i < titles.length; i++) {
         Cell cell = headerRow.createCell(i+1);
@@ -659,11 +677,11 @@ public class RelatorioController {
         calendar.roll(Calendar.MONTH, true);
       }
       // freeze the first row
-      sheet.createFreezePane(0, 1);
+      //sheet.createFreezePane(0, 1);
 
       Row row;
       Cell cell;
-      int rownum = 1;
+      int rownum = 6;
       int nivel = 1;
       for (int i = 0; i < plan.getDependencias()
           .size(); i++, rownum++, nivel++) {
@@ -673,16 +691,23 @@ public class RelatorioController {
 
       // set column widths, the width is measured in units of 1/256th of a
       // character width
-      sheet.setColumnWidth(1, 256 * 6);
-      sheet.setColumnWidth(2, 256 * 6);
-      sheet.setColumnWidth(3, 256 * 65);
-      sheet.setColumnWidth(4, 256 * 20);
-      sheet.setColumnWidth(5, 256 * 12);
-      sheet.setColumnWidth(6, 256 * 20);
-      sheet.setColumnWidth(7, 256 * 12);
-      sheet.setColumnWidth(8, 256 * 20);
-      sheet.setColumnWidth(9, 256 * 12);
-      // sheet.setZoom(75); //75% scale
+      int col = 0;
+      sheet.setColumnWidth(col++, 256 * 3);
+      sheet.setColumnWidth(col++, 256 * 6);
+      sheet.setColumnWidth(col++, 256 * 6);
+      sheet.setColumnWidth(col++, 256 * 65);
+      if(!branco){
+        sheet.setColumnWidth(col++, 256 * 20);
+        sheet.setColumnWidth(col++, 256 * 12);
+      }
+      sheet.setColumnWidth(col++, 256 * 20);
+      sheet.setColumnWidth(col++, 256 * 12);
+      sheet.setColumnWidth(col++, 256 * 20);
+      sheet.setColumnWidth(col++, 256 * 12);
+      sheet.setColumnWidth(col++, 256 * 70);
+      sheet.setZoom(80); //75% scale
+      
+      sheet.setColumnHidden(1,true);
 
     }
   }
@@ -741,11 +766,11 @@ public class RelatorioController {
           : meta.situacaoAnterior.getSituacao());
       cell.setCellStyle(styles.get(styleName));
       
-      if (TipoMeta.META_EXECUCAO.equals(meta.tipoMeta)) {
-        adicionaComboStatusExecucao(sheet, cell);
-      } else if (TipoMeta.META_IMPLANTACAO.equals(meta.tipoMeta)) {
-        adicionaComboStatusImplantacao(sheet, cell);
-      }
+      //if (TipoMeta.META_EXECUCAO.equals(meta.tipoMeta)) {
+      //  adicionaComboStatusExecucao(sheet, cell);
+      //} else if (TipoMeta.META_IMPLANTACAO.equals(meta.tipoMeta)) {
+      //  adicionaComboStatusImplantacao(sheet, cell);
+      //}
   
       cellnum++;
       cell = row.createCell(cellnum);
@@ -790,6 +815,13 @@ public class RelatorioController {
     styleName = "cell_bu_date";
     cell.setCellValue("");
     cell.setCellStyle(styles.get(styleName));
+    
+    cellnum++;
+    cell = row.createCell(cellnum);
+    styleName = "cell_normal_unlock";
+    cell.setCellValue("");
+    cell.setCellStyle(styles.get(styleName));
+
 
     int subNivel = 1;
     if (metaForm.getDependencias() != null
@@ -858,7 +890,7 @@ public class RelatorioController {
         (XSSFSheet) sheet);
     DataValidationConstraint dvConstraint = dvHelper
         .createExplicitListConstraint(
-            new String[] { "Implantada", "Parcialmente", "Não Implantada" });
+            new String[] { "", "Implantada", "Parcialmente", "Não Implantada" });
     CellRangeAddressList addressList = new CellRangeAddressList(
         cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(),
         cell.getColumnIndex());
@@ -873,7 +905,7 @@ public class RelatorioController {
         (XSSFSheet) sheet);
     DataValidationConstraint dvConstraint = dvHelper
         .createExplicitListConstraint(
-            new String[] { "Realizada", "Não Realizada" });
+            new String[] { "", "Realizada", "Não Realizada" });
     CellRangeAddressList addressList = new CellRangeAddressList(
         cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(),
         cell.getColumnIndex());
@@ -888,7 +920,7 @@ public class RelatorioController {
         (XSSFSheet) sheet);
     DataValidationConstraint dvConstraint = dvHelper
         .createExplicitListConstraint(
-            new String[] { "Planejado", "Não Planejado" });
+            new String[] { "", "Planejado", "Não Planejado" });
     CellRangeAddressList addressList = new CellRangeAddressList(
         cell.getRowIndex(), cell.getRowIndex(), cell.getColumnIndex(),
         cell.getColumnIndex());
@@ -1005,14 +1037,14 @@ public class RelatorioController {
     styles.put("cell_g", style);
 
     Font font2 = wb.createFont();
-    font2.setColor(IndexedColors.BLUE.getIndex());
+    //font2.setColor(IndexedColors.BLUE.getIndex());
     font2.setBold(true);
     style = createBorderedStyle(wb);
     style.setAlignment(HorizontalAlignment.LEFT);
     style.setFont(font2);
     styles.put("cell_bb", style);
     
-    font2.setColor(IndexedColors.BLUE.getIndex());
+    //font2.setColor(IndexedColors.BLUE.getIndex());
     font2.setBold(true);
     style = createBorderedStyle(wb);
     style.setAlignment(HorizontalAlignment.LEFT);

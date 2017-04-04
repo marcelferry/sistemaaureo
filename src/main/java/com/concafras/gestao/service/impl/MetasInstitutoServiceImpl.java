@@ -131,6 +131,7 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
           root.get("id"), 
           root.get("descricao"), 
           root.get("tipoMeta"), 
+          root.get("prioridade"), 
           root.get("viewOrder")
       );
       
@@ -179,6 +180,7 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
           root.get("id"), 
           root.get("descricao"), 
           root.get("tipoMeta"), 
+          root.get("prioridade"), 
           root.get("viewOrder")
           );
       

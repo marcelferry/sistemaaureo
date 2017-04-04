@@ -48,7 +48,7 @@
 
 .panel-group .panel-heading a.collapsed.priority {
   /* background: #f0ad4e; */
-  background: #335599;
+  background: #d9534f;
   color: inherit;
 }
 
@@ -245,12 +245,13 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR'}">
+            <div class="form-group">
+            	<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
+            </div>
+            
+            <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
 			<fieldset>
 				<legend>Plano de Metas (Prioridades)</legend>
-	            <div class="form-group">
-	            	<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
-	            </div>
 	              
 	            <div class="panel-group" id="accordion">
 	            	<c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
@@ -258,12 +259,16 @@
 	                 	</c:forEach>
 	            </div>
 	      	</fieldset>
+	      	<c:set value="true" var="prioridade"/>
+	      	</c:if>
+	      	<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_FACILITADOR' }">
+	      	<c:set value="false" var="prioridade"/>
 	      	</c:if>
 	      	<fieldset>
 				<legend>Plano de Metas Completo</legend>
 	            <div class="panel-group" id="accordion">
 	               <c:forEach items="${planoMetasForm.dependencias}" var="meta" varStatus="status">
-	                		 	<template:itemMeta meta="${meta}" index="${status.index}" count="${status.count}"/>
+	                		 	<template:itemMeta meta="${meta}" index="${status.index}" count="${status.count}" prioridade="${ prioridade }"/>
 	                 	</c:forEach>
 	                 	</div>
 	                 	<div class="form-group">

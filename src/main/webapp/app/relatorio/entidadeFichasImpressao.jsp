@@ -86,7 +86,8 @@
                 { "mData": "descricao" },
                 {  "mData": null,
 	  	              "mRender": function(data, type, full){
-	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ver Ficha</button><button type="button" class="btn btn-warn btn-xs xls" data-instituto="' + full.id + '">Excel</button>';   // replace this with button 
+	                       return '<button type="button" class="btn btn-primary btn-xs ficha" data-instituto="' + full.id + '">Ver Ficha</button>'; 
+	                              //'<button type="button" class="btn btn-warn btn-xs xls" data-instituto="' + full.id + '">Excel</button>';   // replace this with button 
 	                      }
                		},
             ]

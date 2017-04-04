@@ -9,8 +9,10 @@
 <div class="row">
 	<div class="col-md-12">
    		<form:hidden path="fase"/>
-       	
-        <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE'}">
+   		
+   		<jsp:useBean id="profiles" type="java.lang.String[]" scope="request"/>
+   		
+   		<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE'}">
         <form:hidden path="evento" value="PRERODIZIO"/>
         <div class="form-group">
 			<label  class="col-sm-2 control-label">Entidade:</label>
@@ -112,12 +114,24 @@
 		</div>
 	</c:if>
 
-	<c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_SECRETARIA' && ROLE_CONTROLE != 'ROLE_METAS_PRESIDENTE'}">
+	<c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_SECRETARIA' && ROLE_CONTROLE != 'ROLE_METAS_PRESIDENTE' }">
 	    <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 		    	<div class="col-sm-2">
-			      <!-- input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/ -->
-			      </div>
+		    	 	<c:if test="${ profiles[0] != 'prod' || ( CICLO_CONTROLE.dataAprovacao >= startDate && CICLO_CONTROLE.dataAprovacao <= endDate ) }">
+			      	<input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
+			      	</c:if>
+			      	<c:if test="${ profiles[0] == 'prod' && ( CICLO_CONTROLE.dataAprovacao <= startDate || CICLO_CONTROLE.dataAprovacao >= endDate ) }">
+			      	<fmt:formatDate var="dataRodizio" value="${CICLO_CONTROLE.dataAprovacao}" pattern="dd/MM/yyyy"/>
+			      	 <div class="alert alert-danger alert-dismissable">
+            			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  						<h4>Estamos fora do período de contratação do rodízio</h4>
+  						<p>Senhores facilitadores, o acesso ao servidor principal ocorre apenas no dia  ${ dataRodizio }.</p>
+  						<p>Para testes favor utilizar o servidor em: <a href="http://beta.contratacaodemetas.com.br/">http://beta.contratacaodemetas.com.br</a>.</p>
+  						
+					</div>
+			      	</c:if>
+			    </div>
 			     
 		    </div>
 		 </div>

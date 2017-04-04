@@ -4,6 +4,7 @@
 <%@attribute name="count" type="java.lang.Integer" required="true" %>
 <%@attribute name="prefix" type="java.lang.String" required="false" %>
 <%@attribute name="pai" type="java.lang.Integer" required="false" %>
+<%@attribute name="prioridade" type="java.lang.Boolean" required="false" %>
 
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -718,7 +719,7 @@
 			<div class="panel-group" id="accordion${posicao}">
 			<spring:nestedPath path="dependencias[${index}]">
 			    <c:forEach items="${meta.dependencias}" var="dependencia" varStatus="status">
-			        <template:itemMeta meta="${dependencia}" index="${status.index}" count="${status.count}" pai="${paiAtual}" prefix="${prefix}${index+1}."/>
+			        <template:itemMeta meta="${dependencia}" index="${status.index}" count="${status.count}" pai="${paiAtual}" prefix="${prefix}${index+1}." prioridade="${prioridade}"/>
 			    </c:forEach>
 		    </spring:nestedPath>
 		    </div>

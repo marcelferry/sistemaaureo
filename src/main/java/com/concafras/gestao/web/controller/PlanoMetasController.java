@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -79,6 +81,9 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/gestao/planodemetas")
 public class PlanoMetasController {
+  
+  @Autowired
+  private Environment environment;
 
   @Autowired
   private MetasInstitutoService metaInstitutoService;
@@ -389,6 +394,11 @@ public class PlanoMetasController {
       facilitadorList.put(String.valueOf(facilitador.getId()),
           facilitador.getTrabalhador().getNomeCompleto());
     }
+    map.put("profiles", environment.getActiveProfiles());
+    Date hoje = trim( new Date());
+    Date amanha = addDay( hoje, 1);
+    map.put("startDate", hoje );
+    map.put("endDate", amanha );
     map.put("facilitadorList", facilitadorList);
     map.put("rodizio", true);
     return "metas.selecao";
@@ -779,7 +789,7 @@ public class PlanoMetasController {
     // Primeiro Rodizio
     if (planoMetasAtual == null || listaMetas == null
         || listaMetas.size() == 0) {
-      metasForm = new MetasHelper(metaService).processaMetaInstitutoToMetaForm(
+      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(
           metasIntituto, planoMetasForm.getFacilitador(),
           planoMetasForm.getContratante(), planoMetasForm.getEvento(),
           planoMetasForm.getRodizio());
@@ -1477,5 +1487,24 @@ public class PlanoMetasController {
       return null;
     }
   }
+  
+  public static Date trim(Date date) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.set(Calendar.MILLISECOND, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+    return calendar.getTime();
+  }
+  
+  public static Date addDay(Date date, int days) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.DATE, days);
+    return calendar.getTime();
+  }
+
 
 }

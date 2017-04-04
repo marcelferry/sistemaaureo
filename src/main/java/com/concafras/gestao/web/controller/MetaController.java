@@ -189,12 +189,6 @@ public class MetaController {
     //TODO: Obter plano a partir dos dados;
     PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(meta.getEntidade().getId(), meta.getInstituto().getId(), ciclo);
 
-    List<HistoricoMetaEntidade> historicoAtual = metaService.findByMetaEntidadeIdAndRodizioId(meta.getId(), plano.getRodizio().getId());
-    List<HistoricoMetaEntidade> historicoAnterior = null;
-    if(plano.getRodizio().getCicloAnterior() != null){
-      historicoAnterior = metaService.findByMetaEntidadeIdAndRodizioId(meta.getId(), plano.getRodizio().getCicloAnterior().getId());
-    }
-    
     String rota = metaService.getCaminhoMeta(meta.getMeta().getId());
 
     form.setDescricaoCompleta(rota);
@@ -208,16 +202,19 @@ public class MetaController {
       editMode = false;
     }
 
-    form = new MetasHelper(metaService).processaMetaEntidade(meta, 
+    form = new MetasHelper(metaService).preencheSituacaoDesejada(meta, 
         form, 
-        historicoAtual,
-        historicoAnterior,
+        EventoMeta.POSRODIZIO, 
+        plano.getRodizio());
+    
+    form = new MetasHelper(metaService).preencheAnotacoes(meta, 
+        form, 
         contratante,
         null, 
         EventoMeta.POSRODIZIO, 
         plano.getRodizio(),
         editMode);
-
+    
     //PlanoMetasForm planoForm = new PlanoMetasForm(plano);
 
     List<ContatoBasico> contatos = processaContatosDoPlano(plano);

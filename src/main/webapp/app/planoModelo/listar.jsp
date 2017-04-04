@@ -56,7 +56,9 @@
 		                            	<form action="edit/${atividade.id}" method="post">
 		                            		<div class="btn-group">
 			                            		<button type="button" onclick="this.form.action = 'edit/${atividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+			                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			                            		<button type="button" onclick="this.form.action = 'delete/${atividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+			                            		</sec:authorize>
 		                            		</div>
 		                            	</form>
 		                            </td>

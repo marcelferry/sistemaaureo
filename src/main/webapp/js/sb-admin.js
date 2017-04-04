@@ -118,8 +118,6 @@ $(function () {
         error: function (xhr, textStatus, error) {
         	if (xhr.readyState < 4){
         		xhr.abort();
-        	} else if (globalVars.unloaded) {
-                return;
         	} else if (xhr.status == 403) {
                 alert("Sorry, your session has expired. Please login again to continue");
                 window.location.reload();

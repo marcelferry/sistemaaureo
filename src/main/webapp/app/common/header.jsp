@@ -42,7 +42,7 @@
                 	${INSTITUTO_CONTROLE.descricao} - 
                 	</c:if>
                 </sec:authorize>
-                <sec:authorize access="!hasRole('ROLE_ADMIN')">
+                <sec:authorize access="isAuthenticated() && !hasRole('ROLE_ADMIN')">
                 <sec:authentication property="principal.pessoa.nome" var="nomeUsuarioLogado"/>
                 <c:set var="nomeUsuario" value="${fn:split(nomeUsuarioLogado, ' ')}" />
                             ${nomeUsuario[0]} 
@@ -250,6 +250,7 @@
                 </li>
                 </sec:authorize>
                 <!-- /.dropdown -->
+                <sec:authorize access="isAuthenticated()">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -269,7 +270,7 @@
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
-                
+                </sec:authorize>
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
