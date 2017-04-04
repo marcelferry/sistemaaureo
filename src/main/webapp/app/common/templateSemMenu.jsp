@@ -73,6 +73,8 @@
 		function formLogoutSubmit() {
 			document.getElementById("logoutForm").submit();
 		}
+		
+		window.setInterval("atualizarInfo()", 10000);
 	</script>
 
 </body>

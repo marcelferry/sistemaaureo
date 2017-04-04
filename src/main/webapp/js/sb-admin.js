@@ -1,4 +1,3 @@
-window.setInterval("atualizarInfo()", 10000);
 
 $.validator.setDefaults({
 	highlight: function (element, errorClass, validClass) {
