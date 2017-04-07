@@ -33,6 +33,13 @@
 	<c:set var="cssIn" value="in"/>
 </c:if>
 
+<c:if test="${! empty meta.id}">
+	<c:set var="metaId" value="${meta.id}"/>
+</c:if>
+<c:if test="${empty meta.id}">
+	<c:set var="metaId" value="${meta.atividade.id}"/>
+</c:if>
+
 <div class="panel panel-green">
 
 
@@ -60,12 +67,12 @@
 	
 	<div class="panel-heading">
 		<h4 class="panel-title small">
-			<a data-toggle="collapse" data-target="#collapse${meta.id}" class="collapsed small">
+			<a data-toggle="collapse" data-target="#collapse${metaId}" class="collapsed small">
 				${prefix}${index + 1} - ${meta.atividade.descricao}
 			</a>
 		</h4>
 	</div>
-	<div id="collapse${meta.id}" class="panel-collapse collapse">
+	<div id="collapse${metaId}" class="panel-collapse collapse">
 		<div class="panel-body">
 			<c:if test="${ (prioridade == true && meta.atividade.prioridade > 0 )}">
 			<div class="alert alert-danger"  style="height:50px;">
@@ -108,13 +115,13 @@
 						<label class="control-label"><strong>Hoje</strong></label>
 						<div class="radio">
 						    <label>
-						      <form:radiobutton id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" data-meta="${meta.id}" value="IMPLANTADA" onclick="realizadoRadio(this);" /> Realizado
+						      <form:radiobutton id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" data-meta="${metaId}" value="IMPLANTADA" onclick="realizadoRadio(this);" /> Realizado
 						    </label>
 						  </div>
 						
 						<div class="radio">
 						    <label>
-						      <form:radiobutton id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" data-meta="${meta.id}" value="NAOIMPLANTADA" onclick="realizadoRadio(this);" /> Não Realizado
+						      <form:radiobutton id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" data-meta="${metaId}" value="NAOIMPLANTADA" onclick="realizadoRadio(this);" /> Não Realizado
 						    </label>
 					  	</div>
 					  	<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="error-messages"/>
@@ -131,7 +138,7 @@
 						<div class="col-sm-12">
 							<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 							<div class="input-group">
-								<form:input  id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+								<form:input  id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
 									class="date-picker form-control "/>
 								<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 							</div>
@@ -152,21 +159,21 @@
 							<div>
 								<div class="radio">
 								    <label>
-								      <form:radiobutton id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" value="IMPLANTADA" data-meta="${meta.id}" onclick="implantadoRadio(this);" /> Implantado 
+								      <form:radiobutton id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" value="IMPLANTADA" data-meta="${metaId}" onclick="implantadoRadio(this);" /> Implantado 
 								      <i class="fa fa-question-circle" data-toggle="popover" data-placement="right" data-content="Considera-se uma atividade implantada quando ela funciona de acordo com as   
 									  diretrizes do centro espírita referencial (dúvidas consultar o livro CENTRO ESPÍRITA - ESCOLA DA ALMA – Editora Auta de Souza)." title="Implantado"></i>
 								    </label>
 								  </div>
 								<div class="radio">
 								    <label>
-								      <form:radiobutton id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" value="IMPLPARCIAL" data-meta="${meta.id}"  onclick="implantadoRadio(this);" /> Parcialmente 
+								      <form:radiobutton id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" value="IMPLPARCIAL" data-meta="${metaId}"  onclick="implantadoRadio(this);" /> Parcialmente 
 								      <i class="fa fa-question-circle" data-toggle="popover" data-placement="right" data-content="Considera-se uma atividade parcialmente implantada quando está fora das diretrizes 
 								      do centro espírita referencial ou está somente com parte implantada, ainda não esta completa." title="Parcialmente Implantado"></i>
 								    </label>
 								  </div>
 								<div class="radio">
 								    <label>
-								      <form:radiobutton id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" value="NAOIMPLANTADA" data-meta="${meta.id}"   onclick="implantadoRadio(this);" /> Não Implantado 
+								      <form:radiobutton id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" value="NAOIMPLANTADA" data-meta="${metaId}"   onclick="implantadoRadio(this);" /> Não Implantado 
 								      <i class="fa fa-question-circle " data-toggle="popover" data-placement="right" data-content="Quando nenhum item da atividade esteja implantada." title="Não Implantado"></i>
 								    </label>
 							  	</div>
@@ -185,7 +192,7 @@
 							</form:label>
 							<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 							<div class="input-group">
-									<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+									<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
 										class="date-picker form-control "/>
 									<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 							</div>
@@ -230,7 +237,7 @@
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
 						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
-						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
 						    <option value=""></option>
 						    <form:option value="IMPLANTADA">Implantada</form:option>
 							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
@@ -238,11 +245,11 @@
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
-					<div id="bloco_dataimplantado_${meta.id}" class="form-group dateimplantado">
+					<div id="bloco_dataimplantado_${metaId}" class="form-group dateimplantado">
 						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
 						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 						<div class="input-group">
-							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
 								cssClass="date-picker form-control " cssErrorClass="date-picker form-control  error-input"/>
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
@@ -251,7 +258,7 @@
 						
 					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
 					<script type="text/javascript">
-						$("#bloco_dataimplantado_${meta.id}").show();
+						$("#bloco_dataimplantado_${metaId}").show();
 					</script>
 					</c:if>
 					<!-- /Coluna 3 -->
@@ -276,7 +283,7 @@
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
 						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
-						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
 						    <option value=""></option>
 							<form:option value="IMPLANTADA">Implantada</form:option>
 							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
@@ -284,11 +291,11 @@
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
-					<div  id="bloco_dataimplantado_${meta.id}"  class="form-group dateimplantado">
+					<div  id="bloco_dataimplantado_${metaId}"  class="form-group dateimplantado">
 						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
 						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 						<div class="input-group">
-							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
 								class="date-picker form-control "/>
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
@@ -296,7 +303,7 @@
 					</div>
 					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
 					<script type="text/javascript">
-						$("#bloco_dataimplantado_${meta.id}").show();
+						$("#bloco_dataimplantado_${metaId}").show();
 					</script>
 					</c:if>
 				<!-- /Coluna 3 -->
@@ -321,7 +328,7 @@
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
 						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
-						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
 						    <option value=""></option>
 							<form:option value="IMPLANTADA">Implantada</form:option>
 							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
@@ -329,11 +336,11 @@
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
-					<div  id="bloco_dataimplantado_${meta.id}"  class="form-group dateimplantado">
+					<div  id="bloco_dataimplantado_${metaId}"  class="form-group dateimplantado">
 						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
 						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 						<div class="input-group">
-							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
 								class="date-picker form-control "/>
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
@@ -341,7 +348,7 @@
 					</div>
 					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
 					<script type="text/javascript">
-						$("#bloco_dataimplantado_${meta.id}").show();
+						$("#bloco_dataimplantado_${metaId}").show();
 					</script>
 					</c:if>
 				<!-- /Coluna 3 -->
@@ -414,7 +421,7 @@
 					<!-- Coluna 3 -->
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
-						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
 						    <option value=""></option>
 					    	<form:option value="IMPLANTADA">Realizado</form:option>
 							<form:option value="REPLANEJADA">Replanejado</form:option>
@@ -422,32 +429,32 @@
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
-					<div id="bloco_dataimplantado_${meta.id}" class="form-group dateimplantado">
+					<div id="bloco_dataimplantado_${metaId}" class="form-group dateimplantado">
 						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 						<label>Em:</label>
 						<div class="input-group">
-							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" class="date-picker form-control " />
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" class="date-picker form-control " />
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
 						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
 					</div>
-					<div id="bloco_datareplanejado_${meta.id}" class="form-group dateimplantado">
+					<div id="bloco_datareplanejado_${metaId}" class="form-group dateimplantado">
 						<fmt:formatDate value="${meta.situacaoAtual.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
 						<label>Para:</label>
 						<div class="input-group">
-							<form:input id="situacaoAtual_previsao_${meta.id}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${previsao}" class="date-picker form-control " />
+							<form:input id="situacaoAtual_previsao_${metaId}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${previsao}" class="date-picker form-control " />
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
 						<form:errors path="dependencias[${index}].situacaoAtual.previsao" cssClass="label label-danger"/>
 					</div>
 					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
 					<script type="text/javascript">
-						$("#bloco_dataimplantado_${meta.id}").show();
+						$("#bloco_dataimplantado_${metaId}").show();
 					</script>
 					</c:if>
 					<c:if test="${meta.situacaoAtual.situacao == 'REPLANEJADA'}">
 					<script type="text/javascript">
-						$("#bloco_datareplanejado_${meta.id}").show();
+						$("#bloco_datareplanejado_${metaId}").show();
 					</script>
 					</c:if>
 					<!-- /Coluna 3 -->
@@ -486,7 +493,7 @@
 					<!-- Coluna 3 -->
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
-						<form:select data-meta="${meta.id}" id="situacaoAtual_situacao_${meta.id}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
 						    <option value=""></option>
 					    	<form:option value="IMPLANTADA">Implantada</form:option>
 							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
@@ -495,32 +502,32 @@
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
-					<div id="bloco_dataimplantado_${meta.id}" class="form-group dateimplantado">
+					<div id="bloco_dataimplantado_${metaId}" class="form-group dateimplantado">
 						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
 						<label>Em:</label>
 						<div class="input-group">
-							<form:input id="situacaoAtual_conclusao_${meta.id}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" class="date-picker form-control " />
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" class="date-picker form-control " />
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
 						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
 					</div>
-					<div id="bloco_datareplanejado_${meta.id}" class="form-group dateimplantado">
+					<div id="bloco_datareplanejado_${metaId}" class="form-group dateimplantado">
 						<fmt:formatDate value="${meta.situacaoAtual.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
 						<label>Para:</label>
 						<div class="input-group">
-							<form:input id="situacaoAtual_previsao_${meta.id}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${previsao}" class="date-picker form-control " />
+							<form:input id="situacaoAtual_previsao_${metaId}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${previsao}" class="date-picker form-control " />
 							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 						</div>
 						<form:errors path="dependencias[${index}].situacaoAtual.previsao" cssClass="label label-danger"/>
 					</div>
 					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
 					<script type="text/javascript">
-						$("#bloco_dataimplantado_${meta.id}").show();
+						$("#bloco_dataimplantado_${metaId}").show();
 					</script>
 					</c:if>
 					<c:if test="${meta.situacaoAtual.situacao == 'REPLANEJADA'}">
 					<script type="text/javascript">
-						$("#bloco_datareplanejado_${meta.id}").show();
+						$("#bloco_datareplanejado_${metaId}").show();
 					</script>
 					</c:if>
 					<!-- /Coluna 3 -->
@@ -537,12 +544,12 @@
 							<div>
 								<div class="radio">
 								    <label >
-								      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${meta.id}"  onclick="planejadoRadio(this);" disabled="true" /> Não Planejado
+								      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${metaId}"  onclick="planejadoRadio(this);" disabled="true" /> Não Planejado
 								    </label>
 								</div>
 								<div class="radio">
 								    <label>
-								      <form:radiobutton id="situacaoDesejada_situacao_planejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${meta.id}"  onclick="planejadoRadio(this);" disabled="true" /> Planejado
+								      <form:radiobutton id="situacaoDesejada_situacao_planejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${metaId}"  onclick="planejadoRadio(this);" disabled="true" /> Planejado
 								    </label>
 								  </div>
 							</div>
@@ -551,7 +558,7 @@
 						<div class="form-group">
 							  <fmt:formatDate value="${meta.situacaoDesejada.previsao}" var="planejado" type="date" pattern="MM/yyyy" />
 							  <div class="input-group">
-							  		<form:input id="situacaoDesejada_previsao_${meta.id}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " disabled="true" />
+							  		<form:input id="situacaoDesejada_previsao_${metaId}" path="dependencias[${index}].situacaoAtual.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " disabled="true" />
 									<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 							  </div>
 							  <form:errors path="dependencias[${index}].situacaoDesejada.previsao" cssClass="label label-danger"/>
@@ -563,12 +570,12 @@
 							<div>   
 								<div class="radio">
 								    <label >
-								      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${meta.id}"  onclick="planejadoRadio(this);" /> Não Planejado
+								      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${metaId}"  onclick="planejadoRadio(this);" /> Não Planejado
 								    </label>
 								</div>
 								<div class="radio">
 								    <label >
-								      <form:radiobutton id="situacaoDesejada_situacao_planejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${meta.id}" onclick="planejadoRadio(this);" /> Planejado
+								      <form:radiobutton id="situacaoDesejada_situacao_planejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${metaId}" onclick="planejadoRadio(this);" /> Planejado
 								    </label>
 								  </div>
 							</div>
@@ -577,7 +584,7 @@
 						<div class="form-group">
 							<fmt:formatDate value="${meta.situacaoDesejada.previsao}" var="planejado" type="date" pattern="MM/yyyy" />
 							<div class="input-group">
-								<form:input id="situacaoDesejada_previsao_${meta.id}" path="dependencias[${index}].situacaoDesejada.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " cssErrorClass="date-picker form-control  error-input" />
+								<form:input id="situacaoDesejada_previsao_${metaId}" path="dependencias[${index}].situacaoDesejada.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " cssErrorClass="date-picker form-control  error-input" />
 								<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 							</div>
 							<form:errors path="dependencias[${index}].situacaoDesejada.previsao" cssClass="label label-danger"/>
@@ -596,12 +603,12 @@
 					<div>
 						<div class="radio">
 						    <label >
-						      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${meta.id}" onclick="planejadoRadio(this);" /> Não Planejado
+						      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${metaId}" onclick="planejadoRadio(this);" /> Não Planejado
 						    </label>
 						</div>
 						<div class="radio">
 						    <label >
-						      <form:radiobutton id="situacaoDesejada_situacao_planejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${meta.id}" onclick="planejadoRadio(this);" /> Planejado
+						      <form:radiobutton id="situacaoDesejada_situacao_planejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${metaId}" onclick="planejadoRadio(this);" /> Planejado
 						    </label>
 						</div>
 					</div> 
@@ -610,7 +617,7 @@
 				<div class="form-group">
 					<fmt:formatDate value="${meta.situacaoDesejada.previsao}" var="planejado" type="date" pattern="MM/yyyy" />
 					<div class="input-group">
-						<form:input id="situacaoDesejada_previsao_${meta.id}" path="dependencias[${index}].situacaoDesejada.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " />
+						<form:input id="situacaoDesejada_previsao_${metaId}" path="dependencias[${index}].situacaoDesejada.previsao" placeholder="mês/ano" value="${planejado}"  class="date-picker form-control " />
 						<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
 					</div>
 					<form:errors path="dependencias[${index}].situacaoDesejada.previsao" cssClass="label label-danger"/>
@@ -627,12 +634,12 @@
 					<div>
 						<div class="radio">
 						    <label >
-						      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${meta.id}" onclick="planejadoRadio(this);" /> Não Planejado
+						      <form:radiobutton id="situacaoDesejada_situacao_naoplanejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="NAOPLANEJADA" data-meta="${metaId}" onclick="planejadoRadio(this);" /> Não Planejado
 						    </label>
 						</div>
 						<div class="radio">
 						    <label >
-						      <form:radiobutton id="situacaoDesejada_situacao_planejada_${meta.id}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${meta.id}" onclick="planejadoRadio(this);" /> Planejado
+						      <form:radiobutton id="situacaoDesejada_situacao_planejada_${metaId}" path="dependencias[${index}].situacaoDesejada.situacao" value="PLANEJADA" data-meta="${metaId}" onclick="planejadoRadio(this);" /> Planejado
 						    </label>
 						</div>
 					</div>
@@ -640,7 +647,7 @@
 				</div>
 				<div class="form-group"> 
 					<fmt:formatNumber value="${meta.situacaoDesejada.previsto}" var="previsto" type="number" maxFractionDigits="0" />
-					<form:input id="situacaoDesejada_previsto_${meta.id}" path="dependencias[${index}].situacaoDesejada.previsto" value="${previsto}" class="form-control "/>
+					<form:input id="situacaoDesejada_previsto_${metaId}" path="dependencias[${index}].situacaoDesejada.previsto" value="${previsto}" class="form-control "/>
 					<form:errors path="dependencias[${index}].situacaoDesejada.previsto" cssClass="label label-danger"/>
 				</div><!-- /Coluna 4 -->
 			</div>
@@ -653,12 +660,12 @@
 					<div class="col-md-12">
 						<c:set var="indexObs" value="${fn:length(meta.observacoes) - 1}" scope="request"/>
 						<script>
-							var nivel${meta.id} = 1;
-							var indexObs${meta.id} = ${fn:length(meta.observacoes)};
-							var indexNivel1${meta.id} = ${index};
+							var nivel${metaId} = 1;
+							var indexObs${metaId} = ${fn:length(meta.observacoes)};
+							var indexNivel1${metaId} = ${index};
 						</script>
 						<c:if test="${indexObs gt 0}">
-						<ul class="list-group" id="observacoes${meta.id}">
+						<ul class="list-group" id="observacoes${metaId}">
 						  <c:forEach items="${meta.observacoes}" var="anotacao" varStatus="idAnot">
 						  	<c:if test="${idAnot.index lt indexObs}">
 						  	<c:if test="${anotacao.sinalizador == 'VERDE'}">
@@ -697,19 +704,19 @@
 						  	<form:hidden path="dependencias[${index}].observacoes[${indexObs}].data" />
 						  	<form:hidden path="dependencias[${index}].observacoes[${indexObs}].sinalizador" />
 						  	<form:label path="dependencias[${index}].observacoes[${indexObs}].texto">Comentário:</form:label>
-							<form:textarea id="observacoes_${meta.id}" path="dependencias[${index}].observacoes[${indexObs}].texto" rows="5" class="form-control col-md-12 "/>
+							<form:textarea id="observacoes_${metaId}" path="dependencias[${index}].observacoes[${indexObs}].texto" rows="5" class="form-control col-md-12 "/>
 						</div>
 					</div>
 					<!--  div class="col-md-2">
-						<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${meta.id}">
+						<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${metaId}">
 									<span class="glyphicon glyphicon-plus">
 									</span>
 						</button>
-						<button type="button" class="btn btn-warning btn-xs btnAnotacaoWarning" data-toggle="modal" data-id="${meta.id}">
+						<button type="button" class="btn btn-warning btn-xs btnAnotacaoWarning" data-toggle="modal" data-id="${metaId}">
 									<span class="glyphicon glyphicon-plus">
 									</span>
 						</button>
-						<button type="button" class="btn btn-danger btn-xs btnAnotacaoDanger" data-toggle="modal" data-id="${meta.id}">
+						<button type="button" class="btn btn-danger btn-xs btnAnotacaoDanger" data-toggle="modal" data-id="${metaId}">
 									<span class="glyphicon glyphicon-plus">
 									</span>
 						</button>

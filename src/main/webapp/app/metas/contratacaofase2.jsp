@@ -46,9 +46,20 @@
   color: inherit;
 }
 
+.panel-group .panel-heading a.priority  {
+  display: block;
+  /* background: #668bb1; */
+  background: #d9534f;
+  color: #ffffff;
+  padding: 15px;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+}
+
 .panel-group .panel-heading a.collapsed.priority {
   /* background: #f0ad4e; */
-  background: #d9534f;
+  background: #006600;
   color: inherit;
 }
 

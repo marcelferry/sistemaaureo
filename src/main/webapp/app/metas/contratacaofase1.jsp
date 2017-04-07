@@ -333,6 +333,7 @@
 		            type: 'Get',
 		            data: { maxRows: 6, query: query, cidade: $('#cidade\\.id').val(), instituto: $('#instituto\\.id').val(), rodizio: $('#rodizio\\.id').val() },
 		            dataType: 'json',
+		            global: false,
 		            success: function (result) {
 
 		                var resultList = result.map(function (item) {
