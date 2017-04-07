@@ -35,6 +35,8 @@
 
 <div class="panel panel-green">
 
+
+	<c:if test="${(prioridade == false || meta.atividade.prioridade == null )}">
 	<form:hidden path="dependencias[${index}].id" value="${meta.id}"/>
 	<form:hidden path="dependencias[${index}].atividade.id" value="${meta.atividade.id}"/>
 	<form:hidden path="dependencias[${index}].atividade.descricao" value="${meta.atividade.descricao}"/>
@@ -54,6 +56,7 @@
 	<form:hidden path="dependencias[${index}].situacaoDesejada.dataSituacao" value="${meta.situacaoDesejada.dataSituacao}"/>
 	<form:hidden path="dependencias[${index}].situacaoDesejada.responsavel.id" value="${meta.situacaoDesejada.responsavel.id}"/>
 	<form:hidden path="dependencias[${index}].situacaoDesejada.responsavel.nome" value="${meta.situacaoDesejada.responsavel.nome}"/>
+	</c:if>
 	
 	<div class="panel-heading">
 		<h4 class="panel-title small">
@@ -64,7 +67,12 @@
 	</div>
 	<div id="collapse${meta.id}" class="panel-collapse collapse">
 		<div class="panel-body">
-			<c:if test="${ empty meta.dependencias}">
+			<c:if test="${ (prioridade == true && meta.atividade.prioridade > 0 )}">
+			<div class="alert alert-danger"  style="height:50px;">
+				<h4>Meta Prioritária - Responder no bloco superior!</h4>
+			</div>
+			</c:if>
+			<c:if test="${ empty meta.dependencias && (prioridade == false || meta.atividade.prioridade == null )}">
 			<div class="row">
 			
 			<!-- Primeiro Rodizio -->

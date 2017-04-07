@@ -39,15 +39,16 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
     EntityManager em;
         
     @Transactional
-    public void save(PlanoMetas planoMetas) {
-      BaseInstituto i = em.find(BaseInstituto.class, planoMetas.getInstituto().getId());
-      planoMetas.setInstituto(i);
+    public PlanoMetas save(PlanoMetas planoMetas) {
+        BaseInstituto i = em.find(BaseInstituto.class, planoMetas.getInstituto().getId());
+        planoMetas.setInstituto(i);
         em.persist(planoMetas);
+        return planoMetas;
     }
     
     @Transactional
-    public void update(PlanoMetas entidade) {
-      em.merge(entidade);
+    public PlanoMetas update(PlanoMetas entidade) {
+      return em.merge(entidade);
     }
 
     @Transactional
@@ -112,7 +113,7 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
     }
     
     private void loadListas(PlanoMetas a) {
-      Hibernate.initialize(a.getListaAnotacoes());
+      Hibernate.initialize(a.getAnotacoes());
     }
 
   @Transactional
@@ -759,29 +760,32 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       else 
         query.setParameter(3, 0);
       
-      List<Object[]> result2 = query.getResultList();
-      
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
+
+      if( query.hasMoreResults() ){
       
-      StatusAtualInstitutoGraphicData institutoAtual = null;
-      Integer idInstituto = null;
-      
-      for (Object[] resultElement : result2) {
-        Integer idAux = (Integer)resultElement[0];
-        if( idAux != idInstituto ){
-          if(institutoAtual != null)
-            result.add(institutoAtual);
-          institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
-          idInstituto = idAux;
-          institutoAtual.setStatusValor(new ArrayList<StatusValor>());
-        }
-        institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+        List<Object[]> result2 = query.getResultList();
         
-        idAux = null;
+        StatusAtualInstitutoGraphicData institutoAtual = null;
+
+        Integer idInstituto = null;
+        
+        for (Object[] resultElement : result2) {
+          Integer idAux = (Integer)resultElement[0];
+          if( idAux != idInstituto ){
+            if(institutoAtual != null)
+              result.add(institutoAtual);
+            institutoAtual = new StatusAtualInstitutoGraphicData( (Integer)resultElement[0] , (String)resultElement[1] );
+            idInstituto = idAux;
+            institutoAtual.setStatusValor(new ArrayList<StatusValor>());
+          }
+          institutoAtual.getStatusValor().add(new StatusValor( (String)resultElement[2],  ((BigInteger)resultElement[3] ).intValue()));
+          
+          idAux = null;
+        }
+        if(institutoAtual != null)
+          result.add(institutoAtual);
       }
-      if(institutoAtual != null)
-        result.add(institutoAtual);
-      
       
       return result;
     }

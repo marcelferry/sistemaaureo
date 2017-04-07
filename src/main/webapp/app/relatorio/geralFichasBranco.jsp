@@ -51,8 +51,8 @@
 		            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
 							<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
 						</form>
-						<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a class="btn btn-primary col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> XLS</a>
+						<sec:authorize access="hasRole('ROLE_METAS_SECRETARIA')">
+						<a class="btn btn-success col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> XLS</a>
 		            	<form method="post" action="/gestao/relatorio/imprimeTodasFichaBranco/XLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
 							<input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
 						</form>

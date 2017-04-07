@@ -35,6 +35,12 @@
 	<form:hidden path="instituto.id"/>
 	<form:hidden path="facilitador.id"/>
 	<form:hidden path="evento"/>
+	<form:hidden path="validado"/>
+	<form:hidden path="finalizado"/>
+	<form:hidden path="emailPresidente"/>
+	<form:hidden path="telefonePresidente"/>
+	<form:hidden path="nomeContratante"/>
+	
 	<div class="row">
 		<div class="col-md-12">
 			<fieldset>
@@ -56,67 +62,7 @@
 			</fieldset>
 		</div>
 	</div>
-	<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE'}">
-	<div class="row">
-		<div class="col-md-12">
-			<fieldset>
-				<legend>Entidade</legend>
-				<div class="form-group small">
-		        	<label class="col-sm-2 col-xs-3 control-label" for="entidade.razaoSocial">Entidade:</label>
-	              	<div class="col-sm-4 col-xs-6">
-	              	    <form:hidden path="entidade.id" value="${ INSTITUICAO_CONTROLE.id }"/>
-	              	    <form:hidden path="entidade.razaoSocial" value="${ INSTITUICAO_CONTROLE.razaoSocial }"/>
-	               		<div class="control-label" style="text-align: left;">${ INSTITUICAO_CONTROLE.razaoSocial }</div>
-	              	</div>
-	           	</div>
-	           	<div class="form-group small">
-	            	<label class="col-sm-2 col-xs-3 control-label"><spring:message code="label.endereco" />:</label>
-	              	<label class="col-sm-4 col-xs-9 control-label" style="text-align: left;"><span id="entidade.endereco">${ INSTITUICAO_CONTROLE.endereco.enderecoFormatado }</span></label>
-	            	<c:if test="${ INSTITUICAO_CONTROLE.primeiroTelefone != 'N/A' }">
-	            	<label class="col-sm-2 col-xs-3 control-label">Telefone:</label>
-	               	<label class="col-sm-4 col-xs-9 control-label" style="text-align: left;"><span id="entidade.telefone">${ INSTITUICAO_CONTROLE.primeiroTelefone }</span></label>
-	           		</c:if> 
-	           	</div>
-	           	<div class="form-group  small">
-	           		<label class="col-sm-2 control-label" for="presidente.nome">Presidente:</label>
-	              	<div class="col-sm-6">
-	               		<div class="input-group">
-	     					<span class="input-group-addon">
-	               				<form:radiobutton path="tipoContratante" value="PRESIDENTE" data-rule-required="true" data-msg-required="Selecione o contratante"/>
-	               			</span>
-	               			<form:hidden path="presidente.id" value="${ INSTITUICAO_CONTROLE.presidente.pessoa.id }"/>
-	               			<form:input path="presidente.nomeCompleto" value="${ INSTITUICAO_CONTROLE.presidente.pessoa.nomeCompleto }" class="form-control input-sm" placeholder="Selecione o presidente da entidade" readonly="true" />
-	                	</div>
-	               	</div>
-	               	<div class="col-sm-2 col-xs-3">
-						<form:errors path="presidente.id" cssClass="error" />
-					</div>
-	           	</div>
-	           	<div class="form-group  small">
-	            	<label class="col-sm-2 control-label" for="coordenador.nome">Coordenador Local:</label>
-	              	<div class="col-sm-6">
-	              		<div class="input-group">
-	     					<span class="input-group-addon">
-	               				<form:radiobutton path="tipoContratante" value="COORDENADOR"/>
-	               			</span>
-	               			<form:hidden path="coordenador.id" />
-	               			<form:input path="coordenador.nomeCompleto" class="form-control  input-sm" placeholder="Não há coordenador selecionado" readonly="true" />
-	                	</div>
-	               </div>
-	               <div class="col-sm-2 col-xs-3">
-						<form:errors path="coordenador.id" cssClass="error" />
-					</div>
-	           	</div>
-	           	<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-	              		<input id="btnSalvar" type="submit" value="Iniciar Rodizio" class="btn btn-primary"/>
-	              	</div>
-				</div>
-	      	</fieldset>
-	    </div>
-	</div>
-	</c:if>
-		
+	
 	<!-- Validação Secretaria -->
 	<c:if test="${planoMetasForm.fase == 4}">
 	<div class="row">
@@ -170,12 +116,7 @@
 		               		</span>
 		               		<form:hidden path="coordenador.id" />
 		               		<spring:message code="hint.selecione.coordenador" var="hint_selecione_coordenador" />
-		               		<c:if test="${not empty planoMetasForm.coordenador.id }">
-		               		<form:input path="coordenador.nomeCompleto" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
-		               		</c:if>
-		               		<c:if test="${empty planoMetasForm.coordenador.id }">
-		               		<form:input path="coordenador.nomeCompleto" value="${ planoMetasForm.nomeCoordenador }" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
-		               		</c:if>
+		               		<form:input path="nomeCoordenador" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
 							<!--<span class="input-group-btn">
 		               			<button class="btn btn-primary" type="button" >Novo</button>
 		               		</span>-->
@@ -297,12 +238,7 @@
 		                		</span>
 		                		<form:hidden path="coordenador.id" />
 		                		<spring:message code="hint.selecione.coordenador" var="hint_selecione_coordenador" />
-		                		<c:if test="${not empty planoMetasForm.coordenador.id }">
-		                		<form:input path="coordenador.nomeCompleto" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
-		                		</c:if>
-		                		<c:if test="${empty planoMetasForm.coordenador.id }">
-		                		<form:input path="coordenador.nomeCompleto" value="${ planoMetasForm.nomeCoordenador }" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
-		                		</c:if>
+		                		<form:input path="nomeCoordenador" class="form-control input-sm" placeholder="${hint_selecione_coordenador}" onblur="limparOcultos(this, 'coordenador.id')" autocomplete="false"/>
 								<!--<span class="input-group-btn">
 		                			<button class="btn btn-primary" type="button" >Novo</button>
 		                		</span>-->
@@ -382,7 +318,7 @@
    $(function() {
 
   	 completePessoa($('#presidente\\.nomeCompleto'), $("#presidente\\.id"), baseUrl);
-  	 completePessoa($('#coordenador\\.nomeCompleto'), $("#coordenador\\.id"), baseUrl, updateCoordenador);
+  	 completePessoa($('#nomeCoordenador'), $("#coordenador\\.id"), baseUrl, updateCoordenador);
   	 completePessoa($('#outro\\.nomeCompleto'), $("#outro\\.id"), baseUrl);
   	 completeCidade($('#cidade\\.nome'), $('#cidade\\.id'), baseUrl, function(item){
 		$("#div_entidade").fadeIn('slow');
@@ -490,7 +426,7 @@
 		           $('#presidente\\.nomeCompleto').val(item.nomePresidente);
 		           if(item.nomeDirigente != undefined && item.nomeDirigente != '' ){
 			           $('#coordenador\\.id').val(item.idDirigente);
-			           $('#coordenador\\.nomeCompleto').val(item.nomeDirigente);
+			           $('#nomeCoordenador').val(item.nomeDirigente);
 			           $('#emailCoordenador').val(item.emailDirigente);
 			           $('#telefoneCoordenador').val(item.telefoneDirigente);
 		           }

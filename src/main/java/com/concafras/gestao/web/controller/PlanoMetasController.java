@@ -358,17 +358,12 @@ public class PlanoMetasController {
       request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
     }
 
-    if ("ROLE_METAS_PRESIDENTE"
-        .equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
-      List<BaseInstituto> listaInstituto = baseInstitutoService
-          .findAllOverview();
-      BaseEntidade entidade = (BaseEntidade) request.getSession()
-          .getAttribute("INSTITUICAO_CONTROLE");
+    if ("ROLE_METAS_PRESIDENTE".equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
+      List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+      BaseEntidade entidade = (BaseEntidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
       List<PreContrato> listaSelecao = new ArrayList<PreContrato>();
       for (BaseInstituto instituto : listaInstituto) {
-        PlanoMetas plano = planoMetasService
-            .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-                instituto.getId(), ciclo);
+        PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), ciclo);
         PreContrato preContrato = new PreContrato();
         preContrato.setInstituto(instituto);
         if (plano != null) {
@@ -422,23 +417,29 @@ public class PlanoMetasController {
       }
       model.addObject("rodizioList", rodizioList);
 
-      if ("ROLE_METAS_PRESIDENTE"
-          .equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
-        List<BaseInstituto> listaInstituto = baseInstitutoService
-            .findAllOverview();
-        BaseEntidade entidade = (BaseEntidade) request.getSession()
-            .getAttribute("INSTITUICAO_CONTROLE");
+      if ("ROLE_METAS_PRESIDENTE".equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
+        List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+        BaseEntidade entidade = (BaseEntidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
+        List<PreContrato> listaSelecao = new ArrayList<PreContrato>();
         for (BaseInstituto instituto : listaInstituto) {
-          PlanoMetas plano = planoMetasService
-              .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-                  instituto.getId(), planoMetasForm.getRodizio().getId());
-          if (plano != null && plano.isFinalizado()) {
-            instituto.setRodizio(true);
+          PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), planoMetasForm.getRodizio().getId());
+          PreContrato preContrato = new PreContrato();
+          preContrato.setInstituto(instituto);
+          if (plano != null) {
+            preContrato.setInicializado(true);
           } else {
-            instituto.setRodizio(false);
+            preContrato.setInicializado(false);
           }
+
+          if (plano != null && plano.getFacilitador() != null) {
+            preContrato.setFinalizadoRodizio(true);
+          } else {
+            preContrato.setFinalizadoRodizio(false);
+          }
+          listaSelecao.add(preContrato);
         }
         model.addObject("institutoList", listaInstituto);
+        model.addObject("preContratoList", listaSelecao);
       }
 
       List<Facilitador> listaFacilitador = facilitadorService.listFacilitador();
@@ -460,126 +461,45 @@ public class PlanoMetasController {
     Rodizio rodizio = restauraRodizio(planoMetasForm);
     BaseInstituto instituto = restauraInstituto(planoMetasForm);
     BaseEntidade entidade = restauraEntidade(planoMetasForm);
-    restauraFacilitador(planoMetasForm);
+    Pessoa facilitador = restauraFacilitador(planoMetasForm);
+    EventoMeta evento = planoMetasForm.getEvento();
 
-    planoMetasForm.setFase(2);
-
+    int fase = 2;
+    
+    boolean processoSecretaria = false;
+    boolean processoPresidente = false;
+    
     // Se processo iniciado por secretaria
-    if (rodizio != null && instituto != null && entidade != null) {
-
-      PlanoMetas planoMetasAtual = planoMetasService
-          .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-              instituto.getId(), rodizio.getId());
-
-      if (planoMetasAtual != null) {
-        planoMetasForm.setId(planoMetasAtual.getId());
-
-        planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
-
-        if (planoMetasAtual.getPresidente() != null) {
-          planoMetasForm.setPresidente(
-              pessoaService.getPessoa(planoMetasAtual.getPresidente().getId()));
-        }
-
-        if (planoMetasAtual.getNomePresidente() != null) {
-          planoMetasForm.setNomePresidente(planoMetasAtual.getNomePresidente());
-        }
-
-        if (planoMetasAtual.getEmailPresidente() != null) {
-          planoMetasForm
-              .setEmailPresidente(planoMetasAtual.getEmailPresidente());
-        }
-
-        if (planoMetasAtual.getTelefonePresidente() != null) {
-          planoMetasForm
-              .setTelefonePresidente(planoMetasAtual.getTelefonePresidente());
-        }
-
-        if (planoMetasAtual.getCoordenador() != null) {
-          planoMetasForm.setCoordenador(pessoaService
-              .getPessoa(planoMetasAtual.getCoordenador().getId()));
-          planoMetasForm.setEmailCoordenador(
-              planoMetasForm.getCoordenador().getPrimeiroEmail());
-          planoMetasForm.setTelefoneCoordenador(
-              planoMetasForm.getCoordenador().getPrimeiroTelefone());
-        } else {
-          if (planoMetasAtual.getNomeCoordenador() != null) {
-            planoMetasForm
-                .setNomeCoordenador(planoMetasAtual.getNomeCoordenador());
-          }
-          if (planoMetasAtual.getEmailCoordenador() != null) {
-            planoMetasForm
-                .setEmailCoordenador(planoMetasAtual.getEmailCoordenador());
-          }
-          if (planoMetasAtual.getTelefoneCoordenador() != null) {
-            planoMetasForm.setTelefoneCoordenador(
-                planoMetasAtual.getTelefoneCoordenador());
-          }
-        }
-
-        if (planoMetasAtual.getContratante() != null) {
-          planoMetasForm.setContratante(pessoaService
-              .getPessoa(planoMetasAtual.getContratante().getId()));
-          planoMetasForm.setEmailContratante(
-              planoMetasAtual.getContratante().getPrimeiroEmail());
-          planoMetasForm.setTelefoneContratante(
-              planoMetasAtual.getContratante().getPrimeiroTelefone());
-        } else {
-          if (planoMetasAtual.getNomeContratante() != null) {
-            planoMetasForm
-                .setNomeContratante(planoMetasAtual.getNomeContratante());
-          }
-          if (planoMetasAtual.getEmailContratante() != null) {
-            planoMetasForm
-                .setEmailContratante(planoMetasAtual.getEmailContratante());
-          }
-          if (planoMetasAtual.getTelefoneContratante() != null) {
-            planoMetasForm.setTelefoneContratante(
-                planoMetasAtual.getTelefoneContratante());
-          }
-
-        }
-
-        if (planoMetasAtual.getTipoContratante() == TipoContratante.OUTRO) {
-          planoMetasForm.setOutro(planoMetasAtual.getContratante());
-        }
-
-        if (planoMetasAtual.getFacilitador() != null) {
-          planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
-        }
-
-      } else {
-        if (planoMetasForm.getEntidade() != null) {
-          BaseEntidade nova = entidadeService
-              .findByIdOverview(planoMetasForm.getEntidade().getId());
-          if (nova != null) {
-            if (nova.getPresidente() != null) {
-              planoMetasForm.setPresidente(nova.getPresidente().getPessoa());
-            }
-
-            List<Dirigente> listaDirigente = nova.getDirigentes();
-
-            if (listaDirigente != null) {
-              for (Dirigente dirigente : listaDirigente) {
-                if (dirigente.getInstituto().getId()
-                    .equals(planoMetasForm.getInstituto().getId())) {
-                  planoMetasForm.setCoordenador(dirigente.getTrabalhador());
-                }
-              }
-            }
-          }
-
-        }
-      }
-      planoMetasForm.setFase(4);
+    if (request.getSession().getAttribute("ROLE_CONTROLE").equals("ROLE_METAS_SECRETARIA")) {
+      processoSecretaria = true;
+      fase = 4;
+      entidade = entidadeService.findByIdOverview(entidade.getId());
     }
-
+    if (request.getSession().getAttribute("ROLE_CONTROLE").equals("ROLE_METAS_PRESIDENTE")) {
+      processoPresidente = true;
+      if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
+        BaseEntidade base = (BaseEntidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
+        entidade = entidadeService.findByIdOverview(base.getId());
+      }
+    }
+    
+    PlanoMetas planoMetasAtual = null;
+    
+    if (rodizio != null && instituto != null && entidade != null) {
+      planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
+      if (planoMetasAtual != null) {
+        planoMetasForm = mapPlanoMetasToPlanoMetasForm(planoMetasAtual);
+        if (facilitador != null) {
+          planoMetasForm.setFacilitador(facilitador);
+        }
+        planoMetasForm.setEvento(evento);
+      }
+    }  
+    
     // Se presidente
-    if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
-      BaseEntidade base = (BaseEntidade) request.getSession()
-          .getAttribute("INSTITUICAO_CONTROLE");
-      entidade = entidadeService.findByIdOverview(base.getId());
+    if (processoPresidente || processoSecretaria){
       if (entidade != null) {
+        
         List<Dirigente> listaDirigente = entidade.getDirigentes();
 
         if (listaDirigente != null) {
@@ -590,24 +510,60 @@ public class PlanoMetasController {
             }
           }
         }
-
-        planoMetasForm.setEntidade(base);
-
+        
+        planoMetasForm.setEntidade(entidade);
         planoMetasForm.setTipoContratante(TipoContratante.PRESIDENTE);
-        planoMetasForm.setPresidente(base.getPresidente().getPessoa());
-        planoMetasForm.setContratante(base.getPresidente().getPessoa());
+        planoMetasForm.setPresidente(entidade.getPresidente().getPessoa());
+        planoMetasForm.setContratante(entidade.getPresidente().getPessoa());
 
         redirect.addFlashAttribute("planoMetasForm", planoMetasForm);
 
         return listAtividades(planoMetasForm, result);
 
       }
+    } 
 
-    }
+    planoMetasForm.setFase(fase);
 
     model.addObject("rodizio", Boolean.TRUE);
 
     return model;
+  }
+
+  private PlanoMetasForm mapPlanoMetasToPlanoMetasForm(PlanoMetas planoMetasAtual) {
+    
+    PlanoMetasForm planoMetasForm = new PlanoMetasForm();
+    
+    planoMetasForm.setId(planoMetasAtual.getId());
+    planoMetasForm.setValidado(planoMetasAtual.isValidado());
+    planoMetasForm.setFinalizado(planoMetasAtual.isFinalizado());
+    planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
+
+    planoMetasForm.setPresidente( planoMetasAtual.getPresidente() );
+    planoMetasForm.setNomePresidente(planoMetasAtual.getNomePresidente());
+    planoMetasForm.setEmailPresidente(planoMetasAtual.getEmailPresidente());
+    planoMetasForm.setTelefonePresidente(planoMetasAtual.getTelefonePresidente());
+
+    planoMetasForm.setCoordenador(planoMetasAtual.getCoordenador());
+    planoMetasForm.setNomeCoordenador(planoMetasAtual.getNomeCoordenador());
+    planoMetasForm.setEmailCoordenador(planoMetasAtual.getEmailCoordenador());
+    planoMetasForm.setTelefoneCoordenador(planoMetasAtual.getTelefoneCoordenador());
+
+    planoMetasForm.setContratante(planoMetasAtual.getContratante());
+    planoMetasForm.setNomeContratante(planoMetasAtual.getNomeContratante());
+    planoMetasForm.setEmailContratante(planoMetasAtual.getEmailContratante());
+    planoMetasForm.setTelefoneContratante(planoMetasAtual.getTelefoneContratante());
+
+    if (planoMetasAtual.getTipoContratante() == TipoContratante.OUTRO) {
+      planoMetasForm.setOutro(planoMetasAtual.getContratante());
+    }
+    planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
+    
+    planoMetasForm.setRodizio(planoMetasAtual.getRodizio());
+    planoMetasForm.setInstituto(planoMetasAtual.getInstituto());
+    planoMetasForm.setEntidade(planoMetasAtual.getEntidade());
+    
+    return planoMetasForm;
   }
 
   @RequestMapping("/atividades")
@@ -626,195 +582,135 @@ public class PlanoMetasController {
 
     // Se teve erros na validação retorna a página anterior
     if (result.hasErrors()) {
-      ModelAndView model = new ModelAndView("metas.contratacao",
-          "planoMetasForm", planoMetasForm);
+      ModelAndView model = new ModelAndView("metas.contratacao", "planoMetasForm", planoMetasForm);
       planoMetasForm.setFase(2);
       model.addObject("erros", true);
       return model;
     }
 
     // Verificar existencia do plano para esse ciclo
-    PlanoMetas planoMetasAtual = planoMetasService
-        .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-            instituto.getId(), rodizio.getId());
+    PlanoMetas planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
 
-    if (planoMetasAtual != null) {
-      planoMetasForm.setId(planoMetasAtual.getId());
-    } else {
+    //Nao existe plano de metas?
+    if (planoMetasAtual == null) {
       planoMetasAtual = new PlanoMetas();
-      planoMetasAtual.setRodizio(rodizio);
-      planoMetasAtual.setInstituto(instituto);
-      planoMetasAtual.setEntidade(entidade);
     }
-
-    // Popula dados do plano de metas atual com as informações do planoMetasForm
-    planoMetasAtual.setEvento(planoMetasForm.getEvento());
-
-    if (planoMetasForm.getTipoContratante() != null) {
-      planoMetasAtual.setTipoContratante(planoMetasForm.getTipoContratante());
-    }
-    if (planoMetasForm.getPresidente() != null) {
-      planoMetasAtual.setPresidente(planoMetasForm.getPresidente());
-    }
-    if (planoMetasForm.getNomePresidente() != null) {
-      planoMetasAtual.setNomePresidente(planoMetasForm.getNomePresidente());
-    }
-    if (planoMetasForm.getEmailPresidente() != null) {
-      planoMetasAtual.setEmailPresidente(planoMetasForm.getEmailPresidente());
-    }
-    if (planoMetasForm.getTelefonePresidente() != null) {
-      planoMetasAtual
-          .setTelefonePresidente(planoMetasForm.getTelefonePresidente());
-    }
-    if (planoMetasForm.getCoordenador() != null) {
-      if (planoMetasForm.getCoordenador().getId() != null) {
-        Pessoa coordenador = pessoaService
-            .getPessoa(planoMetasForm.getCoordenador().getId());
-        planoMetasAtual.setCoordenador(coordenador);
-      }
-      planoMetasAtual.setNomeCoordenador(
-          planoMetasForm.getCoordenador().getNomeCompleto());
-    }
-    if (planoMetasForm.getEmailCoordenador() != null) {
-      planoMetasAtual.setEmailCoordenador(planoMetasForm.getEmailCoordenador());
-    }
-    if (planoMetasForm.getTelefoneCoordenador() != null) {
-      planoMetasAtual
-          .setTelefoneCoordenador(planoMetasForm.getTelefoneCoordenador());
-    }
-
-    if (planoMetasForm.getTipoContratante() == TipoContratante.PRESIDENTE) {
-      planoMetasAtual.setContratante(planoMetasAtual.getPresidente());
-    }
-    if (planoMetasForm.getTipoContratante() == TipoContratante.COORDENADOR
-        && planoMetasForm.getCoordenador() != null) {
-      planoMetasAtual.setContratante(planoMetasAtual.getCoordenador());
-    }
-    if (planoMetasForm.getTipoContratante() == TipoContratante.OUTRO
-        && planoMetasForm.getOutro() != null
-        && planoMetasForm.getOutro().getId() != null) {
-      Pessoa outro = pessoaService.getPessoa(planoMetasForm.getOutro().getId());
-      planoMetasAtual.setContratante(outro);
-    }
-    if (planoMetasForm.getContratante() != null) {
-      if (planoMetasForm.getContratante().getId() != null) {
-        Pessoa contratante = pessoaService
-            .getPessoa(planoMetasForm.getContratante().getId());
-        planoMetasAtual.setContratante(contratante);
-      }
-      planoMetasAtual.setContratante(planoMetasForm.getContratante());
-    }
-    if (planoMetasForm.getNomeContratante() != null) {
-      planoMetasAtual.setNomeContratante(planoMetasForm.getNomeContratante());
-    }
-    if (planoMetasForm.getEmailContratante() != null) {
-      planoMetasAtual.setEmailContratante(planoMetasForm.getEmailContratante());
-    }
-    if (planoMetasForm.getTelefoneContratante() != null) {
-      planoMetasAtual
-          .setTelefoneContratante(planoMetasForm.getTelefoneContratante());
-    }
-
-    if (planoMetasForm.getFacilitador() != null) {
-      planoMetasAtual.setFacilitador(planoMetasForm.getFacilitador());
-    } else if (planoMetasAtual.getFacilitador() != null) {
+    
+    //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
+    mapPlanoMetasFormToPlanoMetas(planoMetasForm, planoMetasAtual);
+    
+    //Pos Evento, ja foi alterado por Facilitador
+    if (planoMetasAtual.getFacilitador() != null && planoMetasForm.getFacilitador() == null) {
       planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
     }
-
-    if (planoMetasAtual.getId() != null) {
-      planoMetasService.update(planoMetasAtual);
-    }
-
+    
     // Prepara
-    planoMetasForm = preparaPlanoMetas(planoMetasForm, planoMetasAtual);
+    recuperaMetas(planoMetasForm, planoMetasAtual);
+    recuperaAnotacoes(planoMetasForm, planoMetasAtual);
 
-    // Salva esboço atual
-    PlanoMetas plano = getPlano(planoMetasForm);
-
-    if (plano.getId() == null || plano.getId() == 0) {
-
-      List<MetaEntidade> metas = plano.getListaMetas();
-      for (MetaEntidade metaEntidade : metas) {
-        if (metaEntidade.getId() == null || metaEntidade.getId() == 0) {
-          metaService.save(metaEntidade);
-        } else {
-          metaService.update(metaEntidade);
-        }
-      }
-      planoMetasService.save(plano);
-
-      planoMetasForm.setId(plano.getId());
-
-      planoMetasAtual = planoMetasService
-          .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-              instituto.getId(), rodizio.getId());
-      List<MetaEntidade> listaMetas2 = metaService
-          .findByEntidadeIdAndInstitutoId(entidade.getId(), instituto.getId());
-      planoMetasAtual.setListaMetas(listaMetas2);
-
-      planoMetasForm = preparaPlanoMetas(planoMetasForm, planoMetasAtual);
-
+    if (planoMetasAtual.getId() == null || planoMetasAtual.getId() == 0) {
+      planoMetasAtual = planoMetasService.save(planoMetasAtual);
+      planoMetasForm.setId(planoMetasAtual.getId());
+    } else {
+      planoMetasAtual = planoMetasService.update(planoMetasAtual);
     }
+
+    List<MetaEntidade> metas = planoMetasAtual.getMetas();
+    for (MetaEntidade metaEntidade : metas) {
+      if (metaEntidade.getId() == null || metaEntidade.getId() == 0) {
+        metaService.save(metaEntidade);
+      } else {
+        metaService.update(metaEntidade);
+      }
+    }
+    
+    recuperaMetas(planoMetasForm, planoMetasAtual);
+    recuperaAnotacoes(planoMetasForm, planoMetasAtual);
 
     planoMetasForm.setFase(3);
 
-    ModelAndView model = new ModelAndView("metas.contratacao2",
-        "planoMetasForm", planoMetasForm);
+    ModelAndView model = new ModelAndView("metas.contratacao2", "planoMetasForm", planoMetasForm);
 
-    List<SituacaoMeta> situacaoList = new ArrayList<SituacaoMeta>(
-        Arrays.asList(SituacaoMeta.values()));
+    List<SituacaoMeta> situacaoList = new ArrayList<SituacaoMeta>(Arrays.asList(SituacaoMeta.values()));
     model.addObject("situacaoList", situacaoList);
     model.addObject("rodizio", Boolean.TRUE);
 
     return model;
   }
 
-  private PlanoMetasForm preparaPlanoMetas(PlanoMetasForm planoMetasForm,
-      PlanoMetas planoMetasAtual) {
+  private void preparaAnotacoes(PlanoMetasForm planoMetasForm, PlanoMetas planoMetas) {
+    if (planoMetasForm.getAnotacoes() != null) {
+      Anotacao novaNota = null;
+      for (Anotacao anot : planoMetasForm.getAnotacoes()) {
+        if (anot.getId() == null && (anot.getTexto() == null || anot.getTexto().trim().equals(""))) {
+          continue;
+        }
+
+        if (planoMetas.getAnotacoes() == null) {
+          planoMetas.setAnotacoes(new ArrayList<Anotacao>());
+        }
+
+        if (planoMetas.getAnotacoes().contains(anot)) {
+          novaNota = planoMetas.getAnotacoes().get(planoMetas.getAnotacoes().indexOf(anot));
+          if (!novaNota.getTexto().equals(anot.getTexto())) {
+            novaNota.setData(new Date());
+            if (planoMetas.getEvento() == EventoMeta.RODIZIO) {
+              if (planoMetas.getFacilitador() != null && planoMetas.getFacilitador().getId() != null)
+                novaNota.setResponsavel(planoMetas.getFacilitador());
+            } else {
+              if (planoMetas.getContratante() != null && planoMetas.getContratante().getId() != null)
+                novaNota.setResponsavel(planoMetas.getContratante());
+            }
+            novaNota.setTexto(anot.getTexto());
+          }
+        } else {
+          anot.setData(new Date());
+          if (planoMetas.getEvento() == EventoMeta.RODIZIO) {
+            if (planoMetas.getFacilitador() != null && planoMetas.getFacilitador().getId() != null)
+              anot.setResponsavel(planoMetas.getFacilitador());
+          } else {
+            if (planoMetas.getContratante() != null && planoMetas.getContratante().getId() != null)
+              anot.setResponsavel(planoMetas.getContratante());
+          }
+          planoMetas.getAnotacoes().add(anot);
+        }
+      }
+    }
+  }
+
+  private void recuperaAnotacoes(PlanoMetasForm planoMetasForm, PlanoMetas planoMetasAtual) {
+    planoMetasForm.setAnotacoes(new ArrayList<Anotacao>());
+    if (planoMetasAtual.getAnotacoes() != null) {
+      for (Anotacao anot : planoMetasAtual.getAnotacoes()) {
+        planoMetasForm.getAnotacoes().add(anot);
+      }
+    }
+  }
+
+  private void recuperaMetas(PlanoMetasForm planoMetasForm, PlanoMetas planoMetasAtual) {
+    
     List<MetaForm> metasForm = null;
 
-    List<MetaInstituto> metasIntituto = metaInstitutoService
-        .listMetaInstitutoByInstitutoResumo(
-            planoMetasForm.getInstituto().getId());
+    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstitutoResumo(planoMetasForm.getInstituto().getId());
 
-    List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId(
-        planoMetasForm.getEntidade().getId(),
-        planoMetasForm.getInstituto().getId());
+    List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId( planoMetasForm.getEntidade().getId(), planoMetasForm.getInstituto().getId());
 
-    if (planoMetasAtual != null) {
-      planoMetasAtual.setListaMetas(listaMetas);
-      planoMetasAtual.setEvento(planoMetasForm.getEvento());
-    }
+    planoMetasAtual.setMetas(listaMetas);
 
     // Primeiro Rodizio
-    if (planoMetasAtual == null || listaMetas == null
-        || listaMetas.size() == 0) {
+    if (listaMetas == null || listaMetas.size() == 0) {
       metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(
           metasIntituto, planoMetasForm.getFacilitador(),
-          planoMetasForm.getContratante(), planoMetasForm.getEvento(),
+          planoMetasForm.getContratante(), 
+          planoMetasForm.getEvento(),
           planoMetasForm.getRodizio());
     } else if (listaMetas.size() > 0) {
-      metasForm = new MetasHelper(metaService)
-          .processaMetaToMetaForm(metasIntituto, planoMetasAtual);
+      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto, planoMetasAtual);
     } else {
       metasForm = new ArrayList<MetaForm>();
     }
-
-    if (planoMetasAtual != null) {
-      planoMetasForm.setAnotacoes(new ArrayList<Anotacao>());
-      if (planoMetasAtual.getListaAnotacoes() != null) {
-        for (Anotacao anot : planoMetasAtual.getListaAnotacoes()) {
-          planoMetasForm.getAnotacoes().add(anot);
-        }
-      }
-
-      planoMetasForm.setFinalizado(planoMetasAtual.isFinalizado());
-      planoMetasForm.setValidado(planoMetasAtual.isValidado());
-    }
-
+    
     planoMetasForm.setDependencias(metasForm);
-
-    return planoMetasForm;
   }
 
   @RequestMapping("/add")
@@ -822,9 +718,9 @@ public class PlanoMetasController {
       @ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm,
       BindingResult result) {
 
-    restauraRodizio(planoMetasForm);
-    restauraInstituto(planoMetasForm);
-    restauraEntidade(planoMetasForm);
+    Rodizio rodizio = restauraRodizio(planoMetasForm);
+    BaseInstituto instituto = restauraInstituto(planoMetasForm);
+    BaseEntidade entidade = restauraEntidade(planoMetasForm);
     restauraFacilitador(planoMetasForm);
 
     if (result.hasErrors()) {
@@ -842,17 +738,23 @@ public class PlanoMetasController {
       planoMetasForm.setTipoContratante(TipoContratante.PRESIDENTE);
     }
 
-    PlanoMetas plano = getPlano(planoMetasForm);
-    // if (request.getSession().getAttribute("ROLE_CONTROLE") != null
-    // && request.getSession().getAttribute("ROLE_CONTROLE")
-    // .equals("ROLE_METAS_FACILITADOR")) {
-    // return model;
-    // } else {
+    // Verificar existencia do plano para esse ciclo
+    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
+
+    //Nao existe plano de metas?
+    if (plano == null) {
+      plano = new PlanoMetas();
+    }
+    
+    //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
+    mapPlanoMetasFormToPlanoMetas(planoMetasForm, plano);
+    preparaAnotacoes(planoMetasForm, plano);
+    preparaMetas(planoMetasForm, plano);
+    
     if (plano.getId() == null || plano.getId() == 0) {
       planoMetasService.save(plano);
     } else {
-
-      List<MetaEntidade> metas = plano.getListaMetas();
+      List<MetaEntidade> metas = plano.getMetas();
 
       for (MetaEntidade metaEntidade : metas) {
         List<MetaEntidadeAnotacao> anotacoes = metaEntidade.getAnotacoes();
@@ -905,145 +807,88 @@ public class PlanoMetasController {
 
   }
 
-  private PlanoMetas getPlano(PlanoMetasForm planoMetasForm) {
-    PlanoMetas plano = new PlanoMetas();
-
-    if (planoMetasForm.getId() != null && planoMetasForm.getId() > 0) {
-      plano = planoMetasService.findById(planoMetasForm.getId());
-    } else {
-      Rodizio rodizio = rodizioService
-          .findById(planoMetasForm.getRodizio().getId());
-      plano.setRodizio(rodizio);
-
-      BaseInstituto instituto = baseInstitutoService
-          .findById(planoMetasForm.getInstituto().getId());
-      plano.setInstituto(instituto);
-
-      BaseEntidade entidade = entidadeService
-          .findById(planoMetasForm.getEntidade().getId());
-      if (entidade == null) {
-        entidade = new Entidade();
-        entidade.setId(planoMetasForm.getEntidade().getId());
-        entidade.setRazaoSocial(planoMetasForm.getEntidade().getRazaoSocial());
-      }
-      plano.setEntidade(entidade);
-    }
-
-    List<MetaEntidade> metasAux = metaService.findByEntidadeIdAndInstitutoId(
-        plano.getEntidade().getId(), plano.getInstituto().getId());
-    plano.setListaMetas(metasAux);
-
-    plano.setFinalizado(planoMetasForm.isFinalizado());
-
-    plano.setValidado(planoMetasForm.isValidado());
-
-    plano.setEvento(planoMetasForm.getEvento());
-
-    plano.setTipoContratante(planoMetasForm.getTipoContratante());
-
-    if (planoMetasForm.getPresidente() != null
-        && planoMetasForm.getPresidente().getId() != null) {
-      Pessoa presidente = pessoaService
-          .getPessoa(planoMetasForm.getPresidente().getId());
-      plano.setPresidente(presidente);
-    }
-
-    if (planoMetasForm.getCoordenador() != null
-        && planoMetasForm.getCoordenador().getId() != null) {
-      Pessoa coordenador = pessoaService
-          .getPessoa(planoMetasForm.getCoordenador().getId());
-      plano.setCoordenador(coordenador);
-    }
-
-    if (planoMetasForm.getTipoContratante() == TipoContratante.PRESIDENTE) {
-      plano.setContratante(plano.getPresidente());
-    }
-    if (planoMetasForm.getTipoContratante() == TipoContratante.COORDENADOR
-        && planoMetasForm.getCoordenador() != null
-        && planoMetasForm.getCoordenador().getId() != null) {
-      plano.setContratante(plano.getCoordenador());
-    }
-    if (planoMetasForm.getTipoContratante() == TipoContratante.OUTRO
-        && planoMetasForm.getOutro() != null
-        && planoMetasForm.getOutro().getId() != null) {
-      Pessoa outro = pessoaService.getPessoa(planoMetasForm.getOutro().getId());
-      plano.setContratante(outro);
-    }
-
-    if (planoMetasForm.getCoordenador() != null
-        && planoMetasForm.getCoordenador().getNomeCompleto() != null)
-      plano.setNomeCoordenador(
-          planoMetasForm.getCoordenador().getNomeCompleto());
-    if (planoMetasForm.getEmailCoordenador() != null)
-      plano.setEmailCoordenador(planoMetasForm.getEmailCoordenador());
-    if (planoMetasForm.getTelefoneCoordenador() != null)
-      plano.setTelefoneCoordenador(planoMetasForm.getTelefoneCoordenador());
-    if (planoMetasForm.getOutro() != null
-        && planoMetasForm.getOutro().getNomeCompleto() != null)
-      plano.setNomeContratante(planoMetasForm.getOutro().getNomeCompleto());
-    if (planoMetasForm.getEmailContratante() != null)
-      plano.setEmailContratante(planoMetasForm.getEmailContratante());
-    if (planoMetasForm.getTelefoneContratante() != null)
-      plano.setTelefoneContratante(planoMetasForm.getTelefoneContratante());
-
-    if (planoMetasForm.getFacilitador() != null
-        && planoMetasForm.getFacilitador().getId() != null) {
-      Pessoa facilitador = pessoaService
-          .getPessoa(planoMetasForm.getFacilitador().getId());
-      plano.setFacilitador(facilitador);
-    }
-
+  private void preparaMetas(PlanoMetasForm planoMetasForm, PlanoMetas plano) {
+    List<MetaEntidade> metasAux = metaService.findByEntidadeIdAndInstitutoId(plano.getEntidade().getId(), plano.getInstituto().getId());
+    
+    plano.setMetas(metasAux);
+    
     List<MetaEntidade> metas = new ArrayList<MetaEntidade>();
 
     processaMetas(planoMetasForm.getDependencias(), metas, plano, null);
 
-    plano.setListaMetas(metas);
+    plano.setMetas(metas);
+  }
+  
+  private void mapPlanoMetasFormToPlanoMetas(PlanoMetasForm planoMetasForm, PlanoMetas planoMetas) {
+    if(planoMetas.getId() == null){
+      planoMetas.setId(planoMetasForm.getId());
+    }
+    
+    // Popula dados do plano de metas atual com as informações do planoMetasForm
+    planoMetas.setEvento(planoMetasForm.getEvento());
+    planoMetas.setTipoContratante(planoMetasForm.getTipoContratante());
+    
+    planoMetas.setNomePresidente(planoMetasForm.getNomePresidente());
+    planoMetas.setEmailPresidente(planoMetasForm.getEmailPresidente());
+    planoMetas.setTelefonePresidente(planoMetasForm.getTelefonePresidente());
+    
+    planoMetas.setNomeCoordenador(planoMetasForm.getNomeCoordenador());
+    planoMetas.setEmailCoordenador(planoMetasForm.getEmailCoordenador());
+    planoMetas.setTelefoneCoordenador(planoMetasForm.getTelefoneCoordenador());
 
-    if (planoMetasForm.getAnotacoes() != null) {
-      Anotacao novaNota = null;
-      for (Anotacao anot : planoMetasForm.getAnotacoes()) {
-        if (anot.getId() == null
-            && (anot.getTexto() == null || anot.getTexto().trim().equals(""))) {
-          continue;
-        }
-
-        if (plano.getListaAnotacoes() == null) {
-          plano.setListaAnotacoes(new ArrayList<Anotacao>());
-        }
-
-        if (plano.getListaAnotacoes().contains(anot)) {
-          novaNota = plano.getListaAnotacoes()
-              .get(plano.getListaAnotacoes().indexOf(anot));
-          if (!novaNota.getTexto().equals(anot.getTexto())) {
-            novaNota.setData(new Date());
-            if (plano.getEvento() == EventoMeta.RODIZIO) {
-              if (plano.getFacilitador() != null
-                  && plano.getFacilitador().getId() != null)
-                novaNota.setResponsavel(plano.getFacilitador());
-            } else {
-              if (plano.getContratante() != null
-                  && plano.getContratante().getId() != null)
-                novaNota.setResponsavel(plano.getContratante());
-            }
-            novaNota.setTexto(anot.getTexto());
-          }
-        } else {
-          anot.setData(new Date());
-          if (plano.getEvento() == EventoMeta.RODIZIO) {
-            if (plano.getFacilitador() != null
-                && plano.getFacilitador().getId() != null)
-              anot.setResponsavel(plano.getFacilitador());
-          } else {
-            if (plano.getContratante() != null
-                && plano.getContratante().getId() != null)
-              anot.setResponsavel(plano.getContratante());
-          }
-          plano.getListaAnotacoes().add(anot);
-        }
-      }
+    planoMetas.setNomeContratante(planoMetasForm.getNomeContratante());
+    planoMetas.setEmailContratante(planoMetasForm.getEmailContratante());
+    planoMetas.setTelefoneContratante(planoMetasForm.getTelefoneContratante());
+    
+    planoMetas.setValidado(planoMetasForm.isValidado());
+    planoMetas.setFinalizado(planoMetasForm.isFinalizado());
+    
+    if(planoMetasForm.getRodizio() != null){
+      Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio().getId());
+      planoMetas.setRodizio(rodizio);
+    }
+    if(planoMetasForm.getInstituto() != null){
+      BaseInstituto instituto = baseInstitutoService.findById(planoMetasForm.getInstituto().getId());
+      planoMetas.setInstituto(instituto);
+    }
+    if(planoMetasForm.getEntidade() != null){
+      BaseEntidade entidade = entidadeService.findById(planoMetasForm.getEntidade().getId());
+      planoMetas.setEntidade(entidade);
+    }
+    
+    if (planoMetasForm.getPresidente() != null && planoMetasForm.getPresidente().getId() != null) {
+      Pessoa presidente = pessoaService.getPessoa(planoMetasForm.getPresidente().getId());
+      planoMetas.setPresidente(presidente);
+      planoMetas.setNomePresidente(planoMetasForm.getPresidente().getNomeCompleto());
+    }
+    
+    if (planoMetasForm.getCoordenador() != null && planoMetasForm.getCoordenador().getId() != null) {
+      Pessoa coordenador = pessoaService.getPessoa(planoMetasForm.getCoordenador().getId());
+      planoMetas.setCoordenador(coordenador);
+      planoMetas.setNomeCoordenador(planoMetasForm.getCoordenador().getNomeCompleto());
     }
 
-    return plano;
+    if (planoMetasForm.getTipoContratante() == TipoContratante.PRESIDENTE) {
+      planoMetas.setContratante(planoMetas.getPresidente());
+    }
+    if (planoMetasForm.getTipoContratante() == TipoContratante.COORDENADOR && planoMetasForm.getCoordenador() != null) {
+      planoMetas.setContratante(planoMetas.getCoordenador());
+    }
+    if (planoMetasForm.getTipoContratante() == TipoContratante.OUTRO && planoMetasForm.getOutro() != null && planoMetasForm.getOutro().getId() != null) {
+      Pessoa outro = pessoaService.getPessoa(planoMetasForm.getOutro().getId());
+      planoMetas.setContratante(outro);
+    }
+    
+    if (planoMetasForm.getContratante() != null && planoMetasForm.getContratante().getId() != null) {
+        Pessoa contratante = pessoaService.getPessoa(planoMetasForm.getContratante().getId());
+        planoMetas.setContratante(contratante);
+    }
+
+    if (planoMetasForm.getFacilitador() != null && planoMetasForm.getFacilitador().getId() != null) {
+      Pessoa facilitador = pessoaService.getPessoa(planoMetasForm.getFacilitador().getId());
+      planoMetas.setFacilitador(facilitador);
+    }
+    
   }
 
   private void processaMetas(List<MetaForm> metasForm, List<MetaEntidade> metas,
@@ -1056,7 +901,7 @@ public class PlanoMetasController {
 
       MetaEntidade meta = null;
       if (metaForm.getId() != null && metaForm.getId() > 0) {
-        meta = new MetasHelper(metaService).searchMeta(plano.getListaMetas(),
+        meta = new MetasHelper(metaService).searchMeta(plano.getMetas(),
             plano.getEntidade(), plano.getInstituto(), metaForm.getAtividade());
         historicoAtual = metaService.findByMetaEntidadeIdAndRodizioId(
             meta.getId(), plano.getRodizio().getId());
@@ -1377,11 +1222,11 @@ public class PlanoMetasController {
       List<MetaEntidade> listaMetas = metaService
           .findByEntidadeIdAndInstitutoId(planoMetas.getEntidade().getId(),
               planoMetas.getInstituto().getId());
-      planoMetas.setListaMetas(listaMetas);
+      planoMetas.setMetas(listaMetas);
 
-      if (planoMetas.getListaMetas().size() > 0) {
+      if (planoMetas.getMetas().size() > 0) {
         List<MetaForm> metas = new MetasHelper(metaService)
-            .processaMetaToMetaForm(atividades, planoMetas);
+            .mapMetaInstitutoToMetaForm(atividades, planoMetas);
         planoMetasForm.setDependencias(metas);
       }
       listanova.add(planoMetasForm);

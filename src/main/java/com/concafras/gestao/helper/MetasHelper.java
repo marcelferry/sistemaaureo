@@ -34,18 +34,153 @@ public class MetasHelper {
     this.metaService = metaService;
   }
   
-  public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> atividades, Pessoa facilitador, Pessoa contratante, EventoMeta evento, Rodizio ciclo) {
+  private MetaForm preencheSituacaoAnteriorAtual(MetaForm meta, MetaEntidade metaEntidade, Rodizio cicloAtual) {
+    if(metaEntidade != null){
+      // Carregar avaliacao pre-salva
+      HistoricoMetaEntidade situacaoAtualSalva = null;
+      HistoricoMetaEntidade historico = null;
+      if( cicloAtual.getCicloAnterior() != null ){
+        situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+        historico = getHistoricoPreAvaliacao( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId() );
+      }
+      
+      if(historico != null){
+        System.out.println("\n========================================================");
+        System.out.println(metaEntidade.getDescricao());
+        System.out.println(cicloAtual.getCicloAnterior().getCiclo());
+        System.out.println("========================================================");
+        System.out.println("RECUPERADO: " + historico.getTipoSituacao() + " - "  + historico.getSituacao()  + " - "  + historico.getRodizio());
+        System.out.println("========================================================");
+        
+        SituacaoMeta situacao = historico.getSituacao();
+        Rodizio ciclo = historico.getRodizio();
+        
+        HistoricoMetaEntidadeVO situacaoAnterior = new HistoricoMetaEntidadeVO(historico);
+        
+        if( situacao == SituacaoMeta.NAOPLANEJADA ){
+          HistoricoMetaEntidade preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getId(), TipoSituacaoMeta.INICIAL, true);
+          if(preHistorico == null && ciclo.getCicloAnterior() != null){
+            preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
+          }
+          
+          if(preHistorico != null) {
+            situacaoAnterior.setSituacao(preHistorico.getSituacao());
+          }  
+        }
+        
+        meta.setSituacaoAnterior(situacaoAnterior);
+        System.out.println("ANTERIOR: " + situacaoAnterior.getTipoSituacao() + " - "  + situacaoAnterior.getSituacao() + " - "  + situacaoAnterior.getCiclo());
+        System.out.println("========================================================");
+        
+        HistoricoMetaEntidadeVO situacaoAtual = null;
+        if(situacaoAtualSalva == null){
+          situacaoAtual = new HistoricoMetaEntidadeVO();
+          situacaoAtual.setCiclo(new RodizioVO( cicloAtual.getCicloAnterior() ));
+          situacaoAtual.setSituacao( situacaoAnterior.getSituacao() );
+          situacaoAtual.setTipoSituacao(TipoSituacaoMeta.AVALIAR);
+        } else {
+          situacaoAtual = new HistoricoMetaEntidadeVO(situacaoAtualSalva);
+        }
+        
+        System.out.println("ATUAL: " + situacaoAtual.getTipoSituacao() + " - "  + situacaoAtual.getSituacao() + " - "  + situacaoAtual.getCiclo());
+        System.out.println("========================================================\n");
+        
+        meta.setSituacaoAtual(situacaoAtual);
+        
+        return meta;
+      } 
+      
+      if(situacaoAtualSalva == null){
+        meta.setSituacaoAnterior(null);
+        meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
+        meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
+      }
+      return meta; 
+    } else { 
+      meta.setSituacaoAnterior(null);
+      meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
+      meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
+      return meta;                                                               
+    }
+  }
+
+  public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, PlanoMetas planoMetasAtual) {
+    
+    List<MetaEntidade> metas = planoMetasAtual.getMetas();
+    
+    List<MetaForm> metasForm = new ArrayList<MetaForm>();
+    
+    metasInstituto.removeAll(Collections.singleton(null));
+    
+    for (MetaInstituto metaInstituto : metasInstituto) {
+      MetaForm metaForm = new MetaForm();
+      metaForm.setAtividade(metaInstituto);
+      
+      MetaEntidade metaEntidade = searchMeta(metas, planoMetasAtual.getEntidade(), planoMetasAtual.getInstituto(), metaInstituto);
+      
+      String rota = metaService.getCaminhoMeta(metaInstituto.getId());
+      metaForm.setDescricaoCompleta(rota);
+      
+      metaForm = preencheSituacaoAnteriorAtual(metaForm, metaEntidade, planoMetasAtual.getRodizio());
+      
+      metaForm = preencheSituacaoDesejada(metaEntidade,  
+          metaForm, 
+          planoMetasAtual.getEvento(), 
+          planoMetasAtual.getRodizio()
+      );
+      
+      metaForm = preencheAnotacoes(metaEntidade,  
+          metaForm, 
+          planoMetasAtual.getContratante(), 
+          planoMetasAtual.getFacilitador(), 
+          planoMetasAtual.getEvento(), 
+          planoMetasAtual.getRodizio(),
+          true
+          );
+      
+      
+      List<MetaInstituto> subAtividades = metaInstituto.getItens();
+      if(subAtividades != null && subAtividades.size() > 0) {
+        List<MetaForm> metas1 = mapMetaInstitutoToMetaForm(subAtividades, planoMetasAtual);
+      
+        if(metas1.size() > 0){
+          metaForm.setDependencias(metas1);
+        }
+      }
+      
+      metasForm.add(metaForm);
+    }
+    
+    return metasForm;
+  }
+  
+
+  public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, Pessoa facilitador, Pessoa contratante, EventoMeta evento, Rodizio ciclo) {
     
     List<MetaForm> metas = new ArrayList<MetaForm>();
     
-    atividades.removeAll(Collections.singleton(null));
+    metasInstituto.removeAll(Collections.singleton(null));
     
-    for (MetaInstituto atividade : atividades) {
+    for (MetaInstituto metaInstituto : metasInstituto) {
       MetaForm meta = new MetaForm();
-      meta.setAtividade(atividade);
-      meta.setSituacaoDesejada(new HistoricoMetaEntidadeVO());
-      meta.setObservacoes(new ArrayList<AnotacaoVO>());
+      meta.setAtividade(metaInstituto);
       
+      String rota = metaService.getCaminhoMeta(metaInstituto.getId());
+      meta.setDescricaoCompleta(rota);
+    
+      //Primeiro rodizio - Sem meta anterior
+      meta.setSituacaoAnterior(null);
+      
+      //Primeiro rodizio - Situacao Atual - Inicial
+      meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
+      meta.getSituacaoAtual().setCiclo(new RodizioVO(ciclo));
+      meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
+    
+      //Primeiro rodizio - Situacao Desejada vazia
+      meta.setSituacaoDesejada(new HistoricoMetaEntidadeVO());
+
+      //Primeiro Rodizio - Nova Anotacao em Branco
+      meta.setObservacoes(new ArrayList<AnotacaoVO>());
       if(evento == EventoMeta.PRERODIZIO){
         Anotacao anot = new Anotacao();
         anot.setNivel(NivelAnotacao.META_PRERODIZIO);
@@ -65,16 +200,8 @@ public class MetasHelper {
         anot.setData(new Date());
         meta.getObservacoes().add(new AnotacaoVO(anot, ciclo));
       }
-    
-      //Primeiro rodizio - Sem meta anterior
-      meta.setSituacaoAnterior(null);
-      
-      //Primeiro rodizio - Situacao Atual - Inicial
-      meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
-      meta.getSituacaoAtual().setCiclo(new RodizioVO(ciclo));
-      meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
-    
-      List<MetaInstituto> subAtividades = atividade.getItens();
+
+      List<MetaInstituto> subAtividades = metaInstituto.getItens();
       if(subAtividades != null){
         List<MetaForm> metas1 = mapMetaInstitutoToMetaForm(subAtividades, facilitador, contratante, evento, ciclo);
         
@@ -82,9 +209,6 @@ public class MetasHelper {
           meta.setDependencias(metas1);
         }
       }
-      
-      String rota = metaService.getCaminhoMeta(atividade.getId());
-      meta.setDescricaoCompleta(rota);
     
       metas.add(meta);
     }
@@ -92,138 +216,6 @@ public class MetasHelper {
     return metas;
   }
 
-
-  public MetaForm preencheSituacaoAnteriorAtual(MetaForm meta, MetaInstituto metaInstituto, PlanoMetas planometas) {
-    if(planometas != null){
-      List<MetaEntidade> metas = planometas.getListaMetas();
-      MetaEntidade metaEntidade = searchMeta(metas, planometas.getEntidade(), planometas.getInstituto(), metaInstituto);
-      
-      if(metaEntidade != null){
-          return preencheSituacaoAnteriorAtual(meta, metaEntidade, planometas.getRodizio());         
-      } 
-    } 
-
-    meta.setSituacaoAnterior(null);
-    meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
-    meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
-
-    return meta;                                                               
-  }
-  
-  private MetaForm preencheSituacaoAnteriorAtual(MetaForm meta, MetaEntidade metaEntidade, Rodizio cicloAtual) {
-    // Carregar avaliacao pre-salva
-    HistoricoMetaEntidade situacaoAtualSalva = null;
-    HistoricoMetaEntidade historico = null;
-    if( cicloAtual.getCicloAnterior() != null ){
-      situacaoAtualSalva = getUltimoHistorico( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
-      historico = getHistoricoPreAvaliacao( metaEntidade.getId(), cicloAtual.getCicloAnterior().getId() );
-    }
-    
-    if(historico != null){
-      System.out.println("\n========================================================");
-      System.out.println(metaEntidade.getDescricao());
-      System.out.println(cicloAtual.getCicloAnterior().getCiclo());
-      System.out.println("========================================================");
-      System.out.println("RECUPERADO: " + historico.getTipoSituacao() + " - "  + historico.getSituacao()  + " - "  + historico.getRodizio());
-      System.out.println("========================================================");
-      
-      TipoSituacaoMeta tipoSituacao = historico.getTipoSituacao();
-      SituacaoMeta situacao = historico.getSituacao();
-      Rodizio ciclo = historico.getRodizio();
-      
-      HistoricoMetaEntidadeVO situacaoAnterior = new HistoricoMetaEntidadeVO(historico);
-      
-      if( situacao == SituacaoMeta.NAOPLANEJADA ){
-        HistoricoMetaEntidade preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getId(), TipoSituacaoMeta.INICIAL, true);
-        if(preHistorico == null && ciclo.getCicloAnterior() != null){
-          preHistorico = getUltimoHistorico(metaEntidade.getId(), ciclo.getCicloAnterior().getId(), TipoSituacaoMeta.AVALIAR, true);
-        }
-        
-        if(preHistorico != null) {
-          situacaoAnterior.setSituacao(preHistorico.getSituacao());
-        }  
-      }
-      
-      meta.setSituacaoAnterior(situacaoAnterior);
-      System.out.println("ANTERIOR: " + situacaoAnterior.getTipoSituacao() + " - "  + situacaoAnterior.getSituacao() + " - "  + situacaoAnterior.getCiclo());
-      System.out.println("========================================================");
-      
-      HistoricoMetaEntidadeVO situacaoAtual = null;
-      if(situacaoAtualSalva == null){
-        situacaoAtual = new HistoricoMetaEntidadeVO();
-        situacaoAtual.setCiclo(new RodizioVO( cicloAtual.getCicloAnterior() ));
-        situacaoAtual.setSituacao( situacaoAnterior.getSituacao() );
-        situacaoAtual.setTipoSituacao(TipoSituacaoMeta.AVALIAR);
-      } else {
-        situacaoAtual = new HistoricoMetaEntidadeVO(situacaoAtualSalva);
-      }
-      
-      System.out.println("ATUAL: " + situacaoAtual.getTipoSituacao() + " - "  + situacaoAtual.getSituacao() + " - "  + situacaoAtual.getCiclo());
-      System.out.println("========================================================\n");
-      
-      meta.setSituacaoAtual(situacaoAtual);
-      
-      return meta;
-    } 
-    
-    if(situacaoAtualSalva == null){
-      meta.setSituacaoAnterior(null);
-      meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
-      meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
-    }
-    
-    return meta; 
-  }
-
-  public List<MetaForm> processaMetaToMetaForm(List<MetaInstituto> metasInstituto, PlanoMetas planoMetasAtual) {
-    
-    List<MetaEntidade> metas = planoMetasAtual.getListaMetas();
-    
-    List<MetaForm> metasForm = new ArrayList<MetaForm>();
-    
-    metasInstituto.removeAll(Collections.singleton(null));
-    
-    for (MetaInstituto metaInstituto : metasInstituto) {
-      MetaForm metaForm = new MetaForm();
-      
-      MetaEntidade metaEntidade = searchMeta(metas, planoMetasAtual.getEntidade(), planoMetasAtual.getInstituto(), metaInstituto);
-      
-      String rota = metaService.getCaminhoMeta(metaInstituto.getId());
-      
-      metaForm.setDescricaoCompleta(rota);
-      
-      metaForm = preencheSituacaoAnteriorAtual(metaForm, metaInstituto, planoMetasAtual);
-      
-      metaForm = preencheSituacaoDesejada(metaEntidade,  
-          metaForm, 
-          planoMetasAtual.getEvento(), 
-          planoMetasAtual.getRodizio()
-      );
-      
-      metaForm = preencheAnotacoes(metaEntidade,  
-          metaForm, 
-          planoMetasAtual.getContratante(), 
-          planoMetasAtual.getFacilitador(), 
-          planoMetasAtual.getEvento(), 
-          planoMetasAtual.getRodizio(),
-          true
-          );
-      
-      metaForm.setAtividade(metaInstituto);
-      List<MetaInstituto> subAtividades = metaInstituto.getItens();
-      if(subAtividades != null && subAtividades.size() > 0) {
-        List<MetaForm> metas1 = processaMetaToMetaForm(subAtividades, planoMetasAtual);
-      
-        if(metas1.size() > 0){
-          metaForm.setDependencias(metas1);
-        }
-      }
-      
-      metasForm.add(metaForm);
-    }
-    
-    return metasForm;
-  }
   
   public MetaEntidade searchMeta(List<MetaEntidade> metasEntidade, BaseEntidade entidadeId, BaseInstituto institutoId, MetaInstituto metaId){
     MetaEntidade meta = new MetaEntidade();

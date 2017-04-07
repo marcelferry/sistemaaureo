@@ -142,6 +142,9 @@ function atualizarInfo(){
         success: function (data) {
         	time = new Date();
           	intervalo = time.getTime() - data;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        	
         }
 	});	
 }

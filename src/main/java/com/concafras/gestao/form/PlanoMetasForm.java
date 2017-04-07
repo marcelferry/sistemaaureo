@@ -19,41 +19,17 @@ public class PlanoMetasForm {
 
   private Rodizio rodizio;
 
-  /*
-   * 01 - Selecao Rodizio / Instituto 02 - Selecao Cidade / Entidade /
-   * Contratante 03 - Preenchimento das Metas 04 - Validação Secretaria
-   */
-  private Integer fase;
-
-  private Cidade cidade;
-
-  private Pessoa facilitador;
+  private BaseEntidade entidade;
 
   private BaseInstituto instituto;
 
-  private Dirigente dirigenteInstituto;
-
-  private BaseEntidade entidade;
-
-  private Pessoa outro;
+  private Pessoa facilitador;
 
   private Pessoa presidente;
 
   private Pessoa coordenador;
 
   private Pessoa contratante;
-
-  private TipoContratante tipoContratante;
-
-  private List<MetaForm> dependencias;
-
-  private List<Anotacao> anotacoes;
-
-  private boolean finalizado;
-
-  private boolean validado;
-
-  private EventoMeta evento;
 
   private String nomePresidente;
 
@@ -72,6 +48,31 @@ public class PlanoMetasForm {
   private String emailCoordenador;
 
   private String emailContratante;
+  
+  private boolean validado;
+  
+  private boolean finalizado;
+  
+  private EventoMeta evento;
+  
+  private TipoContratante tipoContratante;
+  
+  private List<MetaForm> dependencias;
+
+  private List<Anotacao> anotacoes;
+  
+  /*
+   * 01 - Selecao Rodizio / Instituto 02 - Selecao Cidade / Entidade /
+   * Contratante 03 - Preenchimento das Metas 04 - Validação Secretaria
+   */
+  private Integer fase;
+
+  private Cidade cidade;
+
+  private Dirigente dirigenteInstituto;
+
+  private Pessoa outro;
+  
 
   public PlanoMetasForm() {
     // TODO Auto-generated constructor stub
@@ -119,22 +120,6 @@ public class PlanoMetasForm {
     this.rodizio = rodizio;
   }
 
-  public Integer getFase() {
-    return fase;
-  }
-
-  public void setFase(Integer fase) {
-    this.fase = fase;
-  }
-
-  public Cidade getCidade() {
-    return cidade;
-  }
-
-  public void setCidade(Cidade cidade) {
-    this.cidade = cidade;
-  }
-
   public Pessoa getFacilitador() {
     return facilitador;
   }
@@ -175,14 +160,6 @@ public class PlanoMetasForm {
     this.coordenador = coordenador;
   }
 
-  public Pessoa getOutro() {
-    return outro;
-  }
-
-  public void setOutro(Pessoa outro) {
-    this.outro = outro;
-  }
-
   public Pessoa getContratante() {
     return contratante;
   }
@@ -213,38 +190,6 @@ public class PlanoMetasForm {
 
   public void setAnotacoes(List<Anotacao> listaAnotacoes) {
     this.anotacoes = listaAnotacoes;
-  }
-
-  public Dirigente getDirigenteInstituto() {
-    return dirigenteInstituto;
-  }
-
-  public void setDirigenteInstituto(Dirigente dirigenteInstituto) {
-    this.dirigenteInstituto = dirigenteInstituto;
-  }
-
-  public boolean isFinalizado() {
-    return finalizado;
-  }
-
-  public void setFinalizado(boolean finalizado) {
-    this.finalizado = finalizado;
-  }
-
-  public boolean isValidado() {
-    return validado;
-  }
-
-  public void setValidado(boolean validado) {
-    this.validado = validado;
-  }
-
-  public EventoMeta getEvento() {
-    return evento;
-  }
-
-  public void setEvento(EventoMeta evento) {
-    this.evento = evento;
   }
 
   public String getNomePresidente() {
@@ -334,6 +279,66 @@ public class PlanoMetasForm {
   public void setEmailContratante(String emailContratante) {
     this.emailContratante = emailContratante;
   }
+  
+  public boolean isFinalizado() {
+    return finalizado;
+  }
+
+  public void setFinalizado(boolean finalizado) {
+    this.finalizado = finalizado;
+  }
+
+  public boolean isValidado() {
+    return validado;
+  }
+
+  public void setValidado(boolean validado) {
+    this.validado = validado;
+  }
+
+  public EventoMeta getEvento() {
+    return evento;
+  }
+
+  public void setEvento(EventoMeta evento) {
+    this.evento = evento;
+  }
+
+  public Integer getFase() {
+    return fase;
+  }
+
+  public void setFase(Integer fase) {
+    this.fase = fase;
+  }
+
+  public Cidade getCidade() {
+    return cidade;
+  }
+
+  public void setCidade(Cidade cidade) {
+    this.cidade = cidade;
+  }
+  
+  public Dirigente getDirigenteInstituto() {
+    return dirigenteInstituto;
+  }
+
+  public void setDirigenteInstituto(Dirigente dirigenteInstituto) {
+    this.dirigenteInstituto = dirigenteInstituto;
+  }
+
+  public Pessoa getOutro() {
+    return outro;
+  }
+
+  public void setOutro(Pessoa outro) {
+    this.outro = outro;
+  }
+
+
+  
+
 
   @Override
   public String toString() {
@@ -341,6 +346,4 @@ public class PlanoMetasForm {
         + instituto + ", entidade=" + entidade + "]";
   }
   
-  
-
 }

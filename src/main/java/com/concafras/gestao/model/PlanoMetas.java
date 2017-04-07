@@ -35,216 +35,201 @@ public class PlanoMetas implements Serializable{
   private static final long serialVersionUID = -7657616728842158935L;
 
   @Id  
-	@SequenceGenerator(name = "plano_modelo_id_seq_name", sequenceName = "plano_modelo_id_seq", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(generator = "plano_modelo_id_seq_name", strategy = GenerationType.SEQUENCE)
-	private Integer id;
-	
-	/**
-	 * Rodizio do exercicio
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idRodizio", referencedColumnName = "id")
-	@XmlElement
-	private Rodizio rodizio;
-	
-	/** 
-	 * Entidade do plano de metas
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idEntidade", referencedColumnName = "id")
-	@XmlElement
-	private BaseEntidade entidade;
-	
-	/**
-	 * Instituto/Comissao do Plano de Metas
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idInstituto", referencedColumnName = "id")
-	@XmlElement
-	private BaseInstituto instituto;
+  @SequenceGenerator(name = "plano_modelo_id_seq_name", sequenceName = "plano_modelo_id_seq", allocationSize = 1, initialValue = 1)
+  @GeneratedValue(generator = "plano_modelo_id_seq_name", strategy = GenerationType.SEQUENCE)
+  private Integer id;
+  
+  /**
+   * Rodizio do exercicio
+   */
+  @ManyToOne
+  @JoinColumn(name = "idRodizio", referencedColumnName = "id")
+  @XmlElement
+  private Rodizio rodizio;
+  
+  /** 
+   * Entidade do plano de metas
+   */
+  @ManyToOne
+  @JoinColumn(name = "idEntidade", referencedColumnName = "id")
+  @XmlElement
+  private BaseEntidade entidade;
+  
+  /**
+   * Instituto/Comissao do Plano de Metas
+   */
+  @ManyToOne
+  @JoinColumn(name = "idInstituto", referencedColumnName = "id")
+  @XmlElement
+  private BaseInstituto instituto;
+  
+  /**
+   * Facilitador
+   */
+  @ManyToOne
+  @JoinColumn(name = "idFacilitador", referencedColumnName = "id")
+  @XmlElement
+  private Pessoa facilitador;
+  
+  /**
+   * Responsável pela contratação das metas
+   */
+  @ManyToOne
+  @JoinColumn(name = "idPresidente", referencedColumnName = "id")
+  @XmlElement
+  private Pessoa presidente;
+  
+  /**
+   * Responsável pela contratação das metas
+   */
+  @ManyToOne
+  @JoinColumn(name = "idCoordenador", referencedColumnName = "id")
+  @XmlElement
+  private Pessoa coordenador;
+  
+  /**
+   * Responsável pela contratação das metas
+   */
+  @ManyToOne
+  @JoinColumn(name = "idContratante", referencedColumnName = "id")
+  @XmlElement
+  private Pessoa contratante;
 
-	/**
-	 * Facilitador
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idFacilitador", referencedColumnName = "id")
-	@XmlElement
-	private Pessoa facilitador;
+  private String nomePresidente;
 
-	/**
-	 * Responsável pela contratação das metas
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idPresidente", referencedColumnName = "id")
-	@XmlElement
-	private Pessoa presidente;
-	
-	/**
-	 * Responsável pela contratação das metas
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idCoordenador", referencedColumnName = "id")
-	@XmlElement
-	private Pessoa coordenador;
-	
-	/**
-	 * Responsável pela contratação das metas
-	 */
-	@ManyToOne
-	@JoinColumn(name = "idContratante", referencedColumnName = "id")
-	@XmlElement
-	private Pessoa contratante;
-	
-	private String nomePresidente;
-	
-	private String nomeCoordenador;
-	
-	private String nomeContratante;
-	
-	private String telefonePresidente;
-	
-	private String telefoneCoordenador;
-	
-	private String telefoneContratante;
-	
-	private String emailPresidente;
-	
-	private String emailCoordenador;
-	
-	private String emailContratante;
-	
-	private boolean validado;
-	
-	/**
-	 *	Tipo contratante 
-	 */
-	@Enumerated(EnumType.STRING)
-	private TipoContratante tipoContratante;
-	
-	
-	/**
-	 * Observações
-	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="CONTRATO_METAS_ANOTACOES",
+  private String nomeCoordenador;
+
+  private String nomeContratante;
+
+  private String telefonePresidente;
+
+  private String telefoneCoordenador;
+
+  private String telefoneContratante;
+
+  private String emailPresidente;
+
+  private String emailCoordenador;
+
+  private String emailContratante;
+  
+  private boolean validado;
+  
+  private boolean finalizado;
+  
+  @Transient
+  private EventoMeta evento;
+  
+  /**
+   *	Tipo contratante 
+   */
+  @Enumerated(EnumType.STRING)
+  private TipoContratante tipoContratante;
+  
+  
+  /**
+   * Observações
+   */
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinTable(name="CONTRATO_METAS_ANOTACOES",
     joinColumns = @JoinColumn(name = "idPlanoMetas", 
                               referencedColumnName = "id"), 
     inverseJoinColumns = @JoinColumn(name = "idAnotacao", 
                               referencedColumnName = "id"))
-	@XmlElement
-	private List<Anotacao> listaAnotacoes;
-	
-	private boolean finalizado;
-	
-	@Transient
-	private EventoMeta evento;
+  @XmlElement
+  private List<Anotacao> anotacoes;
 
-	@Transient
-	private List<MetaEntidade> listaMetas;
-	
-	public Integer getId() {
-		return id;
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  
+  @Transient
+  private List<MetaEntidade> metas;
 
-	public Rodizio getRodizio() {
-		return rodizio;
-	}
+  public Integer getId() {
+    return id;
+  }
 
-	public void setRodizio(Rodizio rodizio) {
-		this.rodizio = rodizio;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	public Pessoa getFacilitador() {
-		return facilitador;
-	}
+  public Rodizio getRodizio() {
+    return rodizio;
+  }
 
-	public void setFacilitador(Pessoa facilitador) {
-		this.facilitador = facilitador;
-	}
+  public void setRodizio(Rodizio rodizio) {
+    this.rodizio = rodizio;
+  }
 
-	public BaseInstituto getInstituto() {
-		return instituto;
-	}
+  public Pessoa getFacilitador() {
+    return facilitador;
+  }
 
-	public void setInstituto(BaseInstituto instituto) {
-		this.instituto = instituto;
-	}
+  public void setFacilitador(Pessoa facilitador) {
+    this.facilitador = facilitador;
+  }
 
-	public BaseEntidade getEntidade() {
-		return entidade;
-	}
+  public BaseInstituto getInstituto() {
+    return instituto;
+  }
 
-	public void setEntidade(BaseEntidade entidade) {
-		this.entidade = entidade;
-	}
-	
-	public Pessoa getPresidente() {
-		return presidente;
-	}
-	
-	public void setPresidente(Pessoa presidente) {
-		this.presidente = presidente;
-	}
-	
-	public Pessoa getCoordenador() {
-		return coordenador;
-	}
-	
-	public void setCoordenador(Pessoa coordenador) {
-		this.coordenador = coordenador;
-	}
+  public void setInstituto(BaseInstituto instituto) {
+    this.instituto = instituto;
+  }
 
-	public Pessoa getContratante() {
-		return contratante;
-	}
+  public BaseEntidade getEntidade() {
+    return entidade;
+  }
 
-	public void setContratante(Pessoa contratante) {
-		this.contratante = contratante;
-	}
+  public void setEntidade(BaseEntidade entidade) {
+    this.entidade = entidade;
+  }
 
-	public TipoContratante getTipoContratante() {
-		return tipoContratante;
-	}
+  public Pessoa getPresidente() {
+    return presidente;
+  }
 
-	public void setTipoContratante(TipoContratante tipoContratante) {
-		this.tipoContratante = tipoContratante;
-	}
+  public void setPresidente(Pessoa presidente) {
+    this.presidente = presidente;
+  }
 
-	public List<MetaEntidade> getListaMetas() {
-		return listaMetas;
-	}
+  public Pessoa getCoordenador() {
+    return coordenador;
+  }
 
-	public void setListaMetas(List<MetaEntidade> listaMetas) {
-		this.listaMetas = listaMetas;
-	}
+  public void setCoordenador(Pessoa coordenador) {
+    this.coordenador = coordenador;
+  }
 
-	public List<Anotacao> getListaAnotacoes() {
-		return listaAnotacoes;
-	}
+  public Pessoa getContratante() {
+    return contratante;
+  }
 
-	public void setListaAnotacoes(List<Anotacao> listaAnotacoes) {
-		this.listaAnotacoes = listaAnotacoes;
-	}
-	
-	public boolean isFinalizado() {
-		return finalizado;
-	}
-	
-	public void setFinalizado(boolean finalizado) {
-		this.finalizado = finalizado;
-	}
-	
-	public EventoMeta getEvento() {
-		return evento;
-	}
-	
-	public void setEvento(EventoMeta evento) {
-		this.evento = evento;
-	}
+  public void setContratante(Pessoa contratante) {
+    this.contratante = contratante;
+  }
+
+  public TipoContratante getTipoContratante() {
+    return tipoContratante;
+  }
+
+  public void setTipoContratante(TipoContratante tipoContratante) {
+    this.tipoContratante = tipoContratante;
+  }
+
+  public List<MetaEntidade> getMetas() {
+  	return metas;
+  }
+
+  public void setMetas(List<MetaEntidade> listaMetas) {
+  	this.metas = listaMetas;
+  }
+
+  public List<Anotacao> getAnotacoes() {
+    return anotacoes;
+  }
+
+  public void setAnotacoes(List<Anotacao> listaAnotacoes) {
+    this.anotacoes = listaAnotacoes;
+  }
 
   public String getNomePresidente() {
     return nomePresidente;
@@ -317,14 +302,31 @@ public class PlanoMetas implements Serializable{
   public void setEmailContratante(String emailContratante) {
     this.emailContratante = emailContratante;
   }
-	
+  
+  public boolean isFinalizado() {
+    return finalizado;
+  }
+
+  public void setFinalizado(boolean finalizado) {
+    this.finalizado = finalizado;
+  }
+
   public boolean isValidado() {
     return validado;
   }
-	
+
   public void setValidado(boolean validado) {
     this.validado = validado;
   }
+
+  public EventoMeta getEvento() {
+    return evento;
+  }
+
+  public void setEvento(EventoMeta evento) {
+    this.evento = evento;
+  }
+  
 
   @Override
   public String toString() {
@@ -332,6 +334,4 @@ public class PlanoMetas implements Serializable{
         + entidade + ", instituto=" + instituto + "]";
   }
   
-  
-	
 }

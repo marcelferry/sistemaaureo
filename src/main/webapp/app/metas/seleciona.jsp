@@ -117,11 +117,13 @@
 	<c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_SECRETARIA' && ROLE_CONTROLE != 'ROLE_METAS_PRESIDENTE' }">
 	    <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
+	    	 	<c:if test="${ profiles[0] != 'prod' || ( CICLO_CONTROLE.dataAprovacao >= startDate && CICLO_CONTROLE.dataAprovacao <= endDate ) }">
+			    	<div class="col-sm-2">
+			      		<input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
+			      	</div>
+		      	</c:if>
+		      	<c:if test="${ profiles[0] == 'prod' && ( CICLO_CONTROLE.dataAprovacao <= startDate || CICLO_CONTROLE.dataAprovacao >= endDate ) }">
 		    	<div class="col-sm-2">
-		    	 	<c:if test="${ profiles[0] != 'prod' || ( CICLO_CONTROLE.dataAprovacao >= startDate && CICLO_CONTROLE.dataAprovacao <= endDate ) }">
-			      	<input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
-			      	</c:if>
-			      	<c:if test="${ profiles[0] == 'prod' && ( CICLO_CONTROLE.dataAprovacao <= startDate || CICLO_CONTROLE.dataAprovacao >= endDate ) }">
 			      	<fmt:formatDate var="dataRodizio" value="${CICLO_CONTROLE.dataAprovacao}" pattern="dd/MM/yyyy"/>
 			      	 <div class="alert alert-danger alert-dismissable">
             			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -130,9 +132,8 @@
   						<p>Para testes favor utilizar o servidor em: <a href="http://beta.contratacaodemetas.com.br/">http://beta.contratacaodemetas.com.br</a>.</p>
   						
 					</div>
-			      	</c:if>
 			    </div>
-			     
+			    </c:if>		     
 		    </div>
 		 </div>
 	 </c:if>

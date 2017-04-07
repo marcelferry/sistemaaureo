@@ -312,7 +312,7 @@ public class RelatorioController {
   public ModelAndView showMetas(
       @ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm) {
 
-    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
+    List<PlanoMetasForm> lista = obtemDadosInstituto(planoMetasForm);
 
     ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
 
@@ -336,7 +336,7 @@ public class RelatorioController {
       HttpServletResponse response,
       @ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm) {
 
-    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
+    List<PlanoMetasForm> lista = obtemDadosInstituto(planoMetasForm);
 
     Workbook wb = new XSSFWorkbook();
 
@@ -429,14 +429,12 @@ public class RelatorioController {
     BaseEntidade entidade = null;
 
     if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
-      entidade = (BaseEntidade) request.getSession()
-          .getAttribute("INSTITUICAO_CONTROLE");
+      entidade = (BaseEntidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
       entidade = entidadeService.findByIdOverview(entidade.getId());
 
     }
 
-    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm,
-        entidade);
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm, entidade);
 
     ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
 
@@ -471,14 +469,11 @@ public class RelatorioController {
     BaseEntidade entidade = null;
 
     if (request.getSession().getAttribute("INSTITUICAO_CONTROLE") != null) {
-      entidade = (BaseEntidade) request.getSession()
-          .getAttribute("INSTITUICAO_CONTROLE");
+      entidade = (BaseEntidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
       entidade = entidadeService.findByIdOverview(entidade.getId());
-
     }
 
-    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm,
-        entidade);
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm, entidade);
 
     Workbook wb = new XSSFWorkbook();
 
@@ -497,35 +492,134 @@ public class RelatorioController {
     }
 
   }
+  
 
-  private List<PlanoMetasForm> obtemDadosTodosInstitutos(
-      PlanoMetasForm planoMetasForm) {
+  /**
+   * Metodo responsavel pela preparação do dados para impressão da ficha em
+   * branco.
+   * 
+   * @param request
+   * @param planoMetasForm
+   * @return
+   */
+  @RequestMapping("/imprimeTodasFicha")
+  public ModelAndView todasShowMetas(HttpServletRequest request, @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
+
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
+
+    ModelAndView model = new ModelAndView("/app/metas/relatorioMetas.jsp");
+
+    model.addObject("planoList", lista);
+
+    List<SituacaoMeta> situacaoList = new ArrayList<SituacaoMeta>(
+        Arrays.asList(SituacaoMeta.values()));
+    model.addObject("situacaoList", situacaoList);
+
+    model.addObject("branco", true);
+
+    return model;
+
+  }
+  
+  
+  /**
+   * Metodo responsavel pela preparação do dados para impressão da ficha.
+   * 
+   * @param request
+   * @param planoMetasForm
+   * @return
+   */
+  @RequestMapping("/imprimeTodasFicha/XLS")
+  public void todasShowMetasXLS(HttpServletRequest request,
+      HttpServletResponse response,
+      @ModelAttribute("planoMetasForm") PlanoMetasForm planoMetasForm) {
+    
+    List<PlanoMetasForm> lista = obtemDadosTodosInstitutos(planoMetasForm);
+    
+    Workbook wb = new XSSFWorkbook();
+    
+    styles = createStyles(wb);
+    
+    geraPlanilha(wb, lista, false);
+    
+    // Write the output to a file
+    response.setHeader("Content-disposition", "attachment; filename=FICHAS_TODOS_INSTITUTOS.xlsx");
+    try {
+      wb.write(response.getOutputStream());
+      wb.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }
+
+  private List<PlanoMetasForm> obtemDadosTodosInstitutos(PlanoMetasForm planoMetasForm) {
+
+    Rodizio rodizio = restauraRodizio(planoMetasForm);
+    BaseEntidade entidade = restauraEntidade(planoMetasForm);
+    Pessoa facilitador = restauraFacilitador(planoMetasForm);
+
+    List<BaseInstituto> listaInstituto = baseInstitutoService.findByRodizioOverview(true);
+
+    List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
+
+    for (BaseInstituto instituto : listaInstituto) {
+      PlanoMetasForm plano = preparaPlanoMetasForm(entidade, instituto, rodizio, facilitador);
+      lista.add(plano);
+    }
+    
+    return lista;
+  }
+  
+  private List<PlanoMetasForm> obtemDadosInstituto(PlanoMetasForm planoMetasForm) {
     Rodizio rodizio = restauraRodizio(planoMetasForm);
     BaseInstituto instituto = restauraInstituto(planoMetasForm);
     BaseEntidade entidade = restauraEntidade(planoMetasForm);
-    restauraFacilitador(planoMetasForm);
+    Pessoa facilitador = restauraFacilitador(planoMetasForm);
 
+
+    List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
+
+    PlanoMetasForm plano = preparaPlanoMetasForm(entidade, instituto, rodizio, facilitador);
+    
+    lista.add(plano);
+
+    return lista;
+  }
+  
+  
+  
+  private PlanoMetasForm preparaPlanoMetasForm(BaseEntidade entidade, BaseInstituto instituto, Rodizio rodizio, Pessoa facilitador) {
+    
+    PlanoMetasForm planoMetasForm = new PlanoMetasForm();
+    
+    if (entidade != null) {
+      planoMetasForm.setEntidade(entidade);
+    }
+
+    planoMetasForm.setFacilitador(facilitador);
+
+    planoMetasForm.setRodizio(rodizio);
+    planoMetasForm.setInstituto(instituto);
+    planoMetasForm.setEvento(planoMetasForm.getEvento());
+    
     List<MetaForm> metasForm = null;
 
-    List<MetaInstituto> metasIntituto = metaInstitutoService
-        .listMetaInstitutoByInstituto(instituto.getId());
+    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
 
-    PlanoMetas planoMetasAtual = planoMetasService
-        .findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),
-            instituto.getId(), rodizio.getId());
+    PlanoMetas planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
 
-    List<MetaEntidade> listaMetas = metaService
-        .findByEntidadeIdAndInstitutoId(entidade.getId(), instituto.getId());
+    List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId(entidade.getId(), instituto.getId());
 
     if (planoMetasAtual != null) {
       planoMetasForm.setId(planoMetasAtual.getId());
       planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
       planoMetasForm.setContratante(planoMetasAtual.getContratante());
-      Pessoa presidente = pessoaService.getPessoa(
-          planoMetasAtual.getEntidade().getPresidente().getPessoa().getId());
+      Pessoa presidente = pessoaService.getPessoa(planoMetasAtual.getEntidade().getPresidente().getPessoa().getId());
       planoMetasForm.setPresidente(presidente);
 
-      planoMetasAtual.setListaMetas(listaMetas);
+      planoMetasAtual.setMetas(listaMetas);
       planoMetasAtual.setEvento(planoMetasForm.getEvento());
     }
 
@@ -534,27 +628,22 @@ public class RelatorioController {
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
           planoMetasForm.getEvento(), planoMetasForm.getRodizio());
 
-    } else if (planoMetasAtual.getListaMetas().size() > 0) {
-      metasForm = new MetasHelper(metaService).processaMetaToMetaForm(metasIntituto, planoMetasAtual);
+    } else if (planoMetasAtual.getMetas().size() > 0) {
+      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto, planoMetasAtual);
     } else {
       metasForm = new ArrayList<MetaForm>();
     }
 
     planoMetasForm.setDependencias(metasForm);
 
-    planoMetasForm.setFase(3);
-
-    List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
-
-    lista.add(planoMetasForm);
-
-    return lista;
+    planoMetasForm.setFase(3); 
+    
+    return planoMetasForm;
   }
 
   private List<PlanoMetasForm> obtemDadosTodosInstitutos(
       PlanoMetasForm planoMetasForm, BaseEntidade entidade) {
-    List<BaseInstituto> listaInstituto = baseInstitutoService
-        .findByRodizioOverview(true);
+    List<BaseInstituto> listaInstituto = baseInstitutoService.findByRodizioOverview(true);
 
     List<PlanoMetasForm> lista = new ArrayList<PlanoMetasForm>();
 
@@ -562,17 +651,14 @@ public class RelatorioController {
 
       PlanoMetasForm planoMeta = new PlanoMetasForm();
 
-      Rodizio rodizio = rodizioService
-          .findById(planoMetasForm.getRodizio().getId());
+      Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio().getId());
 
       if (entidade != null) {
         planoMeta.setEntidade(entidade);
       }
 
-      if (planoMetasForm.getFacilitador() != null
-          && planoMetasForm.getFacilitador().getId() != null) {
-        Pessoa facilitador = pessoaService
-            .getPessoa(planoMetasForm.getFacilitador().getId());
+      if (planoMetasForm.getFacilitador() != null && planoMetasForm.getFacilitador().getId() != null) {
+        Pessoa facilitador = pessoaService.getPessoa(planoMetasForm.getFacilitador().getId());
         planoMeta.setFacilitador(facilitador);
       }
 
@@ -582,8 +668,7 @@ public class RelatorioController {
 
       List<MetaForm> metasForm = null;
 
-      List<MetaInstituto> metasIntituto = metaInstitutoService
-          .listMetaInstitutoByInstituto(instituto.getId());
+      List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
 
       PlanoMetas planoMetasAtual = null;
 

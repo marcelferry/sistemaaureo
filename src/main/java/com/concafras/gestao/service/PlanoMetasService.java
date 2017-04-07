@@ -5,15 +5,14 @@ import java.util.List;
 
 import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.InstitutoOptionForm;
-import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.model.view.StatusAtualInstitutoGraphicData;
 
 public interface PlanoMetasService {
-    
-    void save(PlanoMetas planoMetas);
-    void update(PlanoMetas planoMetas);
+  
+    PlanoMetas save(PlanoMetas planoMetas);
+    PlanoMetas update(PlanoMetas planoMetas);
     void remove(Integer id);
     PlanoMetas findById(Integer id);
     PlanoMetas findByInstitutoIdAndRodizioId(Integer idInstituto, Integer idRodizio);

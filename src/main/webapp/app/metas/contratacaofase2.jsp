@@ -153,15 +153,18 @@
 	<form:hidden path="emailCoordenador"/>
 	<form:hidden path="telefoneCoordenador"/>
 	<form:hidden path="presidente.id"/>
+	<form:hidden path="nomePresidente"/>
+	<form:hidden path="emailPresidente"/>
+	<form:hidden path="telefonePresidente"/>
 	<form:hidden path="outro.id"/>
 	<form:hidden path="contratante.id"/>
 	<form:hidden path="nomeContratante"/>
 	<form:hidden path="telefoneContratante"/>
 	<form:hidden path="emailContratante"/>
 	<form:hidden path="tipoContratante"/>
-	<form:hidden path="evento"/>
 	<form:hidden path="finalizado"/>
 	<form:hidden path="validado"/>
+	<form:hidden path="evento"/>
 
 	<div class="row">
 		<div class="col-md-12">

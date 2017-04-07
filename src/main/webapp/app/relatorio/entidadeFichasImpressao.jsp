@@ -36,6 +36,28 @@
 						</tr>
 					</tfoot>
 				</table>
+				<a class="btn btn-primary col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> HTML/PDF</a>
+            	<form method="post" action="/gestao/relatorio/imprimeTodasFicha" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				     <input type="hidden" id="fase" name="fase" value="1"/>
+				     <input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
+					 <input type="hidden" id="instituto.id" name="instituto.id"/>
+					 <input type="hidden" id="entidade.id" name="entidade.id" value="${INSTITUICAO_CONTROLE.id}"/>
+					 <input type="hidden" id="facilitador.id" name="facilitador.id"/>
+					 <input type="hidden" id="evento" name="evento"/>
+				</form>
+				<sec:authorize access="hasRole('ROLE_METAS_SECRETARIA')">
+				<a class="btn btn-success col-md-3" href="javascript:void(0);" onclick="$(this).next('form').submit();"><spring:message code="menu.relatorios.fichasembranco" /> XLS</a>
+            	<form method="post" action="/gestao/relatorio/imprimeTodasFicha/XLS" id="planoMetasForm" name="planoMetasForm" class="form-horizontal" target="_blank">
+					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				     <input type="hidden" id="fase" name="fase" value="1"/>
+				     <input type="hidden" id="rodizio.id" name="rodizio.id" value="${CICLO_CONTROLE.id}"/>
+					 <input type="hidden" id="instituto.id" name="instituto.id"/>
+					 <input type="hidden" id="entidade.id" name="entidade.id" value="${INSTITUICAO_CONTROLE.id}"/>
+					 <input type="hidden" id="facilitador.id" name="facilitador.id"/>
+					 <input type="hidden" id="evento" name="evento"/>
+				</form>
+				</sec:authorize>
 			</div>
 		</div>
 	</div>
