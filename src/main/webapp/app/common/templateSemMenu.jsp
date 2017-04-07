@@ -21,22 +21,34 @@
     <link href="/css/cupertino/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     <link href="/css/plugins/tooltipster/tooltipster.css" rel="stylesheet" type="text/css" />
 	<link href="/css/plugins/treegrid/jquery.treegrid.css"  rel="stylesheet" >
-	<link href="/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/DataTables-1.10.13/css/dataTables.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Buttons-1.2.4/css/buttons.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Responsive-2.1.1/css/responsive.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Select-1.2.0/css/select.bootstrap.css"/>
+	
+	<link href="/js/plugins/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
     <link href="/css/sb-admin.css" rel="stylesheet">
-    
     
     <!-- Core Scripts - Include with every page -->
     <script src="/js/jquery-1.10.2.js"></script>
     <script src="/js/jquery-ui-1.10.4.custom.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/moment/moment.min.js"></script>
+    <script src="/js/plugins/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
+    <script src="/js/plugins/blockui/jquery.blockUI.js"></script>
     <script src="/js/bootstrap3-typeahead.min.js"></script>
 	<script src="/js/plugins/treegrid/jquery.treegrid.js" type="text/javascript" ></script>
     <script src="/js/plugins/treegrid/jquery.treegrid.bootstrap3.js" type="text/javascript"></script>
- 	<script src="/js/loading-overlay.min.js"></script>
+ 	<script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/i18n/datepicker-pt-BR.js"></script>    
+    <script src="/js/locales/bootstrap-datepicker.pt-BR.js"></script>
+    <script src="/js/jquery.nestable.js"></script>
+    <script src="/js/loading-overlay.min.js"></script>
     
   </head>
 

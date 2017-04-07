@@ -917,8 +917,6 @@
             	document.getElementById('planoMetasForm').submit();
             }
         }
-
-
         
         $(document).ready(function() { 
            $('input').change(function() { 

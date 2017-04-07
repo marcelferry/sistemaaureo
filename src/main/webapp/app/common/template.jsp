@@ -27,7 +27,6 @@
 	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Select-1.2.0/css/select.bootstrap.css"/>
     
     <link href="/js/plugins/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet"/>
-    <!-- link href="https://cdn.datatables.net/buttons/1.1.0/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" /-->
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/css/datepicker3.css" rel="stylesheet">
     <link href="/css/loading-overlay.css" rel="stylesheet">
