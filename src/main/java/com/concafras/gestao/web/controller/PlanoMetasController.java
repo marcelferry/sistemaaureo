@@ -53,7 +53,6 @@ import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.Dirigente;
-import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
@@ -312,8 +311,7 @@ public class PlanoMetasController {
 
     PlanoMetasForm planoMetasForm = new PlanoMetasForm();
 
-    if ("ROLE_METAS_FACILITADOR"
-        .equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
+    if ("ROLE_METAS_FACILITADOR".equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
       UserDetails user = (UserDetails) authentication.getPrincipal();
 
       if (user instanceof UsuarioAutenticado) {
@@ -321,20 +319,24 @@ public class PlanoMetasController {
 
         Pessoa facilitadorSearch = usuario.getPessoa();
 
+        Rodizio rodizio = rodizioService.findByAtivoTrue();
+        
         List<Facilitador> facilitador = facilitadorService
-            .getFacilitador(facilitadorSearch);
+            .getFacilitador(facilitadorSearch, rodizio);
 
         Facilitador novoFac = null;
 
         for (Facilitador fac : facilitador) {
           novoFac = fac;
         }
-
-        planoMetasForm.setInstituto(novoFac.getInstituto());
+        
+        if(novoFac != null){
+          planoMetasForm.setInstituto(novoFac.getInstituto());
+        }
+        
         planoMetasForm.setFacilitador(facilitadorSearch);
 
         if (ciclo == null) {
-          Rodizio rodizio = rodizioService.findByAtivoTrue();
           ciclo = rodizio.getId();
         }
       }
@@ -455,9 +457,6 @@ public class PlanoMetasController {
       return model;
     }
 
-    ModelAndView model = new ModelAndView("metas.contratacao", "planoMetasForm",
-        planoMetasForm);
-
     Rodizio rodizio = restauraRodizio(planoMetasForm);
     BaseInstituto instituto = restauraInstituto(planoMetasForm);
     BaseEntidade entidade = restauraEntidade(planoMetasForm);
@@ -524,6 +523,8 @@ public class PlanoMetasController {
     } 
 
     planoMetasForm.setFase(fase);
+    
+    ModelAndView model = new ModelAndView("metas.contratacao", "planoMetasForm", planoMetasForm);
 
     model.addObject("rodizio", Boolean.TRUE);
 
@@ -563,6 +564,8 @@ public class PlanoMetasController {
     planoMetasForm.setInstituto(planoMetasAtual.getInstituto());
     planoMetasForm.setEntidade(planoMetasAtual.getEntidade());
     
+    mapAnotacoesPlanoMetasToPlanoMetasForm(planoMetasAtual, planoMetasForm);
+    
     return planoMetasForm;
   }
 
@@ -575,10 +578,11 @@ public class PlanoMetasController {
     Rodizio rodizio = restauraRodizio(planoMetasForm);
     BaseInstituto instituto = restauraInstituto(planoMetasForm);
     BaseEntidade entidade = restauraEntidade(planoMetasForm);
-    restauraFacilitador(planoMetasForm);
+    Pessoa facilitador = restauraFacilitador(planoMetasForm);
     restauraPresidente(planoMetasForm);
     restauraCoordenador(planoMetasForm);
     restauraContratante(planoMetasForm);
+    EventoMeta evento = planoMetasForm.getEvento();
 
     // Se teve erros na validação retorna a página anterior
     if (result.hasErrors()) {
@@ -589,43 +593,23 @@ public class PlanoMetasController {
     }
 
     // Verificar existencia do plano para esse ciclo
-    PlanoMetas planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
+    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
 
     //Nao existe plano de metas?
-    if (planoMetasAtual == null) {
-      planoMetasAtual = new PlanoMetas();
+    if (plano == null) {
+      plano = new PlanoMetas();
     }
     
     //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
-    mapPlanoMetasFormToPlanoMetas(planoMetasForm, planoMetasAtual);
+    mapPlanoMetasFormToPlanoMetas(planoMetasForm, plano);
     
-    //Pos Evento, ja foi alterado por Facilitador
-    if (planoMetasAtual.getFacilitador() != null && planoMetasForm.getFacilitador() == null) {
-      planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
-    }
+    plano = planoMetasService.saveOrUpdate(plano, null);
     
-    // Prepara
-    recuperaMetas(planoMetasForm, planoMetasAtual);
-    recuperaAnotacoes(planoMetasForm, planoMetasAtual);
+    planoMetasForm = mapPlanoMetasToPlanoMetasForm(plano);
 
-    if (planoMetasAtual.getId() == null || planoMetasAtual.getId() == 0) {
-      planoMetasAtual = planoMetasService.save(planoMetasAtual);
-      planoMetasForm.setId(planoMetasAtual.getId());
-    } else {
-      planoMetasAtual = planoMetasService.update(planoMetasAtual);
-    }
+    planoMetasForm.setEvento(evento);
 
-    List<MetaEntidade> metas = planoMetasAtual.getMetas();
-    for (MetaEntidade metaEntidade : metas) {
-      if (metaEntidade.getId() == null || metaEntidade.getId() == 0) {
-        metaService.save(metaEntidade);
-      } else {
-        metaService.update(metaEntidade);
-      }
-    }
-    
-    recuperaMetas(planoMetasForm, planoMetasAtual);
-    recuperaAnotacoes(planoMetasForm, planoMetasAtual);
+    mapMetasFromPlanoMetasToPlanoMetasForm(planoMetasForm, plano);
 
     planoMetasForm.setFase(3);
 
@@ -638,47 +622,47 @@ public class PlanoMetasController {
     return model;
   }
 
-  private void preparaAnotacoes(PlanoMetasForm planoMetasForm, PlanoMetas planoMetas) {
-    if (planoMetasForm.getAnotacoes() != null) {
+  private void preparaAnotacoes(PlanoMetasForm contratoForm, PlanoMetas contratoEntity) {
+    if (contratoForm.getAnotacoes() != null) {
       Anotacao novaNota = null;
-      for (Anotacao anot : planoMetasForm.getAnotacoes()) {
+      for (Anotacao anot : contratoForm.getAnotacoes()) {
         if (anot.getId() == null && (anot.getTexto() == null || anot.getTexto().trim().equals(""))) {
           continue;
         }
 
-        if (planoMetas.getAnotacoes() == null) {
-          planoMetas.setAnotacoes(new ArrayList<Anotacao>());
+        if (contratoEntity.getAnotacoes() == null) {
+          contratoEntity.setAnotacoes(new ArrayList<Anotacao>());
         }
 
-        if (planoMetas.getAnotacoes().contains(anot)) {
-          novaNota = planoMetas.getAnotacoes().get(planoMetas.getAnotacoes().indexOf(anot));
+        if (contratoEntity.getAnotacoes().contains(anot)) {
+          novaNota = contratoEntity.getAnotacoes().get(contratoEntity.getAnotacoes().indexOf(anot));
           if (!novaNota.getTexto().equals(anot.getTexto())) {
             novaNota.setData(new Date());
-            if (planoMetas.getEvento() == EventoMeta.RODIZIO) {
-              if (planoMetas.getFacilitador() != null && planoMetas.getFacilitador().getId() != null)
-                novaNota.setResponsavel(planoMetas.getFacilitador());
+            if (contratoForm.getEvento() == EventoMeta.RODIZIO) {
+              if (contratoEntity.getFacilitador() != null && contratoEntity.getFacilitador().getId() != null)
+                novaNota.setResponsavel(contratoEntity.getFacilitador());
             } else {
-              if (planoMetas.getContratante() != null && planoMetas.getContratante().getId() != null)
-                novaNota.setResponsavel(planoMetas.getContratante());
+              if (contratoEntity.getContratante() != null && contratoEntity.getContratante().getId() != null)
+                novaNota.setResponsavel(contratoEntity.getContratante());
             }
             novaNota.setTexto(anot.getTexto());
           }
         } else {
           anot.setData(new Date());
-          if (planoMetas.getEvento() == EventoMeta.RODIZIO) {
-            if (planoMetas.getFacilitador() != null && planoMetas.getFacilitador().getId() != null)
-              anot.setResponsavel(planoMetas.getFacilitador());
+          if (contratoForm.getEvento() == EventoMeta.RODIZIO) {
+            if (contratoEntity.getFacilitador() != null && contratoEntity.getFacilitador().getId() != null)
+              anot.setResponsavel(contratoEntity.getFacilitador());
           } else {
-            if (planoMetas.getContratante() != null && planoMetas.getContratante().getId() != null)
-              anot.setResponsavel(planoMetas.getContratante());
+            if (contratoEntity.getContratante() != null && contratoEntity.getContratante().getId() != null)
+              anot.setResponsavel(contratoEntity.getContratante());
           }
-          planoMetas.getAnotacoes().add(anot);
+          contratoEntity.getAnotacoes().add(anot);
         }
       }
     }
   }
 
-  private void recuperaAnotacoes(PlanoMetasForm planoMetasForm, PlanoMetas planoMetasAtual) {
+  private void mapAnotacoesPlanoMetasToPlanoMetasForm(PlanoMetas planoMetasAtual, PlanoMetasForm planoMetasForm) {
     planoMetasForm.setAnotacoes(new ArrayList<Anotacao>());
     if (planoMetasAtual.getAnotacoes() != null) {
       for (Anotacao anot : planoMetasAtual.getAnotacoes()) {
@@ -687,30 +671,35 @@ public class PlanoMetasController {
     }
   }
 
-  private void recuperaMetas(PlanoMetasForm planoMetasForm, PlanoMetas planoMetasAtual) {
+  private void mapMetasFromPlanoMetasToPlanoMetasForm(PlanoMetasForm contratoForm, PlanoMetas contratoEntity) {
     
     List<MetaForm> metasForm = null;
 
-    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstitutoResumo(planoMetasForm.getInstituto().getId());
+    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstitutoResumo(contratoForm.getInstituto().getId());
 
-    List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId( planoMetasForm.getEntidade().getId(), planoMetasForm.getInstituto().getId());
-
-    planoMetasAtual.setMetas(listaMetas);
+    List<MetaEntidade> metasEntidade = metaService.findByEntidadeIdAndInstitutoId( contratoForm.getEntidade().getId(), contratoForm.getInstituto().getId());
 
     // Primeiro Rodizio
-    if (listaMetas == null || listaMetas.size() == 0) {
+    if (metasEntidade == null || metasEntidade.size() == 0) {
       metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(
-          metasIntituto, planoMetasForm.getFacilitador(),
-          planoMetasForm.getContratante(), 
-          planoMetasForm.getEvento(),
-          planoMetasForm.getRodizio());
-    } else if (listaMetas.size() > 0) {
-      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto, planoMetasAtual);
+          metasIntituto, 
+          contratoForm.getFacilitador(),
+          contratoForm.getContratante(), 
+          contratoForm.getEvento(),
+          contratoForm.getRodizio());
+    } else if (metasEntidade.size() > 0) {
+      metasForm = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(
+          metasIntituto, 
+          contratoForm.getFacilitador(),
+          contratoForm.getContratante(), 
+          contratoForm.getEvento(), 
+          contratoForm.getEntidade(), 
+          contratoForm.getRodizio());
     } else {
       metasForm = new ArrayList<MetaForm>();
     }
     
-    planoMetasForm.setDependencias(metasForm);
+    contratoForm.setDependencias(metasForm);
   }
 
   @RequestMapping("/add")
@@ -725,8 +714,7 @@ public class PlanoMetasController {
 
     if (result.hasErrors()) {
       restauraDependenciaCiclo(planoMetasForm.getDependencias());
-      ModelAndView model = new ModelAndView("metas.contratacao2",
-          "planoMetasForm", planoMetasForm);
+      ModelAndView model = new ModelAndView("metas.contratacao2", "planoMetasForm", planoMetasForm);
       planoMetasForm.setFase(3);
       model.addObject("erros", true);
       return model;
@@ -741,39 +729,18 @@ public class PlanoMetasController {
     // Verificar existencia do plano para esse ciclo
     PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
 
-    //Nao existe plano de metas?
+    //Nao existe plano de metas? Se entrar aqui tá errado... 
     if (plano == null) {
       plano = new PlanoMetas();
     }
     
     //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
     mapPlanoMetasFormToPlanoMetas(planoMetasForm, plano);
-    preparaAnotacoes(planoMetasForm, plano);
-    preparaMetas(planoMetasForm, plano);
     
-    if (plano.getId() == null || plano.getId() == 0) {
-      planoMetasService.save(plano);
-    } else {
-      List<MetaEntidade> metas = plano.getMetas();
-
-      for (MetaEntidade metaEntidade : metas) {
-        List<MetaEntidadeAnotacao> anotacoes = metaEntidade.getAnotacoes();
-        for (MetaEntidadeAnotacao metaEntidadeAnotacao : anotacoes) {
-          if (metaEntidadeAnotacao.getAnotacao().getId() == null) {
-            metaService.saveAnotacao(metaEntidadeAnotacao.getAnotacao());
-            metaService.saveMetaAnotacao(metaEntidadeAnotacao);
-          }
-        }
-        if (metaEntidade.getId() == null || metaEntidade.getId() == 0) {
-          metaService.save(metaEntidade);
-        } else {
-          metaService.update(metaEntidade);
-
-        }
-      }
-      planoMetasService.update(plano);
-    }
-    // }
+    List<MetaEntidade> metas = preparaMetas(planoMetasForm, plano);
+    
+    planoMetasService.saveOrUpdate(plano, metas);
+    
     return model;
   }
 
@@ -807,16 +774,17 @@ public class PlanoMetasController {
 
   }
 
-  private void preparaMetas(PlanoMetasForm planoMetasForm, PlanoMetas plano) {
+  private List<MetaEntidade> preparaMetas(PlanoMetasForm planoMetasForm, PlanoMetas plano) {
+    
     List<MetaEntidade> metasAux = metaService.findByEntidadeIdAndInstitutoId(plano.getEntidade().getId(), plano.getInstituto().getId());
     
     plano.setMetas(metasAux);
     
     List<MetaEntidade> metas = new ArrayList<MetaEntidade>();
 
-    processaMetas(planoMetasForm.getDependencias(), metas, plano, null);
+    processaMetas(planoMetasForm.getRodizio(), planoMetasForm.getEvento(), planoMetasForm.getDependencias(), metas, plano, null);
 
-    plano.setMetas(metas);
+    return metas;
   }
   
   private void mapPlanoMetasFormToPlanoMetas(PlanoMetasForm planoMetasForm, PlanoMetas planoMetas) {
@@ -825,7 +793,6 @@ public class PlanoMetasController {
     }
     
     // Popula dados do plano de metas atual com as informações do planoMetasForm
-    planoMetas.setEvento(planoMetasForm.getEvento());
     planoMetas.setTipoContratante(planoMetasForm.getTipoContratante());
     
     planoMetas.setNomePresidente(planoMetasForm.getNomePresidente());
@@ -889,10 +856,11 @@ public class PlanoMetasController {
       planoMetas.setFacilitador(facilitador);
     }
     
+    preparaAnotacoes(planoMetasForm, planoMetas);
+    
   }
 
-  private void processaMetas(List<MetaForm> metasForm, List<MetaEntidade> metas,
-      PlanoMetas plano, MetaEntidade pai) {
+  private void processaMetas(Rodizio ciclo, EventoMeta evento, List<MetaForm> metasForm, List<MetaEntidade> metas, PlanoMetas plano, MetaEntidade pai) {
     metasForm.removeAll(Collections.singleton(null));
 
     for (MetaForm metaForm : metasForm) {
@@ -974,7 +942,7 @@ public class PlanoMetasController {
           }
         }
 
-        if (plano.getEvento() == EventoMeta.RODIZIO) {
+        if (evento == EventoMeta.RODIZIO) {
           if (plano.getFacilitador() != null
               && plano.getFacilitador().getId() != null)
             statusInicial.setResponsavel(plano.getFacilitador());
@@ -1009,12 +977,12 @@ public class PlanoMetasController {
           }
         }
 
-        Rodizio ciclo = new Rodizio();
-        ciclo.setId(metaForm.getSituacaoAtual().getCiclo().getId());
+        Rodizio cicloSituacaoAtual = new Rodizio();
+        cicloSituacaoAtual.setId(metaForm.getSituacaoAtual().getCiclo().getId());
 
         if (statusAvaliar == null) {
           statusAvaliar = new HistoricoMetaEntidade();
-          statusAvaliar.setRodizio(ciclo);
+          statusAvaliar.setRodizio(cicloSituacaoAtual);
           statusAvaliar.setTipoSituacao(TipoSituacaoMeta.AVALIAR);
           statusAvaliar.setMeta(meta);
           meta.getHistorico().add(statusAvaliar);
@@ -1029,7 +997,7 @@ public class PlanoMetasController {
         statusAvaliar.setPrevisto(metaForm.getSituacaoAtual().getPrevisto());
         statusAvaliar.setRealizado(metaForm.getSituacaoAtual().getRealizado());
 
-        if (plano.getEvento() == EventoMeta.RODIZIO) {
+        if (evento == EventoMeta.RODIZIO) {
           if (plano.getFacilitador() != null
               && plano.getFacilitador().getId() != null)
             statusAvaliar.setResponsavel(plano.getFacilitador());
@@ -1056,11 +1024,11 @@ public class PlanoMetasController {
         situacaoDesejada.setCiclo(new RodizioVO(plano.getRodizio()));
       }
 
-      TipoSituacaoMeta acaoDefault = null;
+      TipoSituacaoMeta acaoDefault = TipoSituacaoMeta.CONTRATAR;
 
-      if (plano.getEvento() == EventoMeta.PRERODIZIO) {
+      if (evento == EventoMeta.PRERODIZIO) {
         acaoDefault = TipoSituacaoMeta.PRECONTRATAR;
-      } else if (plano.getEvento() == EventoMeta.RODIZIO) {
+      } else if (evento == EventoMeta.RODIZIO) {
         acaoDefault = TipoSituacaoMeta.CONTRATAR;
       }
 
@@ -1098,7 +1066,7 @@ public class PlanoMetasController {
         statusDesejado.setRealizado(situacaoDesejada.getRealizado());
         statusDesejado.setPrevisto(situacaoDesejada.getPrevisto());
 
-        if (plano.getEvento() == EventoMeta.RODIZIO) {
+        if (evento == EventoMeta.RODIZIO) {
           if (plano.getFacilitador() != null
               && plano.getFacilitador().getId() != null)
             statusDesejado.setResponsavel(plano.getFacilitador());
@@ -1113,8 +1081,7 @@ public class PlanoMetasController {
       if (metaForm.getObservacoes() != null) {
         Anotacao novaNota = null;
         for (AnotacaoVO anot : metaForm.getObservacoes()) {
-          if (anot.getId() == null && (anot.getTexto() == null
-              || anot.getTexto().trim().equals(""))) {
+          if (anot.getId() == null && (anot.getTexto() == null || anot.getTexto().trim().equals(""))) {
             continue;
           }
 
@@ -1128,11 +1095,17 @@ public class PlanoMetasController {
           anotAux.setId(anot.getId());
           anotAux.setNivel(anot.getNivel());
 
-          Rodizio cicloAux = new Rodizio();
-          cicloAux.setId(anot.getCiclo().getId());
+          Rodizio cicloAux = null; 
+          if(anot.getId() != null && anot.getCiclo() != null && anot.getCiclo().getId() != null){
+            cicloAux = new Rodizio();
+            cicloAux.setId(anot.getCiclo().getId());
+          } else if(anot.getId() == null ) {
+            cicloAux = ciclo;
+          } else {
+            continue;
+          }
 
-          MetaEntidadeAnotacao metaAnot = new MetaEntidadeAnotacao(meta,
-              cicloAux, anotAux);
+          MetaEntidadeAnotacao metaAnot = new MetaEntidadeAnotacao(meta, cicloAux, anotAux);
 
           if (listaAnotacoes.contains(metaAnot)) {
             int indice = listaAnotacoes.indexOf(metaAnot);
@@ -1150,7 +1123,7 @@ public class PlanoMetasController {
           } else {
             anotAux.setData(new Date());
             if (anot.getResponsavel().getId() != null) {
-              if (plano.getEvento() == EventoMeta.RODIZIO) {
+              if (evento == EventoMeta.RODIZIO) {
                 if (plano.getFacilitador() != null
                     && plano.getFacilitador().getId() != null)
                   anotAux.setResponsavel(plano.getFacilitador());
@@ -1190,7 +1163,7 @@ public class PlanoMetasController {
       List<MetaForm> subAtividades = metaForm.getDependencias();
 
       if (subAtividades != null)
-        processaMetas(subAtividades, metas, plano, meta);
+        processaMetas(ciclo, evento, subAtividades, metas, plano, meta);
 
     }
 
@@ -1217,16 +1190,19 @@ public class PlanoMetasController {
     for (PlanoMetas planoMetas : lista) {
       PlanoMetasForm planoMetasForm = new PlanoMetasForm();
       List<MetaInstituto> atividades = metaInstitutoService
-          .listMetaInstitutoByInstituto(planoMetas.getInstituto().getId());
+          .listMetaInstitutoByInstituto(planoMetas.getInstituto().getId(), true);
 
-      List<MetaEntidade> listaMetas = metaService
-          .findByEntidadeIdAndInstitutoId(planoMetas.getEntidade().getId(),
-              planoMetas.getInstituto().getId());
+      List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId(planoMetas.getEntidade().getId(), planoMetas.getInstituto().getId());
       planoMetas.setMetas(listaMetas);
 
       if (planoMetas.getMetas().size() > 0) {
-        List<MetaForm> metas = new MetasHelper(metaService)
-            .mapMetaInstitutoToMetaForm(atividades, planoMetas);
+        List<MetaForm> metas = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(
+             atividades, 
+             planoMetas.getFacilitador(),
+             planoMetas.getContratante(), 
+             EventoMeta.RODIZIO, 
+             planoMetas.getEntidade(), 
+             planoMetas.getRodizio());
         planoMetasForm.setDependencias(metas);
       }
       listanova.add(planoMetasForm);
@@ -1239,8 +1215,7 @@ public class PlanoMetasController {
     // Verifica Rodizio
     if (planoMetasForm.getRodizio() != null
         && planoMetasForm.getRodizio().getId() != null) {
-      Rodizio rodizio = rodizioService
-          .findById(planoMetasForm.getRodizio().getId());
+      Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio().getId());
       planoMetasForm.setRodizio(rodizio);
       return rodizio;
     } else {
@@ -1350,6 +1325,5 @@ public class PlanoMetasController {
     calendar.add(Calendar.DATE, days);
     return calendar.getTime();
   }
-
 
 }

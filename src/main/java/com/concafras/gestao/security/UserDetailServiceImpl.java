@@ -17,16 +17,21 @@ import com.concafras.gestao.model.Dirigente;
 import com.concafras.gestao.model.DirigenteNacional;
 import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Presidente;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.service.DirigenteNacionalService;
 import com.concafras.gestao.service.FacilitadorService;
 import com.concafras.gestao.service.PresidenteService;
+import com.concafras.gestao.service.RodizioService;
 import com.concafras.gestao.service.UsuarioService;
 
 @Component
 public class UserDetailServiceImpl implements UserDetailsService {
 
+    @Autowired
+    private RodizioService rodizioService;
+  
     @Autowired
     private UsuarioService usuarioService;
     
@@ -79,8 +84,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
 						}
 					}
 					
+					Rodizio ciclo =  rodizioService.findByAtivoTrue();
+					
 					//FACILITADOR?
-					List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(userProfile.getPessoa());
+					List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(userProfile.getPessoa(), ciclo);
 					
 					if(listaFacilitadores != null && listaFacilitadores.size() > 0) {
 						authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_FACILITADOR"));

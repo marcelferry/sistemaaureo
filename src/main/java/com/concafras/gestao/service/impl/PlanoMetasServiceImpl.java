@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +26,14 @@ import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
+import com.concafras.gestao.model.MetaEntidade;
+import com.concafras.gestao.model.MetaEntidadeAnotacao;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.model.view.StatusAtualInstitutoGraphicData;
 import com.concafras.gestao.model.view.StatusValor;
+import com.concafras.gestao.service.MetaService;
 import com.concafras.gestao.service.PlanoMetasService;
 
 @Service
@@ -37,6 +41,9 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 
     @PersistenceContext
     EntityManager em;
+    
+    @Autowired
+    private MetaService metaService;
         
     @Transactional
     public PlanoMetas save(PlanoMetas planoMetas) {
@@ -49,6 +56,22 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
     @Transactional
     public PlanoMetas update(PlanoMetas entidade) {
       return em.merge(entidade);
+    }
+    
+    @Transactional
+    public PlanoMetas saveOrUpdate(PlanoMetas plano, List<MetaEntidade> metas) {
+      // Salvar metas
+      if(metas != null){
+        for (MetaEntidade metaEntidade : metas) {
+          metaService.saveOrUpdate(metaEntidade);
+        }
+      }
+
+      if (plano.getId() == null || plano.getId() == 0) {
+        return save(plano);
+      } else {
+        return update(plano);
+      }
     }
 
     @Transactional

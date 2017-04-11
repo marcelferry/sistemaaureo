@@ -326,7 +326,15 @@
 						  	<form:hidden path="anotacoes[${indexAnot}].data" />
 						  	<form:hidden path="anotacoes[${indexAnot}].sinalizador" />
 						  	<form:label path="anotacoes[${indexAnot}].texto"><spring:message code="label.comentarios" />:</form:label>
-							<form:textarea path="anotacoes[${indexAnot}].texto" rows="8" class="form-control col-md-12 input-sm"/>
+							<form:textarea id="anotacaoContratacao" path="anotacoes[${indexAnot}].texto" rows="8" class="form-control col-md-12 input-sm"/>
+							<div class="col-md-12" style="font-size:11px;color:#ff8080; text-align:right;">Restam <div style="display:inline;" id="caracteresRestantes">4000</div> caracteres disponíveis.</div>
+							<script>
+							var textarea=document.getElementById("anotacaoContratacao");
+							var caracteresRestantes=document.getElementById("caracteresRestantes");
+							textarea.oninput = function(e){
+							    caracteresRestantes.innerHTML=(4000-this.value.length);
+							}
+							</script>
 					</div>
 					<!--  div class="col-md-1">
 						<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${meta.id}">
@@ -351,6 +359,7 @@
 	
 	<div class="row">
 		<div class="col-md-12">
+			<br/>
 			<fieldset>
 	       		<div class="form-group pull-right">
 		        		<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR'}">
@@ -861,6 +870,38 @@
 				$("#situacaoDesejada_previsao_" + meta).prop('disabled', false);
 				
 			}
+
+			if($(source).val() == "IMPLANTADA" || $(source).val() == "IMPLPARCIAL"){
+				//Exibir Data Implantacao
+				$("#bloco_dataimplantado_" + meta).show();
+			} else {
+				// Ocultar Data Implantacao
+				$("#bloco_dataimplantado_" + meta).hide();
+			}
+        } 
+    	
+    	function situacaoAcao(source){
+			var meta = $(source).data("meta");
+			
+			$("#situacaoDesejada_situacao_planejada_" + meta).prop('disabled', false);
+			$("#situacaoDesejada_situacao_naoplanejada_" + meta).prop('disabled', false);
+			$("#situacaoDesejada_previsao_" + meta).prop('disabled', false);
+			
+			/* if($(source).val() == "IMPLANTADA"){
+				//Desabilitar planejados
+				$("#situacaoDesejada_situacao_planejada_" + meta).prop('disabled', true);
+				$("#situacaoDesejada_situacao_planejada_" + meta).prop('checked', false);
+				$("#situacaoDesejada_situacao_naoplanejada_" + meta).prop('disabled', true);
+				$("#situacaoDesejada_situacao_naoplanejada_" + meta).prop('checked', false);
+				$("#situacaoDesejada_previsao_" + meta).prop('disabled', true);
+				$("#situacaoDesejada_previsao_" + meta).val("");
+			} else {
+				//Habilitar planejado
+				$("#situacaoDesejada_situacao_planejada_" + meta).prop('disabled', false);
+				$("#situacaoDesejada_situacao_naoplanejada_" + meta).prop('disabled', false);
+				$("#situacaoDesejada_previsao_" + meta).prop('disabled', false);
+				
+			} */
 
 			if($(source).val() == "IMPLANTADA" || $(source).val() == "IMPLPARCIAL"){
 				//Exibir Data Implantacao

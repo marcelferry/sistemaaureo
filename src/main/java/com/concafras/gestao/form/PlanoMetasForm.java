@@ -78,32 +78,6 @@ public class PlanoMetasForm {
     // TODO Auto-generated constructor stub
   }
 
-  public PlanoMetasForm(PlanoMetas plano) {
-    
-    this.id = plano.getId();
-    this.rodizio = plano.getRodizio();
-    this.entidade = plano.getEntidade();
-    this.instituto = plano.getInstituto();
-    this.facilitador = plano.getFacilitador();
-    this.tipoContratante = plano.getTipoContratante();
-    this.presidente = plano.getPresidente();
-    this.coordenador = plano.getCoordenador();
-    this.contratante = plano.getContratante();
-    this.evento = plano.getEvento();
-    
-    this.nomePresidente = plano.getNomePresidente();
-    this.nomeCoordenador = plano.getNomeCoordenador();
-    this.nomeContratante = plano.getNomeContratante();
-    this.telefonePresidente = plano.getTelefonePresidente();
-    this.telefoneCoordenador = plano.getTelefoneCoordenador();
-    this.telefoneContratante = plano.getTelefoneContratante();
-    this.emailPresidente = plano.getEmailPresidente();
-    this.emailCoordenador = plano.getEmailCoordenador();
-    this.emailContratante = plano.getEmailContratante();
-    
-    
-  }
-
   public Integer getId() {
     return id;
   }

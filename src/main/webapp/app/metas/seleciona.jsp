@@ -114,16 +114,27 @@
 		</div>
 	</c:if>
 
-	<c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_SECRETARIA' && ROLE_CONTROLE != 'ROLE_METAS_PRESIDENTE' }">
+	<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
 	    <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 	    	 	<c:if test="${ profiles[0] != 'prod' || ( CICLO_CONTROLE.dataAprovacao >= startDate && CICLO_CONTROLE.dataAprovacao <= endDate ) }">
+		    		<c:if test="${ not empty instituto }">
 			    	<div class="col-sm-2">
 			      		<input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
 			      	</div>
+		      		</c:if>
+		    		<c:if test="${ empty instituto }">
+			      	<div class="col-sm-6">
+			      	<div class="alert alert-danger alert-dismissable">
+            			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  						<h4>Amigo Facilitador</h4>
+  						<p>Este ano você não possui nenhuma comissão vinculada.</p>
+					</div>
+			    	</div>
+		      		</c:if>			      	
 		      	</c:if>
 		      	<c:if test="${ profiles[0] == 'prod' && ( CICLO_CONTROLE.dataAprovacao <= startDate || CICLO_CONTROLE.dataAprovacao >= endDate ) }">
-		    	<div class="col-sm-2">
+		    	<div class="col-sm-6">
 			      	<fmt:formatDate var="dataRodizio" value="${CICLO_CONTROLE.dataAprovacao}" pattern="dd/MM/yyyy"/>
 			      	 <div class="alert alert-danger alert-dismissable">
             			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

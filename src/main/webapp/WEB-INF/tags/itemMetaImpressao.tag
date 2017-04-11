@@ -55,7 +55,10 @@
 		<c:set var="controlequebra" value="1" scope="request" />
 </c:if>
 
-<tr>
+<c:if test="${ meta.atividade.prioridade > 0 }">
+	<c:set var="cssPrioridade" value="style='background:#cccccc;'" />
+</c:if>
+<tr ${cssPrioridade}>
 	<c:if test="${! empty meta.dependencias}">
 		<c:if test="${not empty controlequebra}">
 			<c:set var="controlequebra" value="${controlequebra + 1}" scope="request"/>
@@ -163,7 +166,7 @@
 	
 	
 	<!-- Rodizio 2016 - Quando possui historico -->
-	<c:if test="${meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL'}">
+	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
 		<!--  Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
@@ -225,7 +228,57 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${meta.situacaoAnterior.situacao == 'PLANEJADA'}">
+	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+		<!--  Coluna 2 -->
+		<td style="width: 15%">
+			<fmt:formatDate value="${meta.situacaoAnterior.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+			<c:choose>
+			    <c:when test="${meta.situacaoAnterior.situacao == 'IMPLANTADA'}">
+				Realizada: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:otherwise>
+			    	<c:if test="${!branco}">
+			        Não Informado
+			        </c:if>
+			        <c:if test="${branco}">
+			        (&nbsp; RE &nbsp;) &nbsp;&nbsp;&nbsp; ( NR )<br/><br/>
+			        EM: _____/______.
+			        </c:if>
+			    </c:otherwise>
+			</c:choose>
+		</td>
+		<!-- Coluna 3 -->
+		<td style="width: 15%">
+			<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+			<c:choose>
+				<c:when test="${meta.situacaoAtual.situacao == 'IMPLANTADA'}">
+				Realizada: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+				<c:when test="${meta.situacaoAtual.situacao == 'CANCELADA'}">
+				Cancelada: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:otherwise>
+			    	<c:if test="${!branco}">
+			        Não Informado
+			        </c:if>
+			        <c:if test="${branco}">
+			        (&nbsp; RE &nbsp;) &nbsp;&nbsp;&nbsp; ( NR )<br/><br/>
+			        EM: _____/______.
+			        </c:if>
+			    </c:otherwise>
+			</c:choose>
+		</td>
+	</c:if>
+	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }}">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
@@ -272,7 +325,94 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'}">
+	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_EXECUCAO' }}">
+		<!-- Coluna 2 -->
+		<td style="width: 15%">
+			<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
+			Planejado: ${previsao}
+		</td>
+		<!-- Coluna 3 -->
+		<td style="width: 15%">
+			<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+			<fmt:formatDate value="${meta.situacaoAtual.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
+			<c:choose>
+				<c:when test="${meta.situacaoAtual.situacao == 'IMPLANTADA'}">
+				Realizado: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:when test="${meta.situacaoAtual.situacao == 'REPLANEJADA'}">
+				Replanejada: ${previsao}
+			       <c:if test="${empty previsao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:when test="${meta.situacaoAtual.situacao == 'CANCELADA'}">
+				Cancelada: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:otherwise>
+			    	<c:if test="${!branco}">
+			        Não Informado
+			        </c:if>
+			        <c:if test="${branco}">
+			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NP )<br/><br/>
+			        DESDE: _____/______.
+			        </c:if>
+			    </c:otherwise>
+			</c:choose>
+		</td>
+	</c:if>
+	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && meta.atividade.tipoMeta == 'META_EXECUCAO' }">
+		<!-- Coluna 2 -->
+		<td style="width: 15%">
+			Não Planejado/Implantado
+		</td>
+		<!-- Coluna 3 -->
+		<td style="width: 15%">
+			<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+			<fmt:formatDate value="${meta.situacaoAtual.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
+			<c:choose>
+				<c:when test="${meta.situacaoAtual.situacao == 'IMPLANTADA'}">
+				Realizado: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:when test="${meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
+				Realizado: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:when test="${meta.situacaoAtual.situacao == 'REPLANEJADA'}">
+				Replanejada: ${previsao}
+			       <c:if test="${empty previsao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:when test="${meta.situacaoAtual.situacao == 'CANCELADA'}">
+				Cancelada: ${conclusao}
+			       <c:if test="${empty conclusao}">
+			       N/I
+			       </c:if>
+				</c:when>
+			    <c:otherwise>
+			    	<c:if test="${!branco}">
+			        Não Informado
+			        </c:if>
+			        <c:if test="${branco}">
+			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NP )<br/><br/>
+			        DESDE: _____/______.
+			        </c:if>
+			    </c:otherwise>
+			</c:choose>
+		</td>
+	</c:if>
+	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			Não Planejado/Implantado

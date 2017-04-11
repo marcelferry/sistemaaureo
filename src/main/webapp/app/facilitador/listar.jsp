@@ -54,7 +54,7 @@
 			                            	<div class="btn-group">
 			                            		<button type="button" onclick="this.form.action = 'delete/${facilitador.id}';submit();" class="btn btn-danger btn-xs" title="Email"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 			                            		<button type="button" class="btn btn-primary btn-xs email" data-id="${facilitador.trabalhador.id}" title="Envio do convite para acesso." alt="Envio do convite para acesso."><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
-			                            		<button type="button" class="btn btn-default btn-sm senha" data-id="${facilitador.trabalhador.id}" title="Reset da Senha para 12345" alt="Reset da Senha para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></button>
+			                            		<button type="button" class="btn btn-default btn-xs senha" data-id="${facilitador.trabalhador.id}" title="Reset da Senha para 12345" alt="Reset da Senha para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></button>
 		                            		</div>
 		                            	</form>
 		                            </td>

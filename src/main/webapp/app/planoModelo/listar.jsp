@@ -32,13 +32,14 @@
 			                    <thead>
 		                    <tr>
 		                        <th class="col-md-5">ID - Meta</th>
+		                        <th class="col-md-1">Prioridade</th>
 		                        <th class="col-md-1">Tipo Meta</th>
 		                        <th class="col-md-1"></th>
 		                    </tr>
 		                    </thead>
 		                    <tbody id="ComTratativas">
 		                    <c:forEach items="${planoModeloForm.itens}" var="atividade" varStatus="status">
-								<tr id="atividade${status.count}_pai">
+								<tr id="atividade${status.count}_pai" class="${subAtividade.prioridade > 0 ? 'danger': ''}">
 									<td>
 										<c:if test="${! empty atividade.itens}">
 											<img src="/img/details_open.png"  onclick='showChildren_ComTratativas("atividade${status.count}_atividade${status.count}", this)' /> 
@@ -46,6 +47,7 @@
 										<c:if test="${ empty atividade.itens}">
 											<img width="20" height="20" src="/img/spacer.png">
 										</c:if>${atividade.viewOrder} - ${atividade.descricao}</td>
+									 <td>${atividade.prioridade > 0 ? 'Sim': '-'}</td>
 									 <td>
 									 	<c:if test="${atividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
 									 	<c:if test="${atividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
@@ -53,18 +55,32 @@
 									 	<c:if test="${atividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 									 </td>
 									 <td>
-		                            	<form action="edit/${atividade.id}" method="post">
+		                            	<form:form action="/gestao/planoModelo/edit/${atividade.id}" commandName="planoModeloForm" method="post">
+		                            		<form:hidden path="instituto.id"/>
 		                            		<div class="btn-group">
-			                            		<button type="button" onclick="this.form.action = 'edit/${atividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/edit/${atividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+			                            		<c:if test="${atividade.prioridade > 0}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${atividade.id}/0';submit();" class="btn btn-danger btn-sm" title="Remover Prioridade"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
+												</c:if>			                            		
+			                            		<c:if test="${atividade.prioridade == null}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${atividade.id}/1';submit();" class="btn btn-success btn-sm" title="Priorizar"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>
+			                            		</c:if>
+			                            		<c:if test="${atividade.dataExclusao == null}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/disable/${atividade.id}';submit();" class="btn btn-danger btn-sm" title="Desabilitar"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+												</c:if>			                            		
+			                            		<c:if test="${atividade.dataExclusao != null}">
+			                            		<fmt:formatDate value="${atividade.dataExclusao}" var="dataExclusao" type="date" pattern="dd/MM/yyyy" />
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/enable/${atividade.id}';submit();" class="btn btn-success btn-sm" title="Habilitar (Desabilitado por ${atividade.usuarioExclusao.username} em  ${dataExclusao})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+			                            		</c:if>
 			                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
-			                            		<button type="button" onclick="this.form.action = 'delete/${atividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/delete/${atividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 			                            		</sec:authorize>
 		                            		</div>
-		                            	</form>
+		                            	</form:form>
 		                            </td>
 								</tr>
 								<c:forEach items="${atividade.itens}" var="subAtividade" varStatus="status2">
-									<tr id="subatividade${status2.count}_atividade${status.count}" class="child">
+									<tr id="subatividade${status2.count}_atividade${status.count}" class="child ${subAtividade.prioridade > 0 ? 'danger': ''}">
 										<td>
 											<img width="20" height="20" src="/img/spacer.png">
 											<c:if test="${! empty subAtividade.itens}">
@@ -73,6 +89,7 @@
 											<c:if test="${ empty subAtividade.itens}">
 												<img width="20" height="20" src="/img/spacer.png">
 											</c:if>${subAtividade.viewOrder} - ${subAtividade.descricao}</td>
+									 	<td> ${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 										<td>
 											<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
 										 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
@@ -80,18 +97,32 @@
 										 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 									 	</td>
 										<td>
-		                            	<form action="edit/${subAtividade.id}" method="post">
+		                            	<form:form action="/gestao/planoModelo/edit/${subAtividade.id}" commandName="planoModeloForm" method="post">
+		                            		<form:hidden path="instituto.id"/>
 			                            	<div class="btn-group">
-			                            		<button type="button" onclick="this.form.action = 'edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+			                            		<c:if test="${subAtividade.prioridade > 0}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/0';submit();" class="btn btn-danger btn-sm" title="Remover Prioridade"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
+												</c:if>			                            		
+			                            		<c:if test="${subAtividade.prioridade == null}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/1';submit();" class="btn btn-success btn-sm" title="Priorizar"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>
+			                            		</c:if>
+			                            		<c:if test="${subAtividade.dataExclusao == null}">
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/disable/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Desabilitar"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+												</c:if>			                            		
+			                            		<c:if test="${subAtividade.dataExclusao != null}">
+			                            		<fmt:formatDate value="${subAtividade.dataExclusao}" var="dataExclusao" type="date" pattern="dd/MM/yyyy" />
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/enable/${subAtividade.id}';submit();" class="btn btn-success btn-sm" title="Habilitar (Desabilitado por ${subAtividade.usuarioExclusao.username} em  ${dataExclusao})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+			                            		</c:if>
 			                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
-			                            		<button type="button" onclick="this.form.action = 'delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+			                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 			                            		</sec:authorize>
 		                            		</div>
-		                            	</form>
+		                            	</form:form>
 		                            	</td>
 									</tr>
 									<c:forEach items="${subAtividade.itens}" var="subAtividade" varStatus="status3">
-										<tr id="ssubatividade${status3.count}_subatividade${status2.count}" class="child">
+										<tr id="ssubatividade${status3.count}_subatividade${status2.count}" class="child ${subAtividade.prioridade > 0 ? 'danger': ''}">
 											<td>
 												<img width="20" height="20" src="/img/spacer.png">
 												<img width="20" height="20" src="/img/spacer.png">
@@ -101,6 +132,7 @@
 												<c:if test="${ empty subAtividade.itens}">
 													<img width="20" height="20" src="/img/spacer.png">
 												</c:if>${subAtividade.viewOrder} - ${subAtividade.descricao}</td>
+										 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 											<td>
 												<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
 											 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
@@ -108,18 +140,32 @@
 											 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 										 	</td>
 											<td>
-			                            	<form action="edit/${subAtividade.id}" method="post">
+			                            	<form:form action="/gestao/planoModelo/edit/${subAtividade.id}" commandName="planoModeloForm" method="post">
+		                            			<form:hidden path="instituto.id"/>
 				                            	<div class="btn-group">
-				                            		<button type="button" onclick="this.form.action = 'edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+				                            		<c:if test="${subAtividade.prioridade > 0}">
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/0';submit();" class="btn btn-danger btn-sm" title="Remover Prioridade"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
+													</c:if>			                            		
+				                            		<c:if test="${subAtividade.prioridade == null}">
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/1';submit();" class="btn btn-success btn-sm" title="Priorizar"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>
+				                            		</c:if>
+				                            		<c:if test="${subAtividade.dataExclusao == null}">
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/disable/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Desabilitar"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+													</c:if>			                            		
+				                            		<c:if test="${subAtividade.dataExclusao != null}">
+				                            		<fmt:formatDate value="${subAtividade.dataExclusao}" var="dataExclusao" type="date" pattern="dd/MM/yyyy" />
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/enable/${subAtividade.id}';submit();" class="btn btn-success btn-sm" title="Habilitar (Desabilitado por ${subAtividade.usuarioExclusao.username} em  ${dataExclusao})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+				                            		</c:if>
 				                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
-				                            		<button type="button" onclick="this.form.action = 'delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+				                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 			                            			</sec:authorize>
 			                            		</div>
-			                            	</form>
+			                            	</form:form>
 			                            	</td>
 										</tr>
 										<c:forEach items="${subAtividade.itens}" var="subAtividade" varStatus="status4">
-											<tr id="sssubatividade${status4.count}_ssubatividade${status3.count}" class="child">
+											<tr id="sssubatividade${status4.count}_ssubatividade${status3.count}" class="child ${subAtividade.prioridade > 0 ? 'danger': ''}">
 												<td>
 													<img width="20" height="20" src="/img/spacer.png">
 													<img width="20" height="20" src="/img/spacer.png">
@@ -130,6 +176,7 @@
 													<c:if test="${ empty subAtividade.itens}">
 														<img width="20" height="20" src="/img/spacer.png">
 													</c:if>${subAtividade.viewOrder} - ${subAtividade.descricao}</td>
+											 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 												<td>
 													<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
 												 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
@@ -137,33 +184,68 @@
 												 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 											 	</td>
 												<td>
-				                            	<form action="edit/${subAtividade.id}" method="post">
+				                            	<form:form action="/gestao/planoModelo/edit/${subAtividade.id}" commandName="planoModeloForm" method="post">
+		                            				<form:hidden path="instituto.id"/>
 					                            	<div class="btn-group">
-					                            		<button type="button" onclick="this.form.action = 'edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
-					                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
-					                            		<button type="button" onclick="this.form.action = 'delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+					                            		<c:if test="${subAtividade.prioridade > 0}">
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/0';submit();" class="btn btn-danger btn-sm" title="Remover Prioridade"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
+														</c:if>			                            		
+					                            		<c:if test="${subAtividade.prioridade == null}">
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/1';submit();" class="btn btn-success btn-sm" title="Priorizar"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>
+					                            		</c:if>
+					                            		<c:if test="${subAtividade.dataExclusao == null}">
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/disable/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Desabilitar"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+														</c:if>			                            		
+					                            		<c:if test="${subAtividade.dataExclusao != null}">
+					                            		<fmt:formatDate value="${subAtividade.dataExclusao}" var="dataExclusao" type="date" pattern="dd/MM/yyyy" />
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/enable/${subAtividade.id}';submit();" class="btn btn-success btn-sm" title="Habilitar (Desabilitado por ${subAtividade.usuarioExclusao.username} em  ${dataExclusao})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+					                            		</c:if>
+				                            			<sec:authorize access="hasRole('ROLE_ADMIN')">
+					                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 				                            			</sec:authorize>
 				                            		</div>
-				                            	</form>
+				                            	</form:form>
 				                            	</td>
 											</tr>
 											<c:forEach items="${subAtividade.itens}" var="subAtividade" varStatus="status5">
-												<tr id="ssssubatividade${status5.count}_sssubatividade${status4.count}" class="child">
+												<tr id="ssssubatividade${status5.count}_sssubatividade${status4.count}" class="child ${subAtividade.prioridade > 0 ? 'danger': ''}">
 													<td>
 														<img width="20" height="20" src="/img/spacer.png">
 														<img width="20" height="20" src="/img/spacer.png">
 														<img width="20" height="20" src="/img/spacer.png">
 														<img width="20" height="20" src="/img/spacer.png">
 														<img width="20" height="20" src="/img/spacer.png">${subAtividade.viewOrder} - ${subAtividade.descricao}</td>
+												 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 													<td>
-					                            	<form action="edit/${subAtividade.id}" method="post">
+													<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+												 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+												 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
+												 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
+												 	</td>
+													<td>
+					                            	<form:form action="/gestao/planoModelo/edit/${subAtividade.id}" commandName="planoModeloForm" method="post">
+		                            					<form:hidden path="instituto.id"/>
 						                            	<div class="btn-group">
-						                            		<button type="button" onclick="this.form.action = 'edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/edit/${subAtividade.id}';submit();" class="btn btn-warning btn-sm" title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+						                            		<c:if test="${subAtividade.prioridade > 0}">
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/0';submit();" class="btn btn-danger btn-sm" title="Remover Prioridade"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></button>
+															</c:if>			                            		
+						                            		<c:if test="${subAtividade.prioridade == null}">
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/priority/${subAtividade.id}/1';submit();" class="btn btn-success btn-sm" title="Priorizar"><span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></button>
+						                            		</c:if>
+						                            		<c:if test="${subAtividade.dataExclusao == null}">
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/disable/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Desabilitar"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+															</c:if>			                            		
+						                            		<c:if test="${subAtividade.dataExclusao != null}">
+						                            		<fmt:formatDate value="${subAtividade.dataExclusao}" var="dataExclusao" type="date" pattern="dd/MM/yyyy" />
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/enable/${subAtividade.id}';submit();" class="btn btn-success btn-sm" title="Habilitar (Desabilitado por ${subAtividade.usuarioExclusao.username} em  ${dataExclusao})"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+						                            		</c:if>
 						                            		<sec:authorize access="hasRole('ROLE_ADMIN')">
-						                            		<button type="button" onclick="this.form.action = 'delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+						                            		<button type="button" onclick="this.form.action = '/gestao/planoModelo/delete/${subAtividade.id}';submit();" class="btn btn-danger btn-sm" title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					                            			</sec:authorize>
 					                            		</div>
-					                            	</form>
+					                            	</form:form>
 					                            	</td>
 												</tr>
 											</c:forEach>
@@ -176,20 +258,20 @@
 		            </div>
 		            <div class="col-md-12">
 		            	<div class="col-md-2">
-		            		<form:form method="get" action="add" commandName="planoModeloForm">
+		            		<form:form method="get" action="/gestao/planoModelo/add" commandName="planoModeloForm">
 				                	<form:hidden path="instituto.id" />
 				            		<input type="submit" class="btn btn-primary btn-mini" value="Nova Meta"/>
 				         	</form:form>
 			         	</div>
 			         	<div class="col-md-2">
-				            <form:form method="post" action="organizar" commandName="planoModeloForm">
+				            <form:form method="post" action="/gestao/planoModelo/organizar" commandName="planoModeloForm">
 				                	<form:hidden path="instituto.id" />
 				            		<input type="submit" class="btn btn-primary btn-mini" value="Organizar"/>
 				         	</form:form>
 				         </div>
 				         
 				         <div class="col-md-2">
-			            	<form:form method="get" action="upload" commandName="planoModeloForm">
+			            	<form:form method="get" action="/gestao/planoModelo/upload" commandName="planoModeloForm">
 			            		<form:hidden path="instituto.id" />
 				            	<input type="button" class="btn btn-success btn-mini" onclick="submit();" value="Upload"/>
 				            </form:form>

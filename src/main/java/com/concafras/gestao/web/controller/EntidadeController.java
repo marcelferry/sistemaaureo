@@ -106,8 +106,7 @@ public class EntidadeController {
 			@RequestParam(value = "rodizio", required = false) Integer rodizio,			
 			@RequestParam int maxRows) {
 
-		List<Entidade> lista = entidadeService.listEntidade(query, cidade,
-				maxRows);
+		List<Entidade> lista = entidadeService.listEntidade(query, cidade, maxRows);
 		List<EntidadeOptionForm> retorno = new ArrayList<EntidadeOptionForm>();
 		for (Entidade entidade : lista) {
 			EntidadeOptionForm e = new EntidadeOptionForm();

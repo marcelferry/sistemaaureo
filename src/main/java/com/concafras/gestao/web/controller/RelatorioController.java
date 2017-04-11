@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.form.EntidadeOptionForm;
@@ -382,7 +383,7 @@ public class RelatorioController {
     List<MetaForm> metasForm = null;
 
     List<MetaInstituto> metasIntituto = metaInstitutoService
-        .listMetaInstitutoByInstituto(planoMetasForm.getInstituto().getId());
+        .listMetaInstitutoByInstituto(planoMetasForm.getInstituto().getId(), true);
 
     PlanoMetas planoMetasAtual = null;
 
@@ -606,7 +607,7 @@ public class RelatorioController {
     
     List<MetaForm> metasForm = null;
 
-    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
+    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId(), true);
 
     PlanoMetas planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
 
@@ -620,7 +621,6 @@ public class RelatorioController {
       planoMetasForm.setPresidente(presidente);
 
       planoMetasAtual.setMetas(listaMetas);
-      planoMetasAtual.setEvento(planoMetasForm.getEvento());
     }
 
     if (planoMetasAtual == null) {
@@ -629,7 +629,12 @@ public class RelatorioController {
           planoMetasForm.getEvento(), planoMetasForm.getRodizio());
 
     } else if (planoMetasAtual.getMetas().size() > 0) {
-      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto, planoMetasAtual);
+      metasForm = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(metasIntituto, 
+          planoMetasForm.getFacilitador(),
+          planoMetasForm.getContratante(), 
+          planoMetasForm.getEvento(), 
+          planoMetasForm.getEntidade(), 
+          planoMetasForm.getRodizio());
     } else {
       metasForm = new ArrayList<MetaForm>();
     }
@@ -668,7 +673,7 @@ public class RelatorioController {
 
       List<MetaForm> metasForm = null;
 
-      List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId());
+      List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstituto(instituto.getId(), true);
 
       PlanoMetas planoMetasAtual = null;
 

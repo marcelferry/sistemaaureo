@@ -27,6 +27,7 @@ import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
+import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
@@ -47,6 +48,41 @@ public class MetaServiceImpl implements MetaService {
     Hibernate.initialize(meta.getHistorico());
 
     return meta;
+  }
+  
+  @Transactional
+  public MetaEntidade saveOrUpdate(MetaEntidade metaEntidade){
+    System.out.println("MetaEntidade: " + metaEntidade);
+    if (metaEntidade.getId() == null || metaEntidade.getId() == 0) {
+      save(metaEntidade);
+      List<MetaEntidadeAnotacao> anotacoes = metaEntidade.getAnotacoes();
+      if(anotacoes != null){
+        System.out.println("MetasAnotacoes: " + anotacoes.size());
+        for (MetaEntidadeAnotacao metaEntidadeAnotacao : anotacoes) {
+          if (metaEntidadeAnotacao.getAnotacao().getId() == null) {
+            System.out.println("Anotacao: " + metaEntidadeAnotacao.getAnotacao());
+            saveAnotacao(metaEntidadeAnotacao.getAnotacao());
+            System.out.println("MetaAnotacao: " + metaEntidadeAnotacao);
+            saveMetaAnotacao(metaEntidadeAnotacao);
+          }
+        }
+      }
+    } else {
+      List<MetaEntidadeAnotacao> anotacoes = metaEntidade.getAnotacoes();
+      if(anotacoes != null){
+        System.out.println("MetasAnotacoes: " + anotacoes.size());
+        for (MetaEntidadeAnotacao metaEntidadeAnotacao : anotacoes) {
+          if (metaEntidadeAnotacao.getAnotacao().getId() == null) {
+            System.out.println("Anotacao: " + metaEntidadeAnotacao.getAnotacao());
+            saveAnotacao(metaEntidadeAnotacao.getAnotacao());
+            System.out.println("MetaAnotacao: " + metaEntidadeAnotacao);
+            saveMetaAnotacao(metaEntidadeAnotacao);
+          }
+        }
+      }
+      update(metaEntidade);
+    }
+    return metaEntidade;
   }
 
   public String getCaminhoMeta(Integer id) {
@@ -135,6 +171,45 @@ public class MetaServiceImpl implements MetaService {
     }
     
     return retorno;
+  }
+  
+  @Transactional
+  public MetaEntidade findByEntidadeIdAndMetaInstitutoId(Integer idEntidade, Integer idMetaInstituto) {
+    
+    MetaInstituto meta = em.find(MetaInstituto.class, idMetaInstituto);
+    BaseEntidade entidade  = em.find(BaseEntidade.class, idEntidade);
+    
+    CriteriaBuilder cb = em.getCriteriaBuilder();
+    CriteriaQuery<MetaEntidade> c = cb.createQuery(MetaEntidade.class);
+    Root<MetaEntidade> emp = c.from(MetaEntidade.class);
+    
+    List<Predicate> criteria = new ArrayList<Predicate>();
+    criteria.add( cb.equal( emp.<MetaInstituto>get("meta") , meta ));
+    criteria.add( cb.equal( emp.<BaseEntidade>get("entidade") , entidade ));
+    c.where(criteria.toArray(new Predicate[]{}));
+    
+    CriteriaQuery<MetaEntidade> select = c.select(emp);
+    
+    List<MetaEntidade> retorno = em.createQuery(select).getResultList();
+    
+    if( retorno != null ){
+    
+      for (MetaEntidade b : retorno) {
+        Hibernate.initialize(b.getAnotacoes());
+        Hibernate.initialize(b.getHistorico());
+      }
+      
+      if(retorno.size() == 1) {
+        return retorno.get(0);
+      } if(retorno.size() > 1) {
+        throw new IllegalStateException("Resultado maior que 1");
+      } else {
+        return null;
+      }
+      
+    }
+    
+    return null;
   }
 
   @Transactional
@@ -346,12 +421,12 @@ public class MetaServiceImpl implements MetaService {
     return retorno;
   }
 
-  @Override
+  @Transactional
   public void saveAnotacao(Anotacao anotacao) {
     em.persist(anotacao);
   }
 
-  @Override
+  @Transactional
   public void saveMetaAnotacao(MetaEntidadeAnotacao metaEntidadeAnotacao) {
     em.persist(metaEntidadeAnotacao);
   }

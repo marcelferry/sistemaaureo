@@ -152,5 +152,21 @@ public class FacilitadorServiceImpl implements FacilitadorService {
   
       return em.createQuery(c).getResultList();
   }
+  
+  @Transactional
+  public List<Facilitador> getFacilitador(Pessoa pessoa, Rodizio rodizio){
+    CriteriaBuilder cb = em.getCriteriaBuilder();
+    CriteriaQuery<Facilitador> c = cb.createQuery(Facilitador.class);
+    Root<Facilitador> emp = c.from(Facilitador.class);
+    
+    if (pessoa != null) {
+      List<Predicate> criteria = new ArrayList<Predicate>();
+      criteria.add(cb.equal(emp.<Pessoa> get("trabalhador"), pessoa ));
+      criteria.add(cb.equal(emp.<Rodizio> get("rodizio"), rodizio ));
+      c.where(criteria.get(0));
+    }
+    
+    return em.createQuery(c).getResultList();
+  }
     
 }

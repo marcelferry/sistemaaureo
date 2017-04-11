@@ -1,6 +1,7 @@
 package com.concafras.gestao.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,12 +12,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Hibernate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.Rodizio;
+import com.concafras.gestao.model.security.Usuario;
+import com.concafras.gestao.security.UsuarioAutenticado;
 import com.concafras.gestao.service.MetasInstitutoService;
 
 @Service
@@ -40,6 +46,44 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
       MetaInstituto entidade = em.find(MetaInstituto.class, id);
       if (null != entidade) {
         em.remove(entidade);
+      }
+    }
+    
+    @Transactional
+    public void disableMetaInstituto(Integer id) {
+      MetaInstituto meta = em.find(MetaInstituto.class, id);
+      if (null != meta) {
+        Authentication auth = SecurityContextHolder.getContext()
+            .getAuthentication();
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        if (userDetails instanceof UsuarioAutenticado) {
+          UsuarioAutenticado usuario = (UsuarioAutenticado) userDetails;
+          Usuario usuarioLogado = usuario.getUsuario();
+          if (usuarioLogado != null) {
+            meta.setUsuarioExclusao(usuarioLogado);
+          }
+        }
+        meta.setDataExclusao(new Date());
+        em.merge(meta);
+      }
+    }
+    
+    @Transactional
+    public void enableMetaInstituto(Integer id) {
+      MetaInstituto meta = em.find(MetaInstituto.class, id);
+      if (null != meta) {
+        meta.setDataExclusao(null);
+        meta.setUsuarioExclusao(null);
+        em.merge(meta);
+      }
+    }
+    
+    @Transactional
+    public void priorityMetaInstituto(Integer id, Integer priority) {
+      MetaInstituto meta = em.find(MetaInstituto.class, id);
+      if (null != meta) {
+        meta.setPrioridade(priority);
+        em.merge(meta);
       }
     }
     
@@ -69,7 +113,7 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
   }
 
     @Transactional
-  public List<MetaInstituto> listMetaInstitutoByInstituto(Integer id) {
+  public List<MetaInstituto> listMetaInstitutoByInstituto(Integer id, boolean removeExcluidos) {
     BaseInstituto base = em.find(BaseInstituto.class, id);
       
       CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -79,6 +123,9 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
       List<Predicate> criteria = new ArrayList<Predicate>();
       criteria.add( cb.equal( emp.<BaseInstituto>get("instituto") , base ));
       criteria.add( cb.isNull( emp.<MetaInstituto>get("pai")  ));
+      if(removeExcluidos){
+        criteria.add( cb.isNull( emp.<Date>get("dataExclusao")  ));
+      }
       c.where(criteria.toArray(new Predicate[]{}));
       
       CriteriaQuery<MetaInstituto> select = c.select(emp);
@@ -124,6 +171,7 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
       List<Predicate> criteria = new ArrayList<Predicate>();
       criteria.add( cb.equal( root.<BaseInstituto>get("instituto") , base ));
       criteria.add( cb.isNull( root.<MetaInstituto>get("pai")  ));
+      criteria.add( cb.isNull( root.<Date>get("dataExclusao")  ));
       c.where(criteria.toArray(new Predicate[]{}));
       
       
@@ -159,6 +207,7 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
       
       List<Predicate> criteria = new ArrayList<Predicate>();
       criteria.add( cb.equal( root.<MetaInstituto>get("pai"), pai  ));
+      criteria.add( cb.isNull( root.<Date>get("dataExclusao")  ));
       c.where(criteria.toArray(new Predicate[]{}));
       
       
@@ -198,31 +247,6 @@ public class MetasInstitutoServiceImpl implements MetasInstitutoService {
       
       return retorno;
     }
-
-    @Transactional
-  public List<MetaInstituto> listMetaInstitutoByRodizio(Integer id) {
-    Rodizio rodizio = em.find(Rodizio.class, id);
-      
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<MetaInstituto> c = cb.createQuery(MetaInstituto.class);
-      Root<MetaInstituto> emp = c.from(MetaInstituto.class);
-      
-      List<Predicate> criteria = new ArrayList<Predicate>();
-      criteria.add( cb.equal( emp.<BaseInstituto>get("rodizio") , rodizio ));
-      c.where(criteria.toArray(new Predicate[]{}));
-      
-      CriteriaQuery<MetaInstituto> select = c.select(emp);
-      
-      select.orderBy(cb.asc(emp.get("viewOrder")));
-      
-      List<MetaInstituto> retorno = em.createQuery(select).getResultList();
-      
-      for(MetaInstituto a : retorno){
-        Hibernate.initialize(a.getItens());
-      }
-      
-      return retorno;
-  }
 
     @Transactional
   public List<MetaInstituto> listMetaInstitutoByInstitutoRodizio(

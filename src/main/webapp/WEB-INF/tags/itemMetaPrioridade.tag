@@ -33,7 +33,6 @@
 	<c:set var="cssIn" value="in"/>
 </c:if>
 
-
 <c:if test="${! empty meta.id}">
 	<c:set var="metaId" value="${meta.id}"/>
 </c:if>
@@ -45,9 +44,11 @@
 <div class="panel panel-green">
 
 	<form:hidden path="dependencias[${index}].id" value="${meta.id}"/>
+	<form:hidden path="dependencias[${index}].descricaoCompleta" value="${meta.descricaoCompleta}"/>
 	<form:hidden path="dependencias[${index}].atividade.id" value="${meta.atividade.id}"/>
 	<form:hidden path="dependencias[${index}].atividade.descricao" value="${meta.atividade.descricao}"/>
 	<form:hidden path="dependencias[${index}].atividade.tipoMeta" value="${meta.atividade.tipoMeta}"/>
+	<form:hidden path="dependencias[${index}].atividade.prioridade" value="${meta.atividade.prioridade}"/>
 	<form:hidden path="dependencias[${index}].situacaoAtual.ciclo.id" value="${meta.situacaoAtual.ciclo.id}"/>
 	<form:hidden path="dependencias[${index}].situacaoAtual.tipoSituacao" value="${meta.situacaoAtual.tipoSituacao}"/>
 	<form:hidden path="dependencias[${index}].situacaoAtual.dataSituacao" value="${meta.situacaoAtual.dataSituacao}"/>
@@ -199,7 +200,7 @@
 			
 			
 			<!-- Rodizio 2016 - Quando possui historico -->
-			<c:if test="${meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL'}">
+			<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -258,8 +259,64 @@
 					<!-- /Coluna 3 -->
 				</div>
 			</c:if>
+
+			<c:if test="${(meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL') && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+				<div class="col-sm-2">
+					<!--  Coluna 2 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
+						<div class="form-group">
+							<label>
+								<c:if test="${meta.situacaoAnterior.situacao == 'IMPLANTADA'}">
+								<font color="#800000">Realizada</font> em:
+								</c:if>
+								<c:if test="${meta.situacaoAnterior.conclusao != null}">
+									<fmt:formatDate value="${meta.situacaoAnterior.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+									<form:hidden path="dependencias[${index}].situacaoAnterior.conclusao" value="${conclusao}"/>
+									<font color="#800000">${conclusao}</font>
+								</c:if>	
+								<c:if test="${meta.situacaoAnterior.conclusao == null}">
+									N/I
+									<i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Data não informado no ato do rodízio" title="Não informado"></i>
+								</c:if>						
+							</label>
+						</div>
+					</div><!-- /Coluna 2 -->
+				</div>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'}">
+				<div class="col-sm-2">
+					<!-- Coluna 3 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como está Hoje?</strong></label>
+						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacaoAcao(this);">
+						    <option value=""></option>
+						    <form:option value="IMPLANTADA">Realizado</form:option>
+							<form:option value="NAOIMPLANTADA">Não Realizado</form:option>
+						</form:select>
+						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
+					</div>
+					<div id="bloco_dataimplantado_${metaId}" class="form-group dateimplantado">
+						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
+						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+						<div class="input-group">
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+								cssClass="date-picker form-control " cssErrorClass="date-picker form-control  error-input"/>
+							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
+						</div>
+						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
+					</div>
+						
+					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
+					<script type="text/javascript">
+						$("#bloco_dataimplantado_${metaId}").show();
+					</script>
+					</c:if>
+					<!-- /Coluna 3 -->
+				</div>
+			</c:if>
+			
+			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -304,7 +361,51 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA'}">
+			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+				<div class="col-sm-2">
+					<!--  Coluna 2 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
+						<div class="form-group">
+							<label class="control-label warning">
+								<font color="#800000">Não Implantado!</font>
+							</label>
+						</div>
+					</div><!-- /Coluna 2 -->
+				</div>
+			
+				<div class="col-sm-2">
+					<!-- Coluna 3 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como está Hoje?</strong></label>
+						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacaoAcao(this);">
+						    <option value=""></option>
+							<form:option value="IMPLANTADA">Realizado</form:option>
+							<form:option value="NAOIMPLANTADA">Não Realizado</form:option>
+						</form:select>
+						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
+					</div>
+					<div  id="bloco_dataimplantado_${metaId}"  class="form-group dateimplantado">
+						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
+						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+						<div class="input-group">
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+								class="date-picker form-control "/>
+							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
+						</div>
+						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
+					</div>
+					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
+					<script type="text/javascript">
+						$("#bloco_dataimplantado_${metaId}").show();
+					</script>
+					</c:if>
+				<!-- /Coluna 3 -->
+				</div>
+			</c:if>
+			
+			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -327,6 +428,50 @@
 							<form:option value="IMPLANTADA">Implantada</form:option>
 							<form:option value="IMPLPARCIAL">Imp. Parcial</form:option>
 							<form:option value="NAOIMPLANTADA">Não Implantada</form:option>
+						</form:select>
+						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
+					</div>
+					<div  id="bloco_dataimplantado_${metaId}"  class="form-group dateimplantado">
+						<form:label path="dependencias[${index}].situacaoAtual.conclusao" cssClass="control-label">Desde:</form:label>
+						<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
+						<div class="input-group">
+							<form:input id="situacaoAtual_conclusao_${metaId}" path="dependencias[${index}].situacaoAtual.conclusao" placeholder="mês/ano" value="${conclusao}" 
+								class="date-picker form-control "/>
+							<span class="input-group-addon"><i class="fa fa-calendar"><jsp:text /></i></span>
+						</div>
+						<form:errors path="dependencias[${index}].situacaoAtual.conclusao" cssClass="label label-danger"/>
+					</div>
+					<c:if test="${meta.situacaoAtual.situacao == 'IMPLANTADA' || meta.situacaoAtual.situacao == 'IMPLPARCIAL'}">
+					<script type="text/javascript">
+						$("#bloco_dataimplantado_${metaId}").show();
+					</script>
+					</c:if>
+				<!-- /Coluna 3 -->
+				</div>
+			</c:if>
+			
+			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && meta.atividade.tipoMeta == 'META_EXECUCAO' }">
+				<div class="col-sm-2">
+					<!--  Coluna 2 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como estava em ${meta.situacaoAnterior.ciclo.ciclo}?</strong></label>
+						<div class="form-group">
+							<label class="control-label warning">
+								<font color="#800000">Planejada/Cancelada!</font>
+							</label>
+						</div>
+					</div><!-- /Coluna 2 -->
+				</div>
+			
+				<div class="col-sm-2">
+					<!-- Coluna 3 -->
+					<div class="form-group">
+						<label class="control-label"><strong>Como está Hoje?</strong></label>
+						<form:hidden path="dependencias[${index}].situacaoAnterior.situacao" />
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacaoAcao(this);">
+						    <option value=""></option>
+							<form:option value="IMPLANTADA">Realizada</form:option>
+							<form:option value="NAOIMPLANTADA">Não Realizada</form:option>
 						</form:select>
 						<form:errors path="dependencias[${index}].situacaoAtual.situacao" cssClass="label label-danger"/>
 					</div>
@@ -415,7 +560,7 @@
 					<!-- Coluna 3 -->
 					<div class="form-group">
 						<label class="control-label"><strong>Como está Hoje?</strong></label>
-						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacao(this);">
+						<form:select data-meta="${metaId}" id="situacaoAtual_situacao_${metaId}" path="dependencias[${index}].situacaoAtual.situacao" class="form-control " onchange="situacaoAcao(this);">
 						    <option value=""></option>
 					    	<form:option value="IMPLANTADA">Realizado</form:option>
 							<form:option value="REPLANEJADA">Replanejado</form:option>
@@ -698,7 +843,15 @@
 						  	<form:hidden path="dependencias[${index}].observacoes[${indexObs}].data" />
 						  	<form:hidden path="dependencias[${index}].observacoes[${indexObs}].sinalizador" />
 						  	<form:label path="dependencias[${index}].observacoes[${indexObs}].texto">Comentário:</form:label>
-							<form:textarea id="observacoes_${metaId}" path="dependencias[${index}].observacoes[${indexObs}].texto" rows="5" class="form-control col-md-12 "/>
+							<form:textarea id="observacoes_${metaId}" path="dependencias[${index}].observacoes[${indexObs}].texto" rows="5" maxlength="4000" class="form-control col-md-12 "/>
+							<div class="col-md-12" style="font-size:11px;color:#ff8080; text-align:right;">Restam <div style="display:inline;" id="caracteresRestantes_${metaId}">4000</div> caracteres disponíveis.</div>
+							<script>
+							var textarea${metaId}=document.getElementById("observacoes_${metaId}");
+							var caracteresRestantes${metaId}=document.getElementById("caracteresRestantes_${metaId}");
+							textarea${metaId}.oninput = function(e){
+							    caracteresRestantes${metaId}.innerHTML=(4000-this.value.length);
+							}
+							</script>
 						</div>
 					</div>
 					<!--  div class="col-md-2">

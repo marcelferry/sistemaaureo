@@ -34,7 +34,7 @@ function completeCidade(nameField, idField, baseUrl, callbackUpdater, rodizio){
 		            	console.log(result);
 		                var resultList = result.map(function (item) {
 		                	console.log(item);
-		                    var aItem = { id: item.id, name: item.nome, uf: item.estado.sigla };
+		                    var aItem = { id: item.id, name: item.nome, uf: item.estado.sigla, qtde: item.entidades };
 		                    return JSON.stringify(aItem);
 		                });
 
@@ -73,7 +73,7 @@ function completeCidade(nameField, idField, baseUrl, callbackUpdater, rodizio){
 		        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
 		        return item.name.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
 		            return '<font color="red"><strong>' + match + '</strong></font>';
-		        }) + '/' + item.uf;
+		        }) + '/' + item.uf + (item.qtde != null ? ' (' + item.qtde + ') ':'') ;
 		    },
 
 		    updater: function (obj) {

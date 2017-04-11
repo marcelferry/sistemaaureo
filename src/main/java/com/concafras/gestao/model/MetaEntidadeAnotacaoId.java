@@ -6,6 +6,11 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class MetaEntidadeAnotacaoId implements java.io.Serializable {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -3049199823278808454L;
+
   @ManyToOne
   private MetaEntidade metaEntidade;
   

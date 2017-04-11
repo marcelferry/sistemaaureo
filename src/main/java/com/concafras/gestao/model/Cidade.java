@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 
 @Entity
@@ -33,6 +34,9 @@ public class Cidade extends ObjetoGerenciado {
   @JoinColumn(name = "idEstado", referencedColumnName = "id")
   @XmlElement
   private Estado estado;
+  
+  @Transient
+  private Integer entidades;
 
   public Cidade() {
     // TODO Auto-generated constructor stub
@@ -44,6 +48,15 @@ public class Cidade extends ObjetoGerenciado {
     this.nome = nome;
     this.estado = new Estado();
     this.estado.setSigla(sigla);
+  }
+  
+  public Cidade(Integer id, String nome, String sigla, int entidades) {
+    super();
+    this.id = id;
+    this.nome = nome;
+    this.estado = new Estado();
+    this.estado.setSigla(sigla);
+    this.entidades = entidades;
   }
 
   public Integer getId() {
@@ -70,9 +83,17 @@ public class Cidade extends ObjetoGerenciado {
     this.estado = estado;
   }
   
+  public Integer getEntidades() {
+    return entidades;
+  }
+  
+  public void setEntidades(Integer entidades) {
+    this.entidades = entidades;
+  }
+  
   @Override
   public String toString() {
-    return this.nome + (this.estado != null? "/" + this.estado.getSigla() : "");
+    return this.nome + (this.estado != null? "/" + this.estado.getSigla() : "") + (this.entidades != null ? " - (" + this.entidades + ")": "");
   }
 
 }

@@ -1,8 +1,6 @@
 package com.concafras.gestao.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Access;
@@ -22,14 +20,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 
-import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoMeta;
-import com.concafras.gestao.enums.TipoSituacaoMeta;
 
 @Entity
 @Table(name = "METAS_ENTIDADE")
@@ -111,33 +105,6 @@ public class MetaEntidade implements Serializable {
   @OrderBy("idRodizio ASC, tipo_situacao ASC")
   private List<HistoricoMetaEntidade> historico;
   
-  //TODO: CAMPOS APENAS DE ULTIMA SITUACAO - REMOVER TODOS
-//  @Enumerated(EnumType.ORDINAL)
-//  @Column(name="tipo_situacao")
-//  private TipoSituacaoMeta tipoSituacao;
-//  
-//  @Temporal(TemporalType.TIMESTAMP)
-//  @Column(name="data_situacao")
-//  private Date dataSituacao;
-//
-//  @Enumerated(EnumType.STRING)
-//  private SituacaoMeta situacao;
-//
-//  @ManyToOne
-//  @JoinColumn(name = "idResponsavel", referencedColumnName = "id")
-//  @XmlElement
-//  private Pessoa responsavel;
-//  
-//  @Temporal(TemporalType.DATE)
-//  private Date previsao;
-//  
-//  private BigDecimal previsto;
-//  
-//  @Temporal(TemporalType.DATE)
-//  private Date conclusao;
-//  
-//  private BigDecimal realizado;
-
   public Integer getId() {
     return id;
   }
@@ -202,70 +169,6 @@ public class MetaEntidade implements Serializable {
     this.anotacoes = anotacoes;
   }
   
-//  public Pessoa getResponsavel() {
-//    return responsavel;
-//  }
-//
-//  public void setResponsavel(Pessoa responsavel) {
-//    this.responsavel = responsavel;
-//  }
-//
-//  public TipoSituacaoMeta getTipoSituacao() {
-//    return tipoSituacao;
-//  }
-//
-//  public void setTipoSituacao(TipoSituacaoMeta acao) {
-//    this.tipoSituacao = acao;
-//  }
-//
-//  public Date getDataSituacao() {
-//    return dataSituacao;
-//  }
-//
-//  public void setDataSituacao(Date dataAcao) {
-//    this.dataSituacao = dataAcao;
-//  }
-//
-//  public SituacaoMeta getSituacao() {
-//    return situacao;
-//  }
-//
-//  public void setSituacao(SituacaoMeta situacao) {
-//    this.situacao = situacao;
-//  }
-//
-//  public Date getPrevisao() {
-//    return previsao;
-//  }
-//
-//  public void setPrevisao(Date dataSituacao) {
-//    this.previsao = dataSituacao;
-//  }
-//
-//  public BigDecimal getPrevisto() {
-//    return previsto;
-//  }
-//
-//  public void setPrevisto(BigDecimal qtdeSituacao) {
-//    this.previsto = qtdeSituacao;
-//  }
-//  
-//  public Date getConclusao() {
-//    return conclusao;
-//  }
-//  
-//  public void setConclusao(Date conclusao) {
-//    this.conclusao = conclusao;
-//  }
-//  
-//  public BigDecimal getRealizado() {
-//    return realizado;
-//  }
-//  
-//  public void setRealizado(BigDecimal realizado) {
-//    this.realizado = realizado;
-//  }
-
   public List<HistoricoMetaEntidade> getHistorico() {
     return historico;
   }

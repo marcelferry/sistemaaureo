@@ -18,6 +18,8 @@ public interface MetaService {
   void remove(Integer id);
 
   MetaEntidade findById(Integer id);
+  
+  MetaEntidade findByEntidadeIdAndMetaInstitutoId(Integer idEntidade, Integer idMetaInstituto);
 
   List<MetaEntidade> findByEntidadeIdAndInstitutoId(Integer entidade,
       Integer instituto);
@@ -42,6 +44,8 @@ public interface MetaService {
   void saveAnotacao(Anotacao anotacao);
 
   void saveMetaAnotacao(MetaEntidadeAnotacao metaEntidadeAnotacao);
+
+  MetaEntidade saveOrUpdate(MetaEntidade metaEntidade);
 
   
 

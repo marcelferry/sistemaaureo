@@ -38,6 +38,7 @@ import com.concafras.gestao.model.ContatoInternet;
 import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.Presidente;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.rest.utils.RestUtils;
@@ -45,6 +46,7 @@ import com.concafras.gestao.service.FacilitadorService;
 import com.concafras.gestao.service.LoginHistoryService;
 import com.concafras.gestao.service.PessoaService;
 import com.concafras.gestao.service.PresidenteService;
+import com.concafras.gestao.service.RodizioService;
 import com.concafras.gestao.service.UsuarioService;
 import com.concafras.gestao.util.CpfValidator;
 
@@ -52,6 +54,9 @@ import com.concafras.gestao.util.CpfValidator;
 @RequestMapping("/gestao/userprofile")
 public class UserProfileController {
 
+  @Autowired
+  private RodizioService rodizioService;
+  
   @Autowired
   private PresidenteService presidenteService;
 
@@ -321,9 +326,10 @@ public class UserProfileController {
           }
         }
 
+        Rodizio ciclo =  rodizioService.findByAtivoTrue();
+        
         // FACILITADOR?
-        List<Facilitador> listaFacilitadores = facilitadorService
-            .getFacilitador(visitante);
+        List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(visitante, ciclo);
 
         if (listaFacilitadores != null && listaFacilitadores.size() > 0) {
           alcadas.add("METAS_FACILITADOR");

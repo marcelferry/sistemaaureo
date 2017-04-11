@@ -105,7 +105,17 @@
 		                            	<form:input path="telefones[${loop.index}].numero" placeholder="Número Telefone" class="form-control input-sm" readonly="${readonly}" />
 		                            </td>
 		                            <td>
-		                            	<form:input path="telefones[${loop.index}].operadora" placeholder="Operadora"  class="form-control input-sm upper" readonly="${readonly}" />
+		                            	<form:select path="telefones[${loop.index}].operadora" class="form-control input-sm" readonly="${readonly}">
+		                            		<form:option value="">Selecione</form:option>
+		                            		<form:option value="CLARO">Claro</form:option>
+		                            		<form:option value="OI">Oi</form:option>
+		                            		<form:option value="TIM">Tim</form:option>
+		                            		<form:option value="VIVO">Vivo</form:option>
+		                            		<form:option value="ALGAR">ALGAR</form:option>
+		                            		<form:option value="NEXTEL">NEXTEL</form:option>
+		                            		<form:option value="MVNO">MVNO's</form:option>
+		                            		<form:option value="Sercomtel">Sercomtel</form:option>
+		                            	</form:select>
 		                            </td>
 		                            <td>
 		                            <!-- Add the remove flag -->
@@ -275,7 +285,17 @@
               html += '</td><td>';
               html += '<input type="text" size="10" id="telefones' + idxPhone + '.numero" name="telefones[' + idxPhone + '].numero" placeholder="Número Telefone"  class="form-control input-sm" />';
               html += '</td><td>';
-              html += '<input type="text" id="telefones' + idxPhone + '.operadora" name="telefones[' + idxPhone + '].operador" placeholder="Operadora"  class="form-control input-sm" />';
+              html += '<select id="telefones' + idxPhone + '.operadora" name="telefones[' + idxPhone + '].operadora" class="form-control input-sm" >';
+              html += '<option value="">Selecione</option>';
+              html += '<option value="CLARO">Claro</option>';
+              html += '<option value="OI">Oi</option>';
+              html += '<option value="TIM">TIM</option>';
+              html += '<option value="VIVO">Vivo</option>';
+              html += '<option value="ALGAR">ALGAR</option>';
+              html += '<option value="NEXTEL">NEXTEL</option>';
+              html += '<option value="MVNO">MVNO\'s</option>';
+              html += '<option value="Sercomtel">Sercomtel</option>';
+              html += '<select>';
               html += '</td><td>';
               html += '<input type="hidden" id="telefones' + idxPhone + '.remove" name="telefones[' + idxPhone + '].remove" value="0" />';
               html += '<button class="btn btn-danger btn-xs telefones.remove" data-index="' + idxPhone + '"><span class="glyphicon glyphicon-remove-sign"></span></button>';                    

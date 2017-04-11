@@ -117,9 +117,6 @@ public class PlanoMetas implements Serializable{
   
   private boolean finalizado;
   
-  @Transient
-  private EventoMeta evento;
-  
   /**
    *	Tipo contratante 
    */
@@ -318,15 +315,6 @@ public class PlanoMetas implements Serializable{
   public void setValidado(boolean validado) {
     this.validado = validado;
   }
-
-  public EventoMeta getEvento() {
-    return evento;
-  }
-
-  public void setEvento(EventoMeta evento) {
-    this.evento = evento;
-  }
-  
 
   @Override
   public String toString() {

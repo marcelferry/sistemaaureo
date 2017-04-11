@@ -162,7 +162,7 @@ public class PlanoModeloController {
     
 
     List<MetaInstituto> planoModelos = metasInstitutoService
-        .listMetaInstitutoByInstituto(instituto.getId());
+        .listMetaInstitutoByInstituto(instituto.getId(), false);
 
     form = new PlanoModeloForm(instituto.getId());
     form.setInstituto(instituto);
@@ -170,40 +170,6 @@ public class PlanoModeloController {
     
     if (planoModelos != null) {
       cleanPlanoModeloList(planoModelos);
-      /*planoModelos.removeAll(Collections.singleton(null));
-      for (MetaInstituto planoModelo : planoModelos) {
-        List<MetaInstituto> subPlanoModelos = planoModelo.getItens();
-        if (subPlanoModelos != null) {
-          subPlanoModelos.removeAll(Collections.singleton(null));
-          for (MetaInstituto planoModelo2 : subPlanoModelos) {
-            List<MetaInstituto> subPlanoModelos2 = planoModelo2.getItens();
-            if (subPlanoModelos2 != null) {
-              subPlanoModelos2.removeAll(Collections.singleton(null));
-              for (MetaInstituto planoModelo3 : subPlanoModelos2) {
-                List<MetaInstituto> subPlanoModelos3 = planoModelo3.getItens();
-                if (subPlanoModelos3 != null) {
-                  subPlanoModelos3.removeAll(Collections.singleton(null));
-                  for (MetaInstituto planoModelo4 : subPlanoModelos3) {
-                    List<MetaInstituto> subPlanoModelos4 = planoModelo4
-                        .getItens();
-                    if (subPlanoModelos4 != null) {
-                      subPlanoModelos4.removeAll(Collections.singleton(null));
-                      for (MetaInstituto planoModelo5 : subPlanoModelos4) {
-                        List<MetaInstituto> subPlanoModelos5 = planoModelo5
-                            .getItens();
-                        if (subPlanoModelos5 != null) {
-                          subPlanoModelos5.removeAll(Collections
-                              .singleton(null));
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }*/
       form.setItens(planoModelos);
     } else {
       form.setItens(new ArrayList<MetaInstituto>());
@@ -241,43 +207,10 @@ public class PlanoModeloController {
       @ModelAttribute("planoModeloForm") PlanoModeloForm form) {
 
     List<MetaInstituto> planoModelos = metasInstitutoService
-        .listMetaInstitutoByInstituto(form.getInstituto().getId());
+        .listMetaInstitutoByInstituto(form.getInstituto().getId(), false);
 
     if (planoModelos != null) {
       cleanPlanoModeloList(planoModelos);
-      /*for (MetaInstituto planoModelo : planoModelos) {
-        List<MetaInstituto> subPlanoModelos = planoModelo.getItens();
-        if (subPlanoModelos != null) {
-          subPlanoModelos.removeAll(Collections.singleton(null));
-          for (MetaInstituto planoModelo2 : subPlanoModelos) {
-            List<MetaInstituto> subPlanoModelos2 = planoModelo2.getItens();
-            if (subPlanoModelos2 != null) {
-              subPlanoModelos2.removeAll(Collections.singleton(null));
-              for (MetaInstituto planoModelo3 : subPlanoModelos2) {
-                List<MetaInstituto> subPlanoModelos3 = planoModelo3.getItens();
-                if (subPlanoModelos3 != null) {
-                  subPlanoModelos3.removeAll(Collections.singleton(null));
-                  for (MetaInstituto planoModelo4 : subPlanoModelos3) {
-                    List<MetaInstituto> subPlanoModelos4 = planoModelo4
-                        .getItens();
-                    if (subPlanoModelos4 != null) {
-                      subPlanoModelos4.removeAll(Collections.singleton(null));
-                      for (MetaInstituto planoModelo5 : subPlanoModelos4) {
-                        List<MetaInstituto> subPlanoModelos5 = planoModelo5
-                            .getItens();
-                        if (subPlanoModelos5 != null) {
-                          subPlanoModelos5.removeAll(Collections
-                              .singleton(null));
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }*/
       form.setItens(planoModelos);
     } else {
       form.setItens(new ArrayList<MetaInstituto>());
@@ -313,43 +246,10 @@ public class PlanoModeloController {
       @ModelAttribute("planoModeloForm") PlanoModeloForm form) {
 
     List<MetaInstituto> planoModelos = metasInstitutoService
-        .listMetaInstitutoByInstituto(form.getInstituto().getId());
+        .listMetaInstitutoByInstituto(form.getInstituto().getId(), false);
 
     if (planoModelos != null) {
       cleanPlanoModeloList(planoModelos);
-      /*for (MetaInstituto planoModelo : planoModelos) {
-        List<MetaInstituto> subPlanoModelos = planoModelo.getItens();
-        if (subPlanoModelos != null) {
-          subPlanoModelos.removeAll(Collections.singleton(null));
-          for (MetaInstituto planoModelo2 : subPlanoModelos) {
-            List<MetaInstituto> subPlanoModelos2 = planoModelo2.getItens();
-            if (subPlanoModelos2 != null) {
-              subPlanoModelos2.removeAll(Collections.singleton(null));
-              for (MetaInstituto planoModelo3 : subPlanoModelos2) {
-                List<MetaInstituto> subPlanoModelos3 = planoModelo3.getItens();
-                if (subPlanoModelos3 != null) {
-                  subPlanoModelos3.removeAll(Collections.singleton(null));
-                  for (MetaInstituto planoModelo4 : subPlanoModelos3) {
-                    List<MetaInstituto> subPlanoModelos4 = planoModelo4
-                        .getItens();
-                    if (subPlanoModelos4 != null) {
-                      subPlanoModelos4.removeAll(Collections.singleton(null));
-                      for (MetaInstituto planoModelo5 : subPlanoModelos4) {
-                        List<MetaInstituto> subPlanoModelos5 = planoModelo5
-                            .getItens();
-                        if (subPlanoModelos5 != null) {
-                          subPlanoModelos5.removeAll(Collections
-                              .singleton(null));
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }*/
       form.setItens(planoModelos);
     } else {
       form.setItens(new ArrayList<MetaInstituto>());
@@ -426,8 +326,7 @@ public class PlanoModeloController {
 
     // metasInstitutoService.updatePlanoModelo(planoModelo);
 
-    planoModelos = metasInstitutoService
-        .listMetaInstitutoByInstituto(planoModeloForm.getInstituto().getId());
+    planoModelos = metasInstitutoService.listMetaInstitutoByInstituto(planoModeloForm.getInstituto().getId(), false);
 
     planoModeloForm.setItens(planoModelos);
 
@@ -527,13 +426,53 @@ public class PlanoModeloController {
     return "redirect:/gestao/planoModelo/listar";
   }
 
-  @RequestMapping("/delete/{planoModeloId}")
-  public String deletePlanoModelo(
+  @RequestMapping("/priority/{planoModeloId}/{priority}")
+  public ModelAndView priorityPlanoModelo(
+      HttpServletRequest request,
+      @ModelAttribute("planoModeloForm") PlanoModeloForm form, 
+      @PathVariable("planoModeloId") Integer planoModeloId,
+      @PathVariable("priority") Integer priority) {
+
+    if(priority == 0){
+      metasInstitutoService.priorityMetaInstituto(planoModeloId, null);
+    } else {
+      metasInstitutoService.priorityMetaInstituto(planoModeloId, priority);
+    }
+
+    return listMetasInstituto(form, request);
+  }
+  
+  @RequestMapping("/enable/{planoModeloId}")
+  public ModelAndView enablePlanoModelo(
+      HttpServletRequest request,
+      @ModelAttribute("planoModeloForm") PlanoModeloForm form, 
       @PathVariable("planoModeloId") Integer planoModeloId) {
-
+    
+    metasInstitutoService.enableMetaInstituto(planoModeloId);
+    
+    return listMetasInstituto(form, request);
+  }
+  
+  @RequestMapping("/disable/{planoModeloId}")
+  public ModelAndView disablePlanoModelo(
+      HttpServletRequest request,
+      @ModelAttribute("planoModeloForm") PlanoModeloForm form,
+      @PathVariable("planoModeloId") Integer planoModeloId) {
+    
+    metasInstitutoService.disableMetaInstituto(planoModeloId);
+    
+    return listMetasInstituto(form, request);
+  }
+  
+  @RequestMapping("/delete/{planoModeloId}")
+  public ModelAndView deletePlanoModelo(
+      HttpServletRequest request,
+      @ModelAttribute("planoModeloForm") PlanoModeloForm form,
+      @PathVariable("planoModeloId") Integer planoModeloId) {
+    
     metasInstitutoService.removeMetaInstituto(planoModeloId);
-
-    return "redirect:/gestao/planoModelo/";
+    
+    return listMetasInstituto(form, request);
   }
 
   public void updateGrupo(ItemPlanoModeloWrapper planoModeloWrapper,
@@ -626,7 +565,7 @@ public class PlanoModeloController {
     insertGrupo(metas, instituto, null);
 
     metas = metasInstitutoService.listMetaInstitutoByInstituto(planoModeloForm
-        .getInstituto().getId());
+        .getInstituto().getId(), false);
 
     ModelAndView model = new ModelAndView("planoModelo.listar",
         "planoModeloForm", planoModeloForm);

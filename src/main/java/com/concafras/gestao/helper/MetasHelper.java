@@ -104,44 +104,18 @@ public class MetasHelper {
     }
   }
 
-  public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, PlanoMetas planoMetasAtual) {
-    
-    List<MetaEntidade> metas = planoMetasAtual.getMetas();
+  public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, Pessoa facilitador, Pessoa contratante, EventoMeta evento, BaseEntidade entidade, Rodizio ciclo) {
     
     List<MetaForm> metasForm = new ArrayList<MetaForm>();
     
     metasInstituto.removeAll(Collections.singleton(null));
     
     for (MetaInstituto metaInstituto : metasInstituto) {
-      MetaForm metaForm = new MetaForm();
-      metaForm.setAtividade(metaInstituto);
-      
-      MetaEntidade metaEntidade = searchMeta(metas, planoMetasAtual.getEntidade(), planoMetasAtual.getInstituto(), metaInstituto);
-      
-      String rota = metaService.getCaminhoMeta(metaInstituto.getId());
-      metaForm.setDescricaoCompleta(rota);
-      
-      metaForm = preencheSituacaoAnteriorAtual(metaForm, metaEntidade, planoMetasAtual.getRodizio());
-      
-      metaForm = preencheSituacaoDesejada(metaEntidade,  
-          metaForm, 
-          planoMetasAtual.getEvento(), 
-          planoMetasAtual.getRodizio()
-      );
-      
-      metaForm = preencheAnotacoes(metaEntidade,  
-          metaForm, 
-          planoMetasAtual.getContratante(), 
-          planoMetasAtual.getFacilitador(), 
-          planoMetasAtual.getEvento(), 
-          planoMetasAtual.getRodizio(),
-          true
-          );
-      
+      MetaForm metaForm = mapMetaEntidadeToMetaForm(metaInstituto, facilitador, contratante, evento, entidade, ciclo);
       
       List<MetaInstituto> subAtividades = metaInstituto.getItens();
       if(subAtividades != null && subAtividades.size() > 0) {
-        List<MetaForm> metas1 = mapMetaInstitutoToMetaForm(subAtividades, planoMetasAtual);
+        List<MetaForm> metas1 = mapMetaEntidadeToMetaForm(subAtividades, facilitador, contratante, evento, entidade, ciclo);
       
         if(metas1.size() > 0){
           metaForm.setDependencias(metas1);
@@ -154,6 +128,37 @@ public class MetasHelper {
     return metasForm;
   }
   
+  
+  
+
+  private MetaForm mapMetaEntidadeToMetaForm(MetaInstituto metaInstituto, Pessoa facilitador, Pessoa contratante, EventoMeta evento, BaseEntidade entidade, Rodizio ciclo) {
+    MetaForm metaForm = new MetaForm();
+    metaForm.setAtividade(metaInstituto);
+    
+    MetaEntidade metaEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(), metaInstituto.getId()); //searchMeta(metas, planoMetasAtual.getEntidade(), planoMetasAtual.getInstituto(), metaInstituto);
+    
+    String rota = metaService.getCaminhoMeta(metaInstituto.getId());
+    metaForm.setDescricaoCompleta(rota);
+    
+    metaForm = preencheSituacaoAnteriorAtual(metaForm, metaEntidade, ciclo);
+    
+    metaForm = preencheSituacaoDesejada(metaEntidade,  
+        metaForm,
+        evento,
+        ciclo
+    );
+    
+    metaForm = preencheAnotacoes(metaEntidade,  
+        metaForm, 
+        contratante, 
+        facilitador, 
+        evento,
+        ciclo,
+        true
+        );
+    
+    return metaForm; 
+  }
 
   public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, Pessoa facilitador, Pessoa contratante, EventoMeta evento, Rodizio ciclo) {
     
@@ -218,6 +223,7 @@ public class MetasHelper {
 
   
   public MetaEntidade searchMeta(List<MetaEntidade> metasEntidade, BaseEntidade entidadeId, BaseInstituto institutoId, MetaInstituto metaId){
+
     MetaEntidade meta = new MetaEntidade();
     
     meta.setEntidade(entidadeId);
@@ -236,10 +242,11 @@ public class MetasHelper {
 
   public MetaForm processaMetaEntidade(MetaEntidade metaEntidade, 
       MetaForm metaForm, 
+      EventoMeta evento,
       PlanoMetas planoMetasAtual, 
       boolean editMode) {
-    metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, planoMetasAtual.getEvento(), planoMetasAtual.getRodizio());
-    return preencheAnotacoes(metaEntidade, metaForm, planoMetasAtual.getContratante(), planoMetasAtual.getFacilitador(), planoMetasAtual.getEvento(), planoMetasAtual.getRodizio(), editMode);
+    metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, evento, planoMetasAtual.getRodizio());
+    return preencheAnotacoes(metaEntidade, metaForm, planoMetasAtual.getContratante(), planoMetasAtual.getFacilitador(), evento, planoMetasAtual.getRodizio(), editMode);
   }
   
   public MetaForm preencheSituacaoDesejada(MetaEntidade metaEntidade, 

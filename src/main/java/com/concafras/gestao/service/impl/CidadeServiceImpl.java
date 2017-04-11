@@ -1,5 +1,6 @@
 package com.concafras.gestao.service.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class CidadeServiceImpl implements CidadeService {
   }
 
   @Transactional
-  public List<Cidade> listCidadeResumo(String name, int maxRows, boolean rodizio) {
+  public List<Cidade> listCidadeResumo(String name, int maxRows) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Cidade> c = cb.createQuery(Cidade.class);
     Root<Cidade> root = c.from(Cidade.class);
@@ -102,6 +103,39 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     return q.getResultList();
+  }
+  
+  @Transactional
+  public List<Cidade> listCidadeResumo(String name, int maxRows, boolean rodizio) {
+    
+    if(rodizio){ 
+      Query query = em.createNativeQuery(
+          " select tc.id, tc.nome, te.sigla, count(*) " + 
+          " from cidades tc inner join estados te on tc.idestado = te.id  " + 
+          " inner join enderecos tend on tend.idcidade = tc.id " + 
+          " inner join entidades tent on tent.idendereco = tend.id " + 
+          " where UNACCENT(lower(tc.nome)) like lower('" + name.toLowerCase().trim().replaceAll(" ", "%") + "%') " +
+          " group by tc.id, tc.nome, te.sigla order by tc.nome");
+                
+      List<Object[]> result2 = query.getResultList();
+      
+      List<Cidade> result = new ArrayList<Cidade>();
+      
+      for (Object[] resultElement : result2) {
+        Integer id = (Integer)resultElement[0];
+        String nome = (String)resultElement[1];
+        String sigla = (String)resultElement[2];
+        Integer entidades = ((BigInteger)resultElement[3]).intValue();
+        Cidade op = new Cidade(id, nome, sigla, entidades);
+        result.add(op);
+        op = null;
+      }
+      
+      return result;
+    } else {
+      return listCidadeResumo(name, maxRows);
+    }
+  
   }
 
   @Transactional

@@ -33,8 +33,7 @@ public class GlobalExceptionHandler {
   @Autowired
   private JavaMailSender mailSender;
 
-  private static final Logger logger = LoggerFactory
-      .getLogger(GlobalExceptionHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
   @ExceptionHandler(SQLException.class)
   public ModelAndView handleSQLException(HttpServletRequest request,
