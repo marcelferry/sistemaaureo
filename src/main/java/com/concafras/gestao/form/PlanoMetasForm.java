@@ -73,6 +73,8 @@ public class PlanoMetasForm {
 
   private Pessoa outro;
   
+  private Long prioridades;
+  
 
   public PlanoMetasForm() {
     // TODO Auto-generated constructor stub
@@ -310,9 +312,13 @@ public class PlanoMetasForm {
     this.outro = outro;
   }
 
-
+  public Long getPrioridades() {
+    return prioridades;
+  }
   
-
+  public void setPrioridades(Long prioridades) {
+    this.prioridades = prioridades;
+  }
 
   @Override
   public String toString() {

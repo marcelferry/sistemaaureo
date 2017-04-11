@@ -50,7 +50,9 @@
 									 <td>${atividade.prioridade > 0 ? 'Sim': '-'}</td>
 									 <td>
 									 	<c:if test="${atividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+									 	<c:if test="${atividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">Grupo/Implantação</c:if>
 									 	<c:if test="${atividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+									 	<c:if test="${atividade.tipoMeta == 'GRUPO_EXECUCAO'}">Grupo/Ação</c:if>
 									 	<c:if test="${atividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
 									 	<c:if test="${atividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 									 </td>
@@ -92,7 +94,9 @@
 									 	<td> ${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 										<td>
 											<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+										 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">Grupo/Implantação</c:if>
 										 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+										 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_EXECUCAO'}">Grupo/Ação</c:if>
 										 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
 										 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 									 	</td>
@@ -135,7 +139,9 @@
 										 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 											<td>
 												<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+											 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">Grupo/Implantação</c:if>
 											 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+											 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_EXECUCAO'}">Grupo/Ação</c:if>
 											 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
 											 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 										 	</td>
@@ -179,7 +185,9 @@
 											 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 												<td>
 													<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+												 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">Grupo/Implantação</c:if>
 												 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+												 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_EXECUCAO'}">Grupo/Ação</c:if>
 												 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
 												 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 											 	</td>
@@ -218,10 +226,12 @@
 														<img width="20" height="20" src="/img/spacer.png">${subAtividade.viewOrder} - ${subAtividade.descricao}</td>
 												 	<td>${subAtividade.prioridade > 0 ? 'Sim': '-'}</td>
 													<td>
-													<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
-												 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
-												 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
-												 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
+														<c:if test="${subAtividade.tipoMeta == 'GRUPO_METAS'}">Grupo</c:if>
+													 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">Grupo/Implantação</c:if>
+													 	<c:if test="${subAtividade.tipoMeta == 'META_IMPLANTACAO'}">Implantação</c:if>
+													 	<c:if test="${subAtividade.tipoMeta == 'GRUPO_EXECUCAO'}">Grupo/Ação</c:if>
+													 	<c:if test="${subAtividade.tipoMeta == 'META_EXECUCAO'}">Ação</c:if>
+													 	<c:if test="${subAtividade.tipoMeta == 'META_QUANTITATIVA'}">Quantitativa</c:if>
 												 	</td>
 													<td>
 					                            	<form:form action="/gestao/planoModelo/edit/${subAtividade.id}" commandName="planoModeloForm" method="post">

@@ -176,6 +176,7 @@
 	<form:hidden path="finalizado"/>
 	<form:hidden path="validado"/>
 	<form:hidden path="evento"/>
+	<form:hidden path="prioridades"/>
 
 	<div class="row">
 		<div class="col-md-12">
@@ -263,7 +264,7 @@
             	<a href="#" class="btn btn-primary expand-all ">Expandir Tudo</a>
             </div>
             
-            <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' }">
+            <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR' && planoMetasForm.prioridades > 0  }">
 			<fieldset>
 				<legend>Plano de Metas (Prioridades)</legend>
 	              
@@ -275,7 +276,7 @@
 	      	</fieldset>
 	      	<c:set value="true" var="prioridade"/>
 	      	</c:if>
-	      	<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_FACILITADOR' }">
+	      	<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_FACILITADOR' || planoMetasForm.prioridades == 0  }">
 	      	<c:set value="false" var="prioridade"/>
 	      	</c:if>
 	      	<fieldset>

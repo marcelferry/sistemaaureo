@@ -33,7 +33,9 @@
 			<div class="col-sm-4">
 				<form:select path="tipoMeta" cssClass="form-control input-sm" >
 					<form:option value="GRUPO_METAS">Grupo</form:option>
+					<form:option value="GRUPO_IMPLANTACAO">Grupo/Implantação</form:option>
 					<form:option value="META_IMPLANTACAO">Implantação</form:option>
+					<form:option value="GRUPO_EXECUCAO">Grupo/Ação</form:option>
 					<form:option value="META_EXECUCAO">Ação</form:option>
 					<form:option value="META_QUANTITATIVA">Quantitativa</form:option>
 				</form:select>

@@ -21,13 +21,54 @@ body{
 }
 
 table {
-	border: solid 1px black;
+	-fs-table-paginate: paginate;
+	-fs-border-spacing-horizontal: 0;
+    -fs-border-spacing-vertical: 0;
+    border-spacing: 0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
 	font-size: 10px;
 }
 
 td, th {
-	border: solid 1px black;
+	border-bottom: solid 1px black;
+	border-right: solid 1px black;
 }
+
+td:first-child, th:first-child {
+	border-bottom: solid 1px black;
+	border-right: solid 1px black;
+}
+
+td:last-child, th:last-child {
+	border-bottom: solid 1px black;
+	border-right: none;
+}
+
+tr:last-child > td {
+	border-bottom: none;
+	border-right: solid 1px black;
+}
+
+tr:last-child > td:first-child {
+	border-bottom: none;
+	border-right: solid 1px black;
+}
+
+tr:last-child > td:last-child {
+	border: none;
+}
+
+td.fixMergedLast {
+	border-right: solid 1px black;
+}
+
+td.fixMergedLastRow {
+	border-bottom: none;
+	border-right: solid 1px black;
+}
+
 
 .separador{
 	page-break-after: always;
@@ -94,14 +135,14 @@ td, th {
 		<c:if test="${ empty planoMetasForm.entidade.razaoSocial}">
 			<tr>
 				<td rowspan="2"><b><spring:message code="label.endereco" />:</b></td>
-				<td  colspan="5">${planoMetasForm.entidade.endereco.enderecoFormatado} &nbsp;</td>
+				<td colspan="5">${planoMetasForm.entidade.endereco.enderecoFormatado} &nbsp;</td>
 				<td rowspan="2" width="8.5%"><b>Cidade:</b></td>
 				<td rowspan="2" width="17%" colspan="3">${planoMetasForm.entidade.endereco.cidade.nome} &nbsp;</td>
 				<td rowspan="2" width="5%"><b>UF:</b></td>
 				<td rowspan="2" width="10%">${planoMetasForm.entidade.endereco.cidade.estado.sigla} &nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="5">&nbsp;</td>
+				<td colspan="5" class="fixMergedLast" >&nbsp;</td>
 			</tr>
 		</c:if>
 		<c:if test="${ ! empty planoMetasForm.presidente.nomeCompleto}">
@@ -156,21 +197,21 @@ td, th {
 		</c:if>
 		<c:if test="${ ! empty planoMetasForm.outro.nomeCompleto}">
 			<tr>
-				<td><c:if test="${ planoMetasForm.tipoContratante == 'OUTRO' }">( X )</c:if>&nbsp;<b>Trabalhador:</b></td>
+				<td class="fixMergedLastRow"><c:if test="${ planoMetasForm.tipoContratante == 'OUTRO' }">( X )</c:if>&nbsp;<b>Trabalhador:</b></td>
 				<td colspan="4">${planoMetasForm.outro.nomeCompleto}</td>
-				<td><b>Email:</b></td>
+				<td class="fixMergedLastRow"><b>Email:</b></td>
 				<td colspan="4">&nbsp;</td>
-				<td><b>Fone:</b></td>
+				<td class="fixMergedLastRow"><b>Fone:</b></td>
 				<td>&nbsp;</td>
 			</tr>
 		</c:if>
 		<c:if test="${ empty planoMetasForm.outro.nomeCompleto}">
 			<tr>
-				<td rowspan="2"><c:if test="${ planoMetasForm.tipoContratante != 'OUTRO' }">( &nbsp;&nbsp; )</c:if>&nbsp;<b>Trabalhador:</b></td>
+				<td rowspan="2" class="fixMergedLastRow"><c:if test="${ planoMetasForm.tipoContratante != 'OUTRO' }">( &nbsp;&nbsp; )</c:if>&nbsp;<b>Trabalhador:</b></td>
 				<td colspan="4">&nbsp;</td>
-				<td rowspan="2"><b>Email:</b></td>
+				<td rowspan="2" class="fixMergedLastRow"><b>Email:</b></td>
 				<td colspan="4">&nbsp;</td>
-				<td rowspan="2"><b>Fone:</b></td>
+				<td rowspan="2" class="fixMergedLastRow"><b>Fone:</b></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>

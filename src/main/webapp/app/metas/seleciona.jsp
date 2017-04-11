@@ -118,12 +118,12 @@
 	    <div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-10">
 	    	 	<c:if test="${ profiles[0] != 'prod' || ( CICLO_CONTROLE.dataAprovacao >= startDate && CICLO_CONTROLE.dataAprovacao <= endDate ) }">
-		    		<c:if test="${ not empty instituto }">
+		    		<c:if test="${ not empty planoMetasForm.instituto }">
 			    	<div class="col-sm-2">
 			      		<input type="submit" value="Iniciar" class="btn btn-primary btn-mini"/>
 			      	</div>
 		      		</c:if>
-		    		<c:if test="${ empty instituto }">
+		    		<c:if test="${ empty planoMetasForm.instituto }">
 			      	<div class="col-sm-6">
 			      	<div class="alert alert-danger alert-dismissable">
             			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

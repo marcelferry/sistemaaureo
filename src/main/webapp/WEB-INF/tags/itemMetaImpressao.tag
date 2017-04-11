@@ -59,7 +59,7 @@
 	<c:set var="cssPrioridade" value="style='background:#cccccc;'" />
 </c:if>
 <tr ${cssPrioridade}>
-	<c:if test="${! empty meta.dependencias}">
+	<c:if test="${! empty meta.dependencias && (meta.atividade.tipoMeta != 'GRUPO_IMPLANTACAO' && meta.atividade.tipoMeta != 'GRUPO_EXECUCAO') }">
 		<c:if test="${not empty controlequebra}">
 			<c:set var="controlequebra" value="${controlequebra + 1}" scope="request"/>
 		</c:if>
@@ -68,7 +68,7 @@
 		</td>
 	</c:if>
 
-	<c:if test="${ empty meta.dependencias}">
+	<c:if test="${ empty meta.dependencias || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO'  }">
 	<c:if test="${not empty controlequebra}">
 		<c:set var="controlequebra" value="${controlequebra + 2}" scope="request"/>
 	</c:if>
@@ -100,7 +100,7 @@
 		</c:if>
 	
 		<!-- META É ACAO -->
-		<c:if test="${meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+		<c:if test="${meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO'}">
 		<!--  Coluna 2 -->
 		<td colspan="2" style="width: 20%">
 			<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
@@ -129,7 +129,7 @@
 		
 		
 		<!-- META É IMPLANTACAO -->
-		<c:if test="${meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+		<c:if test="${meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">
 		<!--  Coluna 2 -->
 		<td colspan="2" style="width: 20%">
 			<fmt:formatDate value="${meta.situacaoAtual.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
@@ -166,7 +166,7 @@
 	
 	
 	<!-- Rodizio 2016 - Quando possui historico -->
-	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO'  || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' )}">
 		<!--  Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
@@ -228,7 +228,7 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+	<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && (meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO')}">
 		<!--  Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.conclusao}" var="conclusao" type="date" pattern="MM/yyyy" />
@@ -278,7 +278,7 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }}">
+	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO') }">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
@@ -325,7 +325,7 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_EXECUCAO' }}">
+	<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && (meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO') }">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			<fmt:formatDate value="${meta.situacaoAnterior.previsao}" var="previsao" type="date" pattern="MM/yyyy" />
@@ -366,7 +366,7 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && meta.atividade.tipoMeta == 'META_EXECUCAO' }">
+	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && ( meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO') }">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			Não Planejado/Implantado
@@ -412,7 +412,7 @@
 			</c:choose>
 		</td>
 	</c:if>
-	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
+	<c:if test="${ ( meta.situacaoAnterior.situacao == 'NAOPLANEJADA' || meta.situacaoAnterior.situacao == 'NAOIMPLANTADA'  )  && (meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO') }">
 		<!-- Coluna 2 -->
 		<td style="width: 15%">
 			Não Planejado/Implantado

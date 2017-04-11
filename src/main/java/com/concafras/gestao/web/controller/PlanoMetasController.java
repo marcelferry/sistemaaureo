@@ -610,6 +610,10 @@ public class PlanoMetasController {
     planoMetasForm.setEvento(evento);
 
     mapMetasFromPlanoMetasToPlanoMetasForm(planoMetasForm, plano);
+    
+    Long prioridades = metaService.countListMetaEntidadePrioridade(instituto.getId());
+    
+    planoMetasForm.setPrioridades(prioridades);
 
     planoMetasForm.setFase(3);
 

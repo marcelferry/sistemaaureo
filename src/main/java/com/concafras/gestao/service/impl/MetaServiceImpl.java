@@ -12,6 +12,8 @@ import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -24,6 +26,7 @@ import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
+import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
@@ -429,6 +432,25 @@ public class MetaServiceImpl implements MetaService {
   @Transactional
   public void saveMetaAnotacao(MetaEntidadeAnotacao metaEntidadeAnotacao) {
     em.persist(metaEntidadeAnotacao);
+  }
+  
+  @Transactional
+  public Long countListMetaEntidadePrioridade(Integer idInstituto) {
+
+    BaseInstituto base = em.find(BaseInstituto.class, idInstituto);
+    
+    CriteriaBuilder qb = em.getCriteriaBuilder();
+    CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+    Root<MetaInstituto> root = cq.from(MetaInstituto.class);
+    cq.select(qb.count(root));
+
+    List<Predicate> criteria = new ArrayList<Predicate>();
+    criteria.add( qb.equal( root.<BaseInstituto>get("instituto") , base ));
+    criteria.add( qb.isNotNull( root.<Integer>get("prioridade") ));
+    cq.where(criteria.toArray(new Predicate[]{}));
+
+    return em.createQuery(cq).getSingleResult();
+
   }
 
 }

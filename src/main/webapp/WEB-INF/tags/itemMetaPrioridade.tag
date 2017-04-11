@@ -74,7 +74,7 @@
 	</div>
 	<div id="collapse${metaId}-pri" class="panel-collapse collapse">
 		<div class="panel-body">
-			<c:if test="${ empty meta.dependencias}">
+			<c:if test="${ empty meta.dependencias || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' }">
 			<div class="row">
 			
 			<!-- Primeiro Rodizio -->
@@ -103,7 +103,7 @@
 				</c:if>
 			
 				<!-- META É ACAO -->
-				<c:if test="${meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+				<c:if test="${meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' }">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -146,7 +146,7 @@
 				
 				
 				<!-- META É IMPLANTACAO -->
-				<c:if test="${meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+				<c:if test="${meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">
 					<div class="col-sm-2">
 						<!--  Coluna 2 -->
 						<div class="form-group">
@@ -200,7 +200,7 @@
 			
 			
 			<!-- Rodizio 2016 - Quando possui historico -->
-			<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+			<c:if test="${( meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL' )  && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' )}">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -260,7 +260,7 @@
 				</div>
 			</c:if>
 
-			<c:if test="${(meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL') && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+			<c:if test="${(meta.situacaoAnterior.situacao == 'IMPLANTADA' || meta.situacaoAnterior.situacao == 'IMPLPARCIAL') && (meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO')}">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -316,7 +316,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO') }">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -361,7 +361,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+			<c:if test="${meta.situacaoAnterior.situacao == 'NAOIMPLANTADA' && ( meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO')}">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -405,7 +405,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
+			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' ) }">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -450,7 +450,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && meta.atividade.tipoMeta == 'META_EXECUCAO' }">
+			<c:if test="${meta.situacaoAnterior.situacao == 'CANCELADA' && ( meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' ) }">
 				<div class="col-sm-2">
 					<!--  Coluna 2 -->
 					<div class="form-group">
@@ -528,7 +528,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' ) && meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' ) && ( meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO') }">
 				<div class="col-sm-2">
 					<!-- Coluna 2 -->
 					<div class="form-group">
@@ -600,7 +600,7 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && meta.atividade.tipoMeta == 'META_IMPLANTACAO' }">
+			<c:if test="${(meta.situacaoAnterior.situacao == 'PLANEJADA' || meta.situacaoAnterior.situacao == 'REPLANEJADA' )  && ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' ) }">
 				<div class="col-sm-2">
 					<!-- Coluna 2 -->
 					<div class="form-group">
@@ -673,7 +673,7 @@
 				</div>
 			</c:if>
 
-			<c:if test="${meta.atividade.tipoMeta == 'META_IMPLANTACAO'}">
+			<c:if test="${ ( meta.atividade.tipoMeta == 'META_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' ) }">
 			<div class="col-sm-2">
 				<!-- Coluna 4 -->
 				<c:choose>
@@ -734,7 +734,7 @@
 			</div>
 			</c:if>
 			
-			<c:if test="${meta.atividade.tipoMeta == 'META_EXECUCAO'}">
+			<c:if test="${( meta.atividade.tipoMeta == 'META_EXECUCAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' )}">
 			<div class="col-sm-2">
 				<!-- Coluna 4 -->
 				<div class="form-group">

@@ -36,10 +36,10 @@
 			                <table class="table table-bordered table-striped table-hover small" id="tablefacilitador">
 			                    <thead>
 		                    <tr>
-		                        <th class="col-md-6">Facilitador</th>
+		                        <th class="col-md-5">Facilitador</th>
 		                        <th class="col-md-5">Email</th>
 		                        <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA'}">
-		                        <th class="col-md-1"></th>
+		                        <th class="col-md-2"></th>
 		                        </c:if>
 		                    </tr>
 		                    </thead>
