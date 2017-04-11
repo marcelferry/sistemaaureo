@@ -39,7 +39,7 @@
 		                    </thead>
 		                    <tbody id="ComTratativas">
 		                    <c:forEach items="${planoModeloForm.itens}" var="atividade" varStatus="status">
-								<tr id="atividade${status.count}_pai" class="${subAtividade.prioridade > 0 ? 'danger': ''}">
+								<tr id="atividade${status.count}_pai" class="${atividade.prioridade > 0 ? 'danger': ''}">
 									<td>
 										<c:if test="${! empty atividade.itens}">
 											<img src="/img/details_open.png"  onclick='showChildren_ComTratativas("atividade${status.count}_atividade${status.count}", this)' /> 
