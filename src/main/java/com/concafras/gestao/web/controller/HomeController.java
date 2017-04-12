@@ -200,6 +200,7 @@ public class HomeController {
       String retorno = rolesRedirect.get(role);
 
       request.getSession().setAttribute("ROLE_CONTROLE", role);
+      request.getSession().setAttribute("profiles", environment.getActiveProfiles());
 
       return "redirect:" + retorno;
     }
