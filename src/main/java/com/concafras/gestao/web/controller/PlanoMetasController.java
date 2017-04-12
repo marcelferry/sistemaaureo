@@ -301,6 +301,7 @@ public class PlanoMetasController {
   @RequestMapping("/")
   public String seleciona(Map<String, Object> map, HttpServletRequest request,
       Authentication authentication) {
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
     return seleciona(map, null, request, authentication);
   }
 
