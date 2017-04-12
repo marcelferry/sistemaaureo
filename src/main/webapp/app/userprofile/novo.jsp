@@ -4,12 +4,6 @@
       <div class="row">
       
             <form:form method="post" action="add" commandName="userprofile" class="form-horizontal">
-                <div class="form-group">
-		            <form:label class="col-sm-2 control-label" path="username">Nome Usuário</form:label>
-                	<div class="col-sm-4">
-                		<form:input path="username"  cssClass="form-control" />
-                	</div>
-	            </div>
 	             <div class="form-group">
 	            	<form:hidden path="pessoa.id"/>
 	                <form:label  class="col-sm-2 control-label" path="pessoa.nome">Caravaneiro</form:label>
@@ -17,6 +11,12 @@
                 		<form:input path="pessoa.nome" cssClass="form-control" />
                 	</div>
                 </div>
+                <div class="form-group">
+		            <form:label class="col-sm-2 control-label" path="username">Nome Usuário</form:label>
+                	<div class="col-sm-4">
+                		<form:input path="username"  cssClass="form-control" />
+                	</div>
+	            </div>
                 <div class="form-group">
 		            <form:label class="col-sm-2 control-label" path="password">Senha</form:label>
                 	<div class="col-sm-6">

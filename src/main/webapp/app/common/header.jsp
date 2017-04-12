@@ -3,7 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-		
+			<jsp:useBean id="profiles" type="java.lang.String[]" scope="session"/>
+   		
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -11,20 +12,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <c:if test="${ profiles[0] != 'prod' }">
+                	<c:set var="envAmb" value=" - AMBIENTE DE TESTES"/>
+                </c:if>
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_FACILITADOR'}"> 
-                	<a class="navbar-brand" href="#"><spring:message code="app.nameShort" /></a>
+                	<a class="navbar-brand" href="#"><spring:message code="app.nameShort" /><font color="red"><b>${ envAmb }</b></font></a>
                 </c:if>
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA'}"> 
-                	<a class="navbar-brand" href="/gestao/home/dashboard/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /></a>
+                	<a class="navbar-brand" href="/gestao/home/dashboard/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /><font color="red"><b>${ envAmb }</b></font></a>
                 </c:if>
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_PRESIDENTE'}"> 
-                	<a class="navbar-brand" href="/gestao/home/presidente/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /></a>
+                	<a class="navbar-brand" href="/gestao/home/presidente/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /><font color="red"><b>${ envAmb }</b></font></a>
                 </c:if>
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}"> 
-                	<a class="navbar-brand" href="/gestao/home/dirigente"><spring:message code="app.nameShort" /></a>
+                	<a class="navbar-brand" href="/gestao/home/dirigente"><spring:message code="app.nameShort" /><font color="red"><b>${ envAmb }</b></font></a>
                 </c:if>
                 <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_CONSELHO'}"> 
-                	<a class="navbar-brand" href="/gestao/home/dashboard/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /></a>
+                	<a class="navbar-brand" href="/gestao/home/dashboard/${CICLO_CONTROLE.id}"><spring:message code="app.nameShort" /><font color="red"><b>${ envAmb }</b></font></a>
                 </c:if>
             </div>
             <!-- /.navbar-header -->

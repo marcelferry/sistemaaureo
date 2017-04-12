@@ -42,6 +42,7 @@ import com.concafras.gestao.enums.TipoTelefone;
 import com.concafras.gestao.form.DirigenteOptionForm;
 import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.PresidenteOptionForm;
+import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.Cidade;
 import com.concafras.gestao.model.ContatoInternet;
 import com.concafras.gestao.model.Dirigente;
@@ -52,6 +53,7 @@ import com.concafras.gestao.model.Presidente;
 import com.concafras.gestao.model.Telefone;
 import com.concafras.gestao.model.view.EntidadeExcel;
 import com.concafras.gestao.rest.utils.RestUtils;
+import com.concafras.gestao.service.BaseInstitutoService;
 import com.concafras.gestao.service.CidadeService;
 import com.concafras.gestao.service.DirigenteService;
 import com.concafras.gestao.service.EmailService;
@@ -89,11 +91,13 @@ public class EntidadeController {
   
   @Autowired
   private PlanoMetasService planoMetasService;
+  
+  @Autowired
+  private BaseInstitutoService baseInstitutoService;
+
 
 	@RequestMapping("/")
 	public String listEntidade(Map<String, Object> map) {
-
-		//map.put("entidadeList", entidadeService.listEntidade());
 		map.put("basicos", true);
 		return "entidade.listar";
 	}
@@ -262,6 +266,9 @@ public class EntidadeController {
 
 		map.put("entidade", new Entidade());
 		map.put("basicos", true);
+		
+		List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+		map.put("institutoList", listaInstituto);
 
 		List<TipoEntidade> tipoEntidadeList = new ArrayList<TipoEntidade>(
 				Arrays.asList(TipoEntidade.values()));
@@ -295,6 +302,9 @@ public class EntidadeController {
 
 		map.put("entidade", entidade);
 		map.put("basicos", true);
+    
+    List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+    map.put("institutoList", listaInstituto);
 
 		List<TipoEntidade> tipoEntidadeList = new ArrayList<TipoEntidade>(
 				Arrays.asList(TipoEntidade.values()));
@@ -323,6 +333,9 @@ public class EntidadeController {
 		if (result.hasErrors()) {
 			map.put("entidade", entidade);
 			map.put("basicos", true);
+			
+	    List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+	    map.put("institutoList", listaInstituto);
 
 			List<TipoEntidade> tipoEntidadeList = new ArrayList<TipoEntidade>(
 					Arrays.asList(TipoEntidade.values()));
@@ -394,6 +407,10 @@ public class EntidadeController {
 			@PathVariable("entidadeId") Integer entidadeId) {
 
 		map.put("entidade", entidadeService.findById(entidadeId));
+		
+    
+    List<BaseInstituto> listaInstituto = baseInstitutoService.findAllOverview();
+    map.put("institutoList", listaInstituto);
 
 		List<TipoEntidade> tipoEntidadeList = new ArrayList<TipoEntidade>(
 				Arrays.asList(TipoEntidade.values()));

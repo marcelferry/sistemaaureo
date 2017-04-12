@@ -506,6 +506,7 @@
         </div>
         <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
         <script type="text/javascript" src="/js/custom/autocompletecidade.js"></script>
+        
   <script>
 
   var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
@@ -777,8 +778,14 @@
           $("#dirigentes tr:last").after(function() {
               var html = '<tr id="dirigentes' + indexDirigentes + '.wrapper" class="hidden">';  
               html += '<td>';
-              html += '<input type="hidden" id="dirigentes' + indexDirigentes + '.instituto.id" name="dirigentes[' + indexDirigentes + '].instituto.id" value="" />';
-           	  html += '<input type="text" id="dirigentes' + indexDirigentes + '.instituto.descricao" name="dirigentes[' + indexDirigentes + '].instituto.descricao" data-index="' + indexDirigentes + '" placeholder="Selecione o Instituto/Comissão"  class="form-control input-sm instituto" />';
+              html += '<select name="dirigentes[' + indexDirigentes + '].instituto.id" id="dirigentes' + indexDirigentes + '.instituto.id" class="form-control input-sm" data-msg-required="Selecione um instituto" data-rule-required="true" >';
+           	  html += '<option value=""></option>';
+			        <c:forEach items="${institutoList}" var="option">
+				      	html += '<option value="${option.id}">';
+				      	html += '<c:out value="${option.descricao}"></c:out>';
+				      	html += '</option>';
+			        </c:forEach>
+			  html += '</select>';
 			  html += '</td><td>';                  
               html += '<input type="hidden" id="dirigentes' + indexDirigentes + '.trabalhador.id" name="dirigentes[' + indexDirigentes + '].trabalhador.id" value="" />';
            	  html += '<input type="text" id="dirigentes' + indexDirigentes + '.trabalhador.nome" name="dirigentes[' + indexDirigentes + '].trabalhador.nome" data-index="' + indexDirigentes + '" placeholder="Selecione o trabalhador"  class="form-control input-sm trabalhador" />';

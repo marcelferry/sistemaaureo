@@ -156,6 +156,12 @@ function limparOcultos(campo, oculto){
     }
 }
 
+function limparId(campo, oculto){
+	  if($(oculto).val() == ''){
+		  campo.value = '';
+    }
+}
+
 function removeDiacritics(str) {
 
 	var defaultDiacriticsRemovalMap = [

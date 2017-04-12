@@ -12,7 +12,7 @@
 </style>
 
       <div class="row">
-            <form:form method="post" action="save/${entidade.id}" commandName="entidade" class="form-horizontal validado">
+            <form:form method="post" action="save/${entidade.id}" commandName="entidade" class="form-horizontal validado" role="form">
             <ul class="nav nav-tabs" id="tabpessoa" role="tablist">
 			  <li class="active"><a href="#dadosgerais" role="tab" data-toggle="tab">Dados Gerais</a></li>
 			  <li><a href="#endereco" role="tab" data-toggle="tab">Endereço</a></li>
@@ -412,7 +412,7 @@
 			               			 		<form:hidden path="dirigentes[${loop.index}].instituto.id" 
 			               			 			data-msg-required="Selecione um instituto"
 												data-rule-required="true"/>
-			                        		<form:input path="dirigentes[${loop.index}].instituto.descricao" placeholder="Selecione o Instituto/Comissão"  class="form-control input-sm" readonly="true"/>	
+			                        		<form:input path="dirigentes[${loop.index}].instituto.descricao" placeholder="Selecione o Instituto/Comissão"  class="form-control input-sm" readonly="true"/>
 										</td>
 			               			 	<td>
 			               			 	    <form:hidden path="dirigentes[${loop.index}].id"/>
@@ -527,7 +527,7 @@
 		        <!--  /div-->
 	            <div class="form-group">
 					    <div class="col-sm-offset-2 col-sm-10">
-                			<button type="submit" class="btn btn-primary btn-mini">Salvar</button>
+                			<button type="button" onclick="enviar();" class="btn btn-primary btn-mini">Salvar</button>
                 		</div>
 				</div>
             </form:form>
@@ -535,20 +535,30 @@
   <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
   <script type="text/javascript" src="/js/custom/autocompletecidade.js"></script>
   <script type="text/javascript" src="/js/custom/autocompleteinstituto.js"></script>
+  
   <script>
 
   var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 
-  function limparOcultos(campo, oculto){
-      if(campo.value == ''){
-      	$(oculto).val('');
-      }
-  }
-
-  function limparId(campo, oculto){
-	  if($(oculto).val() == ''){
-		  campo.value = '';
-      }
+  function enviar(){
+	var breakOut = false
+	$('input[name^="dirigentes"]').each(function() {
+			if( $(this).attr("name").endsWith("trabalhador.id")){
+				if($(this).val() == '') {
+			    	alert("É preciso 'selecionar' um trabalhador já cadastrado para dirigente de comissão!!");
+			    	$(this).closest('tr').addClass('has-error');
+			    	breakOut = true;
+			    	return false;
+				}
+			}
+	});
+	
+	if(breakOut) {
+	    breakOut = false;
+	    return false;
+	} else {
+    	document.getElementById('entidade').submit();
+	}
   }
   
   $(function() {
@@ -711,7 +721,6 @@
           return false;
       });
 
-
       <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_ADMIN'}">
    		// Add a new presidente
       $("#addPresidentes").off("click").on("click", function() {
@@ -741,15 +750,13 @@
           });
 
           $('#presidentes' + indexPresidentes + '\\.pessoa\\.nome').typeahead({
-        	  
 	  		    source: function (query, process) {
 	  		        return $.ajax({
-	  		            url: '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/pessoa/list',
+	  		            url: baseUrl + '/pessoa/list',
 	  		            type: 'Get',
 	  		            data: { maxRows: 6, query: query },
 	  		            dataType: 'json',
 	  		            success: function (result) {
-	
 	  		                var resultList = result.map(function (item) {
 	  		                    var aItem = { id: item.id, name: item.nome };
 	  		                    return JSON.stringify(aItem);
@@ -760,12 +767,10 @@
 	  		            }
 	  		        });
 	  		    },
-	
 	  			matcher: function (obj) {
 	  		        var item = JSON.parse(obj);
 	  		        return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
 	  		    },
-	
 	  		    sorter: function (items) {          
 	  		       var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
 	  		        while (aItem = items.shift()) {
@@ -778,8 +783,6 @@
 	  		        return beginswith.concat(caseSensitive, caseInsensitive)
 	
 	  		    },
-	
-	
 	  		    highlighter: function (obj) {
 	  		        var item = JSON.parse(obj);
 	  		        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
@@ -787,7 +790,6 @@
 	  		            return '<strong>' + match + '</strong>'
 	  		        })
 	  		    },
-	
 	  		    updater: function (obj) {
 	  		        var item = JSON.parse(obj);
 	  		        var indice = this.$element.data('index');
@@ -801,7 +803,7 @@
 				autoclose: true,
 				language: 'pt-BR'
 			});
-          
+
           indexPresidentes++;
           return false;
       });
@@ -821,19 +823,25 @@
           $("#dirigentes tr:last").after(function() {
               var html = '<tr id="dirigentes' + indexDirigentes + '.wrapper" class="hidden">';  
               html += '<td>';
-              html += '<input type="hidden" id="dirigentes' + indexDirigentes + '.instituto.id" name="dirigentes[' + indexDirigentes + '].instituto.id" value="" data-msg-required="Selecione um instituto" data-rule-required="true" />';
-           	  html += '<input type="text" id="dirigentes' + indexDirigentes + '.instituto.descricao" name="dirigentes[' + indexDirigentes + '].instituto.descricao" data-index="' + indexDirigentes + '" placeholder="Selecione o Instituto/Comissão"  class="form-control input-sm instituto" autocomplete="off"/>';
+              html += '<select name="dirigentes[' + indexDirigentes + '].instituto.id" id="dirigentes' + indexDirigentes + '.instituto.id" class="form-control input-sm" data-msg-required="Selecione um instituto" data-rule-required="true" >';
+           	  html += '<option value=""></option>';
+			        <c:forEach items="${institutoList}" var="option">
+				      	html += '<option value="${option.id}">';
+				      	html += '<c:out value="${option.descricao}"></c:out>';
+				      	html += '</option>';
+			        </c:forEach>
+			  html += '</select>';
 			  html += '</td><td>';                  
-              html += '<input type="hidden" id="dirigentes' + indexDirigentes + '.trabalhador.id" name="dirigentes[' + indexDirigentes + '].trabalhador.id" value="" data-msg-required="Selecione um trabalhador previamente " data-rule-required="true"/>';
-           	  html += '<input type="text" id="dirigentes' + indexDirigentes + '.trabalhador.nome" name="dirigentes[' + indexDirigentes + '].trabalhador.nome" data-index="' + indexDirigentes + '" placeholder="Selecione o trabalhador"  class="form-control input-sm trabalhador" autocomplete="off"/>';
+              html += '<input type="hidden"   id="dirigentes' + indexDirigentes + '.trabalhador.id"      name="dirigentes[' + indexDirigentes + '].trabalhador.id" value="" data-msg-required="Selecione um trabalhador previamente " data-rule-required="true"/>';
+           	  html += '<input type="text"     id="dirigentes' + indexDirigentes + '.trabalhador.nome"    name="dirigentes[' + indexDirigentes + '].trabalhador.nome" data-index="' + indexDirigentes + '" placeholder="Selecione o trabalhador"  class="form-control input-sm trabalhador" autocomplete="off"/>';
 			  html += '</td><td>';                  
-              html += '<input type="text" id="dirigentes' + indexDirigentes + '.inicioMandato" name="dirigentes[' + indexDirigentes + '].inicioMandato" class="form-control input-sm datepicker" />';
+              html += '<input type="text"     id="dirigentes' + indexDirigentes + '.inicioMandato"       name="dirigentes[' + indexDirigentes + '].inicioMandato" class="form-control input-sm datepicker" />';
               html += '</td><td>';
-              html += '<input type="text" id="dirigentes' + indexDirigentes + '.terminoMandato" name="dirigentes[' + indexDirigentes + '].terminoMandato" class="form-control input-sm datepicker" />';
+              html += '<input type="text"     id="dirigentes' + indexDirigentes + '.terminoMandato"      name="dirigentes[' + indexDirigentes + '].terminoMandato" class="form-control input-sm datepicker" />';
               html += '</td><td>';
-              html += '<input type="checkbox" id="dirigentes' + indexDirigentes + '.ativo" name="dirigentes[' + indexDirigentes + '].ativo" class="form-control input-sm" />';
+              html += '<input type="checkbox" id="dirigentes' + indexDirigentes + '.ativo"               name="dirigentes[' + indexDirigentes + '].ativo" class="form-control input-sm" />';
               html += '</td><td>';
-              html += '<input type="hidden" id="dirigentes' + indexDirigentes + '.remove" name="dirigentes[' + indexDirigentes + '].remove" value="0" />';
+              html += '<input type="hidden"   id="dirigentes' + indexDirigentes + '.remove"              name="dirigentes[' + indexDirigentes + '].remove" value="0" />';
               html += '<button class="btn btn-danger btn-xs dirigentes.remove" data-index="' + indexDirigentes + '"><span class="glyphicon glyphicon-remove-sign"></span></button>';                    
               html += "</td></tr>";
               return html;
@@ -847,7 +855,6 @@
               $("#dirigentes" + index2remove + "\\.remove").val("1");
               return false;
           });
-
 
           completePessoa($('#dirigentes' + indexDirigentes + '\\.trabalhador\\.nome'), $("#dirigentes" + indexDirigentes + "\\.trabalhador\\.id"), baseUrl);
           completeInstituto($('#dirigentes' + indexDirigentes + '\\.instituto\\.descricao'), $("#dirigentes" + indexDirigentes + "\\.instituto\\.id"), baseUrl);
@@ -870,33 +877,27 @@
           return false;
       });
       //XXXXXXXXXXXXXXXXXXXXXX FIM DIRIGENTES XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-      
 
       $('.pessoa').typeahead({
 		    source: function (query, process) {
 		        return $.ajax({
-		            url: '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/pessoa/list',
+		            url: baseUrl + '/pessoa/list',
 		            type: 'Get',
 		            data: { maxRows: 6, query: query },
 		            dataType: 'json',
 		            success: function (result) {
-
 		                var resultList = result.map(function (item) {
 		                    var aItem = { id: item.id, name: item.nome };
 		                    return JSON.stringify(aItem);
 		                });
-
 		                return process(resultList);
-
 		            }
 		        });
 		    },
-
 			matcher: function (obj) {
 		        var item = JSON.parse(obj);
 		        return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
 		    },
-
 		    sorter: function (items) {          
 		       var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
 		        while (aItem = items.shift()) {
@@ -905,12 +906,8 @@
 		            else if (~item.name.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
 		            else caseInsensitive.push(JSON.stringify(item));
 		        }
-
 		        return beginswith.concat(caseSensitive, caseInsensitive)
-
 		    },
-
-
 		    highlighter: function (obj) {
 		        var item = JSON.parse(obj);
 		        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
@@ -918,7 +915,6 @@
 		            return '<strong>' + match + '</strong>'
 		        })
 		    },
-
 		    updater: function (obj) {
 		        var item = JSON.parse(obj);
 		        var indice = this.$element.data('index');
@@ -930,28 +926,23 @@
       $('.trabalhador').typeahead({
 		    source: function (query, process) {
 		        return $.ajax({
-		            url: '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/pessoa/list',
+		            url: baseUrl + '/pessoa/list',
 		            type: 'Get',
 		            data: { maxRows: 6, query: query },
 		            dataType: 'json',
 		            success: function (result) {
-
 		                var resultList = result.map(function (item) {
 		                    var aItem = { id: item.id, name: item.nome };
 		                    return JSON.stringify(aItem);
 		                });
-
 		                return process(resultList);
-
 		            }
 		        });
 		    },
-
 			matcher: function (obj) {
 		        var item = JSON.parse(obj);
 		        return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
 		    },
-
 		    sorter: function (items) {          
 		       var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
 		        while (aItem = items.shift()) {
@@ -960,12 +951,8 @@
 		            else if (~item.name.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
 		            else caseInsensitive.push(JSON.stringify(item));
 		        }
-
 		        return beginswith.concat(caseSensitive, caseInsensitive)
-
 		    },
-
-
 		    highlighter: function (obj) {
 		        var item = JSON.parse(obj);
 		        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
@@ -973,7 +960,6 @@
 		            return '<strong>' + match + '</strong>'
 		        })
 		    },
-
 		    updater: function (obj) {
 		        var item = JSON.parse(obj);
 		        var indice = this.$element.data('index');

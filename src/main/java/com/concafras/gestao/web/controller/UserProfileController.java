@@ -228,7 +228,7 @@ public class UserProfileController {
 
     ModelAndView model = new ModelAndView();
     // Nova senha limpa sem cripgrafia
-    String novaSenha = gerarSenhaNumerica();
+    String novaSenha = "123456";//gerarSenhaNumerica();
     String senha = "";
     boolean filtroCpf = false;
 

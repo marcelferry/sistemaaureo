@@ -88,7 +88,7 @@
                     </c:if>
                 	<c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_ADMIN' }">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
+                        <!-- li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Localizar...">
                                 <span class="input-group-btn">
@@ -97,8 +97,7 @@
                                 </button>
                             </span>
                             </div>
-                            <!-- /input-group -->
-                        </li>
+                        </li -->
                         <li class="sidebar-search">
                         	<select id="ciclo_atual_secretaria" class="form-control">
                         		<c:forEach items="${rodiziolist}" var="rodizio" varStatus="status">
@@ -165,7 +164,7 @@
                          <li ${admin?"class=\"active\"":""}>
                        		<a href="#"><i class="fa fa-coffee fa-fw"></i> Administrador<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-					             <li><a href="/gestao/userprofile/">Usuarios</a></li>
+					             <li><a href="/gestao/userprofile/"><spring:message code="menu.usuarios"/> </a></li>
                             </ul>
                             <!-- /.nav-second-level -->
                          </li>

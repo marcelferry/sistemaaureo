@@ -166,7 +166,7 @@ $(document).ready(function() {
             "mRender": function(data, type, full){
                      return '<form action="edit/' + full.id + '" method="post">' + 
                  				'<button type="button" onclick="this.form.action = \'edit/' + full.id + '\';submit();" class="btn btn-success btn-xs">Editar</button>&nbsp'+
-               				'<button type="button" onclick="this.form.action = \'delete/' + full.id + '\';submit();" class="btn btn-danger btn-xs">Excluir</button>' + 
+               				'<button type="button" data-id="' + full.id + '" class="btn btn-danger btn-xs">Excluir</button>' + 
            				'</form>';   // replace this with button 
                     }
              }, 
@@ -178,5 +178,27 @@ $(document).ready(function() {
              "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
          }
      });
+     
+     $('#dataTables-example tbody') .on('click','.delete', function() {
+         BootstrapDialog.confirm({
+             title: 'WARNING',
+             message: 'Warning! Drop your banana?',
+             type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+             closable: false, // <-- Default value is false
+             draggable: false, // <-- Default value is false
+             btnCancelLabel: 'Do not drop it!', // <-- Default value is 'Cancel',
+             btnOKLabel: 'Drop it!', // <-- Default value is 'OK',
+             btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+             callback: function(result) {
+                 // result will be true if button was click, while it will be false if users close the dialog directly.
+                 if(result) {
+                   return true;
+                 }else {
+                   return false;
+                 }
+             }
+         });	
+ 	 });
+
  });
  </script>

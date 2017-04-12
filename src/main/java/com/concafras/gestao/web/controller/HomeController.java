@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +34,9 @@ import com.concafras.gestao.service.RodizioService;
 @Controller
 @RequestMapping("/gestao/home")
 public class HomeController {
+  
+  @Autowired
+  private Environment environment;
 
   private static Map<String, String> rolesNames;
 
@@ -225,6 +229,8 @@ public class HomeController {
   public String dashboard(Map<String, Object> map, HttpServletRequest request) {
     Rodizio rodizio = rodizioService.findByAtivoTrue();
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
+
     map.put("dashboard", true);
     return "dashboard";
   }
@@ -233,6 +239,8 @@ public class HomeController {
   public String dashboard(Map<String, Object> map, HttpServletRequest request, @PathVariable("ciclo") Integer ciclo) {
     Rodizio rodizio = rodizioService.findById(ciclo);
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
+
     map.put("dashboard", true);
     return "dashboard";
   }
