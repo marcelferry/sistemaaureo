@@ -102,6 +102,7 @@ public class HomeController {
           String retorno = rolesRedirect.get(listaRoles.get(0));
 
           request.getSession().setAttribute("ROLE_CONTROLE", listaRoles.get(0));
+          request.getSession().setAttribute("profiles", environment.getActiveProfiles());
 
           ModelAndView redirectLogin = new ModelAndView();
 
@@ -258,6 +259,7 @@ public class HomeController {
   public String listMetas(Map<String, Object> map, HttpServletRequest request, @PathVariable("ciclo") Integer ciclo) {
     Rodizio rodizio = rodizioService.findById(ciclo);
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
     map.put("dashboard", true);
     return "listagem";
   }
@@ -275,6 +277,7 @@ public class HomeController {
     
     Rodizio rodizio = rodizioService.findById(ciclo);
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
     
     Entidade controle = (Entidade) request.getSession().getAttribute("INSTITUICAO_CONTROLE");
     if(controle != null){
@@ -319,6 +322,7 @@ public class HomeController {
     
     Rodizio rodizio = rodizioService.findById(ciclo);
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
     
     BaseInstituto controle = (BaseInstituto) request.getSession().getAttribute("INSTITUTO_CONTROLE");
     if(controle != null){
@@ -367,6 +371,7 @@ public class HomeController {
 
     Rodizio rodizio = rodizioService.findById(ciclo);
     request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
     
     map.put("dashboard", true);
 
