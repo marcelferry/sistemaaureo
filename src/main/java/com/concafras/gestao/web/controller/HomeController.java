@@ -173,6 +173,7 @@ public class HomeController {
         String retorno = rolesRedirect.get(listaRoles.get(0));
 
         request.getSession().setAttribute("ROLE_CONTROLE", listaRoles.get(0));
+        request.getSession().setAttribute("profiles", environment.getActiveProfiles());
 
         ModelAndView mav = new ModelAndView();
 
