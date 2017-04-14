@@ -34,7 +34,7 @@
         			<spring:message code="app.name" />
         		</span>
         	</div>
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 ">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
                 <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Efetuar Login</h3>
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 ">
                 <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Fechado para o Rodízio</h3>
