@@ -33,8 +33,8 @@ BEGIN
             inner join estados uf on c.idestado = uf.id  
             inner join metas_entidade m on m.identidade = e.id  
             inner join (
-          		select idmeta, idrodizio, max(tipo_situacao) as tipo_situacao from historico_metas_entidade 
-          		group by idmeta, idrodizio 
+          		select DISTINCT ON ( idmeta ) idmeta, idrodizio, tipo_situacao, situacao from historico_metas_entidade
+			    ORDER by idmeta, idrodizio desc, tipo_situacao DESC
           	) hmelast on m.id = hmelast.idmeta 
             inner join historico_metas_entidade hme on hmelast.idmeta = hme.idmeta and hmelast.idrodizio = hme.idrodizio and hmelast.tipo_situacao = hme.tipo_situacao
             inner join institutos i on m.idinstituto = i.id  
@@ -54,7 +54,7 @@ BEGIN
             group by path_info[1]) md  on md.id = m.idmetasinstituto   
             ) x   
             where   
-            ( tipo_situacao = 1 or tipo_situacao = 2 or tipo_situacao = 3 )  and  
+            ( tipo_situacao = 1 or tipo_situacao = 2 or tipo_situacao = 3 or tipo_situacao = 7 )  and  
             ( situacao = 'PLANEJADA' or situacao = 'REPLANEJADA' ) and 
             ( pCiclo = 0 OR cid =  pCiclo ) and  
             ( pRegiao = 0 OR idregiao = pRegiao ) and 
