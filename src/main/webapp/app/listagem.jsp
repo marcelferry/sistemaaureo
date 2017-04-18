@@ -28,6 +28,7 @@
 					class="display table table-bordered table-striped table-hover">
 					<thead>
 						<tr>
+							<th>Ciclo</th>
 							<th>Previsao</th>
 							<th>Entidade</th>
 							<th>Cidade</th>
@@ -40,6 +41,7 @@
 
 					<tfoot>
 						<tr>
+							<th>Ciclo</th>
 							<th>Previsao</th>
 							<th>Entidade</th>
 							<th>Cidade</th>
@@ -94,12 +96,12 @@
     	$.fn.modalmanager.defaults.resize = true;
 
     	<c:if test="${not empty INSTITUICAO_CONTROLE || not empty INSTITUTO_CONTROLE}">
-    	<c:if test="${not empty INSTITUICAO_CONTROLE}">
-        	showMetas("Contratado", null, null, null, ${INSTITUICAO_CONTROLE.id});
-        </c:if>
-    	<c:if test="${not empty INSTITUTO_CONTROLE}">		
-        	showMetas("Contratado", null, null, ${INSTITUTO_CONTROLE.id}, null);
-        </c:if>
+    		<c:if test="${not empty INSTITUICAO_CONTROLE}">
+        		showMetas("Contratado", null, null, null, ${INSTITUICAO_CONTROLE.id});
+        	</c:if>
+    		<c:if test="${not empty INSTITUTO_CONTROLE}">		
+        		showMetas("Contratado", null, null, ${INSTITUTO_CONTROLE.id}, null);
+        	</c:if>
         </c:if>
     });
 
@@ -158,6 +160,7 @@
 		            'copy', 'excel', 'pdf', 'print'
 		        ],
 	          "aoColumns": [
+	        	  { "mData": "ciclo", "visible" : ${not empty INSTITUICAO_CONTROLE || not empty INSTITUTO_CONTROLE} },
 	              { "mData": "previsao", 
 	                  "sDefaultContent" : "",
 	                  "mRender": function(data, type, full){

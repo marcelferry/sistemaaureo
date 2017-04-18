@@ -80,6 +80,8 @@ public class HomeController {
       @RequestParam(value = "logout", required = false) String logout,
       HttpServletRequest request,
       Authentication authentication) {
+    
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
 
     if(authentication != null && authentication.isAuthenticated()){
       
@@ -133,6 +135,70 @@ public class HomeController {
     }
     model.setViewName("login");
 
+    return model;
+  }
+  
+  @RequestMapping(value = "/loginsec", method = RequestMethod.GET)
+  public ModelAndView loginsec(
+      @RequestParam(value = "error", required = false) String error,
+      @RequestParam(value = "logout", required = false) String logout,
+      HttpServletRequest request,
+      Authentication authentication) {
+    
+    request.getSession().setAttribute("profiles", environment.getActiveProfiles());
+    
+    if(authentication != null && authentication.isAuthenticated()){
+      
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      
+      System.out.println("User has authorities: " + userDetails.getAuthorities());
+      
+      request.getSession().removeAttribute("ROLE_CONTROLE");
+      request.getSession().removeAttribute("INSTITUICAO_CONTROLE");
+      
+      List<String> listaRoles = new ArrayList<String>();
+      
+      for (GrantedAuthority auth : userDetails.getAuthorities()) {
+        listaRoles.add(auth.getAuthority());
+      }
+      
+      if (listaRoles.size() == 1) {
+        if (rolesRedirect.containsKey(listaRoles.get(0))) {
+          
+          String retorno = rolesRedirect.get(listaRoles.get(0));
+          
+          request.getSession().setAttribute("ROLE_CONTROLE", listaRoles.get(0));
+          request.getSession().setAttribute("profiles", environment.getActiveProfiles());
+          
+          ModelAndView redirectLogin = new ModelAndView();
+          
+          redirectLogin.setViewName("redirect:" + retorno);
+          
+          return redirectLogin;
+        }
+      }
+      
+      ModelAndView selecionaPerfil = new ModelAndView();
+      
+      selecionaPerfil.addObject("mapRoles", rolesNames);
+      
+      selecionaPerfil.addObject("listaRoles", listaRoles);
+      
+      selecionaPerfil.setViewName("selecionaperfil");
+      
+      return selecionaPerfil;
+    }
+    
+    ModelAndView model = new ModelAndView();
+    if (error != null) {
+      model.addObject("error", "Usuário e/ou senha inválidos!");
+    }
+    
+    if (logout != null) {
+      model.addObject("msg", "Você saiu do sistema.");
+    }
+    model.setViewName("loginsec");
+    
     return model;
   }
 

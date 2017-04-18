@@ -132,11 +132,32 @@
 						<c:forEach items="${metaForm.historico}" var="historico">
 						<tr>
 							<td><fmt:formatDate value="${historico.dataSituacao}" pattern="dd/MM/yyyy"/></td>
-							<td>${historico.tipoSituacao}</td>
+							<td>
+								<c:if test="${historico.tipoSituacao == 'INICIAL'}">Situação Anterior</c:if> 
+								<c:if test="${historico.tipoSituacao == 'PRECONTRATAR'}">Presidente</c:if> 
+								<c:if test="${historico.tipoSituacao == 'CONTRATAR'}">Rodízio</c:if> 
+								<c:if test="${historico.tipoSituacao == 'REPLANEJAR'}">Presidente</c:if> 
+								<c:if test="${historico.tipoSituacao == 'CONCLUIR'}">Presidente</c:if> 
+								<c:if test="${historico.tipoSituacao == 'CONCLUIR_PARCIALMENTE'}">Presidente</c:if> 
+								<c:if test="${historico.tipoSituacao == 'CANCELAR'}">Presidente</c:if> 
+								<c:if test="${historico.tipoSituacao == 'AVALIAR'}">Avaliação Anterior</c:if> 
+							</td>
 							<td>${historico.responsavel.nome}<sup style="color: red;">${historico.tipoResponsavel}</sup></td>
 							<td>
 <c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
-								${historico.situacao}
+	<c:if test="${metaForm.tipoMeta == 'META_EXECUCAO' || metaForm.tipoMeta == 'GRUPO_EXECUCAO'}">
+								<c:if test="${historico.situacao == 'IMPLANTADA'}">Realizado</c:if>
+								<c:if test="${historico.situacao == 'NAOIMPLANTADA'}">Não Realizada</c:if>
+	</c:if>
+	<c:if test="${metaForm.tipoMeta == 'META_IMPLANTACAO' || metaForm.tipoMeta == 'GRUPO_IMPLANTACAO'}">
+								<c:if test="${historico.situacao == 'IMPLANTADA'}">Implantada</c:if>
+								<c:if test="${historico.situacao == 'IMPLPARCIAL'}">Impl. Parcial.</c:if>
+								<c:if test="${historico.situacao == 'NAOIMPLANTADA'}">Não Implantada</c:if>
+	</c:if>
+								<c:if test="${historico.situacao == 'PLANEJADA'}">Planejada</c:if>
+								<c:if test="${historico.situacao == 'NAOPLANEJADA'}">Não Planejada</c:if>
+								<c:if test="${historico.situacao == 'REPLANEJADA'}">Replanejada</c:if>
+								<c:if test="${historico.situacao == 'CANCELADA'}">Canelada</c:if>
 </c:if>
 <c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA' && ( historico.tipoSituacao == 'INICIAL' || historico.tipoSituacao == 'CONCLUIR' || historico.tipoSituacao == 'CONCLUIR_PARCIALMENTE')}">
 								${historico.realizado}

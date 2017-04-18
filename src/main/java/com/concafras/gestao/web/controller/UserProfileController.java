@@ -510,7 +510,7 @@ public class UserProfileController {
       @PathVariable("notificar") boolean notificar,
       HttpServletRequest request) {
 
-    String novaSenha = "12345";
+    String novaSenha = "123456";
     String senha = "";
 
     try {

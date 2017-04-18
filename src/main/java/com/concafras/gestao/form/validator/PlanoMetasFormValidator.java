@@ -1,5 +1,8 @@
 package com.concafras.gestao.form.validator;
 
+import java.io.File;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -10,6 +13,8 @@ import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.util.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Component
 public class PlanoMetasFormValidator implements Validator {
@@ -22,6 +27,27 @@ public class PlanoMetasFormValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		PlanoMetasForm plano = (PlanoMetasForm) obj;
+		
+		String jsonInString = null;
+		
+		try {
+      ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.enable(SerializationFeature.INDENT_OUTPUT);
+      
+      jsonInString = mapper.writeValueAsString(plano);
+            
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+		
+		try {
+      String file = "validator" + plano.getFase() + "_r_" + 2017 + "_e_" + ( plano.getEntidade() != null ? plano.getEntidade().getId() : "null" ) + "_i_" + (plano.getInstituto() != null ? plano.getInstituto().getId() : "null") + ".json";
+      FileUtils.writeStringToFile(new File("/data/metas/" +  file), jsonInString);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+		
 		if(plano.getFase() != null){
 			if(plano.getFase() == 1){
 				if(plano.getRodizio() == null || 

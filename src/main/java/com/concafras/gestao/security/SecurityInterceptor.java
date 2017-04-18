@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -32,6 +34,10 @@ import com.concafras.gestao.service.UsuarioService;
 
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
   
+  private static Logger LOG = LoggerFactory.getLogger(SecurityInterceptor.class);
+  
+  private long startTime = 0L;
+  
   @Autowired
   private UsuarioService userService;
   
@@ -46,6 +52,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
   public boolean preHandle(HttpServletRequest request,
       HttpServletResponse response, Object handler) throws Exception {
     HttpSession session = request.getSession();
+    
+    LOG.info("processing: " + request.getRequestURI() + " Handler: " + handler.toString());
+    startTime = System.currentTimeMillis();
     
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -134,5 +143,8 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         modelAndView.getModel().put("sec", sec);
       }
     }
+    LOG.info("processed: " + request.getRequestURI() + " Handler: " + handler.toString());
+    long responseTime = System.currentTimeMillis() - startTime;
+    LOG.info(String.format("responseTime: %d ms", responseTime));
   }
 }

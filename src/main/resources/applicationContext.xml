@@ -87,7 +87,7 @@
             <property name="jpaProperties">
                 <props>
                     <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-                    <prop key="hibernate.show_sql">false</prop>
+                    <prop key="hibernate.show_sql">true</prop>
                     <prop key="hibernate.hbm2ddl.auto">none</prop>
                     <prop key="default_batch_fetch_size">4</prop>
                 </props>
@@ -96,17 +96,16 @@
     </beans>
     
     <beans profile="hom">
-        <bean class="java.net.URI" id="dbUrl">
-            <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL'] + '/' + systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
-        </bean>
-
         <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            
             <property name="driverClassName" value="org.postgresql.Driver"/>
-            <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
-            <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-            <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+            <property name="url" value="jdbc:postgresql://localhost/aureobeta"/>
+            <property name="username" value="aureobeta"/>
+            <property name="password" value=""/>
+            
+            
         </bean>
-        
+        <!-- fim do adiciona  -->
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
             <property name="dataSource" ref="dataSource"/>
             <property name="jpaVendorAdapter">
@@ -116,25 +115,24 @@
                 <props>
                     <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                     <prop key="hibernate.show_sql">false</prop>
-                    <!-- change this to 'verify' before running as a production app -->
                     <prop key="hibernate.hbm2ddl.auto">none</prop>
+                    <prop key="default_batch_fetch_size">4</prop>
                 </props>
             </property>
         </bean>
     </beans>
 
     <beans profile="prod">
-        <bean class="java.net.URI" id="dbUrl">
-            <constructor-arg value="#{systemEnvironment['OPENSHIFT_POSTGRESQL_DB_URL'] + '/' + systemEnvironment['OPENSHIFT_APP_NAME'] }"/>
-        </bean>
-
         <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+            
             <property name="driverClassName" value="org.postgresql.Driver"/>
-            <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
-            <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-            <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+            <property name="url" value="jdbc:postgresql://localhost/aureo"/>
+            <property name="username" value="aureo"/>
+            <property name="password" value=""/>
+            
+            
         </bean>
-        
+        <!-- fim do adiciona  -->
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
             <property name="dataSource" ref="dataSource"/>
             <property name="jpaVendorAdapter">
@@ -144,8 +142,8 @@
                 <props>
                     <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                     <prop key="hibernate.show_sql">false</prop>
-                    <!-- change this to 'verify' before running as a production app -->
                     <prop key="hibernate.hbm2ddl.auto">none</prop>
+                    <prop key="default_batch_fetch_size">4</prop>
                 </props>
             </property>
         </bean>

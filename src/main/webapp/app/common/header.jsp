@@ -33,8 +33,6 @@
                 </c:if>
             </div>
             <!-- /.navbar-header -->
-
-           	
 			
             <ul class="nav navbar-top-links navbar-right">
             	<sec:authorize access="hasRole('ROLE_METAS_PRESIDENTE')">

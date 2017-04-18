@@ -27,7 +27,7 @@
                 <table class="table table-bordered table-striped table-hover" id="dataTables-example">
                 	<thead>
 	                    <tr>
-	                        <th>Ciclo</th>
+	                        <th>Cod.</th>
 	                        <th>Entidade</th>
 	                        <th>Cidade/UF</th>
 	                        <th>Situacao</th>
@@ -47,27 +47,10 @@
                    <tbody>
                    <c:forEach items="${listaMetas}" var="meta">
                        <tr>
-                           <td>${meta.ciclo}</td>
+                           <td>${meta.idMeta}</td>
                            <td>${meta.entidade}</td>
                            <td>${meta.cidade}/${meta.uf}</td>
-                           <td>
-<c:if test="${meta.tipoMeta != 'META_QUANTITATIVA'}">
-	<c:if test="${meta.tipoMeta == 'META_EXECUCAO' || meta.tipoMeta == 'GRUPO_EXECUCAO'}">
-								<c:if test="${meta.situacao == 'IMPLANTADA'}">Realizado</c:if>
-								<c:if test="${meta.situacao == 'NAOIMPLANTADA'}">Não Realizada</c:if>
-	</c:if>
-	<c:if test="${meta.tipoMeta == 'META_IMPLANTACAO' || meta.tipoMeta == 'GRUPO_IMPLANTACAO'}">
-								<c:if test="${meta.situacao == 'IMPLANTADA'}">Implantada</c:if>
-								<c:if test="${meta.situacao == 'IMPLPARCIAL'}">Impl. Parcial.</c:if>
-								<c:if test="${meta.situacao == 'NAOIMPLANTADA'}">Não Implantada</c:if>
-	</c:if>
-								<c:if test="${meta.situacao == 'PLANEJADA'}">Planejada</c:if>
-								<c:if test="${meta.situacao == 'NAOPLANEJADA'}">Não Planejada</c:if>
-								<c:if test="${meta.situacao == 'REPLANEJADA'}">Replanejada</c:if>
-								<c:if test="${meta.situacao == 'CANCELADA'}">Canelada</c:if>
-</c:if>
-                           	
-                           </td>
+                           <td>${meta.situacao}</td>
                            <c:if test="${status != 'NAOPLANEJADA'}">
                            <td>
 	                           <c:if test="${status == 'IMPLANTADA'}">

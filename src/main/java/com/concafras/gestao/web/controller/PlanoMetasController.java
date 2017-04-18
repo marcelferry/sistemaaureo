@@ -2,6 +2,7 @@ package com.concafras.gestao.web.controller;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -74,6 +76,8 @@ import com.concafras.gestao.service.MetasInstitutoService;
 import com.concafras.gestao.service.PessoaService;
 import com.concafras.gestao.service.PlanoMetasService;
 import com.concafras.gestao.service.RodizioService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -711,7 +715,20 @@ public class PlanoMetasController {
   public ModelAndView saveContratacao(HttpServletRequest request,
       @ModelAttribute("planoMetasForm") @Validated PlanoMetasForm planoMetasForm,
       BindingResult result) {
+    
+    String jsonInString = null;
 
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      
+      mapper.enable(SerializationFeature.INDENT_OUTPUT);
+      
+      jsonInString = mapper.writeValueAsString(planoMetasForm);
+            
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
     Rodizio rodizio = restauraRodizio(planoMetasForm);
     BaseInstituto instituto = restauraInstituto(planoMetasForm);
     BaseEntidade entidade = restauraEntidade(planoMetasForm);
@@ -724,7 +741,15 @@ public class PlanoMetasController {
       model.addObject("erros", true);
       return model;
     }
+    
+    try {
+      String file = "metas_r_" + 2017 + "_e_" + ( entidade != null ? entidade.getId() : "null" ) + "_i_" + (instituto != null ? instituto.getId() : "null") + ".json";
+      FileUtils.writeStringToFile(new File("/data/metas/" +  file), jsonInString);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
+    
     ModelAndView model = new ModelAndView("metas.conclusao");
 
     if (planoMetasForm.getTipoContratante() == null) {
@@ -732,19 +757,28 @@ public class PlanoMetasController {
     }
 
     // Verificar existencia do plano para esse ciclo
-    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(),instituto.getId(), rodizio.getId());
+    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
 
     //Nao existe plano de metas? Se entrar aqui tá errado... 
     if (plano == null) {
       plano = new PlanoMetas();
     }
     
-    //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
-    mapPlanoMetasFormToPlanoMetas(planoMetasForm, plano);
-    
-    List<MetaEntidade> metas = preparaMetas(planoMetasForm, plano);
-    
-    planoMetasService.saveOrUpdate(plano, metas);
+    try {
+      
+      //Atualizo dados das tela anterior (Contratante/Coordenador/Presidente/Evento)
+      mapPlanoMetasFormToPlanoMetas(planoMetasForm, plano);
+      
+      List<MetaEntidade> metas = preparaMetas(planoMetasForm, plano);
+      
+      planoMetasService.saveOrUpdate(plano, metas);
+
+    } catch (Exception e) {
+      System.out.println("ERRO");
+      System.out.println("======================================");
+      System.out.println(planoMetasForm);
+      System.out.println("======================================");      
+    }
     
     return model;
   }
@@ -874,8 +908,7 @@ public class PlanoMetasController {
 
       MetaEntidade meta = null;
       if (metaForm.getId() != null && metaForm.getId() > 0) {
-        meta = new MetasHelper(metaService).searchMeta(plano.getMetas(),
-            plano.getEntidade(), plano.getInstituto(), metaForm.getAtividade());
+        meta =  metaService.findById( metaForm.getId() ); // new MetasHelper(metaService).searchMeta(plano.getMetas(), plano.getEntidade(), plano.getInstituto(), metaForm.getAtividade());
         historicoAtual = metaService.findByMetaEntidadeIdAndRodizioId(
             meta.getId(), plano.getRodizio().getId());
         if (plano.getRodizio().getCicloAnterior() != null) {

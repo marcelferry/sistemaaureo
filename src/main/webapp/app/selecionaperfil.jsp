@@ -12,7 +12,7 @@
   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Sistema Áureo</title>
+    <title><spring:message code="app.name" /></title>
 
     <!-- Core CSS - Include with every page -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -24,12 +24,17 @@
 </head>
 
 <body>
-
+				<c:if test="${ empty profiles || profiles[0] != 'prod' }">
+                	<c:set var="envAmb" value="AMBIENTE DE TESTES"/>
+                </c:if>
+                <c:if test="${ not empty profiles && profiles[0] == 'prod'  }">
+                	<c:set var="envAmb" value=" "/>
+                </c:if>
     <div class="container">
         <div class="row">
         	<div class="col-md-12" style="text-align: center;">
         		<span style="font-size: 20px;">
-        			<spring:message code="app.name" />
+        			<spring:message code="app.name" /><br/><font color="red"><b>${ envAmb }</b>
         		</span>
         	</div>
             <div class="col-md-4 col-md-offset-4">

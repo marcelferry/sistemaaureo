@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Sistema de Ge</title>
+  <title>Sistema de Gestão de Metas</title>
 </head>
 
 <body>

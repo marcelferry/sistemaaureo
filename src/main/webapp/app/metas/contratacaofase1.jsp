@@ -184,7 +184,7 @@
 				<legend>Entidade</legend>
 				<!-- Parte do facilitador -->
 				<div class="form-group">
-		            <label class="col-sm-2 col-xs-3 control-label" for="cidade">Cidade/Estado:</label>
+		            <label class="col-sm-2 col-xs-3 control-label" for="cidade">Cidade:</label>
 		              	<div id="scrollable-dropdown-menu" class="col-sm-3 col-xs-4">
 		              		<form:hidden path="cidade.id" />
 		               	<form:input path="cidade.nome" class="form-control" placeholder="Digite ao menos 2 caracteres" type="text" onblur="limparOcultos(this, 'cidade.id')" autocomplete="off"/>
@@ -430,13 +430,23 @@
 			           $('#nomeCoordenador').val(item.nomeDirigente);
 			           $('#emailCoordenador').val(item.emailDirigente);
 			           $('#telefoneCoordenador').val(item.telefoneDirigente);
+		           } else {
+		        	   $('#coordenador\\.id').val("");
+			           $('#nomeCoordenador').val("");
+			           $('#emailCoordenador').val("");
+			           $('#telefoneCoordenador').val("");
 		           }
 		          if(item.nomeOutro != undefined && item.nomeOutro != '' ){
 			           $('#outro\\.id').val(item.idOutro);
 			           $('#outro\\.nomeCompleto').val(item.nomeOutro);
 			           $('#emailContratante').val(item.emailOutro);
 			           $('#telefoneContratante').val(item.telefoneOutro);
-	           }
+	           		} else {
+	           			$('#outro\\.id').val("");
+				           $('#outro\\.nomeCompleto').val("");
+				           $('#emailContratante').val("");
+				           $('#telefoneContratante').val("");
+	           		}
 		           $("#div_coordenador").fadeIn('slow');
 	           $("#div_coordenador2").fadeIn('slow'); 
 			       $("#div_endereco").fadeIn('slow');

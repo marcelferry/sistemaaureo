@@ -86,8 +86,7 @@
 			document.getElementById("logoutForm").submit();
 		}
 		
-		window.setInterval("atualizarInfo()", 300000);
-
+		//window.setInterval("atualizarInfo()", 300000);
 	</script>
 
 </body>

@@ -17,7 +17,7 @@
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
 	                	<div class="form-group small">
-							<label class="col-sm-2 col-xs-3 control-label">Rodízio:</label>
+							<label class="col-sm-2 col-xs-3 control-label">Ciclo:</label>
 							<div class="col-sm-8 col-xs-9 control-label" style="text-align: left;">${facilitadorForm.rodizio.ciclo}</div>
 						</div>
 						<div class="form-group small">
@@ -92,35 +92,35 @@
     
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
-    $(document).ready(function() {
-    	$('.email').click(function(evt) {
-    	  	// Prevent the button from triggering a form submission.
-    	  	evt.preventDefault();
-    	  	exibirModalAguarde();
-		    $.ajax({
-		        type: "GET",
-		        contentType: 'application/json; charset=utf-8',
-		        dataType: 'json',
-		        context: $(this),
-		        url: '/gestao/email/facilitador/sendConvite/' + $(this).data('id') ,
-		        error: function(jqXHR, textStatus, errorThrown) 
-				{
-		        	concluirModalAguarde();
-					var exceptionVO = jQuery.parseJSON(jqXHR.responseText);
-				   
-					$('#errorModal')
-					.find('.modal-header h3').html(jqXHR.status+' error').end()
-					.find('.modal-body p>strong').html(exceptionVO.clazz).end()
-					.find('.modal-body p>em').html(exceptionVO.method).end()
-					.find('.modal-body p>span').html(exceptionVO.message).end()
-					.modal('show');
-				   
-				},
-		        success: function ( response ) {
-					var valid = response === true || response === "true";
-					concluirModalAguarde();
-					alert("Email enviado com sucesso!");
-		        }
+$(document).ready(function() {
+   	$('.email').click(function(evt) {
+   	  	// Prevent the button from triggering a form submission.
+   	  	evt.preventDefault();
+   	  	exibirModalAguarde();
+	    $.ajax({
+	        type: "GET",
+	        contentType: 'application/json; charset=utf-8',
+	        dataType: 'json',
+	        context: $(this),
+	        url: '/gestao/email/facilitador/sendConvite/' + $(this).data('id') ,
+	        error: function(jqXHR, textStatus, errorThrown) 
+			{
+	        	concluirModalAguarde();
+				var exceptionVO = jQuery.parseJSON(jqXHR.responseText);
+			   
+				$('#errorModal')
+				.find('.modal-header h3').html(jqXHR.status+' error').end()
+				.find('.modal-body p>strong').html(exceptionVO.clazz).end()
+				.find('.modal-body p>em').html(exceptionVO.method).end()
+				.find('.modal-body p>span').html(exceptionVO.message).end()
+				.modal('show');
+			   
+			},
+	        success: function ( response ) {
+				var valid = response === true || response === "true";
+				concluirModalAguarde();
+				alert("Email enviado com sucesso!");
+	        }
 		});
     });
 
@@ -151,5 +151,6 @@
 			}
 		});
 	});
+});
 </script>
 	   

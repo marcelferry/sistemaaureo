@@ -99,7 +99,11 @@ public class MetaController {
   @RequestMapping("/edit/{ciclo}/{id}")
   public ModelAndView editarMeta(@PathVariable Integer ciclo, @PathVariable Integer id,
       HttpServletRequest request, Authentication authentication) {
-    return editarMeta("metas.editar", ciclo,  id, request, authentication, true);
+    if ("ROLE_METAS_PRESIDENTE".equals(request.getSession().getAttribute("ROLE_CONTROLE"))){
+      return editarMeta("metas.editar", ciclo,  id, request, authentication, true);
+    } else {
+      return editarMeta("metas.editar", ciclo,  id, request, authentication, false);
+    }
   }
 
   @RequestMapping(value = "/edit/save/{metaId}", method = RequestMethod.POST)

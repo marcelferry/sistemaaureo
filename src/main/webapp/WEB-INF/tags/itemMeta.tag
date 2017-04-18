@@ -81,7 +81,7 @@
 				<h4>Meta Prioritária - Responder no bloco superior!</h4>
 			</div>
 			</c:if>
-			<c:if test="${ ( empty meta.dependencias && (prioridade == false || meta.atividade.prioridade == null ) ) || meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' }">
+			<c:if test="${ ( empty meta.dependencias && (prioridade == false || meta.atividade.prioridade == null ) ) || ( prioridade == false &&  ( meta.atividade.tipoMeta == 'GRUPO_IMPLANTACAO' || meta.atividade.tipoMeta == 'GRUPO_EXECUCAO' ) ) }">
 			<div class="row">
 			
 			<!-- Primeiro Rodizio -->

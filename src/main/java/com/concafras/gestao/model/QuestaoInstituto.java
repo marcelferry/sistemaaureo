@@ -26,7 +26,7 @@ import com.concafras.gestao.enums.TipoCampo;
 @Entity
 @Table(name = "QUESTOES_INSTITUTO")
 @Access(AccessType.FIELD)
-@XmlRootElement
+@XmlRootElement 
 public class QuestaoInstituto extends ObjetoGerenciado {
 
 	/**
@@ -102,6 +102,14 @@ public class QuestaoInstituto extends ObjetoGerenciado {
 
   public void setViewOrder(int viewOrder) {
     this.viewOrder = viewOrder;
+  }
+  
+  public QuestaoInstituto getPai() {
+    return pai;
+  }
+  
+  public void setPai(QuestaoInstituto pai) {
+    this.pai = pai;
   }
   
   public List<QuestaoInstituto> getItens() {

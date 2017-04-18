@@ -191,6 +191,8 @@ public class MetaServiceImpl implements MetaService {
     criteria.add( cb.equal( emp.<BaseEntidade>get("entidade") , entidade ));
     c.where(criteria.toArray(new Predicate[]{}));
     
+    c.orderBy(cb.desc(emp.<Integer> get("id")));
+    
     CriteriaQuery<MetaEntidade> select = c.select(emp);
     
     List<MetaEntidade> retorno = em.createQuery(select).getResultList();
@@ -205,7 +207,10 @@ public class MetaServiceImpl implements MetaService {
       if(retorno.size() == 1) {
         return retorno.get(0);
       } if(retorno.size() > 1) {
-        throw new IllegalStateException("Resultado maior que 1");
+        System.out.println("===============================================");
+        System.out.println("Caso com histórico duplicado: " + retorno.get(0).getDescricao());
+        System.out.println("===============================================");
+        return retorno.get(0); 
       } else {
         return null;
       }
@@ -226,8 +231,13 @@ public class MetaServiceImpl implements MetaService {
   @Override
   public List<ResumoMetaEntidade> findByMetaInstitutoAndStatus(Integer atividade,
       SituacaoMeta status) {
-    String sql = "select e.id, e.razaoSocial, c.nome, uf.sigla, r.id as cid, r.ciclo, i.id as iid, i.descricao as instituto, me.id as mid, me.descricao as meta,  me.tipo_situacao, me.previsao, me.conclusao, me.previsto, me.realizado, me.situacao, me.tipo_meta " + 
+    String sql = "select e.id, e.razaoSocial, c.nome, uf.sigla, r.id as cid, r.ciclo, i.id as iid, i.descricao as instituto, me.id as mid, me.descricao as meta,  hme.tipo_situacao, hme.previsao, hme.conclusao, hme.previsto, hme.realizado, hme.situacao, me.tipo_meta " + 
            "from metas_entidade me  " +
+           "inner join ( " +
+           "  select DISTINCT ON ( idmeta ) idmeta, idrodizio, tipo_situacao, situacao from historico_metas_entidade " +
+           "   ORDER by idmeta, idrodizio desc, tipo_situacao DESC " +
+           ") hmelast on me.id = hmelast.idmeta " +
+           "inner join historico_metas_entidade hme on hmelast.idmeta = hme.idmeta and hmelast.idrodizio = hme.idrodizio and hmelast.tipo_situacao = hme.tipo_situacao " +
            "inner join institutos i on me.idinstituto = i.id " + 
            "inner join ciclos_avaliacao r on r.id = me.idrodizio " + 
            "inner join entidades e on me.identidade = e.id  " +
@@ -237,18 +247,18 @@ public class MetaServiceImpl implements MetaService {
            "where idmetasinstituto = " + atividade + " " +
            "and (  ";
     if(status == SituacaoMeta.IMPLANTADA){
-      sql += "( me.tipo_situacao = 0 and ( me.situacao = 'IMPLANTADA' or me.situacao = 'IMPLPARCIAL' ) ) or  " + 
-             "( me.tipo_situacao = 4 and me.situacao = 'IMPLANTADA' ) or  " +
-             "( me.tipo_situacao = 5 and me.situacao = 'IMPLPARCIAL' )  ";
+      sql += "( hme.tipo_situacao = 0 and ( hme.situacao = 'IMPLANTADA' or hme.situacao = 'IMPLPARCIAL' ) ) or  " + 
+             "( hme.tipo_situacao = 4 and hme.situacao = 'IMPLANTADA' ) or  " +
+             "( hme.tipo_situacao = 5 and hme.situacao = 'IMPLPARCIAL' )  ";
     } else if(status == SituacaoMeta.PLANEJADA){
-      sql += "( me.tipo_situacao = 1 and me.situacao = 'PLANEJADA' ) or  " +
-             "( me.tipo_situacao = 2 and me.situacao = 'PLANEJADA' ) or  " +
-             "( me.tipo_situacao = 3 and me.situacao = 'REPLANEJADA' ) ";
+      sql += "( hme.tipo_situacao = 1 and hme.situacao = 'PLANEJADA' ) or  " +
+             "( hme.tipo_situacao = 2 and hme.situacao = 'PLANEJADA' ) or  " +
+             "( hme.tipo_situacao = 3 and hme.situacao = 'REPLANEJADA' ) ";
     } else if(status == SituacaoMeta.NAOPLANEJADA ) {
-      sql += "( me.tipo_situacao = 0 and me.situacao = 'NAOIMPLANTADA') OR  " +
-          "( me.tipo_situacao = 1 and me.situacao = 'NAOPLANEJADA' ) OR " +
-          "( me.tipo_situacao = 2 and me.situacao = 'NAOPLANEJADA' )  OR " +
-          "( me.tipo_situacao = 6 and me.situacao = 'NAOIMPLANTADA' )  " ;
+      sql += "( hme.tipo_situacao = 0 and hme.situacao = 'NAOIMPLANTADA') OR  " +
+          "( hme.tipo_situacao = 1 and hme.situacao = 'NAOPLANEJADA' ) OR " +
+          "( hme.tipo_situacao = 2 and hme.situacao = 'NAOPLANEJADA' )  OR " +
+          "( hme.tipo_situacao = 6 and hme.situacao = 'NAOIMPLANTADA' )  " ;
     }
     sql += ")   " +
            "order by e.razaoSocial";
