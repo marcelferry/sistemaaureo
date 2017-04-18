@@ -39,7 +39,7 @@
         			<spring:message code="app.name" /><br/><font color="red"><b>${ envAmb }</b></font>
         		</span>
         	</div>
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
                 <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Efetuar Login</h3>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 ">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 hidden">
                 <div class="login-panel panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Sistema em manutenção</h3>
