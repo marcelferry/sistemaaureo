@@ -14,7 +14,7 @@
                     <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Usuário</th>
+                        <th>Email Acesso</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
