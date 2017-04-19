@@ -2,6 +2,7 @@ package com.concafras.gestao.model.security;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -57,6 +58,9 @@ public class Usuario implements Serializable {
   })
   @XmlElement
   private Set<AlcadaUsuario> userRoles;
+  
+  @Transient
+  private List<Integer> rolesIds;
 
   
   private boolean passwordExpired;
@@ -152,6 +156,14 @@ public class Usuario implements Serializable {
         + password + ", confirmPassword=" + confirmPassword + ", pessoa="
         + pessoa + ", userRoles=" + userRoles + ", passwordExpired="
         + passwordExpired + ", lastLogin=" + lastLogin + "]";
+  }
+
+  public void setRolesIds(List<Integer> ids) {
+    this.rolesIds = ids;
+  }
+  
+  public List<Integer> getRolesIds() {
+    return rolesIds;
   }
   
   

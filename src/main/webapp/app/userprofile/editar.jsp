@@ -5,12 +5,6 @@
       
             <form:form method="post" action="save/${userprofile.id}" commandName="userprofile" class="form-horizontal">
             	<form:hidden path="id" />
-                <div class="form-group">
-		            <form:label class="col-sm-2 control-label" path="username">Nome Usuário</form:label>
-                	<div class="col-sm-4">
-                		<form:input path="username"  cssClass="form-control" />
-                	</div>
-	            </div>
 	            <div class="form-group">
 	            	<form:hidden path="pessoa.id"/>
 	                <form:label  class="col-sm-2 control-label" path="pessoa.nome">Caravaneiro</form:label>
@@ -19,11 +13,31 @@
                 	</div>
                 </div>
                 <div class="form-group">
+		            <form:label class="col-sm-2 control-label" path="username">Nome Usuário</form:label>
+                	<div class="col-sm-4">
+                		<form:input path="username"  cssClass="form-control" />
+                	</div>
+	            </div>
+                <div class="form-group">
 		            <form:label class="col-sm-2 control-label" path="password">Senha</form:label>
                 	<div class="col-sm-6">
                 		<form:password path="password"  cssClass="form-control" />
                 	</div>
 	            </div>
+	            
+	            <div class="form-group">
+					<!-- The field label is defined in the messages file (for i18n) -->
+					<label for="rolesIds" class="col-sm-2 control-label">Perfis</label>
+					<div class="col-sm-10">
+						<span class="checkbox col-md-12 col-sm-12">
+							<input type="checkbox" name="select-all" id="select-all" />
+							<label for="select-all">Selecionar/Deselecionar Tudo</label>
+						</span>
+						<form:checkboxes id="rolesIds" element="span class='checkbox col-md-4 col-sm-6'" itemLabel="roleName" itemValue="id" items="${alcadas}" path="rolesIds" />
+						<form:errors id="rolesIds_errors" path="rolesIds" cssClass="label label-danger" />
+
+					</div>
+				</div>
     
                  <div class="form-group">
 					    <div class="col-sm-offset-2 col-sm-10">

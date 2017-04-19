@@ -92,7 +92,7 @@
     
     <definition name="instituto.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Instituto :: Listar" />
-        <put-attribute name="header" value="Manutenção de Institutos" />
+        <put-attribute name="header" value="Cadastro de Institutos" />
         <put-attribute name="bodyPage" value="/app/instituto/listar.jsp" />
     </definition>
     <definition name="instituto.novo" extends="base.definition">
@@ -109,7 +109,7 @@
     
     <definition name="comissao.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Comissão :: Listar" />
-        <put-attribute name="header" value="Manutenção de Comissões" />
+        <put-attribute name="header" value="Cadastro de Comissões" />
         <put-attribute name="bodyPage" value="/app/comissao/listar.jsp" />
     </definition>
     <definition name="comissao.novo" extends="base.definition">
@@ -125,17 +125,17 @@
     
      <definition name="atividade.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Atividade :: Listar" />
-        <put-attribute name="header" value="Manutenção de Atividade" />
+        <put-attribute name="header" value="Cadastro de Atividade" />
         <put-attribute name="bodyPage" value="/app/atividade/listar.jsp" />
     </definition>
     <definition name="atividade.novo" extends="base.definition">
         <put-attribute name="title" value="Metas :: Atividade :: Novo" />
-        <put-attribute name="header" value="Manutenção de Atividade" />
+        <put-attribute name="header" value="Nova Atividade" />
         <put-attribute name="bodyPage" value="/app/atividade/novo.jsp" />
     </definition>
      <definition name="atividade.editar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Atividade :: Editar" />
-        <put-attribute name="header" value="Manutenção de Atividade" />
+        <put-attribute name="header" value="Editar Atividade" />
         <put-attribute name="bodyPage" value="/app/atividade/editar.jsp" />
     </definition>
      <definition name="atividade.selecionar" extends="base.definition">
@@ -145,12 +145,12 @@
     </definition>
      <definition name="atividade.editarLista" extends="base.definition">
         <put-attribute name="title" value="Metas :: Atividade :: Listar" />
-        <put-attribute name="header" value="Manutenção de Atividade" />
+        <put-attribute name="header" value="Cadastro de Atividade" />
         <put-attribute name="bodyPage" value="/app/atividade/editarLista.jsp" />
     </definition>
     <definition name="atividade.organizar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Atividade :: Organizar" />
-        <put-attribute name="header" value="Manutenção de Atividade" />
+        <put-attribute name="header" value="Cadastro de Atividade" />
         <put-attribute name="bodyPage" value="/app/atividade/organizar.jsp" />
     </definition>
     
@@ -167,102 +167,102 @@
     </definition>
     
     <definition name="questaoInstituto.listar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Questionário :: Listar" />
+        <put-attribute name="header" value="Cadastro de Questões" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/listar.jsp" />
     </definition>
     <definition name="questaoInstituto.novo" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Novo" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Questionário :: Novo" />
+        <put-attribute name="header" value="Nova Questão" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/novo.jsp" />
     </definition>
      <definition name="questaoInstituto.editar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Editar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Questionário :: Editar" />
+        <put-attribute name="header" value="Editar Questão" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/editar.jsp" />
     </definition>
      <definition name="questaoInstituto.selecionarInstituto" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
+        <put-attribute name="title" value="Metas :: Questionário :: Listar" />
         <put-attribute name="header" value="Selecionar Instituto" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/listarBaseInstituto.jsp" />
     </definition>
      <definition name="questaoInstituto.editarLista" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Questionário :: Listar" />
+        <put-attribute name="header" value="Cadastro de Questões" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/editarLista.jsp" />
     </definition>
     <definition name="questaoInstituto.organizar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Organizar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Questionário :: Organizar" />
+        <put-attribute name="header" value="Cadastro de Questões" />
         <put-attribute name="bodyPage" value="/app/questaoInstituto/organizar.jsp" />
     </definition>
     
     <definition name="planoModelo.listar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Listar" />
+        <put-attribute name="header" value="Ficha de Metas" />
         <put-attribute name="bodyPage" value="/app/planoModelo/listar.jsp" />
     </definition>
     <definition name="planoModelo.dirigente.listar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Plano de Metas Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Listar" />
+        <put-attribute name="header" value="Ficha de Metas" />
         <put-attribute name="bodyPage" value="/app/planoModelo/dirigente/listar.jsp" />
     </definition>
     <definition name="planoModelo.dirigente.implantadas" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
+        <put-attribute name="title" value="Metas :: Fichas :: Status" />
         <put-attribute name="header" value="Entidades que já realizam" />
         <put-attribute name="bodyPage" value="/app/planoModelo/dirigente/entidadestatus.jsp" />
     </definition>
     <definition name="planoModelo.dirigente.planejadas" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
+        <put-attribute name="title" value="Metas :: Fichas :: Status" />
         <put-attribute name="header" value="Entidades que planejam realizar" />
         <put-attribute name="bodyPage" value="/app/planoModelo/dirigente/entidadestatus.jsp" />
     </definition>
     <definition name="planoModelo.dirigente.naoplanejadas" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
+        <put-attribute name="title" value="Metas :: Fichas :: Status" />
         <put-attribute name="header" value="Entidades que não realizam ainda" />
         <put-attribute name="bodyPage" value="/app/planoModelo/dirigente/entidadestatus.jsp" />
     </definition>
     
     <definition name="planoModelo.novo" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Novo" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Novo" />
+        <put-attribute name="header" value="Nova Meta" />
         <put-attribute name="bodyPage" value="/app/planoModelo/novo.jsp" />
     </definition>
      <definition name="planoModelo.editar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Editar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Editar" />
+        <put-attribute name="header" value="Editar Meta" />
         <put-attribute name="bodyPage" value="/app/planoModelo/editar.jsp" />
     </definition>
      <definition name="planoModelo.selecionarInstituto" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Selecionar Instituto" />
+        <put-attribute name="title" value="Metas :: Fichas :: Listar Instituto" />
+        <put-attribute name="header" value="Ficha de Metas :: Instituto" />
         <put-attribute name="bodyPage" value="/app/planoModelo/listarBaseInstituto.jsp" />
     </definition>
      <definition name="planoModelo.editarLista" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Listar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Editar Lista" />
+        <put-attribute name="header" value="Ficha de Metas" />
         <put-attribute name="bodyPage" value="/app/planoModelo/editarLista.jsp" />
     </definition>
     <definition name="planoModelo.organizar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Organizar" />
-        <put-attribute name="header" value="Manutenção de Plano Modelo" />
+        <put-attribute name="title" value="Metas :: Fichas :: Organizar" />
+        <put-attribute name="header" value="Ficha de Metas" />
         <put-attribute name="bodyPage" value="/app/planoModelo/organizar.jsp" />
     </definition>
      <definition name="planoModelo.upload" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Upload" />
-        <put-attribute name="header" value="Upload de Ficha de Metas (Novo Modelo)" />
+        <put-attribute name="title" value="Metas :: Fichas :: Upload" />
+        <put-attribute name="header" value="Upload de Ficha de Metas" />
         <put-attribute name="bodyPage" value="/app/planoModelo/upload.jsp" />
     </definition>
     
       <definition name="planoModelo.uploadvalidate" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Plano Modelo :: Upload" />
+        <put-attribute name="title" value="Metas :: Fichas :: Upload" />
         <put-attribute name="header" value="Upload de Cadastros em Excel" />
         <put-attribute name="bodyPage" value="/app/planoModelo/uploadvalidate.jsp" />
     </definition>
     
      <definition name="entidade.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Entidades :: Listar" />
-        <put-attribute name="header" value="Manutenção de Entidades" />
+        <put-attribute name="header" value="Cadastro de Entidades" />
         <put-attribute name="bodyPage" value="/app/entidade/listar.jsp" />
     </definition>
      <definition name="entidade.enviar" extends="base.definition">
@@ -369,8 +369,8 @@
     </definition>
     
     <definition name="userprofile.listar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Usuarios :: Listar" />
-        <put-attribute name="header" value="Manutenção de Usuarios" />
+        <put-attribute name="title" value="Metas :: Usuários :: Listar" />
+        <put-attribute name="header" value="Cadastro de Usuários" />
         <put-attribute name="bodyPage" value="/app/userprofile/listar.jsp" />
     </definition>
     
@@ -394,7 +394,7 @@
 
     <definition name="cidade.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Cidades :: Listar" />
-        <put-attribute name="header" value="Manutenção de Cidade" />
+        <put-attribute name="header" value="Cadastro de Cidade" />
         <put-attribute name="bodyPage" value="/app/cidade/listar.jsp" />
     </definition>
     
@@ -412,7 +412,7 @@
       
      <definition name="estado.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Estados :: Listar" />
-        <put-attribute name="header" value="Manutenção de Estados" />
+        <put-attribute name="header" value="Cadastro de Estados" />
         <put-attribute name="bodyPage" value="/app/estado/listar.jsp" />
     </definition>
     
@@ -430,7 +430,7 @@
     
      <definition name="pais.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Paises :: Listar" />
-        <put-attribute name="header" value="Manutenção de Países" />
+        <put-attribute name="header" value="Cadastro de Países" />
         <put-attribute name="bodyPage" value="/app/pais/listar.jsp" />
     </definition>
     
@@ -448,7 +448,7 @@
     
      <definition name="rodizio.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Rodízio :: Listar" />
-        <put-attribute name="header" value="Manutenção de Rodízio" />
+        <put-attribute name="header" value="Cadastro de Rodízio" />
         <put-attribute name="bodyPage" value="/app/rodizio/listar.jsp" />
     </definition>
     
@@ -466,12 +466,12 @@
     
    <definition name="facilitador.listar" extends="base.definition">
         <put-attribute name="title" value="Metas :: Facilitador :: Listar" />
-        <put-attribute name="header" value="Manutenção de Facilitador" />
+        <put-attribute name="header" value="Cadastro de Facilitador" />
         <put-attribute name="bodyPage" value="/app/facilitador/listar.jsp" />
     </definition>
     <definition name="facilitador.novo" extends="base.definition">
         <put-attribute name="title" value="Metas :: Facilitador :: Novo" />
-        <put-attribute name="header" value="Manutenção de Facilitador" />
+        <put-attribute name="header" value="Novo Facilitador" />
         <put-attribute name="bodyPage" value="/app/facilitador/novo.jsp" />
     </definition>
      <definition name="facilitador.selecionar" extends="base.definition">

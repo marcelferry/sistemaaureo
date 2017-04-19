@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.service.UsuarioService;
 
@@ -54,6 +55,13 @@ public class UsuarioServiceImpl implements UsuarioService {
   @Transactional
   public Usuario findById(Integer id) {
     Usuario person = em.find(Usuario.class, id);
+    
+    List<Integer> ids = new ArrayList<Integer>();
+    for (AlcadaUsuario usuarioEmpresaPermissao : person.getUserRoles()) {
+      ids.add(usuarioEmpresaPermissao.getId());
+    }
+    person.setRolesIds(ids);
+    
     return person;
   }
 

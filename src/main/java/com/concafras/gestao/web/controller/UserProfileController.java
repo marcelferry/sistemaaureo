@@ -39,9 +39,11 @@ import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.Presidente;
 import com.concafras.gestao.model.Rodizio;
+import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.rest.utils.RestUtils;
+import com.concafras.gestao.service.AlcadaUsuarioService;
 import com.concafras.gestao.service.FacilitadorService;
 import com.concafras.gestao.service.LoginHistoryService;
 import com.concafras.gestao.service.PessoaService;
@@ -62,6 +64,9 @@ public class UserProfileController {
 
   @Autowired
   private UsuarioService usuarioService;
+
+  @Autowired
+  private AlcadaUsuarioService alcadaUsuarioService;
   
   @Autowired
   private LoginHistoryService loginHistoryService;
@@ -90,6 +95,8 @@ public class UserProfileController {
   @RequestMapping(value = "/add", method = RequestMethod.GET)
   public String addUserProfile(Map<String, Object> map) {
 
+    List<AlcadaUsuario> lista = alcadaUsuarioService.findAll();
+    map.put("alcadas", lista);
     map.put("userprofile", new Usuario());
     map.put("admin", true);
     return "userprofile.novo";
@@ -108,6 +115,8 @@ public class UserProfileController {
   public String editUserProfile(Map<String, Object> map,
       @PathVariable("userprofileId") Integer userprofileId) {
 
+    List<AlcadaUsuario> lista = alcadaUsuarioService.findAll();
+    map.put("alcadas", lista);
     map.put("userprofile", usuarioService.findById(userprofileId));
     map.put("admin", true);
     return "userprofile.editar";

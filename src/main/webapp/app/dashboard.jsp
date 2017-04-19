@@ -5,9 +5,6 @@
 <link href="/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
 <link href="/css/plugins/timeline/timeline.css" rel="stylesheet">
 
-<link href="/css/plugins/bootstrap-modal/bootstrap-modal-bs3patch.css" rel="stylesheet" />
-<link href="/css/plugins/bootstrap-modal/bootstrap-modal.css" rel="stylesheet" />
-
 <style>
 <!--
 .panel-heading a:after {
@@ -202,7 +199,7 @@
 			<h4 id="table-title" class="modal-title">Pendências</h4>
 		</div>
 		<div class="modal-body">
-			<div class="content">
+			<div id="modal-content" class="content">
 				<div class="table-responsive">
 					<table id="tableEntidade"
 						class="display table table-bordered table-striped table-hover">
@@ -234,25 +231,22 @@
 		</div>
 	</div>
 
-	<div id="ajax-modal" class="modal fade" tabindex="-1" data-width="760"
-		style="display: none;"></div>
-
 	<!-- Page-Level Plugin Scripts - Dashboard -->
 	<script src="/js/plugins/morris/raphael-2.1.0.min.js"></script>
 	<script src="/js/plugins/morris/morris.js"></script>
 
-<!-- Page-Level Plugin Scripts - Tables -->
-<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
+	<!-- Page-Level Plugin Scripts - Tables -->
+	<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
+	<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
 
 	<!-- Page-Level Plugin Scripts - Flot -->
 	<!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
@@ -260,9 +254,6 @@
 	<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
 	<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
 	<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
-
-	<script src="/js/plugins/bootstrap-modal/bootstrap-modalmanager.js"></script>
-	<script src="/js/plugins/bootstrap-modal/bootstrap-modal.js"></script>
 
 	<!-- Page-Level Demo Scripts - Flot - Use for reference -->
 	<sec:authorize
@@ -277,16 +268,6 @@
 
   //Flot Pie Chart
     $(function() {
-
-    	$.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner = 
-    	      '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
-    	        '<div class="progress progress-striped active">' +
-    	          '<div class="progress-bar" style="width: 100%;"></div>' +
-    	        '</div>' +
-    	      '</div>';
-
-    	$.fn.modalmanager.defaults.resize = true;
-
     	var options = {
                 series: {
                     pie: {
@@ -680,7 +661,7 @@
 
     function showMetas(titulo, status, regiao, instituto, entidade){
       // create the backdrop and wait for next modal to be triggered
-      $('body').modalmanager('loading');
+      //$('body').modalmanager('loading');
 
       var urlService;
 
@@ -699,12 +680,12 @@
      } 
  
       if ( ! $.fn.DataTable.isDataTable( '#tableEntidade' ) ) {
-      
-	      $("#tableEntidade").dataTable( {
+    	  exibirModalAguarde();
+	      $("#tableEntidade").DataTable( {
 	  		"language": {
 	              "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 	          },
-	          "bProcessing": true,
+	          "bProcessing": false,
 	          "bSort": false,
 	          "sAjaxSource": urlService,
 	          "fnServerData": function ( sSource, aoData, fnCallback ) {
@@ -713,6 +694,7 @@
 		                "type": "GET",
 		                "url": sSource,
 		                "data": aoData,
+		                "globals": false,
 		                "success": fnCallback,
 		                "timeout": 30000,   // optional if you want to handle timeouts (which you should)
 		                "error": handleAjaxError // this sets up jQuery to give me errors
@@ -769,7 +751,12 @@
 	          ],
 	          "fnInitComplete": function ( oSettings )
 	          {
+	        	  concluirModalAguarde();
 	              ///
+	        	  BootstrapDialog.show({
+	                  title: 'Say-hello dialog',
+	                  message: $('#modal-content')
+	              });
 	          }
 		          
 	      } );
@@ -795,34 +782,11 @@
 		      }, 1000);
 		});
 
-		$('#responsive').modal();
+		//$('#responsive').modal();
+		
+		
 		
     }
-
-    var $modal = $('#ajax-modal');
-    
-    $('.ajax .demo').on('click', function(){
-      // create the backdrop and wait for next modal to be triggered
-      $('body').modalmanager('loading');
-     
-      setTimeout(function(){
-         $modal.load('/modal_ajax_test.html', '', function(){
-          $modal.modal();
-        });
-      }, 1000);
-    });
-     
-    $modal.on('click', '.update', function(){
-      $modal.modal('loading');
-      setTimeout(function(){
-        $modal
-          .modal('loading')
-          .find('.modal-body')
-            .prepend('<div class="alert alert-info fade in">' +
-              'Updated!<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '</div>');
-      }, 1000);
-    });
 
     function handleAjaxError( xhr, textStatus, error ) {
 	    if ( textStatus === 'timeout' ) {
@@ -839,7 +803,7 @@
 
     	if(clean) $(tableId).dataTable().fnClearTable(this);
     	
-    	$modalResp.modal('loading');
+    	//$modalResp.modal('loading');
 	   $.getJSON(urlData, null, function( json )
 	   {
 	     table = $(tableId).dataTable();
@@ -855,7 +819,7 @@
 	     oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	     table.fnDraw();
 	     
-	     $modalResp.modal('loading');
+	     //$modalResp.modal('loading');
 	   });
 	 }
 
