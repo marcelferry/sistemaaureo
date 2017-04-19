@@ -13,6 +13,7 @@
 			                <table class="table table-bordered table-striped table-hover" id="dataTables-example">
                     <thead>
                     <tr>
+                        <th>Nome</th>
                         <th>Usuário</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -20,6 +21,7 @@
                     <tbody>
                     <c:forEach items="${userprofileList}" var="usuario">
                         <tr>
+                            <td>${usuario.pessoa.nomeCompleto}</td>
                             <td>${usuario.username}</td>
                             <td>
                             	<form action="edit/${usuario.id}" method="post">

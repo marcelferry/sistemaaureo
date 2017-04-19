@@ -2,9 +2,7 @@ package com.concafras.gestao.service;
 
 import java.util.List;
 
-import com.concafras.gestao.model.Cidade;
 import com.concafras.gestao.model.Pessoa;
-import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 
 public interface UsuarioService {

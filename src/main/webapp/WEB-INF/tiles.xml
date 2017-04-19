@@ -375,19 +375,19 @@
     </definition>
     
     <definition name="userprofile.novo" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Usuarios :: Novo" />
-        <put-attribute name="header" value="Novo Usuario" />
+        <put-attribute name="title" value="Metas :: Usuários :: Novo" />
+        <put-attribute name="header" value="Novo Usuário" />
         <put-attribute name="bodyPage" value="/app/userprofile/novo.jsp" />
     </definition>
  
     <definition name="userprofile.editar" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Usuarios :: Novo" />
-        <put-attribute name="header" value="Editar Usuario" />
+        <put-attribute name="title" value="Metas :: Usuários :: Novo" />
+        <put-attribute name="header" value="Editar Usuário" />
         <put-attribute name="bodyPage" value="/app/userprofile/editar.jsp" />
     </definition>
     
     <definition name="userprofile.historico" extends="base.definition">
-        <put-attribute name="title" value="Metas :: Usuarios :: Histórico" />
+        <put-attribute name="title" value="Metas :: Usuários :: Histórico" />
         <put-attribute name="header" value="Histórico de Login" />
         <put-attribute name="bodyPage" value="/app/userprofile/historico.jsp" />
     </definition>
