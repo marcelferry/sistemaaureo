@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,6 +41,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 @RequestMapping("/gestao/questaoInstituto")
 public class QuestaoInstitutoController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(QuestaoInstitutoController.class);
 
   /**
    * The Constant PATTERN_YYYY_MM_DD.

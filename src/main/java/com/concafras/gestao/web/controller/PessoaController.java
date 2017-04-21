@@ -15,6 +15,8 @@ import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AutoPopulatingList;
@@ -51,13 +53,11 @@ import com.concafras.gestao.util.Util;
 @Controller
 @RequestMapping("/gestao/pessoa")
 public class PessoaController {
-	
+  
+  private static final Logger logger = LoggerFactory.getLogger(PessoaController.class);
 
 	@Autowired
 	private PessoaService pessoaService;
-	
-	@Autowired
-	private CidadeService cidadeService;
 	
 	@Autowired
 	private TelefoneService telefoneService;

@@ -51,7 +51,7 @@ public class Usuario implements Serializable {
   @XmlElement
   private Pessoa pessoa;
 
-  @ManyToMany(fetch=FetchType.EAGER)
+  @ManyToMany
   @JoinTable(name = "USUARIO_ALCADAS", 
     joinColumns = { @JoinColumn(name = "IdUser", referencedColumnName = "id") },
     inverseJoinColumns = { @JoinColumn(name = "IdRole", referencedColumnName = "id") 
@@ -68,7 +68,7 @@ public class Usuario implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date lastLogin;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user")
   private Set<LoginHistory> loginHistory;
   
   public Usuario() {}

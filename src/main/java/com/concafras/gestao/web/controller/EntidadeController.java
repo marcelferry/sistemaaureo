@@ -20,6 +20,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AutoPopulatingList;
@@ -67,6 +69,8 @@ import com.concafras.gestao.util.Util;
 @Controller
 @RequestMapping("/gestao/entidade")
 public class EntidadeController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(EntidadeController.class);
 
 	@Autowired
 	private EntidadeService entidadeService;

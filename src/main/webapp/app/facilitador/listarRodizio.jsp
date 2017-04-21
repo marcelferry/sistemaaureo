@@ -26,13 +26,17 @@
 							id="tabelaRodizio">
 							<thead>
 								<tr>
-									<th class="col-md-6">Ano</th>
+									<th class="col-md-8">Ano</th>
+									<th class="col-md-4">Ações</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach items="${rodizioList}" var="rodizio">
-									<tr data-id="${rodizio.id}">
+									<tr>
 										<td>${rodizio.ciclo}</td>
+										<td>
+											<input type="button" data-id="${rodizio.id}" class="btn btn-success btn-xs institutos" value="Institutos"/>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -77,13 +81,11 @@
 			}
 		});
 
-		$('#tabelaRodizio tbody tr').css( 'cursor', 'pointer' );
-
 		$('#tabelaRodizio tbody tr').bind('selectstart', function(event) {
 		    event.preventDefault();
 		});
 
-		$('#tabelaRodizio tbody').on( 'dblclick', 'tr', function () {
+		$('#tabelaRodizio tbody').on( 'click', '.institutos', function () {
 			$('#rodizio\\.id').val($(this).data('id'));
 			$('#facilitadorForm').submit();
 	    });

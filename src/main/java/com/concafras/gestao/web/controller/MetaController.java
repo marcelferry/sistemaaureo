@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,16 +41,15 @@ import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.Telefone;
 import com.concafras.gestao.security.UsuarioAutenticado;
-import com.concafras.gestao.service.EntidadeService;
-import com.concafras.gestao.service.InstitutoService;
 import com.concafras.gestao.service.MetaService;
 import com.concafras.gestao.service.PessoaService;
 import com.concafras.gestao.service.PlanoMetasService;
-import com.concafras.gestao.service.RodizioService;
 
 @Controller
 @RequestMapping("/gestao/metas")
 public class MetaController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(MetaController.class);
 
   @Autowired
   private MetaService metaService;

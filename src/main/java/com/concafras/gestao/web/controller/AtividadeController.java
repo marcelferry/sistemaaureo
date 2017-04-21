@@ -22,6 +22,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,13 +47,14 @@ import com.concafras.gestao.model.view.AtividadeExcel;
 import com.concafras.gestao.model.view.AtividadeWrapper;
 import com.concafras.gestao.service.AtividadeService;
 import com.concafras.gestao.service.BaseInstitutoService;
-import com.concafras.gestao.service.InstitutoService;
 import com.concafras.gestao.util.Util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/gestao/atividade")
 public class AtividadeController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(AtividadeController.class);
 	
 	  /**
      * The Constant PATTERN_HH_MM.
@@ -61,9 +64,6 @@ public class AtividadeController {
 
     @Autowired
     private AtividadeService atividadeService;
-    
-    @Autowired
-    private InstitutoService institutoService;
     
     @Autowired
     private BaseInstitutoService baseInstitutoService;

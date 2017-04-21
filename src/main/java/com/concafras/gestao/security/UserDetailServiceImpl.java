@@ -13,16 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.concafras.gestao.model.Dirigente;
-import com.concafras.gestao.model.DirigenteNacional;
-import com.concafras.gestao.model.Facilitador;
-import com.concafras.gestao.model.Presidente;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.Usuario;
-import com.concafras.gestao.service.DirigenteNacionalService;
-import com.concafras.gestao.service.FacilitadorService;
-import com.concafras.gestao.service.PresidenteService;
 import com.concafras.gestao.service.RodizioService;
 import com.concafras.gestao.service.UsuarioService;
 
@@ -35,15 +28,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UsuarioService usuarioService;
     
-    @Autowired
-    private PresidenteService presidenteService;
-    
-    @Autowired
-    private FacilitadorService facilitadorService;
-    
-    @Autowired
-    private DirigenteNacionalService dirigenteNacionalService;
-
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
 		UsuarioAutenticado portalUser = null;
@@ -57,48 +41,26 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 				if (null != userRoles && userRoles.size() > 0) {
 					for (AlcadaUsuario userRole : userRoles) {
-						authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole
-								.getRoleName()));
+						authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRoleName()));
 					}
 				}
 				
 				if(userProfile.getPessoa() != null){
 				
-					// PRESIDENTE?
-					List<Presidente> listaPresidentes = presidenteService.getPresidente(userProfile.getPessoa());
-					
-					if(listaPresidentes != null && listaPresidentes.size() > 0) {
-					
-						boolean presidenteAtivo = false;
-						List<Presidente> presidenciasAtuais = new ArrayList<Presidente>();
-						
-						for (Presidente presidente : listaPresidentes) {
-							if(presidente.isAtivo()){
-								presidenteAtivo = true;
-								presidenciasAtuais.add(presidente);
-							}
-						}
-						
-						if(presidenteAtivo) {
-							authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_PRESIDENTE"));
-						}
-					}
-					
 					Rodizio ciclo =  rodizioService.findByAtivoTrue();
 					
-					//FACILITADOR?
-					List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(userProfile.getPessoa(), ciclo);
-					
-					if(listaFacilitadores != null && listaFacilitadores.size() > 0) {
-						authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_FACILITADOR"));
-					}
-					
-				  //DIRIGENTE?
-          List<DirigenteNacional> listaDirigentes = dirigenteNacionalService.findByDirigente(userProfile.getPessoa());
+          if (usuarioService.isPresidente(userProfile.getPessoa())) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_PRESIDENTE"));
+          }
           
-          if(listaDirigentes != null && listaDirigentes.size() > 0) {
+          if (usuarioService.isDirigente(userProfile.getPessoa())) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_DIRIGENTE"));
           }
+          
+          if (usuarioService.isFacilitador(userProfile.getPessoa(), ciclo)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + "METAS_FACILITADOR"));
+          }
+          
 				}
 
 				if(authorities.size() > 0){

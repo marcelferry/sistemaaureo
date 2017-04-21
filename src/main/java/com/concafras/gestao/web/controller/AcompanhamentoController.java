@@ -5,12 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.view.StatusAtualInstitutoGraphicData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +19,9 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/gestao/acompanhamento")
 public class AcompanhamentoController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(AcompanhamentoController.class);
+
   
   @RequestMapping(value = "/listarTodasMetas", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
   public @ResponseBody

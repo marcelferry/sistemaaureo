@@ -3,6 +3,8 @@ package com.concafras.gestao.web.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,8 @@ import com.concafras.gestao.service.RodizioService;
 @Controller
 @RequestMapping("/gestao/rodizio")
 public class RodizioController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(RodizioController.class);
 
   @Autowired
   private RodizioService rodizioService;

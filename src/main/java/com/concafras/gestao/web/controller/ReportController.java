@@ -26,12 +26,10 @@ import com.concafras.gestao.service.UsuarioService;
 @RequestMapping("/gestao/report/")
 public class ReportController {
 	
+  private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 	
 	@Autowired
 	javax.sql.DataSource datasource;
- 
- 
-    private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
  
     @Autowired
     UsuarioService userProfileService;

@@ -27,7 +27,6 @@ import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.MetaEntidade;
-import com.concafras.gestao.model.MetaEntidadeAnotacao;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;

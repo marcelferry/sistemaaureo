@@ -31,6 +31,7 @@
   padding: 0;
 }
 .panel-group .panel-heading a {
+  cursor: 'pointer';
   display: block;
   /* background: #668bb1; */
   background: #f0ad4e;
@@ -47,6 +48,7 @@
 }
 
 .panel-group .panel-heading a.priority  {
+  cursor: 'pointer';
   display: block;
   /* background: #668bb1; */
   background: #d9534f;

@@ -182,86 +182,40 @@
 		</c:if>
 	</div>
 </div>
-	<!-- /.row -->
-	<div class="ajax hidden">
-		<button class="demo btn btn-primary btn-lg" data-toggle="modal">View
-			Demo</button>
-	</div>
-	<div class="responsive hidden">
-		<button class="demo btn btn-primary btn-lg" data-toggle="modal">Responsivo</button>
-	</div>
 
-	<div id="responsive" class="modal container fade" tabindex="-1"
-		style="display: none;">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"
-				aria-hidden="true">&times;</button>
-			<h4 id="table-title" class="modal-title">Pendências</h4>
-		</div>
-		<div class="modal-body">
-			<div id="modal-content" class="content">
-				<div class="table-responsive">
-					<table id="tableEntidade"
-						class="display table table-bordered table-striped table-hover">
-						<thead>
-							<tr>
-								<th>Previsao</th>
-								<th>Entidade</th>
-								<th>Cidade</th>
-								<th>Instituto</th>
-								<th>Meta</th>
-							</tr>
-						</thead>
+<div id="modals" class="hidden"></div>
 
-						<tfoot>
-							<tr>
-								<th>Previsao</th>
-								<th>Entidade</th>
-								<th>Cidade</th>
-								<th>Instituto</th>
-								<th>Meta</th>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-default">Fechar</button>
-		</div>
-	</div>
+<!-- Page-Level Plugin Scripts - Dashboard -->
+<script src="/js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="/js/plugins/morris/morris.js"></script>
 
-	<!-- Page-Level Plugin Scripts - Dashboard -->
-	<script src="/js/plugins/morris/raphael-2.1.0.min.js"></script>
-	<script src="/js/plugins/morris/morris.js"></script>
+<!-- Page-Level Plugin Scripts - Tables -->
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
 
-	<!-- Page-Level Plugin Scripts - Tables -->
-	<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
-	<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
+<!-- Page-Level Plugin Scripts - Flot -->
+<!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
+<script src="/js/plugins/flot/jquery.flot.js"></script>
+<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
 
-	<!-- Page-Level Plugin Scripts - Flot -->
-	<!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
-	<script src="/js/plugins/flot/jquery.flot.js"></script>
-	<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
-	<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
+<!-- Page-Level Demo Scripts - Flot - Use for reference -->
+<sec:authorize
+	access="( hasRole('ROLE_METAS_CONSELHO') || hasRole('ROLE_METAS_SECRETARIA')) && !hasRole('ROLE_METAS_PRESIDENTE')">
+	<!-- script src="/js/demo/pie-demo.js"></script-->
+</sec:authorize>
 
-	<!-- Page-Level Demo Scripts - Flot - Use for reference -->
-	<sec:authorize
-		access="( hasRole('ROLE_METAS_CONSELHO') || hasRole('ROLE_METAS_SECRETARIA')) && !hasRole('ROLE_METAS_PRESIDENTE')">
-		<!-- script src="/js/demo/pie-demo.js"></script-->
-	</sec:authorize>
-
-	<script type="text/javascript">
+<script type="text/javascript">
 
     var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	
@@ -332,12 +286,12 @@
                         var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
                         return bItem;//JSON.stringify(bItem);
                     });
-                    $("#institutochart").append(template(item.nomeInstituto, 'ins', key));
+                    $("#institutochart").append(templateGrafico(item.nomeInstituto, 'ins', key));
                 	var plotObj = $.plot($("#flot-pie-chart-ins-" + key), resultList, options);
 
                 	$("#flot-pie-chart-ins-" + key).bind("plotclick", function(event, pos, obj){
                 	    if (!obj){return;}
-                	    showMetas(item.nomeInstituto, obj.series.situacao, null, item.idinstituto, ${INSTITUICAO_CONTROLE.id} );
+                	    showMetas(item.nomeInstituto, obj.series.situacao, null, item.idinstituto, '${INSTITUICAO_CONTROLE.id}' );
 
                 	});
                 });
@@ -387,7 +341,7 @@
                         var bItem = { label: situacao, data: status.quantidade, color: cor };
                         return bItem;//JSON.stringify(bItem);
                     });
-                    $("#presidentechart").append(template(item.nomeInstituto, 'atu', key));
+                    $("#presidentechart").append(templateGrafico(item.nomeInstituto, 'atu', key));
                 	var plotObj = $.plot($("#flot-pie-chart-atu-" + key), resultList, options);
                 });
 
@@ -446,7 +400,7 @@
                         var bItem = { label: situacao, data: status.quantidade, color: cor };
                         return bItem;//JSON.stringify(bItem);
                     });
-                    $("#presidentedesejadachart").append(template(item.nomeInstituto, 'des', key));
+                    $("#presidentedesejadachart").append(templateGrafico(item.nomeInstituto, 'des', key));
                 	var plotObj = $.plot($("#flot-pie-chart-des-" + key), resultList, options);
                 });
 
@@ -492,20 +446,19 @@
 
                         if(situacao == 'ATRASADO'){
                             situacao = "<spring:message code="label.situacao.atrasado"/>";
-                            cor = colors[0];
+                            cor = colors[7];
                         } else if(situacao == 'FEITO'){
                         	situacao = "<spring:message code="label.situacao.implantada"/>";
-                        	cor = colors[1];
+                        	cor = colors[6];
                         } else if(situacao == 'NO PRAZO'){
                         	situacao = "<spring:message code="label.situacao.noprazo"/>";
-                        	cor = colors[2];
+                        	cor = colors[5];
                         } else if(situacao == 'INDEFINIDO'){
                         	situacao = "<spring:message code="label.situacao.datanaoinformada"/>";
-                        	cor = colors[3];
+                        	cor = colors[4];
                         } else if(situacao == 'A VENCER'){
                         	situacao = "<spring:message code="label.situacao.avencer"/>";
-                        	cor = colors[4];
-                        	
+                        	cor = colors[1];
                         }
                         situacao = situacao + " ( " + status.quantidade + " )";
                         var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
@@ -528,58 +481,55 @@
             }
         });
         
-            $.ajax({
-                type: "GET",
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
-                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil + '/${INSTITUTO_CONTROLE.id}',
-                </c:if>
-                <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
-                url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil,
-                </c:if>
-                success: function (data) {
-                	$.each( data, function( key, item ) {
-                		var resultList = item.statusValor.map(function (status) {
-                            var situacao = status.situacao;
-                            var cor = '#fff';
-                            
-                            if(situacao == 'ATRASADO'){
-                                situacao = "<spring:message code="label.situacao.atrasado"/>";
-                            	cor = "#cb4b4b";
-                            } else if(situacao == 'FEITO'){
-                            	situacao = "<spring:message code="label.situacao.implantada"/>";
-                            	cor = "#4da74d";
-                            } else if(situacao == 'NO PRAZO'){
-                            	situacao = "<spring:message code="label.situacao.noprazo"/>";
-                            	cor =  "#edc240";
-                            	
-                            } else if(situacao == 'INDEFINIDO'){
-                            	situacao = "<spring:message code="label.situacao.datanaoinformada"/>";
-                            	cor = "#cb4bcc";
-                            } else if(situacao == 'A VENCER'){
-                            	situacao = "<spring:message code="label.situacao.avencer"/>";
-                            	 cor = "#afd8f8";
-                            	
-                            }
-                            situacao = situacao + " ( " + status.quantidade + " )";
-                            var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
-                            return bItem;//JSON.stringify(bItem);
-                        });
-                    	var plotObj = $.plot($("#flot-pie-chart-" + item.idinstituto), resultList, options);
+        $.ajax({
+            type: "GET",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
+            url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil + '/${INSTITUTO_CONTROLE.id}',
+            </c:if>
+            <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
+            url: '/gestao/graphicData/statusContratadoPorRegiaoGraphicData/' + cicloChartBrasil,
+            </c:if>
+            success: function (data) {
+            	$.each( data, function( key, item ) {
+            		var resultList = item.statusValor.map(function (status) {
+                        var situacao = status.situacao;
+                        var cor = '#fff';
+                        var colors = ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2b3e50', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
 
-                    	$("#flot-pie-chart-" + item.idinstituto).bind("plotclick", function(event, pos, obj){
-                    	    if (!obj){return;}
-                    	    
-                    	    showMetas(item.nomeInstituto, obj.series.situacao, item.idinstituto);
-
-                    	});
-                    	
+                        if(situacao == 'ATRASADO'){
+                            situacao = "<spring:message code="label.situacao.atrasado"/>";
+                            cor = colors[7];
+                        } else if(situacao == 'FEITO'){
+                        	situacao = "<spring:message code="label.situacao.implantada"/>";
+                        	cor = colors[6];
+                        } else if(situacao == 'NO PRAZO'){
+                        	situacao = "<spring:message code="label.situacao.noprazo"/>";
+                        	cor = colors[5];
+                        } else if(situacao == 'INDEFINIDO'){
+                        	situacao = "<spring:message code="label.situacao.datanaoinformada"/>";
+                        	cor = colors[4];
+                        } else if(situacao == 'A VENCER'){
+                        	situacao = "<spring:message code="label.situacao.avencer"/>";
+                        	cor = colors[1];
+                        }
+                        situacao = situacao + " ( " + status.quantidade + " )";
+                        var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
+                        return bItem;//JSON.stringify(bItem);
                     });
+                	var plotObj = $.plot($("#flot-pie-chart-" + item.idinstituto), resultList, options);
 
-                }
+                	$("#flot-pie-chart-" + item.idinstituto).bind("plotclick", function(event, pos, obj){
+                	    if (!obj){return;}
+                	    
+                	    showMetas(item.nomeInstituto, obj.series.situacao, item.idinstituto);
 
-            
+                	});
+                	
+                });
+
+            }
         });
         
         <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
@@ -593,29 +543,29 @@
                 		var resultList = item.statusValor.map(function (status) {
                             var situacao = status.situacao;
                             var cor = '#fff';
-                            
+                            var colors = ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2b3e50', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
+
                             if(situacao == 'ATRASADO'){
                                 situacao = "<spring:message code="label.situacao.atrasado"/>";
-                            	cor = "#cb4b4b";
+                                cor = colors[7];
                             } else if(situacao == 'FEITO'){
                             	situacao = "<spring:message code="label.situacao.implantada"/>";
-                            	cor = "#4da74d";
+                            	cor = colors[6];
                             } else if(situacao == 'NO PRAZO'){
                             	situacao = "<spring:message code="label.situacao.noprazo"/>";
-                            	cor =  "#edc240";
+                            	cor = colors[5];
                             } else if(situacao == 'INDEFINIDO'){
                             	situacao = "<spring:message code="label.situacao.datanaoinformada"/>";
-                            	cor = "#cb4bcc";
+                            	cor = colors[4];
                             } else if(situacao == 'A VENCER'){
                             	situacao = "<spring:message code="label.situacao.avencer"/>";
-                            	 cor = "#afd8f8";
-                            	
+                            	cor = colors[1];
                             }
                             situacao = situacao + " ( " + status.quantidade + " ) ";
                             var bItem = { label: situacao, data: status.quantidade, color: cor, situacao: status.situacao };
                             return bItem;//JSON.stringify(bItem);
                         });
-                        $("#institutochart").append(template(item.nomeInstituto, 'ins', key));
+                        $("#institutochart").append(templateGrafico(item.nomeInstituto, 'ins', key));
                     	var plotObj = $.plot($("#flot-pie-chart-ins-" + key), resultList, options);
 
                     	$("#flot-pie-chart-ins-" + key).bind("plotclick", function(event, pos, obj){
@@ -636,7 +586,7 @@
   
     });
 
-    function template(instituto, tipo, indice){
+    function templateGrafico(instituto, tipo, indice){
         var html = '\
        	<div class="col-lg-4 col-md-6 col-sm-12"">\
             <div class="panel panel-primary" style="height: 450px;">\
@@ -656,16 +606,45 @@
     </div>';
         return html;
     }
-
-    var $modalResp = $('#responsive');
+    
+    function templateTabela(){
+    	var html = '\
+    <div id="modal-content" class="content">\
+		<div class="table-responsive">\
+			<table id="tableEntidade"\
+				class="display table table-bordered table-striped table-hover">\
+				<thead>\
+					<tr>\
+						<th>Previsão</th>\
+						<th>Entidade</th>\
+						<th>Cidade</th>\
+						<th>Instituto</th>\
+						<th>Meta</th>\
+					</tr>\
+				</thead>\
+				<tfoot>\
+					<tr>\
+						<th>Previsão</th>\
+						<th>Entidade</th>\
+						<th>Cidade</th>\
+						<th>Instituto</th>\
+						<th>Meta</th>\
+					</tr>\
+				</tfoot>\
+			</table>\
+		</div>\
+	</div>';
+		return html;
+    }
 
     function showMetas(titulo, status, regiao, instituto, entidade){
       // create the backdrop and wait for next modal to be triggered
-      //$('body').modalmanager('loading');
 
+      $('#modals').html(templateTabela());
+      
       var urlService;
 
-      $("#table-title").html(titulo + (status != null ? " - " + status : "") );
+      var tituloJanela = titulo + (status != null ? " - " + status : "");
       
 	 if(regiao != undefined || regiao != null){
 		 urlService = baseUrl + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
@@ -752,11 +731,13 @@
 	          "fnInitComplete": function ( oSettings )
 	          {
 	        	  concluirModalAguarde();
-	              ///
-	        	  BootstrapDialog.show({
-	                  title: 'Say-hello dialog',
-	                  message: $('#modal-content')
-	              });
+	        	  setTimeout(() => {
+	        		  BootstrapDialog.show({
+	        			  size: BootstrapDialog.SIZE_WIDE,	        			  
+		                  title: tituloJanela,
+		                  message: $('#modal-content')
+		              });
+				  }, 500); 
 	          }
 		          
 	      } );
@@ -782,10 +763,6 @@
 		      }, 1000);
 		});
 
-		//$('#responsive').modal();
-		
-		
-		
     }
 
     function handleAjaxError( xhr, textStatus, error ) {
@@ -800,10 +777,7 @@
 
     function RefreshTable(tableId, urlData, clean)
 	 {
-
     	if(clean) $(tableId).dataTable().fnClearTable(this);
-    	
-    	//$modalResp.modal('loading');
 	   $.getJSON(urlData, null, function( json )
 	   {
 	     table = $(tableId).dataTable();
@@ -819,7 +793,14 @@
 	     oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	     table.fnDraw();
 	     
-	     //$modalResp.modal('loading');
+	     concluirModalAguarde();
+   	  	 setTimeout(() => {
+   		  BootstrapDialog.show({
+   			  size: BootstrapDialog.SIZE_WIDE,	        			  
+                 title: 'Pendências',
+                 message: $('#modal-content')
+             });
+		  }, 500); 
 	   });
 	 }
 

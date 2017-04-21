@@ -60,7 +60,8 @@ BEGIN
             ( pRegiao = 0 OR idregiao = pRegiao ) and 
             ( pEntidade = 0 OR eid  = pEntidade ) and 
             ( pInstituto = 0 OR iid =  pInstituto ) and 
-            ( pStatus = '' OR status = pStatus ) 
+            ( pStatus = '' OR status = pStatus ) and
+            tipo_meta <> 'META_QUANTITATIVA'
           order by previsao, eid, ciclo, mid, tipo_situacao;
     
   RETURN ref;

@@ -1,30 +1,29 @@
 package com.concafras.gestao.web.controller;
 
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +34,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.concafras.gestao.form.UsuarioVO;
 import com.concafras.gestao.model.ContatoInternet;
-import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Pessoa;
-import com.concafras.gestao.model.Presidente;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.rest.utils.RestUtils;
 import com.concafras.gestao.service.AlcadaUsuarioService;
-import com.concafras.gestao.service.FacilitadorService;
+import com.concafras.gestao.service.EmailService;
 import com.concafras.gestao.service.LoginHistoryService;
 import com.concafras.gestao.service.PessoaService;
-import com.concafras.gestao.service.PresidenteService;
 import com.concafras.gestao.service.RodizioService;
 import com.concafras.gestao.service.UsuarioService;
 import com.concafras.gestao.util.CpfValidator;
@@ -55,13 +51,12 @@ import com.concafras.gestao.util.CpfValidator;
 @Controller
 @RequestMapping("/gestao/userprofile")
 public class UserProfileController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
   @Autowired
   private RodizioService rodizioService;
   
-  @Autowired
-  private PresidenteService presidenteService;
-
   @Autowired
   private UsuarioService usuarioService;
 
@@ -73,16 +68,9 @@ public class UserProfileController {
 
   @Autowired
   private PessoaService pessoaService;
-
-  @Autowired
-  private FacilitadorService facilitadorService;
   
   @Autowired
-  private JavaMailSender mailSender;
-
-  @Autowired
-  private VelocityEngine velocityEngine;
-
+  private EmailService emailService;
   
   @RequestMapping("/")
   public String listUserProfile(Map<String, Object> map) {
@@ -113,11 +101,35 @@ public class UserProfileController {
 
   @RequestMapping(value = "/edit/{userprofileId}", method = RequestMethod.POST)
   public String editUserProfile(Map<String, Object> map,
-      @PathVariable("userprofileId") Integer userprofileId) {
+      @PathVariable("userprofileId") Integer userprofileId,
+      HttpServletRequest request) {
+    
+    Rodizio ciclo = (Rodizio)request.getSession().getAttribute("CICLO_CONTROLE");
+    
+    if(ciclo == null){
+      ciclo =  rodizioService.findByAtivoTrue();
+    }
 
     List<AlcadaUsuario> lista = alcadaUsuarioService.findAll();
     map.put("alcadas", lista);
-    map.put("userprofile", usuarioService.findById(userprofileId));
+    
+    Usuario usuario = usuarioService.findById(userprofileId);
+    
+    if(usuario.getPessoa() != null){
+      if (usuarioService.isPresidente(usuario.getPessoa())) {
+        usuario.getRolesIds().add(7); // PRESIDENTE
+      }
+      
+      if (usuarioService.isDirigente(usuario.getPessoa())) {
+        usuario.getRolesIds().add(5); // DIRIGENTE
+      }
+      
+      if (usuarioService.isFacilitador(usuario.getPessoa(), ciclo)) {
+        usuario.getRolesIds().add(3); // FACILITADOR
+      }
+    }
+    
+    map.put("userprofile", usuario);
     map.put("admin", true);
     return "userprofile.editar";
   }
@@ -157,8 +169,23 @@ public class UserProfileController {
 
     usuarioform.setUsername(userDetails.getUsername());
 
-    ModelAndView model = new ModelAndView("trocarsenha", "usuarioform",
-        usuarioform);
+    ModelAndView model = new ModelAndView("trocarsenha", "usuarioform", usuarioform);
+
+    return model;
+  }
+  
+  @RequestMapping(value = "/trocarsenha/{userprofileId}", method = RequestMethod.POST)
+  public ModelAndView abretrocarsenha(
+        @PathVariable("userprofileId") Integer userprofileId 
+      ) {
+
+    Usuario usuario = usuarioService.findById(userprofileId);
+
+    UsuarioVO usuarioform = new UsuarioVO();
+
+    usuarioform.setUsername(usuario.getUsername());
+
+    ModelAndView model = new ModelAndView("trocarsenha", "usuarioform", usuarioform);
 
     return model;
   }
@@ -179,12 +206,19 @@ public class UserProfileController {
 
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
+    boolean userChange = false;
+    
+    if(usuarioform.getUsername().equals(userDetails.getUsername())){
+      userChange = true;
+    }
+    
     System.out.println("User has authorities: " + userDetails.getAuthorities());
 
     Usuario usuario = usuarioService.findByUsername(usuarioform.getUsername());
 
     try {
       usuario.setPassword(criptografa(usuarioform.getPassword()));
+      usuario.setConfirmPassword(criptografa(usuarioform.getConfirmPassword()));
     } catch (NoSuchAlgorithmException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -207,7 +241,11 @@ public class UserProfileController {
       userLoginHistory.setUser(usuario);
       userLoginHistory.setLoggedIn(new Date());
       userLoginHistory.setUserIp(ip);
-      userLoginHistory.setStatus("CHANGEPASSWORD");
+      if(userChange) {
+        userLoginHistory.setStatus("CHANGEPASSWORD");
+      } else {
+        userLoginHistory.setStatus("CHNGPASSBYADMIN");
+      }
       loginHistoryService.save(userLoginHistory);
     }catch(Exception ex){
       //
@@ -215,7 +253,11 @@ public class UserProfileController {
 
     ModelAndView model = new ModelAndView();
 
-    model.setViewName("redirect:/gestao/home/roles/true");
+    if(userChange){
+      model.setViewName("redirect:/gestao/home/roles/true");
+    } else {
+      model.setViewName("redirect:/gestao/userprofile/");
+    }
 
     return model;
   }
@@ -306,7 +348,7 @@ public class UserProfileController {
           //
         }
         
-        sendConfirmationEmail(usuario, novaSenha);
+        emailService.sendConfirmationEmail(usuario, novaSenha);
 
         model.addObject("msg", "Sua nova senha será enviada por email.");
       } else {
@@ -314,33 +356,17 @@ public class UserProfileController {
 
         List<String> alcadas = new ArrayList<String>();
 
-        // PRESIDENTE?
-        List<Presidente> listaPresidentes = presidenteService
-            .getPresidente(visitante);
-
-        if (listaPresidentes != null && listaPresidentes.size() > 0) {
-
-          boolean presidenteAtivo = false;
-          List<Presidente> presidenciasAtuais = new ArrayList<Presidente>();
-
-          for (Presidente presidente : listaPresidentes) {
-            if (presidente.isAtivo()) {
-              presidenteAtivo = true;
-              presidenciasAtuais.add(presidente);
-            }
-          }
-
-          if (presidenteAtivo) {
-            alcadas.add("METAS_PRESIDENTE");
-          }
-        }
-
         Rodizio ciclo =  rodizioService.findByAtivoTrue();
         
-        // FACILITADOR?
-        List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(visitante, ciclo);
-
-        if (listaFacilitadores != null && listaFacilitadores.size() > 0) {
+        if (usuarioService.isPresidente(visitante)) {
+          alcadas.add("METAS_PRESIDENTE");
+        }
+        
+        if (usuarioService.isDirigente(visitante)) {
+          alcadas.add("METAS_DIRIGENTE");
+        }
+        
+        if (usuarioService.isFacilitador(visitante, ciclo)) {
           alcadas.add("METAS_FACILITADOR");
         }
 
@@ -405,7 +431,7 @@ public class UserProfileController {
           }
           
           // enviar email pessoa
-          sendConfirmationEmail(usuario, novaSenha);
+          emailService.sendConfirmationEmail(usuario, novaSenha);
 
           
           model.addObject("msg", "Sua senha será enviada por email.");
@@ -470,31 +496,6 @@ public class UserProfileController {
     return senha;
   }
 
-  private void sendConfirmationEmail(final Usuario user, final String senha) {
-    MimeMessagePreparator preparator = new MimeMessagePreparator() {
-      public void prepare(MimeMessage mimeMessage) throws Exception {
-        MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-        message
-            .setSubject(user.getPessoa().getPrimeiroNome()
-                + ", sua nova senha de acesso ao sistema de gestão de metas chegou.");
-        message.setTo(new InternetAddress(user.getUsername(), user.getPessoa()
-            .getNome()));
-        message
-            .setFrom(new InternetAddress(
-                "Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("usuario", user);
-        model.put("senha", senha);
-        String text = VelocityEngineUtils.mergeTemplateIntoString(
-            velocityEngine,
-            "com/concafras/gestao/email/template/confirmacao-registro.vm",
-            model);
-        message.setText(text, true);
-      }
-    };
-    EmailController.sendMessage(this.mailSender, preparator);
-  }
-  
   /**
   public User registerNewUserAccount(UserDto accountDto) throws EmailExistsException {
       if (emailExist(accountDto.getEmail())) {  
@@ -561,39 +562,24 @@ public class UserProfileController {
         }
         
         if (notificar)
-          sendConfirmationEmail(usuario, novaSenha);
+          emailService.sendConfirmationEmail(usuario, novaSenha);
 
       } else {
         // Testar niveis
 
         List<String> alcadas = new ArrayList<String>();
 
-        // PRESIDENTE?
-        List<Presidente> listaPresidentes = presidenteService
-            .getPresidente(visitante);
-
-        if (listaPresidentes != null && listaPresidentes.size() > 0) {
-
-          boolean presidenteAtivo = false;
-          List<Presidente> presidenciasAtuais = new ArrayList<Presidente>();
-
-          for (Presidente presidente : listaPresidentes) {
-            if (presidente.isAtivo()) {
-              presidenteAtivo = true;
-              presidenciasAtuais.add(presidente);
-            }
-          }
-
-          if (presidenteAtivo) {
-            alcadas.add("METAS_PRESIDENTE");
-          }
+        Rodizio ciclo =  rodizioService.findByAtivoTrue();
+        
+        if (usuarioService.isPresidente(visitante)) {
+          alcadas.add("METAS_PRESIDENTE");
         }
-
-        // FACILITADOR?
-        List<Facilitador> listaFacilitadores = facilitadorService
-            .getFacilitador(visitante);
-
-        if (listaFacilitadores != null && listaFacilitadores.size() > 0) {
+        
+        if (usuarioService.isDirigente(visitante)) {
+          alcadas.add("METAS_DIRIGENTE");
+        }
+        
+        if (usuarioService.isFacilitador(visitante, ciclo)) {
           alcadas.add("METAS_FACILITADOR");
         }
 
@@ -625,7 +611,7 @@ public class UserProfileController {
           }
           // enviar email pessoa
           if (notificar)
-            sendConfirmationEmail(usuario, novaSenha);
+            emailService.sendConfirmationEmail(usuario, novaSenha);
 
         } else {
           return false;
@@ -669,7 +655,32 @@ public class UserProfileController {
     }
     
     return new RestUtils<LoginHistory>().createDatatableResponse(data);
-    
+  }
+  
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+      @Override
+      public void setAsText(String value) {
+        try {
+          Date parsedDate = dateFormat.parse(value);
+          setValue(parsedDate);
+        } catch (ParseException e) {
+          setValue(null);
+        }
+      }
+
+      @Override
+      public String getAsText() {
+        try {
+          String parsedDate = dateFormat.format((Date) getValue());
+          return parsedDate;
+        } catch (Exception e) {
+          return "";
+        }
+      }
+    });
   }
 
 }

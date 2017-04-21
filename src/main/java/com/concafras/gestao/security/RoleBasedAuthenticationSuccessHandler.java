@@ -6,13 +6,16 @@ import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
@@ -36,13 +39,10 @@ public class RoleBasedAuthenticationSuccessHandler extends SavedRequestAwareAuth
       HttpServletResponse response, Authentication authentication)
       throws ServletException, IOException {
     
-    UsuarioAutenticado customUserDetails = (UsuarioAutenticado) authentication
-        .getPrincipal();
-    Usuario user = usuarioService.findByUsername(customUserDetails
-        .getUsername());
+    UsuarioAutenticado customUserDetails = (UsuarioAutenticado) authentication.getPrincipal();
+    Usuario user = usuarioService.findByUsername(customUserDetails.getUsername());
 
-    WebAuthenticationDetails details = (WebAuthenticationDetails) authentication
-        .getDetails();
+    WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
     String ip = details.getRemoteAddress();
 
     LoginHistory userLoginHistory = new LoginHistory();

@@ -25,8 +25,9 @@
                             <td>${usuario.username}</td>
                             <td>
                             	<form action="edit/${usuario.id}" method="post">
-	                            	<input type="button" onclick="this.form.action = 'edit/${usuario.id}';submit();" class="btn btn-success btn-xs" value="Editar"/>&nbsp
-	                            	<input type="button" onclick="this.form.action = 'delete/${usuario.id}';submit();" class="btn btn-danger btn-xs" value="Excluir"/>
+	                            	<button type="button" onclick="this.form.action = 'edit/${usuario.id}';submit();" class="btn btn-success btn-xs"  title="Editar"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+	                            	<button type="button" onclick="this.form.action = 'delete/${usuario.id}';submit();" class="btn btn-danger btn-xs"  title="Excluir"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+	                            	<button type="button" onclick="this.form.action = 'trocarsenha/${usuario.id}';submit();" class="btn btn-info btn-xs" title="Trocar Senha"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></button>
                             	</form>
                             </td>
                         </tr>

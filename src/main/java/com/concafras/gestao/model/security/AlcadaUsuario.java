@@ -24,6 +24,8 @@ public class AlcadaUsuario  implements Serializable {
     private Integer id;
 	
 	private String roleName; 
+	
+	private String descricao; 
 
 	public Integer getId() {
 		return this.id;
@@ -40,5 +42,13 @@ public class AlcadaUsuario  implements Serializable {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
+	
+	public String getDescricao() {
+    return descricao;
+  }
+	
+	public void setDescricao(String descricao) {
+    this.descricao = descricao;
+  }
 
 }

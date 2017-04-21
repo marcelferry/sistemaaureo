@@ -17,20 +17,23 @@
 			<div class="panel-heading"><spring:message code="label.rodizio" /></div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
-				<h4>Dois clique no ciclo para detalhar os Institutos</h4>
 				<div class="table-responsive">
 					<form:form method="post" commandName="relatorioForm" action="${action}">
 						<table class="table table-bordered table-striped table-hover"
 							id="tabelaRodizio">
 							<thead>
 								<tr>
-									<th class="col-md-6">Ciclo</th>
+									<th class="col-md-8">Ciclo</th>
+									<th class="col-md-4">Ações</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach items="${rodizioList}" var="rodizio">
-									<tr data-id="${rodizio.id}" data-ciclo="${rodizio.ciclo}">
+									<tr>
 										<td>${rodizio.ciclo}</td>
+										<td>
+											<input type="button"  data-id="${rodizio.id}" data-ciclo="${rodizio.ciclo}" class="btn btn-success btn-xs entidades" value="Entidades"/>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -260,7 +263,7 @@
 		    event.preventDefault();
 		});
 
-		$('#tabelaRodizio tbody').on( 'dblclick', 'tr', function () {
+		$('#tabelaRodizio tbody').on( 'click', '.entidades', function () {
 			$('#panelRodizio').hide();
 			$('#panelInstituto').removeClass('hidden');
 

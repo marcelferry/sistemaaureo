@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,8 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/gestao/graphicData")
 public class GraphicDataController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(GraphicDataController.class);
 	
 	@Autowired
 	PlanoMetasService planoMetasService;

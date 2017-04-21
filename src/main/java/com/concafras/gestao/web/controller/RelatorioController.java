@@ -36,6 +36,8 @@ import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
@@ -48,7 +50,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.form.EntidadeOptionForm;
@@ -78,6 +79,8 @@ import com.concafras.gestao.util.MyPDFPageEvents;
 @Controller
 @RequestMapping("/gestao/relatorio")
 public class RelatorioController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(RelatorioController.class);
 
   @Autowired
   PlanoMetasService planoMetasService;

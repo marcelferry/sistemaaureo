@@ -18,6 +18,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -84,6 +86,8 @@ import com.google.gson.GsonBuilder;
 @Controller
 @RequestMapping("/gestao/planodemetas")
 public class PlanoMetasController {
+  
+  private static final Logger logger = LoggerFactory.getLogger(PlanoMetasController.class);
   
   @Autowired
   private Environment environment;
@@ -238,8 +242,15 @@ public class PlanoMetasController {
       @PathVariable("regiao") Integer regiao,
       @PathVariable("status") String status) throws IOException {
     List<ResumoMetaEntidade> retorno = null;
+    
+    Integer instituto = null;
+    BaseInstituto baseInstituto = (BaseInstituto) request.getSession().getAttribute("INSTITUTO_CONTROLE");
+    if(baseInstituto != null){
+      instituto = baseInstituto.getId();
+    }
+    
     retorno = planoMetasService.getListaContratadoGeralData(ciclo, regiao, null,
-        null, status);
+        instituto, status);
     return new RestUtils<ResumoMetaEntidade>().createDatatableResponse(retorno);
 
   }

@@ -57,8 +57,7 @@ public class DirigenteNacionalServiceImpl implements DirigenteNacionalService {
     Join pessoa = emp.join("dirigente", JoinType.LEFT);
 
     List<Predicate> criteria = new ArrayList<Predicate>();
-    criteria.add(cb.like(cb.lower(pessoa.get("nomeCompleto")), "%"
-        + name.toLowerCase().trim().replaceAll(" ", "%") + "%"));
+    criteria.add(cb.like(cb.lower(pessoa.get("nomeCompleto")), "%" + name.toLowerCase().trim().replaceAll(" ", "%") + "%"));
     c.where(criteria.get(0));
 
     return em.createQuery(c).getResultList();

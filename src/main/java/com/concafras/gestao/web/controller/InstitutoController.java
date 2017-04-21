@@ -29,8 +29,7 @@ import com.concafras.gestao.service.InstitutoService;
 @RequestMapping("/gestao/instituto")
 public class InstitutoController {
 
-  private static final Logger logger = LoggerFactory
-      .getLogger(InstitutoController.class);
+  private static final Logger logger = LoggerFactory.getLogger(InstitutoController.class);
 
   @Autowired
   private InstitutoService institutoService;

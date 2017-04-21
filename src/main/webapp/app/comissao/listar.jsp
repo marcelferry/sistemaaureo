@@ -5,7 +5,7 @@
 	            <c:if  test="${!empty comissaoList}">
 	            <div class="panel panel-primary">
 	                <div class="panel-heading">
-	                    Comissï¿½es Cadastrados
+	                    Comissões Cadastrados
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
@@ -26,7 +26,7 @@
 		                            <td>${comissao.id}</td>
 		                            <td>${comissao.descricao}</td>
 		                            <td>${comissao.instituto.descricao}</td>
-		                            <td>${comissao.rodizio?"Sim":"Nï¿½o"}</td>
+		                            <td>${comissao.rodizio?"Sim":"Não"}</td>
 		                            <td>
 		                            	<form action="edit/${comissao.id}" method="post">
 			                            	<input type="button" onclick="this.form.action = 'edit/${comissao.id}';submit();" class="btn btn-success btn-xs" value="Editar"/>&nbsp
@@ -48,7 +48,7 @@
 	                </div>
 	                <!-- /.panel-heading -->
 	                <div class="panel-body">
-		                Nï¿½o hï¿½ Comissï¿½es cadastradas.
+		                Não há Comissões cadastradas.
 		            </div>
 		        </div>
             </c:if>

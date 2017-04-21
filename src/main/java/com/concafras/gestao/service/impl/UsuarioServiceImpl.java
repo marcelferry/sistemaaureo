@@ -1,7 +1,9 @@
 package com.concafras.gestao.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,14 +14,22 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.concafras.gestao.model.ContatoInternet;
+import com.concafras.gestao.model.DirigenteNacional;
+import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.model.Presidente;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.Telefone;
 import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.Usuario;
+import com.concafras.gestao.service.DirigenteNacionalService;
+import com.concafras.gestao.service.FacilitadorService;
+import com.concafras.gestao.service.PresidenteService;
 import com.concafras.gestao.service.UsuarioService;
 import javax.persistence.criteria.Expression;
 
@@ -28,6 +38,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
   @PersistenceContext
   EntityManager em;
+  
+  @Autowired
+  private FacilitadorService facilitadorService;
+  
+  @Autowired
+  private PresidenteService presidenteService;
+  
+  @Autowired
+  private DirigenteNacionalService dirigenteNacionalService;
 
   @Transactional
   public void save(Usuario usuario) {
@@ -36,7 +55,32 @@ public class UsuarioServiceImpl implements UsuarioService {
   
   @Transactional
   public void update(Usuario usuario) {
-    em.merge(usuario);
+    Usuario usuarioEntity = em.find(Usuario.class, usuario.getId());
+    
+    if (null != usuarioEntity) {
+      List<Integer> ids = usuario.getRolesIds();
+      if(ids != null && !ids.isEmpty()){ 
+        Set<AlcadaUsuario> alcadas = usuarioEntity.getUserRoles();
+        alcadas.clear();
+        for (Integer integer : ids) {
+          if(integer.equals(1) || integer.equals(2) || integer.equals(4) || integer.equals(6)){
+            AlcadaUsuario alcada = new AlcadaUsuario();
+            alcada.setId(integer);
+            alcadas.add(alcada);
+          }
+        }
+      }
+      if(usuario.getPassword() != null){
+        if(usuario.getPassword().equals(usuario.getConfirmPassword())){
+          usuarioEntity.setPassword(usuario.getPassword());
+        }
+      }
+      usuarioEntity.setUsername(usuario.getUsername());
+      usuarioEntity.setPessoa(usuario.getPessoa());
+      usuarioEntity.setPasswordExpired(usuario.isPasswordExpired());
+      usuarioEntity.setLastLogin(usuario.getLastLogin());
+      em.merge(usuarioEntity);
+    }
   }
 
   @Transactional
@@ -140,5 +184,52 @@ public class UsuarioServiceImpl implements UsuarioService {
     } catch (javax.persistence.NoResultException ex) {
       return null;
     }
+  }
+
+  @Override
+  public boolean isFacilitador(Pessoa pessoa, Rodizio ciclo) {
+
+    List<Facilitador> listaFacilitadores = facilitadorService.getFacilitador(pessoa, ciclo);
+
+    if (listaFacilitadores != null && listaFacilitadores.size() > 0) {
+      return true;
+    }
+    return false;
+    
+  }
+
+  @Override
+  public boolean isPresidente(Pessoa pessoa) {
+
+    List<Presidente> listaPresidentes = presidenteService.getPresidente(pessoa);
+
+    if (listaPresidentes != null && listaPresidentes.size() > 0) {
+      boolean presidenteAtivo = false;
+      List<Presidente> presidenciasAtuais = new ArrayList<Presidente>();
+
+      for (Presidente presidente : listaPresidentes) {
+        if (presidente.isAtivo()) {
+          presidenteAtivo = true;
+          presidenciasAtuais.add(presidente);
+        }
+      }
+
+      if (presidenteAtivo) {
+        return true;
+      }
+    }
+    return false;
+    
+  }
+
+  @Override
+  public boolean isDirigente(Pessoa pessoa) {
+  //DIRIGENTE?
+    List<DirigenteNacional> listaDirigentes = dirigenteNacionalService.findByDirigente(pessoa);
+    
+    if(listaDirigentes != null && listaDirigentes.size() > 0) {
+      return true;
+    }
+    return false;
   }
 }
