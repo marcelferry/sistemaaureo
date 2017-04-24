@@ -65,11 +65,9 @@
         </div>   
         <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
   <script>
-  var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-  
   $(function() {
 	  
-    completePessoa($('#pessoa\\.nome'), $("#pessoa\\.id"), baseUrl );  
+    completePessoa($('#pessoa\\.nome'), $("#pessoa\\.id"), BASEURL );  
     
    	// Listen for click on toggle checkbox
    	$('#select-all').click(function(event) {   

@@ -40,7 +40,7 @@
 					$.ajax({
 			            dataType: "json",
 			            type : 'Get',
-			            url: '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/estado/list',
+			            url: BASEURL + '/estado/list',
 			           	data: {	            
 							maxRows: 6,
 							query: request.term

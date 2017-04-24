@@ -227,15 +227,13 @@
   <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
   <script>
 
-  var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-
 	function enviar(){
 		var id = $("#id").val();
 		if(id != null && id > 0){
-			$("#pessoa").attr('action',  baseUrl + "/gestao/pessoa/editBase/save/" + id );
+			$("#pessoa").attr('action', BASEURL + "/gestao/pessoa/editBase/save/" + id );
 			//alert($("#pessoa").attr('action'));
 		} else {
-			$("#pessoa").attr('action',   baseUrl + "/gestao/pessoa/addBase/" );
+			$("#pessoa").attr('action', BASEURL + "/gestao/pessoa/addBase/" );
 			//alert($("#pessoa").attr('action'));
 		}
 		$("#pessoa").submit();
@@ -243,14 +241,14 @@
   
   $(function() {
 	  
-	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), baseUrl, function(item){
+	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), BASEURL, function(item){
 		    $('#endereco\\.cidade\\.estado\\.sigla').val(item.uf);
 	        $('#endereco\\.cidade\\.estado\\.sigla').attr('readonly', true);
 	        return item.name;
 		}, false);
 		
-	  completePessoa($('#nomeCompleto'), $('#id'), baseUrl, function(item){
-			  var myUrl = baseUrl + "/gestao/pessoa/editBase/" + item.id;// + " #principal";
+	  completePessoa($('#nomeCompleto'), $('#id'), BASEURL, function(item){
+			  var myUrl = BASEURL + "/gestao/pessoa/editBase/" + item.id;// + " #principal";
 			  //window.location.replace(myUrl);
 
 			  var form = document.createElement("form");

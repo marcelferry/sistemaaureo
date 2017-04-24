@@ -64,29 +64,14 @@
 
 	<script type="text/javascript">
 
-    var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-	
-
     $(function() {
-
-    	$.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner = 
-    	      '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
-    	        '<div class="progress progress-striped active">' +
-    	          '<div class="progress-bar" style="width: 100%;"></div>' +
-    	        '</div>' +
-    	      '</div>';
-
-    	$.fn.modalmanager.defaults.resize = true;
-
-    	
-
         carregarHistorico();
     });
 
     function carregarHistorico(){
       var urlService;
      
-      urlService = baseUrl + '/gestao/userprofile/listaHistoricoLogin';
+      urlService = BASEURL + '/gestao/userprofile/listaHistoricoLogin';
      
       if ( ! $.fn.DataTable.isDataTable( '#tableEntidade' ) ) {
       

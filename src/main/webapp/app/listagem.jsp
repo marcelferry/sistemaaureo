@@ -81,20 +81,7 @@
 
 	<script type="text/javascript">
 
-    var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-	
-
     $(function() {
-
-    	$.fn.modal.defaults.spinner = $.fn.modalmanager.defaults.spinner = 
-    	      '<div class="loading-spinner" style="width: 200px; margin-left: -100px;">' +
-    	        '<div class="progress progress-striped active">' +
-    	          '<div class="progress-bar" style="width: 100%;"></div>' +
-    	        '</div>' +
-    	      '</div>';
-
-    	$.fn.modalmanager.defaults.resize = true;
-
     	<c:if test="${not empty INSTITUICAO_CONTROLE || not empty INSTITUTO_CONTROLE}">
     		<c:if test="${not empty INSTITUICAO_CONTROLE}">
         		showMetas("Contratado", null, null, null, ${INSTITUICAO_CONTROLE.id});
@@ -114,25 +101,25 @@
       $("#table-title").html(titulo + (status != null ? " - " + status : "") );
       
 	 if(regiao != undefined || regiao != null){
-		 urlService = baseUrl + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
+		 urlService = BASEURL + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
      } else if(instituto != undefined){
          if(entidade != null){
-        	 urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
+        	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
          } else {
         	 if(status != null){
-    	 		urlService = baseUrl + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
+    	 		urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
         	 } else {
-    	 		urlService = baseUrl + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto;
+    	 		urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto;
         	 }
      	}
      } else if(entidade != null){
          if(status != null){
-    	 	urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeData/${CICLO_CONTROLE.id}/'  + entidade + '/'  + status;
+    	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeData/${CICLO_CONTROLE.id}/'  + entidade + '/'  + status;
          } else {
-        	urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeData/${CICLO_CONTROLE.id}/'  + entidade;
+        	urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeData/${CICLO_CONTROLE.id}/'  + entidade;
          }
      } else {
-    	 urlService = baseUrl + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
+    	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
      } 
  
       if ( ! $.fn.DataTable.isDataTable( '#tableEntidade' ) ) {

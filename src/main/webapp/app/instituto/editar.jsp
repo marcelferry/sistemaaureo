@@ -56,8 +56,7 @@
         <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
         <script type="text/javascript">
 		$(function(){
-			var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-			completePessoa($('#dirigenteNacional\\.nome'), $("#dirigenteNacional\\.id"), baseUrl );
+			completePessoa($('#dirigenteNacional\\.nome'), $("#dirigenteNacional\\.id"), BASEURL );
 		});
 
         </script>

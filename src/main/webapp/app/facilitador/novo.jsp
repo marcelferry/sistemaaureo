@@ -44,11 +44,7 @@
 	    <script type="text/javascript" src="/js/custom/autocompleteinstituto.js"></script>
 		<script type="text/javascript">
 		$(function(){
-
-			var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-
-			completePessoa($('#trabalhador\\.nome'), $("#trabalhador\\.id"), baseUrl);
-			completeInstituto($('#instituto\\.descricao'), $("#instituto\\.id"), baseUrl);
-			
+			completePessoa($('#trabalhador\\.nome'), $("#trabalhador\\.id"), BASEURL );
+			completeInstituto($('#instituto\\.descricao'), $("#instituto\\.id"), BASEURL );
 		});
 	</script>

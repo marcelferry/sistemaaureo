@@ -75,7 +75,6 @@
 <script type="text/javascript" src="/js/custom/autocompletecidade.js"></script>
 <script type="text/javascript" src="/js/plugins/summernote/summernote.js"></script>
 <script type="text/javascript">
-var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 $(function(){
 
 		$('#mensagem').summernote({
@@ -83,7 +82,7 @@ $(function(){
 		});
 			
 	
-		completeCidade($('#cidadeNome'), $('#cidadeId'), baseUrl, function(item){
+		completeCidade($('#cidadeNome'), $('#cidadeId'), BASEURL, function(item){
 		    $("#entidadeRazaoSocial").focus();
 	        return item.name;
 		}, true);
@@ -91,7 +90,7 @@ $(function(){
  		$('#entidadeRazaoSocial').typeahead({
  			    source: function (query, process) {
  			        return $.ajax({
- 			        	url: baseUrl + '/gestao/entidade/list',
+ 			        	url: BASEURL + '/gestao/entidade/list',
  			            type: 'Get',
  			            data: { maxRows: 6, query: query, cidade: $('#cidadeId').val() },
  			            dataType: 'json',

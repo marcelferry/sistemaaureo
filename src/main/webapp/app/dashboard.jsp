@@ -216,10 +216,6 @@
 </sec:authorize>
 
 <script type="text/javascript">
-
-    var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-	
-
   //Flot Pie Chart
     $(function() {
     	var options = {
@@ -647,15 +643,15 @@
       var tituloJanela = titulo + (status != null ? " - " + status : "");
       
 	 if(regiao != undefined || regiao != null){
-		 urlService = baseUrl + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
+		 urlService = BASEURL + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
      } else if(instituto != undefined){
          if(entidade != null){
-        	 urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
+        	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
          } else {
-    	 	urlService = baseUrl + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
+    	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
      	}
      } else {
-    	 urlService = baseUrl + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
+    	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
      } 
  
       if ( ! $.fn.DataTable.isDataTable( '#tableEntidade' ) ) {

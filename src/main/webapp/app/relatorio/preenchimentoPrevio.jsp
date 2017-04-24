@@ -184,7 +184,6 @@
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	var rodizio = null;
 	var ciclo = null;
 	var entidade = null;
@@ -239,7 +238,7 @@
 	                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 	            },
 	            "bProcessing": true,
-	            "sAjaxSource": baseUrl + '/gestao/relatorio/${action}/' + $(this).data('ciclo'),
+	            "sAjaxSource": BASEURL + '/gestao/relatorio/${action}/' + $(this).data('ciclo'),
 	            "aoColumns": [
 	                { "mData": "id" , "visible": false },
 	                { "mData": "razaoSocial" },
@@ -375,7 +374,7 @@
 		                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 		            },
 		            "bProcessing": true,
-		            "sAjaxSource": baseUrl + '/gestao/relatorio/${action}/' + ciclo + '/' + entidade,
+		            "sAjaxSource": BASEURL + '/gestao/relatorio/${action}/' + ciclo + '/' + entidade,
 		            "aoColumns": [
 		                { "mData": "id", "visible": false },
 		                { "mData": "descricao" },

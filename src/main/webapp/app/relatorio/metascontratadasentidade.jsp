@@ -220,7 +220,6 @@
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	var rodizio = null;
 	var ciclo = null;
 	var entidade = null;
@@ -274,7 +273,7 @@
 	                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 	            },
 	            "bProcessing": true,
-	            "sAjaxSource": baseUrl + '/gestao/relatorio/metascontratadasporentidade/ciclo/' + ciclo + '/entidades',
+	            "sAjaxSource": BASEURL + '/gestao/relatorio/metascontratadasporentidade/ciclo/' + ciclo + '/entidades',
 	            "aoColumns": [
 	                { "mData": "id" , "visible": false },
 	                { "mData": "razaoSocial" },
@@ -354,7 +353,7 @@
 				
 				var urlService;
 
-			    urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeData/' + ciclo + '/' + $(this).data('entidade');
+			    urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeData/' + ciclo + '/' + $(this).data('entidade');
 			      
 			      if ( ! $.fn.DataTable.isDataTable( '#tableMetas' ) ) {
 			      
@@ -449,7 +448,7 @@
 		                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 		            },
 		            "bProcessing": true,
-		            "sAjaxSource": baseUrl + '/gestao/relatorio/metascontratadasporentidade/ciclo/'  + ciclo + '/entidade/' + entidade,
+		            "sAjaxSource": BASEURL + '/gestao/relatorio/metascontratadasporentidade/ciclo/'  + ciclo + '/entidade/' + entidade,
 		            "aoColumns": [
 		                { "mData": "id", "visible": false },
 		                { "mData": "descricao" },
@@ -478,7 +477,7 @@
 					
 					var urlService;
 
-				    urlService = baseUrl + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/' + ciclo + '/' + entidade +  '/' + $(this).data('instituto') ;
+				    urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/' + ciclo + '/' + entidade +  '/' + $(this).data('instituto') ;
 				      
 				      
 				      if ( ! $.fn.DataTable.isDataTable( '#tableMetas' ) ) {

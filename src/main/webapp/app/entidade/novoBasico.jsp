@@ -265,9 +265,6 @@
         <script type="text/javascript" src="/js/custom/autocompletepessoa.js"></script>
         <script type="text/javascript" src="/js/custom/autocompletecidade.js"></script>
   <script>
-
-  var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-  
   $(function() {
 	  $('#cnpj').mask('00.000.000/0000-00', {reverse: true});
 	  $('.cep').mask('00000-000');
@@ -277,8 +274,8 @@
 			language: 'pt-BR'
 		});
 
-      completePessoa($('#presidente\\.pessoa\\.nome'), $("#presidente\\.pessoa\\.id"), baseUrl );
-	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), baseUrl, function(item){
+      completePessoa($('#presidente\\.pessoa\\.nome'), $("#presidente\\.pessoa\\.id"), BASEURL );
+	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), BASEURL, function(item){
 		  	$('#endereco\\.cidade\\.estado\\.sigla').val(item.uf);
 	        $('#endereco\\.cidade\\.estado\\.sigla').attr('readonly', true);
 	        return item.name;

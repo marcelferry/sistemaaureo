@@ -76,7 +76,7 @@
 					$.ajax({
 			            dataType: "json",
 			            type : 'Get',
-			            url: '${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/instituto/list',
+			            url: BASEURL + '/instituto/list',
 			           	data: {	            
 							maxRows: 6,
 							query: request.term
@@ -110,8 +110,7 @@
 			}); 
 
 			
-			var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-			completePessoa($('#dirigenteNacional\\.nome'), $("#dirigenteNacional\\.id"), baseUrl );
+			completePessoa($('#dirigenteNacional\\.nome'), $("#dirigenteNacional\\.id"), BASEURL );
 		});
 
         </script>

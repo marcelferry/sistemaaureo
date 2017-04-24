@@ -537,9 +537,6 @@
   <script type="text/javascript" src="/js/custom/autocompleteinstituto.js"></script>
   
   <script>
-
-  var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-
   function enviar(){
 	var breakOut = false
 	$('input[name^="dirigentes"]').each(function() {
@@ -571,8 +568,8 @@
 		});
 
 
-      completePessoa($('#presidente\\.pessoa\\.nome'), $("#presidente\\.pessoa\\.id"), baseUrl );
-      completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), baseUrl, function(item){
+      completePessoa($('#presidente\\.pessoa\\.nome'), $("#presidente\\.pessoa\\.id"), BASEURL );
+      completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), BASEURL , function(item){
 		  	$('#endereco\\.cidade\\.estado\\.sigla').attr('value', item.uf);
 	        $('#endereco\\.cidade\\.estado\\.sigla').attr('readonly', true);
 	        return item.name;
@@ -752,7 +749,7 @@
           $('#presidentes' + indexPresidentes + '\\.pessoa\\.nome').typeahead({
 	  		    source: function (query, process) {
 	  		        return $.ajax({
-	  		            url: baseUrl + '/pessoa/list',
+	  		            url: BASEURL + '/pessoa/list',
 	  		            type: 'Get',
 	  		            data: { maxRows: 6, query: query },
 	  		            dataType: 'json',
@@ -856,8 +853,8 @@
               return false;
           });
 
-          completePessoa($('#dirigentes' + indexDirigentes + '\\.trabalhador\\.nome'), $("#dirigentes" + indexDirigentes + "\\.trabalhador\\.id"), baseUrl);
-          completeInstituto($('#dirigentes' + indexDirigentes + '\\.instituto\\.descricao'), $("#dirigentes" + indexDirigentes + "\\.instituto\\.id"), baseUrl);
+          completePessoa($('#dirigentes' + indexDirigentes + '\\.trabalhador\\.nome'), $("#dirigentes" + indexDirigentes + "\\.trabalhador\\.id"), BASEURL);
+          completeInstituto($('#dirigentes' + indexDirigentes + '\\.instituto\\.descricao'), $("#dirigentes" + indexDirigentes + "\\.instituto\\.id"), BASEURL);
 
           $('.datepicker').datepicker({
 				format: "dd/mm/yyyy",
@@ -881,7 +878,7 @@
       $('.pessoa').typeahead({
 		    source: function (query, process) {
 		        return $.ajax({
-		            url: baseUrl + '/pessoa/list',
+		            url: BASEURL + '/pessoa/list',
 		            type: 'Get',
 		            data: { maxRows: 6, query: query },
 		            dataType: 'json',
@@ -926,7 +923,7 @@
       $('.trabalhador').typeahead({
 		    source: function (query, process) {
 		        return $.ajax({
-		            url: baseUrl + '/pessoa/list',
+		            url: BASEURL + '/pessoa/list',
 		            type: 'Get',
 		            data: { maxRows: 6, query: query },
 		            dataType: 'json',

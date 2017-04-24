@@ -185,7 +185,6 @@
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	var rodizio = null;
 	var ciclo = null;
 	var entidade = null;
@@ -238,7 +237,7 @@
 	                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 	            },
 	            "bProcessing": true,
-	            "sAjaxSource": baseUrl + '/gestao/planodemetas/secretaria/${action}/' + rodizio,
+	            "sAjaxSource": BASEURL + '/gestao/planodemetas/secretaria/${action}/' + rodizio,
 	            "fnServerData": function ( sSource, aoData, fnCallback ) {
 		            $.ajax( {
 		                "dataType": 'json',
@@ -395,7 +394,7 @@
 			            },
 			            "bProcessing": true,
 			            "iDisplayLength": 15,
-			            "sAjaxSource": baseUrl + '/gestao/planodemetas/secretaria/${action}/' + ciclo + '/' + entidade,
+			            "sAjaxSource": BASEURL + '/gestao/planodemetas/secretaria/${action}/' + ciclo + '/' + entidade,
 			            "fnServerData": function ( sSource, aoData, fnCallback ) {
 				            $.ajax( {
 				                "dataType": 'json',
@@ -432,7 +431,7 @@
 			        } );
 				} else {
 					$('#panelInstituto').show();
-					RefreshTable('#tableInstituto', baseUrl + '/gestao/planodemetas/secretaria/${action}/' + ciclo + '/' + entidade);
+					RefreshTable('#tableInstituto', BASEURL + '/gestao/planodemetas/secretaria/${action}/' + ciclo + '/' + entidade);
 				}
 
 				$('#tableInstituto tbody').on( 'click', '.ficha', function() { 

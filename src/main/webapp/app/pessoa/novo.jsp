@@ -422,18 +422,16 @@
    <script type="text/javascript" src="/js/custom/autocompleteentidade.js"></script>
   <script>
 
-  var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-  
   $(function() {
 
-	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), baseUrl, function(item){
+	  completeCidade($('#endereco\\.cidade\\.nome'), $('#endereco\\.cidade\\.id'), BASEURL, function(item){
 		  	$('#endereco\\.cidade\\.estado\\.sigla').attr('value', item.uf);
 	        $('#endereco\\.cidade\\.estado\\.sigla').attr('readonly', true);
 	        return item.name;
 		});
 
-		completeCidade($('#cidade'), $('#cidade\\.id'), baseUrl);
-		completeEntidade($('#entidade'), $('#entidade\\.id'), baseUrl);
+		completeCidade($('#cidade'), $('#cidade\\.id'), BASEURL);
+		completeEntidade($('#entidade'), $('#entidade\\.id'), BASEURL);
 
 	  $('.external').on('click', function(e) {
 	        e.preventDefault();

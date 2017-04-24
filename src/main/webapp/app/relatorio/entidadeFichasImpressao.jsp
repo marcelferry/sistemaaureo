@@ -91,7 +91,6 @@
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	var ciclo = ${CICLO_CONTROLE.id};
 	var entidade = ${INSTITUICAO_CONTROLE.id};
 
@@ -102,7 +101,7 @@
                 "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
             },
             "bProcessing": true,
-            "sAjaxSource": baseUrl + '/gestao/relatorio/metascontratadasporentidade/ciclo/' + ciclo + '/entidade/' + entidade,
+            "sAjaxSource": BASEURL + '/gestao/relatorio/metascontratadasporentidade/ciclo/' + ciclo + '/entidade/' + entidade,
             "aoColumns": [
                 { "mData": "id", "visible": false },
                 { "mData": "descricao" },

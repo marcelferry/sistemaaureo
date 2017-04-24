@@ -307,7 +307,6 @@
 
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 
 
 	function updateCoordenador(item){
@@ -317,10 +316,10 @@
 	
    $(function() {
 
-  	 completePessoa($('#presidente\\.nomeCompleto'), $("#presidente\\.id"), baseUrl);
-  	 completePessoa($('#nomeCoordenador'), $("#coordenador\\.id"), baseUrl, updateCoordenador);
-  	 completePessoa($('#outro\\.nomeCompleto'), $("#outro\\.id"), baseUrl);
-  	 completeCidade($('#cidade\\.nome'), $('#cidade\\.id'), baseUrl, function(item){
+  	 completePessoa($('#presidente\\.nomeCompleto'), $("#presidente\\.id"), BASEURL );
+  	 completePessoa($('#nomeCoordenador'), $("#coordenador\\.id"), BASEURL , updateCoordenador);
+  	 completePessoa($('#outro\\.nomeCompleto'), $("#outro\\.id"), BASEURL );
+  	 completeCidade($('#cidade\\.nome'), $('#cidade\\.id'), BASEURL , function(item){
 		$("#div_entidade").fadeIn('slow');
 	    $("#entidade\\.razaoSocial").focus();
         return item.name;
@@ -329,7 +328,7 @@
 	$('#entidade\\.razaoSocial').typeahead({
 		    source: function (query, process) {
 		        return $.ajax({
-		        	url: baseUrl + '/gestao/entidade/list',
+		        	url: BASEURL + '/gestao/entidade/list',
 		            type: 'Get',
 		            data: { maxRows: 6, query: query, cidade: $('#cidade\\.id').val(), instituto: $('#instituto\\.id').val(), rodizio: $('#rodizio\\.id').val() },
 		            dataType: 'json',

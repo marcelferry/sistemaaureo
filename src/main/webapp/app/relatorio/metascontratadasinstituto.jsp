@@ -220,7 +220,6 @@
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
 <script>
 
-	var baseUrl = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 	var rodizio = null;
 	var ciclo = null;
 	var entidade = null;
@@ -274,7 +273,7 @@
 	                "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
 	            },
 	            "bProcessing": true,
-	            "sAjaxSource": baseUrl + '/gestao/relatorio/${action}/' + ciclo,
+	            "sAjaxSource": BASEURL + '/gestao/relatorio/${action}/' + ciclo,
 	            "aoColumns": [
 	                { "mData": "id", "visible": false },
 	                { "mData": "descricao" },
@@ -302,7 +301,7 @@
 				
 				var urlService;
 
-			    urlService = baseUrl + '/gestao/planodemetas/listaContratadoInstitutoData/' + ciclo + '/' + $(this).data('instituto');
+			    urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/' + ciclo + '/' + $(this).data('instituto');
 			      
 			      
 			      if ( ! $.fn.DataTable.isDataTable( '#tableMetas' ) ) {
