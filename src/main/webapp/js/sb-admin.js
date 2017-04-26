@@ -1,5 +1,3 @@
-var BASEURL = "${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
-
 $.validator.setDefaults({
 	highlight: function (element, errorClass, validClass) {
         if (element.type === "radio") {
