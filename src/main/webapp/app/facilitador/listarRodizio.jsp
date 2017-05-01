@@ -27,7 +27,7 @@
 							<thead>
 								<tr>
 									<th class="col-md-8">Ano</th>
-									<th class="col-md-4">Ações</th>
+									<th class="col-md-2">Ações</th>
 								</tr>
 							</thead>
 							<tbody>

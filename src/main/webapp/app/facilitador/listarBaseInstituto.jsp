@@ -25,16 +25,20 @@
 									<sec:authorize access="hasRole('ROLE_ADMIN')">
 			                        <th class="col-md-1"><spring:message code="label.codigo.resumido" /></th>
 			                        </sec:authorize>
-									<th class="col-md-9">Nome</th>
+									<th class="col-md-8">Nome</th>
+									<th class="col-md-2">Ações</th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach items="${institutoList}" var="instituto">
-									<tr data-id="${instituto.id}">
+									<tr>
 										<sec:authorize access="hasRole('ROLE_ADMIN')">
 			                            <td>${instituto.id}</td>
 			                            </sec:authorize>
 										<td>${instituto.descricao}</td>
+										<td>
+											<input type="button" data-id="${instituto.id}" class="btn btn-success btn-xs facilitadores" value="Facilitadores"/>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -69,13 +73,11 @@
 			}
 		});
 
-		$('#tabelaInstituto tbody tr').css( 'cursor', 'pointer' );
-		
 		$('#tabelaInstituto tbody tr').bind('selectstart', function(event) {
 		    event.preventDefault();
 		});
 
-		$('#tabelaInstituto tbody').on( 'dblclick', 'tr', function () {
+		$('#tabelaInstituto tbody').on( 'dblclick', '.facilitadores', function () {
 			$('#instituto\\.id').val($(this).data('id'));
 			$('#facilitadorForm').submit();
 	    });

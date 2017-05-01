@@ -153,11 +153,20 @@
 		<!-- Visão Presidente -->
 		<c:if test="${not empty INSTITUICAO_CONTROLE}">
 			<ul class="nav nav-tabs" id="tabpresidente" role="tablist">
-				<li class="active"><a href="#metascontratadas" role="tab" data-toggle="tab">Metas Contratadas</a></li>
+				<li class="active"><a href="#ultimas" role="tab" data-toggle="tab">Metas Vencidas</a></li>
+				<li><a href="#metascontratadas" role="tab" data-toggle="tab">Metas Contratadas</a></li>
 				<li><a href="#situacaoatual" role="tab" data-toggle="tab">Situação Atual</a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="metascontratadas">
+				<div class="tab-pane active" id="ultimas">
+					<div class="col-md-12">
+						<h4>Metas Vencidas</h4>
+						<div id="metasvencidastable"></div>
+						<h4>Metas a Vencer</h4>
+						<div id="metasvencertable"></div>
+					</div>
+				</div>
+				<div class="tab-pane" id="metascontratadas">
 					<div class="col-md-12">
 						<h4>Situação das Metas Contratadas</h4>
 						<div id="institutochart"></div>
@@ -244,6 +253,10 @@
 
     	<c:if test="${not empty INSTITUICAO_CONTROLE}">
 
+    	
+    	showMetas('metasvencertable', null, 'NO PRAZO', null, null, '${INSTITUICAO_CONTROLE.id}');
+    	showMetas('metasvencidastable', null, 'ATRASADO', null, null, '${INSTITUICAO_CONTROLE.id}');    	
+    	
     	$.ajax({
             type: "GET",
             contentType: 'application/json; charset=utf-8',
@@ -287,7 +300,7 @@
 
                 	$("#flot-pie-chart-ins-" + key).bind("plotclick", function(event, pos, obj){
                 	    if (!obj){return;}
-                	    showMetas(item.nomeInstituto, obj.series.situacao, null, item.idinstituto, '${INSTITUICAO_CONTROLE.id}' );
+                	    showMetasPopup(item.nomeInstituto, obj.series.situacao, null, item.idinstituto, '${INSTITUICAO_CONTROLE.id}' );
 
                 	});
                 });
@@ -411,10 +424,10 @@
         <c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA' || ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
         
         <c:if test="${CICLO_CONTROLE.dataAprovacao > now }" >
-        var cicloChartBrasil = ${CICLO_CONTROLE.cicloAnterior.id};
+        var cicloChartBrasil = '${CICLO_CONTROLE.cicloAnterior.id}';
         </c:if>
         <c:if test="${CICLO_CONTROLE.dataAprovacao <= now }" >
-        var cicloChartBrasil = ${CICLO_CONTROLE.id};
+        var cicloChartBrasil = '${CICLO_CONTROLE.id}';
         </c:if>
 
         $.ajax({
@@ -466,10 +479,10 @@
                 	$("#flot-pie-chart-brasil").bind("plotclick", function(event, pos, obj){
                 	    if (!obj){return;}
                 	    <c:if test="${ ROLE_CONTROLE == 'ROLE_METAS_DIRIGENTE'}">
-                	    showMetas(item.nomeInstituto, obj.series.situacao , null, ${INSTITUTO_CONTROLE.id } );
+                	    showMetasPopup(item.nomeInstituto, obj.series.situacao , null, ${INSTITUTO_CONTROLE.id } );
                 	    </c:if>
                         <c:if test="${ ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE'}">
-                        showMetas(item.nomeInstituto, obj.series.situacao );
+                        showMetasPopup(item.nomeInstituto, obj.series.situacao );
                         </c:if>
                 	});
                 });
@@ -519,7 +532,7 @@
                 	$("#flot-pie-chart-" + item.idinstituto).bind("plotclick", function(event, pos, obj){
                 	    if (!obj){return;}
                 	    
-                	    showMetas(item.nomeInstituto, obj.series.situacao, item.idinstituto);
+                	    showMetasPopup(item.nomeInstituto, obj.series.situacao, item.idinstituto);
 
                 	});
                 	
@@ -566,7 +579,7 @@
 
                     	$("#flot-pie-chart-ins-" + key).bind("plotclick", function(event, pos, obj){
                     	    if (!obj){return;}
-                    	    showMetas(item.nomeInstituto, obj.series.situacao, null, item.idinstituto);
+                    	    showMetasPopup(item.nomeInstituto, obj.series.situacao, null, item.idinstituto);
 
                     	});
                     });
@@ -603,11 +616,11 @@
         return html;
     }
     
-    function templateTabela(){
+    function templateTabela(conteudo){
     	var html = '\
     <div id="modal-content" class="content">\
 		<div class="table-responsive">\
-			<table id="tableEntidade"\
+			<table id="tableEntidade'+ conteudo + '"\
 				class="display table table-bordered table-striped table-hover">\
 				<thead>\
 					<tr>\
@@ -632,133 +645,158 @@
 	</div>';
 		return html;
     }
+    
+    function defineUrlMetas(status, regiao, instituto, entidade){
+    	var urlService;
 
-    function showMetas(titulo, status, regiao, instituto, entidade){
-      // create the backdrop and wait for next modal to be triggered
+        if(regiao != undefined || regiao != null){
+  		 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
+        } else if(instituto != undefined){
+           	if(entidade != null){
+          	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
+           	} else {
+      	 		urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
+       		}
+       	} else if(instituto == undefined){ 
+       		if(entidade != null){
+          	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeData/${CICLO_CONTROLE.id}/'  + entidade + '/'  + status;
+           	} else {
+      	 		urlService = BASEURL + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/' + status;
+       		}
+       	} else {
+      	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
+       	} 
+       
+        return urlService;
+    }
+    
+    function showMetas(conteudo, titulo, status, regiao, instituto, entidade){
+    	var urlService = defineUrlMetas(status, regiao, instituto, entidade);
+        
+        $('#' + conteudo).html(templateTabela(conteudo));
+        var tituloJanela = titulo + (status != null ? " - " + status : "");
+   	 	var elementName =  '#tableEntidade'+conteudo;
+    
+        populateTable(elementName, urlService, instituto, function ( oSettings ) {
+         	  concluirModalAguarde();
+        });
+    }
 
-      $('#modals').html(templateTabela());
+    function showMetasPopup(titulo, status, regiao, instituto, entidade){
       
-      var urlService;
-
-      var tituloJanela = titulo + (status != null ? " - " + status : "");
-      
-	 if(regiao != undefined || regiao != null){
-		 urlService = BASEURL + '/gestao/planodemetas/listaContratadoRegiaoData/${CICLO_CONTROLE.id}/' + regiao + '/' + status;
-     } else if(instituto != undefined){
-         if(entidade != null){
-        	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoEntidadeInstitutoData/${CICLO_CONTROLE.id}/'  + entidade + '/' + instituto + '/'  + status;
-         } else {
-    	 	urlService = BASEURL + '/gestao/planodemetas/listaContratadoInstitutoData/${CICLO_CONTROLE.id}/' + instituto + '/'  + status;
-     	}
-     } else {
-    	 urlService = BASEURL + '/gestao/planodemetas/listaContratadoGeralData/${CICLO_CONTROLE.id}/'  + status
-     } 
+      var urlService = defineUrlMetas(status, regiao, instituto, entidade);
+     
+     $('#modals').html(templateTabela(''));
+     var tituloJanela = titulo + (status != null ? " - " + status : "");
+	 var elementName =  '#tableEntidade';
  
-      if ( ! $.fn.DataTable.isDataTable( '#tableEntidade' ) ) {
-    	  exibirModalAguarde();
-	      $("#tableEntidade").DataTable( {
-	  		"language": {
-	              "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
-	          },
-	          "bProcessing": false,
-	          "bSort": false,
-	          "sAjaxSource": urlService,
-	          "fnServerData": function ( sSource, aoData, fnCallback ) {
-		            $.ajax( {
-		                "dataType": 'json',
-		                "type": "GET",
-		                "url": sSource,
-		                "data": aoData,
-		                "globals": false,
-		                "success": fnCallback,
-		                "timeout": 30000,   // optional if you want to handle timeouts (which you should)
-		                "error": handleAjaxError // this sets up jQuery to give me errors
-		            } );
-		        },
-		        "fnDrawCallback": function ( oSettings ) 
-				{
-		    	  for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-		          {
-		                if ( oSettings.aoData[i]._aData.status == "ATRASADO" )
-		                {
-		                	oSettings.aoData[i].nTr.className += " danger";
-		                }
-		                else if ( oSettings.aoData[i]._aData.status == "NO PRAZO" )
-		                {
-		                	oSettings.aoData[i].nTr.className += " warning";
-		                }
-		                else if ( oSettings.aoData[i]._aData.status == "A VENCER" )
-		                {
-		                	oSettings.aoData[i].nTr.className += " info";
-		                }
-		          }
-			  },
-	          "aoColumns": [
-	              { "mData": "previsao", 
-	                  "sDefaultContent" : "",
-	                  "mRender": function(data, type, full){
-	                	  if(data != undefined){
-		                	  var date = new Date(data);
-		                	  return moment(date).format('MM/YYYY');
-	                	  } else {
-							  return "";
-			              }
-	                      //return full.previsao;
-	                   } 
-	              },
-	              { "mData": "entidade", "visible" : ${empty INSTITUICAO_CONTROLE} },
-	              { "mData": null, 
-	                  "sDefaultContent" : "",
-	                  "mRender": function(data, type, full){
-	                      var retorno = "";
-	                      if(full.cidade != undefined){
-	                          retorno += full.cidade;
-	                          if(full.uf != undefined){
-	                              retorno += '/' + full.uf;
-	                          }
-	                      }
-	                      return retorno;
-	                   },
-	                   "visible" : ${empty INSTITUICAO_CONTROLE} 
-	              },
-	              { "mData": "instituto", "sDefaultContent" : "", "visible" : ( (instituto == undefined) && ${empty INSTITUTO_CONTROLE} ) },
-	              { "mData": "meta", "sDefaultContent" : "" }, 
-	          ],
-	          "fnInitComplete": function ( oSettings )
-	          {
-	        	  concluirModalAguarde();
-	        	  setTimeout(() => {
-	        		  BootstrapDialog.show({
-	        			  size: BootstrapDialog.SIZE_WIDE,	        			  
-		                  title: tituloJanela,
-		                  message: $('#modal-content')
-		              });
-				  }, 500); 
-	          }
-		          
-	      } );
-        } else {
-    	    RefreshTable('#tableEntidade', urlService, true);
-		}
+      populateTable(elementName, urlService, instituto, function ( oSettings ) {
+      	  concluirModalAguarde();
+      	  setTimeout(() => {
+      		  BootstrapDialog.show({
+      			  size: BootstrapDialog.SIZE_WIDE,	        			  
+	                  title: tituloJanela,
+	                  message: $('#modal-content')
+	              });
+			  }, 500); 
+        });
+    }
+    
+    function populateTable(elementName, urlService, instituto, onCompleteCallback) {
+    	
+    	if ( ! $.fn.DataTable.isDataTable( elementName ) ) {
+      	  exibirModalAguarde();
+  	      $(elementName).DataTable( {
+  	  		"language": {
+  	              "url": "/js/plugins/dataTables/dataTablesPortuguese.json"
+  	          },
+  	          "bProcessing": false,
+  	          "bSort": false,
+  	          "sAjaxSource": urlService,
+  	          "fnServerData": function ( sSource, aoData, fnCallback ) {
+  		            $.ajax( {
+  		                "dataType": 'json',
+  		                "type": "GET",
+  		                "url": sSource,
+  		                "data": aoData,
+  		                "globals": false,
+  		                "success": fnCallback,
+  		                "timeout": 30000,   // optional if you want to handle timeouts (which you should)
+  		                "error": handleAjaxError // this sets up jQuery to give me errors
+  		            } );
+  		        },
+  		        "fnDrawCallback": function ( oSettings ) 
+  				{
+  		    	  for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+  		          {
+  		                if ( oSettings.aoData[i]._aData.status == "ATRASADO" )
+  		                {
+  		                	oSettings.aoData[i].nTr.className += " danger";
+  		                }
+  		                else if ( oSettings.aoData[i]._aData.status == "NO PRAZO" )
+  		                {
+  		                	oSettings.aoData[i].nTr.className += " warning";
+  		                }
+  		                else if ( oSettings.aoData[i]._aData.status == "A VENCER" )
+  		                {
+  		                	oSettings.aoData[i].nTr.className += " info";
+  		                }
+  		          }
+  			  },
+  	          "aoColumns": [
+  	              { "mData": "previsao", 
+  	                  "sDefaultContent" : "",
+  	                  "mRender": function(data, type, full){
+  	                	  if(data != undefined){
+  		                	  var date = new Date(data);
+  		                	  return moment(date).format('MM/YYYY');
+  	                	  } else {
+  							  return "";
+  			              }
+  	                      //return full.previsao;
+  	                   } 
+  	              },
+  	              { "mData": "entidade", "visible" : ${empty INSTITUICAO_CONTROLE} },
+  	              { "mData": null, 
+  	                  "sDefaultContent" : "",
+  	                  "mRender": function(data, type, full){
+  	                      var retorno = "";
+  	                      if(full.cidade != undefined){
+  	                          retorno += full.cidade;
+  	                          if(full.uf != undefined){
+  	                              retorno += '/' + full.uf;
+  	                          }
+  	                      }
+  	                      return retorno;
+  	                   },
+  	                   "visible" : ${empty INSTITUICAO_CONTROLE} 
+  	              },
+  	              { "mData": "instituto", "sDefaultContent" : "", "visible" : ( (instituto == undefined) && ${empty INSTITUTO_CONTROLE} ) },
+  	              { "mData": "meta", "sDefaultContent" : "" }, 
+  	          ],
+  	          "fnInitComplete": onCompleteCallback 
+  	      } );
+          } else {
+      	    RefreshTable(elementName, urlService, true, onCompleteCallback);
+  		}
 
-		$('#tableEntidade tbody tr').css( 'cursor', 'pointer' );
+  		$(elementName + ' tbody tr').css( 'cursor', 'pointer' );
 
-		$('#tableEntidade tbody tr').bind('selectstart', function(event) {
-		    event.preventDefault();
-		});
+  		$(elementName + ' tbody tr').bind('selectstart', function(event) {
+  		    event.preventDefault();
+  		});
 
-		$('#tableEntidade tbody').on( 'dblclick', 'tr', function () {
-			 var meta = $("#tableEntidade").DataTable().row( this ).data().idMeta;
-			 
-		      $('body').modalmanager('loading');
-		     
-		      setTimeout(function(){
-		         $modal.load('/gestao/metas/preview/' + meta , '', function(){
-		          $modal.modal();
-		        });
-		      }, 1000);
-		});
-
+  		$(elementName + ' tbody').on( 'dblclick', 'tr', function () {
+  			 var meta = $(elementName).DataTable().row( this ).data().idMeta;
+  			 
+  		      $('body').modalmanager('loading');
+  		     
+  		      setTimeout(function(){
+  		         $modal.load('/gestao/metas/preview/' + meta , '', function(){
+  		          $modal.modal();
+  		        });
+  		      }, 1000);
+  		});
     }
 
     function handleAjaxError( xhr, textStatus, error ) {
@@ -771,7 +809,7 @@
 	    myDataTable.fnProcessingIndicator( false );
 	}
 
-    function RefreshTable(tableId, urlData, clean)
+    function RefreshTable(tableId, urlData, clean, onCompleteCallback)
 	 {
     	if(clean) $(tableId).dataTable().fnClearTable(this);
 	   $.getJSON(urlData, null, function( json )
@@ -789,14 +827,7 @@
 	     oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	     table.fnDraw();
 	     
-	     concluirModalAguarde();
-   	  	 setTimeout(() => {
-   		  BootstrapDialog.show({
-   			  size: BootstrapDialog.SIZE_WIDE,	        			  
-                 title: 'Pendências',
-                 message: $('#modal-content')
-             });
-		  }, 500); 
+	     onCompleteCallback(); 
 	   });
 	 }
 
