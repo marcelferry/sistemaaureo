@@ -41,6 +41,7 @@
 			<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
 			<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
 			<button type="button" onclick="this.form.action = '/gestao/email/entidade/envio';submit();" class="btn btn-primary">Enviar email</button>
+			<button type="button" onclick="this.form.action = '/gestao/email/entidade/sendLembreteTodos/${CICLO_CONTROLE.id}';submit();" class="btn btn-primary">Enviar email</button>
 		</form>
 	</div>
 	
@@ -135,8 +136,9 @@ $(document).ready(function() {
 				    		+ '<ul class="dropdown-menu" role="menu">'
 							+ '<li><a type="button" class="btn-sm edit" data-id="' + full.id + '" title="Editar este registro"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>'
 							+ '<li><a type="button" class="btn-sm delete" data-id="' + full.id  + '" title="Excluir este registro"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>'
-							+ '<li><a type="button" class="btn-sm email" data-id="' + full.presidente.id + '" data-entidade="' + full.id + '" title="Enviar convite de acesso para o presidente." alt="Enviar convite de acesso para o presidente."><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar convite</a></li>'
-							+ '<li><a type="button" class="btn-sm senha" data-id="' + full.presidente.id + '" title="Redefinir senha do presidente para 12345" alt="Redefinir senha do presidente para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Redefinir senha</a></li>'
+							+ '<li><a type="button" class="btn-sm email" data-pessoa="' + full.presidente.id + '" data-id="' + full.id + '" title="Enviar convite de acesso para o presidente." alt="Enviar convite de acesso para o presidente."><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar convite</a></li>'
+							+ '<li><a type="button" class="btn-sm lembrete" data-pessoa="' + full.presidente.id + '" data-id="' + full.id + '" title="Enviar Lembrete" alt="Enviar Lembrete"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar lembrete</a></li>'
+							+ '<li><a type="button" class="btn-sm senha" data-pessoa="' + full.presidente.id + '" title="Redefinir senha do presidente para 123456" alt="Redefinir senha do presidente para 12345"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Redefinir senha</a></li>'
 							+ '</ul>'
 						+ '</div>'; // replace this with button 
 				} else {
@@ -171,7 +173,34 @@ $(document).ready(function() {
 			contentType : 'application/json; charset=utf-8',
 			dataType : 'json',
 			context : $(this),
-			url : '/gestao/email/entidade/sendConvite/' + $(this).data('id') + '/' + escape($(this).data('entidade')),
+			url : '/gestao/email/entidade/sendConvite/' + $(this).data('id') + '/' + escape($(this).data('pessoa')),
+			error : function(jqXHR, textStatus, errorThrown) {
+				concluirModalAguarde();
+				var exceptionVO = jQuery.parseJSON(jqXHR.responseText);
+				$('#errorModal')
+					.find('.modal-header h3').html(jqXHR.status + ' error').end()
+					.find('.modal-body p>strong').html(exceptionVO.clazz).end()
+					.find('.modal-body p>em').html(exceptionVO.method).end()
+					.find('.modal-body p>span').html(exceptionVO.message).end()
+					.modal('show');
+
+			},
+			success : function(response) {
+				var valid = response === true || response === "true";
+				concluirModalAguarde();
+				alert("Email enviado com sucesso!");
+			}
+		});
+	});
+	
+	$('#example tbody') .on('click','.lembrete', function() {
+		exibirModalAguarde();
+		$.ajax({
+			type : "GET",
+			contentType : 'application/json; charset=utf-8',
+			dataType : 'json',
+			context : $(this),
+			url : '/gestao/email/entidade/sendLembrete/${ CICLO_CONTROLE.id }' + '/' + $(this).data('id') + '/' + escape($(this).data('pessoa')),
 			error : function(jqXHR, textStatus, errorThrown) {
 				concluirModalAguarde();
 				var exceptionVO = jQuery.parseJSON(jqXHR.responseText);

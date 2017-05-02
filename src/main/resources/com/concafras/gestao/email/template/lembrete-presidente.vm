@@ -1,0 +1,100 @@
+<html>
+<body>
+
+<h4>Caro Presidente, que a paz de Jesus esteja com você.</h4>
+
+<p>Este email é para lembrar das metas contratadas na reunião da semana da santa.</p>
+
+<p>É muito importante que você mantenha as informações das metas atualizadas.</p>
+
+<div>
+	<h4>Metas Vencidas até ${mesAnterior}</h4>
+	<table style="width: 933px; border: solid 1px #666666;">
+		<thead>
+			<tr role="row" style="background-color: #cccccc;">
+				<th style="width: 96px;">Previsão</th>
+				<th style="width: 153px;">Instituto</th>
+				<th style="width: 220px;">Meta</th></tr>
+		</thead>
+		<tfoot>
+			<tr style="background-color: #cccccc;">
+				<th>Previsão</th>
+				<th>Instituto</th>
+				<th>Meta</th>
+			</tr>
+		</tfoot>
+		<tbody>
+		#foreach( $meta in ${listaVencidas} )
+			<tr role="row" style="border-top: solid 1px #666666;">
+				<td>$date.format("MM/yyyy", ${meta.previsao} )</td>
+				<td>${meta.instituto}</td>
+				<td>${meta.meta}</td>
+			</tr>
+		#end
+		#if ($listaVencidas.empty)
+			<tr>
+				<td valign="top" align="center" colspan="3">Não foram encontrados resultados</td>
+			</tr>
+		#end
+		</tbody>
+	</table>
+</div>
+<div>	
+	<h4>Metas a Vencer em ${mesAtual}</h4>
+	<table style="width: 933px; border: solid 1px #666666;">
+		<thead>
+			<tr role="row" style="background-color: #cccccc;">
+				<th style="width: 96px;">Previsão</th>
+				<th style="width: 153px;">Instituto</th>
+				<th style="width: 634px;">Meta</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr style="background-color: #cccccc;">
+				<th>Previsão</th>
+				<th>Instituto</th>
+				<th>Meta</th>
+			</tr>
+		</tfoot>
+		<tbody>
+		#foreach( $meta in ${listaVencer} )
+			<tr role="row" style="border-top: solid 1px #666666;">
+				<td>$date.format("MM/yyyy", ${meta.previsao})</td>
+				<td>${meta.instituto}</td>
+				<td>${meta.meta}</td>
+			</tr>
+		#end
+		#if ($listaVencer.empty)
+			<tr>
+				<td valign="top" align="center" colspan="3">Não foram encontrados resultados</td>
+			</tr>
+		#end
+		</tbody>
+	</table>
+</div>
+
+<p>A atualização pode ser feito por você ou pelos seus dirigentes de instituto, desde que utilizem o seu login e a sua senha.</p>
+
+<p>Para realizar o acesso nesse momento, utilize o seguinte endereço:</p>
+
+<p><a href="http://www.contratacaodemetas.com.br/">http://www.contratacaodemetas.com.br/</a></p>
+
+<p>Utilize seu email e senha já cadastrados.</p>
+
+<hr/>
+
+<p><b>Se você não é o mais o presidente da instituição, por favor redirecione este email para ele e nos informe. Agradecemos sua colaboração. </b> </p>
+
+<hr/>
+
+<p>Caso tenha dúvidas não deixe de nos procurar através do e-mail <a href="mailto:sistemadegestaodemetas@gmail.com">sistemadegestaodemetas@gmail.com</a></p>
+
+<p><b>Secretaria Nacional</b><br/>
+<b>Sistema de gestão e contratação de metas</b><br/>
+<b>CONCAFRAS/pse</b></p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

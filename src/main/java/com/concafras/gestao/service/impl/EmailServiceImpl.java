@@ -30,6 +30,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl;
+import org.apache.velocity.tools.generic.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -124,7 +125,6 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
             message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um convite muito especial.");
             message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-            message.setBcc(  new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
             message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
             
             //ClassPathResource file = new ClassPathResource("com/concafras/gestao/email/attachment/manual_do_facilitador.pdf");
@@ -142,6 +142,32 @@ public class EmailServiceImpl implements EmailService {
       };
       sendMessage(this.mailSender, preparator);
    }
+    
+    public void sendLembreteEmail(final Pessoa pessoa, final Entidade entidade, final List vencidas, final List avencer, final String mesAtual, final String mesAnterior) {
+      MimeMessagePreparator preparator = new MimeMessagePreparator() {
+        public void prepare(MimeMessage mimeMessage) throws Exception {
+          MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+          message.setSubject(pessoa.getPrimeiroNome() + ", vamos manter nossas metas atualizadas?.");
+          message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
+          message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
+          
+          Map<String, Object> model = new HashMap<String, Object>();
+          model.put("presidente" , pessoa );
+          model.put("entidade"   , entidade );
+          model.put("email"      , pessoa.getPrimeiroEmail());
+          model.put("listaVencidas", vencidas);
+          model.put("listaVencer"  , avencer);
+          model.put("mesAtual"  , mesAtual);
+          model.put("mesAnterior"  , mesAnterior);
+          model.put("date", new DateTool());
+          
+          String text = VelocityEngineUtils.mergeTemplateIntoString(
+              velocityEngine, "com/concafras/gestao/email/template/lembrete-presidente.vm", "UTF-8", model);
+          message.setText(text, true);
+        }
+      };
+      sendMessage(this.mailSender, preparator);
+    }
 
     
     public void sendEmail(final Pessoa pessoa, final Entidade entidade, final String assunto, final String mensagem) {
@@ -191,7 +217,6 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
             message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um lembrete.");
             message.setTo(  new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-            message.setBcc(  new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
             message.setFrom( new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
             
             Map<String, Object> model = new HashMap<String, Object>();
@@ -276,7 +301,6 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
             message.setSubject(pessoa.getPrimeiroNome() + ", você está recebendo um convite muito especial.");
             message.setTo(new InternetAddress( pessoa.getPrimeiroEmail() , pessoa.getNome() ));
-            message.setBcc(new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>"));
             message.setFrom(new InternetAddress("Gestão de Metas - Concafras-PSE <sistemadegestaodemetas@gmail.com>") );
             
             ClassPathResource file = new ClassPathResource("com/concafras/gestao/email/attachment/manual_do_facilitador.pdf");

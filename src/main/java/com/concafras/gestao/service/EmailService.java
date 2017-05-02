@@ -20,6 +20,7 @@ public interface EmailService {
     public void removeEmail(Integer id);
     public void sendConfirmationEmail(Usuario usuario, String novaSenha);
     public void sendInviteEmail(Pessoa pessoa, Entidade entidade);
+    public void sendLembreteEmail(Pessoa pessoa, Entidade entidade, List vencidas, List avencer, String mesAtual, String mesAnterior);
     public void sendInviteEmail(Pessoa pessoa, String descricao);
     public void sendEmail(Pessoa pessoa, Entidade entidade, String assunto, String mensagem);
     public void sendEmail(HttpServletRequest request, Exception ex);
