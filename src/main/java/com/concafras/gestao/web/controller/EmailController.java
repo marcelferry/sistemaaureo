@@ -177,7 +177,11 @@ public class EmailController {
       throw new JqueryBussinessException("Pessoa não possui email cadastrado.");
     }
     
-    emailService.sendLembreteEmail(pessoaLoaded, entidadeLoaded, vencidas, vencer, mesAtualtexto, mesAnteriortexto);
+    if( 
+        (vencidas != null && !vencidas.isEmpty()) || 
+        (vencer != null && !vencer.isEmpty()) ) {
+      emailService.sendLembreteEmail(pessoaLoaded, entidadeLoaded, vencidas, vencer, mesAtualtexto, mesAnteriortexto);
+    }
     
     return true;
   }

@@ -3,7 +3,7 @@
 
 <h4>Caro Presidente, que a paz de Jesus esteja com você.</h4>
 
-<p>Este email é para lembrar das metas contratadas na reunião da semana da santa.</p>
+<p>Este email é para lembrar das metas contratadas na reunião da semana santa.</p>
 
 <p>É muito importante que você mantenha as informações das metas atualizadas.</p>
 
@@ -33,7 +33,7 @@
 		#end
 		#if ($listaVencidas.empty)
 			<tr>
-				<td valign="top" align="center" colspan="3">Não foram encontrados resultados</td>
+				<td valign="top" align="center" colspan="3">Não há metas vencidas</td>
 			</tr>
 		#end
 		</tbody>
@@ -66,7 +66,7 @@
 		#end
 		#if ($listaVencer.empty)
 			<tr>
-				<td valign="top" align="center" colspan="3">Não foram encontrados resultados</td>
+				<td valign="top" align="center" colspan="3">Não há metas a vencer nesse mês.</td>
 			</tr>
 		#end
 		</tbody>
