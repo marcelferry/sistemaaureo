@@ -167,7 +167,7 @@ public class EmailController {
     
     List<ResumoMetaEntidade> vencidas = null;
     vencidas = planoMetasService.getListaContratadoGeralData(ciclo, null,
-        entidade, null, "VENCIDAS");
+        entidade, null, "ATRASADO");
     
     List<ResumoMetaEntidade> vencer = null;
     vencer = planoMetasService.getListaContratadoGeralData(ciclo, null,
