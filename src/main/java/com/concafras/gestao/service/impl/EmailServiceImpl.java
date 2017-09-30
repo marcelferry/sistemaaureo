@@ -381,7 +381,6 @@ public class EmailServiceImpl implements EmailService {
           sb.append("<br/>");
         }
         
-        
         sb.append("<br/>");
         
         sb.append("<b>Exceção</b><br/>");
@@ -394,9 +393,8 @@ public class EmailServiceImpl implements EmailService {
         
         sb.append("<br/>");
         
-        
         StackTraceElement[] elements = exception.getStackTrace();
-    
+        
         for (StackTraceElement stackTraceElement : elements) {
           sb.append(stackTraceElement.toString());
           sb.append("<br/>");
