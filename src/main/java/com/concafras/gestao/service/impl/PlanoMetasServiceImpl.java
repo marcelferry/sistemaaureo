@@ -291,35 +291,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
     
     @Transactional
     public List<StatusAtualInstitutoGraphicData> getStatusAtualGraphicData(Integer ciclo, Integer entidade){
-      Query query2 = em.createNativeQuery(
-        "select id, descricao, situacao, total from ( (select i.id, i.descricao, coalesce(hme.situacao, " +
-        " CASE WHEN hme.realizado > 0 THEN 'IMPLANTADA' " +
-        "            ELSE NULL " +
-        "       END, 'NAOINFORMADA') as situacao, count(*) as total " +
-        "         from institutos i " +
-        "         inner join metas_instituto mi on i.id = mi.idinstituto " + 
-        "         left outer join metas_entidade me on me.idmetasinstituto = mi.id " +
-        "         left outer join historico_metas_entidade hme on me.id = hme.idmeta " +
-        "         where  " +
-        "         mi.tipo_meta != 'GRUPO_METAS' and " +
-        "         (hme.tipo_situacao = 0 or hme.tipo_situacao is null) and " +
-        "         me.identidade = " + entidade + " and hme.idrodizio = " + ciclo + " " +
-        "         group by i.id, i.descricao, coalesce(hme.situacao, " +
-        " CASE WHEN hme.realizado > 0 THEN 'IMPLANTADA' " +
-        "            ELSE NULL " +
-        "       END, 'NAOINFORMADA') " +
-        "order by i.descricao,  situacao) " +
-        "UNION " +
-        "(select i.id, i.descricao, 'NAOINFORMADA' as situacao, count(*) as total " +
-        "         from institutos i " +
-        "         inner join metas_instituto mi on i.id = mi.idinstituto " +
-        "         where mi.tipo_meta != 'GRUPO_METAS' and " +
-        "     i.id not in (select idinstituto from contrato_metas pme " +
-        "     where pme.identidade = " + entidade + " and pme.idrodizio = " + ciclo + ") " +
-        "     group by i.id, i.descricao " +
-        "order by i.descricao,  situacao) " +
-        ") x " +
-        "order by descricao,  situacao; ");
       
       StoredProcedureQuery query = em.createStoredProcedureQuery("sp_status_atual_metas");
       query.registerStoredProcedureParameter(1, void.class, ParameterMode.REF_CURSOR);
@@ -331,6 +302,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
+      boolean statusq = query.execute();
+      
+      if(!statusq) {
+    	  	return result;
+      }
+      
       if( query.hasMoreResults() ){
       
         List<Object[]> result2 = query.getResultList();
@@ -356,7 +333,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
         }
       }
       
-      
       return result;
     }
     
@@ -370,6 +346,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       query.setParameter(3, ciclo);
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
+      
+      boolean statusq = query.execute();
+      
+      if(!statusq) {
+    	  	return result;
+      }
       
       if( query.hasMoreResults() ){
       
@@ -414,6 +396,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
+      boolean statusq = query.execute();
+      
+      if(!statusq) {
+    	  	return result;
+      }
+      
       if( query.hasMoreResults() ){
         
         List<Object[]> result2 = query.getResultList();
@@ -618,6 +606,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
+      boolean statusq = query.execute();
+      
+      if(!statusq) {
+    	  	return result;
+      }
+      
       if( query.hasMoreResults() ){
       
         List<Object[]> result2 = query.getResultList();
@@ -673,7 +667,13 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
         query.setParameter(6, 0);
       
       List<ResumoMetaEntidade> result = new ArrayList<ResumoMetaEntidade>();
-
+      
+      boolean statusq = query.execute();
+      
+      if(!statusq) {
+    	  	return result;
+      }
+      
       if( query.hasMoreResults() ){
               
         List<Object[]> result2 = query.getResultList();
@@ -736,6 +736,13 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
       
+      boolean status = query.execute();
+      
+      if(!status) {
+    	  	return result;
+      }
+      
+      
       if( query.hasMoreResults() ){
         
         List<Object[]> result2 = query.getResultList();
@@ -784,6 +791,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
+      boolean status = query.execute();
+      
+      if(!status) {
+    	  	return result;
+      }
+      
       if( query.hasMoreResults() ){
       
         List<Object[]> result2 = query.getResultList();
