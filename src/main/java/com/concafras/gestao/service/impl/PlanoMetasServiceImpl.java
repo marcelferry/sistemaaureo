@@ -301,12 +301,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       //query.execute();
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
-
-      boolean statusq = query.execute();
-      
-      if(!statusq) {
-    	  	return result;
-      }
       
       if( query.hasMoreResults() ){
       
@@ -346,12 +340,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       query.setParameter(3, ciclo);
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
-      
-      boolean statusq = query.execute();
-      
-      if(!statusq) {
-    	  	return result;
-      }
       
       if( query.hasMoreResults() ){
       
@@ -396,12 +384,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
-      boolean statusq = query.execute();
-      
-      if(!statusq) {
-    	  	return result;
-      }
-      
       if( query.hasMoreResults() ){
         
         List<Object[]> result2 = query.getResultList();
@@ -606,12 +588,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
-      boolean statusq = query.execute();
-      
-      if(!statusq) {
-    	  	return result;
-      }
-      
       if( query.hasMoreResults() ){
       
         List<Object[]> result2 = query.getResultList();
@@ -667,12 +643,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
         query.setParameter(6, 0);
       
       List<ResumoMetaEntidade> result = new ArrayList<ResumoMetaEntidade>();
-      
-      boolean statusq = query.execute();
-      
-      if(!statusq) {
-    	  	return result;
-      }
       
       if( query.hasMoreResults() ){
               
@@ -736,13 +706,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
       
-      boolean status = query.execute();
-      
-      if(!status) {
-    	  	return result;
-      }
-      
-      
       if( query.hasMoreResults() ){
         
         List<Object[]> result2 = query.getResultList();
@@ -791,11 +754,6 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
       
       List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
-      boolean status = query.execute();
-      
-      if(!status) {
-    	  	return result;
-      }
       
       if( query.hasMoreResults() ){
       
