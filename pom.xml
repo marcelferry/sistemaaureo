@@ -6,6 +6,7 @@
 	<artifactId>gestao-app</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
+	<name>gestao-app</name>
 
 	<issueManagement>
 		<url>https://github.com/marcelferry/sistemaaureo/issues</url>
