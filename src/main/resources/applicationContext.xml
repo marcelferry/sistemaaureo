@@ -40,7 +40,7 @@
 	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"/>
-		<property name="port" value="587"/>
+		<property name="port" value="465"/>
 		<property name="username" value="sistemadegestaodemetas@gmail.com"/>
 		<property name="javaMailProperties">
 			<props>
@@ -52,7 +52,7 @@
 				<prop key="mail.smtp.auth.mechanisms">XOAUTH2</prop>
 				<!-- Use TLS to encrypt communication with SMTP server -->
 				<prop key="mail.smtp.starttls.enable">true</prop>
-				<prop key="mail.debug">false</prop>
+				<prop key="mail.debug">true</prop>
 			</props>
 		</property>
 	</bean>
