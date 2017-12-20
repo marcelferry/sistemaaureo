@@ -42,7 +42,7 @@
 		<property name="host" value="mail.contratacaodemetas.com.br" />
 		<property name="port" value="587" />
 		<property name="username" value="contato@contratacaodemetas.com.br" />
-		<property name="password" value="182229" />
+		<property name="password" value="182229!" />
 
 		<property name="javaMailProperties">
 			<props>
