@@ -258,6 +258,9 @@ public class EmailServiceImpl implements EmailService {
     
     
     public void sendMessage(JavaMailSender mailSender, MimeMessagePreparator preparator) {
+    		mailSender.send(preparator);
+    }
+    /*public void sendMessage(JavaMailSender mailSender, MimeMessagePreparator preparator) {
         if(System.currentTimeMillis() > tokenExpires) {
             try {
                 String request = "client_id="+URLEncoder.encode(oauthClientId, "UTF-8")
@@ -292,7 +295,7 @@ public class EmailServiceImpl implements EmailService {
         ((JavaMailSenderImpl)mailSender).setPassword(accessToken);
         // Now send mail like normal
         mailSender.send(preparator);
-    }
+    }*/
     
     
     public void sendInviteEmail(final Pessoa pessoa, final String instituto) {
