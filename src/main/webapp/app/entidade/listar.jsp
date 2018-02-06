@@ -228,7 +228,7 @@ $(document).ready(function() {
 			contentType : 'application/json; charset=utf-8',
 			dataType : 'json',
 			context : $(this),
-			url : '/gestao/userprofile/redefinirSenha/' + $(this).data('id') + '/false',
+			url : '/gestao/userprofile/redefinirSenha/' + $(this).data('pessoa') + '/false',
 			error : function(jqXHR, textStatus, errorThrown) {
 				concluirModalAguarde();
 				var exceptionVO = jQuery.parseJSON(jqXHR.responseText);
