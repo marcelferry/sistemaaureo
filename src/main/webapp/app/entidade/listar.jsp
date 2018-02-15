@@ -40,8 +40,8 @@
 		<form action="" method="get">
 			<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
 			<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
-			<button type="button" onclick="this.form.action = '/gestao/email/entidade/envio';submit();" class="btn btn-primary">Enviar email</button>
-			<button type="button" onclick="this.form.action = '/gestao/email/entidade/sendLembreteTodos/${CICLO_CONTROLE.id}';submit();" class="btn btn-primary">Enviar email</button>
+			<button type="button" onclick="this.form.action = '/gestao/email/entidade/envio';submit();" class="btn btn-primary">Envio de email</button>
+			<button type="button" onclick="this.form.action = '/gestao/email/entidade/sendLembreteTodos/${CICLO_CONTROLE.id}';submit();" class="btn btn-primary">Enviar metas vencidas</button>
 		</form>
 	</div>
 	
@@ -83,12 +83,12 @@ jQuery.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings) {
 };
 
 $(document).ready(function() {
-	exibirModalAguarde();
+	//exibirModalAguarde();
 	var table = $("#example").DataTable({
 		"language" : {
 			"url" : "/js/plugins/dataTables/dataTablesPortuguese.json"
 		},
-		"bProcessing" : false,
+		"bProcessing" : true,
 		"bServerSide" : true,
 		"searchDelay": 500,
 		"sort" : "position",
@@ -98,7 +98,7 @@ $(document).ready(function() {
 		"iDisplayLength" : 10,
 		//We will use below variable to track page number on server side(For more information visit: http://legacy.datatables.net/usage/options#iDisplayStart)
 		"iDisplayStart" : 0,
-		"fnInitComplete" : concluirModalAguarde,
+		//"fnInitComplete" : concluirModalAguarde,
 		"fnDrawCallback" : function() {
 			//Get page numer on client. Please note: number start from 0 So
 			//for the first page you will see 0 second page 1 third page 2...
