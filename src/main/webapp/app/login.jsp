@@ -83,7 +83,9 @@
 							</c:if>
                         </form>
                         <br/>
+                        <c:if test="${false}">
                         Primeiro acesso? Esqueceu sua senha? <b><a href="/gestao/userprofile/recuperarsenha">Entre Aqui</a></b>
+                        </c:if>
                     </div>
                 </div>
             </div>

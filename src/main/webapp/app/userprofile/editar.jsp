@@ -16,7 +16,7 @@
                 <div class="form-group">
 		            <form:label class="col-sm-2 control-label" path="username">Nome Usuário</form:label>
                 	<div class="col-sm-4">
-                		<form:input path="username"  cssClass="form-control" />
+                		<form:input path="username" cssClass="form-control" />
                 	</div>
 	            </div>
                 <div class="form-group">
@@ -26,7 +26,7 @@
                 	</div>
 	            </div>
 	            <div class="form-group">
-		                <form:label class="col-sm-2 control-label" path="passwordExpired">Trocar Senha</form:label>
+		                <form:label class="col-sm-2 control-label" path="passwordExpired">Forçar Troca Senha</form:label>
 		                <div class="col-sm-3">
 							<form:select path="passwordExpired" cssClass="form-control">
 								<form:option value="false">Não</form:option>
