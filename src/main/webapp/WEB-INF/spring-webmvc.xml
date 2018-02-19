@@ -33,6 +33,7 @@
             <mvc:exclude-mapping path="/font-awesome/**"/>
             <mvc:exclude-mapping path="/img/**"/>
             <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/api/**"/>
             <mvc:exclude-mapping path="/gestao/userprofile/recuperarsenha*"/>
             <mvc:exclude-mapping path="/gestao/userprofile/trocarsenha*"/>
             <mvc:exclude-mapping path="/gestao/userprofile/password/change*"/>
