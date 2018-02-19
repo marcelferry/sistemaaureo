@@ -13,9 +13,9 @@ public class PlanoMetasForm {
 
   private RodizioVO rodizio;
 
-  private BaseEntidade entidade;
+  private EntidadeOptionForm entidade;
 
-  private BaseInstituto instituto;
+  private InstitutoOptionForm instituto;
 
   private PessoaOptionForm facilitador;
 
@@ -98,19 +98,19 @@ public class PlanoMetasForm {
     this.facilitador = facilitador;
   }
 
-  public BaseInstituto getInstituto() {
+  public InstitutoOptionForm getInstituto() {
     return instituto;
   }
 
-  public void setInstituto(BaseInstituto instituto) {
+  public void setInstituto(InstitutoOptionForm instituto) {
     this.instituto = instituto;
   }
 
-  public BaseEntidade getEntidade() {
+  public EntidadeOptionForm getEntidade() {
     return entidade;
   }
 
-  public void setEntidade(BaseEntidade entidade) {
+  public void setEntidade(EntidadeOptionForm entidade) {
     this.entidade = entidade;
   }
 

@@ -382,7 +382,7 @@ public class RelatorioController {
       BaseEntidade base = (BaseEntidade) request.getSession()
           .getAttribute("INSTITUICAO_CONTROLE");
       BaseEntidade entidade = entidadeService.findByIdOverview(base.getId());
-      planoMetasForm.setEntidade(entidade);
+      planoMetasForm.setEntidade( new EntidadeOptionForm( entidade ) );
     }
 
     List<MetaForm> metasForm = null;
@@ -601,7 +601,7 @@ public class RelatorioController {
     PlanoMetasForm planoMetasForm = new PlanoMetasForm();
     
     if (entidade != null) {
-      planoMetasForm.setEntidade(entidade);
+      planoMetasForm.setEntidade( new EntidadeOptionForm(entidade) );
     }
     
     PessoaOptionForm pessoa = new PessoaOptionForm(facilitador);
@@ -609,7 +609,7 @@ public class RelatorioController {
     planoMetasForm.setFacilitador(pessoa);
 
     planoMetasForm.setRodizio( new RodizioVO( rodizio ) );
-    planoMetasForm.setInstituto(instituto);
+    planoMetasForm.setInstituto( new InstitutoOptionForm( instituto ) );
     planoMetasForm.setEvento(planoMetasForm.getEvento());
     
     List<MetaForm> metasForm = null;
@@ -671,7 +671,7 @@ public class RelatorioController {
       Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio().getId());
 
       if (entidade != null) {
-        planoMeta.setEntidade(entidade);
+        planoMeta.setEntidade(new EntidadeOptionForm(entidade) );
       }
 
       if (planoMetasForm.getFacilitador() != null && planoMetasForm.getFacilitador().getId() != null) {
@@ -681,7 +681,7 @@ public class RelatorioController {
       }
 
       planoMeta.setRodizio( new RodizioVO( rodizio ) );
-      planoMeta.setInstituto(instituto);
+      planoMeta.setInstituto( new InstitutoOptionForm( instituto ) );
       planoMeta.setEvento(planoMetasForm.getEvento());
 
       List<MetaForm> metasForm = null;
@@ -1250,7 +1250,7 @@ public class RelatorioController {
         && planoMetasForm.getInstituto().getId() != null) {
       BaseInstituto instituto = baseInstitutoService
           .findByIdOverview(planoMetasForm.getInstituto().getId());
-      planoMetasForm.setInstituto(instituto);
+      planoMetasForm.setInstituto( new InstitutoOptionForm( instituto ) );
       return instituto;
     } else {
       planoMetasForm.setInstituto(null);
@@ -1264,7 +1264,7 @@ public class RelatorioController {
         && planoMetasForm.getEntidade().getId() != null) {
       BaseEntidade entidade = entidadeService
           .findByIdOverview(planoMetasForm.getEntidade().getId());
-      planoMetasForm.setEntidade(entidade);
+      planoMetasForm.setEntidade( new EntidadeOptionForm( entidade ) );
       return entidade;
     } else {
       planoMetasForm.setEntidade(null);

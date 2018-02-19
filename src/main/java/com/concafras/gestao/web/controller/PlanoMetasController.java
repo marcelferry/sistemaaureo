@@ -348,7 +348,7 @@ public class PlanoMetasController {
         }
         
         if(novoFac != null){
-          planoMetasForm.setInstituto(novoFac.getInstituto());
+          planoMetasForm.setInstituto( new InstitutoOptionForm( novoFac.getInstituto() ) );
         }
         
         planoMetasForm.setFacilitador(new PessoaOptionForm( facilitadorSearch ) );
@@ -529,7 +529,7 @@ public class PlanoMetasController {
           }
         }
         
-        planoMetasForm.setEntidade(entidade);
+        planoMetasForm.setEntidade( new EntidadeOptionForm( entidade ) );
         planoMetasForm.setTipoContratante(TipoContratante.PRESIDENTE);
         if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null) { 
         		planoMetasForm.setPresidente(  new PessoaOptionForm(  entidade.getPresidente().getPessoa() ) );
@@ -590,8 +590,8 @@ public class PlanoMetasController {
     }
     
     planoMetasForm.setRodizio( new RodizioVO( planoMetasAtual.getRodizio() ) );
-    planoMetasForm.setInstituto(planoMetasAtual.getInstituto());
-    planoMetasForm.setEntidade(planoMetasAtual.getEntidade());
+    planoMetasForm.setInstituto( new InstitutoOptionForm( planoMetasAtual.getInstituto() ) );
+    planoMetasForm.setEntidade( new EntidadeOptionForm( planoMetasAtual.getEntidade() ) );
     
     mapAnotacoesPlanoMetasToPlanoMetasForm(planoMetasAtual, planoMetasForm);
     
@@ -1287,7 +1287,7 @@ public class PlanoMetasController {
              facilitador,
              contratante, 
              EventoMeta.RODIZIO, 
-             planoMetas.getEntidade(), 
+             new EntidadeOptionForm( planoMetas.getEntidade() ) , 
              new RodizioVO( planoMetas.getRodizio() ) );
         		planoMetasForm.setDependencias(metas);
       }
@@ -1316,7 +1316,7 @@ public class PlanoMetasController {
         && planoMetasForm.getInstituto().getId() != null) {
       BaseInstituto instituto = baseInstitutoService
           .findByIdOverview(planoMetasForm.getInstituto().getId());
-      planoMetasForm.setInstituto(instituto);
+      planoMetasForm.setInstituto( new InstitutoOptionForm( instituto ) );
       return instituto;
     } else {
       planoMetasForm.setInstituto(null);
@@ -1330,7 +1330,7 @@ public class PlanoMetasController {
         && planoMetasForm.getEntidade().getId() != null) {
       BaseEntidade entidade = entidadeService
           .findByIdOverview(planoMetasForm.getEntidade().getId());
-      planoMetasForm.setEntidade(entidade);
+      planoMetasForm.setEntidade( new EntidadeOptionForm( entidade ) );
       return entidade;
     } else {
       planoMetasForm.setEntidade(null);

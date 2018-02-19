@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.concafras.gestao.form.EntidadeOptionForm;
+import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.PlanoMetasForm;
@@ -95,7 +97,7 @@ public class PlanoMetasRestController {
 		PlanoMetasForm planoMetasForm = new PlanoMetasForm();
 
 		if (entidade != null) {
-			planoMetasForm.setEntidade(entidade);
+			planoMetasForm.setEntidade( new EntidadeOptionForm( entidade ) );
 		}
 
 		PessoaOptionForm pessoaFacilitador = new PessoaOptionForm(facilitador);
@@ -103,7 +105,9 @@ public class PlanoMetasRestController {
 		planoMetasForm.setFacilitador(pessoaFacilitador);
 
 		planoMetasForm.setRodizio(rodizio);
-		planoMetasForm.setInstituto(instituto);
+		if(instituto != null) { 
+			planoMetasForm.setInstituto( new InstitutoOptionForm( instituto ) );
+		}
 		planoMetasForm.setEvento(planoMetasForm.getEvento());
 
 		List<MetaForm> metasForm = null;
@@ -134,6 +138,7 @@ public class PlanoMetasRestController {
 					planoMetasForm.getRodizio());
 
 		} else if (planoMetasAtual.getMetas().size() > 0) {
+			
 			metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
 					planoMetasForm.getEntidade(), planoMetasForm.getRodizio());

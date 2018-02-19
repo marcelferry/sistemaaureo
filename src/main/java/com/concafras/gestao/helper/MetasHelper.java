@@ -11,6 +11,7 @@ import com.concafras.gestao.enums.Sinalizador;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.form.AnotacaoVO;
+import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.MetaInstitutoVO;
@@ -116,7 +117,7 @@ public class MetasHelper {
 	}
 
 	public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, BaseEntidade entidade, RodizioVO ciclo) {
+			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo) {
 
 		List<MetaForm> metasForm = new ArrayList<MetaForm>();
 
@@ -144,7 +145,7 @@ public class MetasHelper {
 	}
 
 	private MetaForm mapMetaEntidadeToMetaForm(MetaInstitutoVO metaInstituto, PessoaOptionForm facilitador, PessoaOptionForm contratante,
-			EventoMeta evento, BaseEntidade entidade, RodizioVO ciclo) {
+			EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo) {
 		MetaForm metaForm = new MetaForm();
 		metaForm.setAtividade(  metaInstituto );
 
