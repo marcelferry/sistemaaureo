@@ -30,7 +30,7 @@ public class PlanoModeloRestController {
       @PathVariable("instituto") int instituto){
     
     //TODO: Regra diferente 
-    List<MetaInstituto> retorno = metasInstitutoService.listMetaInstitutoByInstitutoRodizio(instituto, ciclo);
+    List<MetaInstituto> retorno = metasInstitutoService.listMetaInstitutoByInstituto(instituto, true);
     
     DatatableResponse<MetaInstituto> result = new DatatableResponse<MetaInstituto>();
     result.setiTotalDisplayRecords(retorno.size());
