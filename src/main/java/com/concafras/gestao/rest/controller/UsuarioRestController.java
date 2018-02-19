@@ -100,7 +100,7 @@ public class UsuarioRestController {
       }
       
       List<EntidadeOptionForm> entidades = new ArrayList<EntidadeOptionForm>();
-      if(listaRoles.contains("ROLE_PRESIDENTE")) {
+      if(listaRoles.contains("ROLE_METAS_PRESIDENTE")) {
           Pessoa pessoa = usuario.getPessoa();
           List<Entidade> entidadesLoaded = entidadeService.getEntidade(pessoa);
           for (Entidade entidade : entidadesLoaded) {
