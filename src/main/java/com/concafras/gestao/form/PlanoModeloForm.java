@@ -5,7 +5,6 @@ import java.util.List;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.MetaInstituto;
-import com.concafras.gestao.model.Rodizio;
 
 public class PlanoModeloForm {
 	

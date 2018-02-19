@@ -1,7 +1,6 @@
 package com.concafras.gestao.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -9,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -31,7 +31,6 @@ import com.concafras.gestao.service.DirigenteNacionalService;
 import com.concafras.gestao.service.FacilitadorService;
 import com.concafras.gestao.service.PresidenteService;
 import com.concafras.gestao.service.UsuarioService;
-import javax.persistence.criteria.Expression;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {

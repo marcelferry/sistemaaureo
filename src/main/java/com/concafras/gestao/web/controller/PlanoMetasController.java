@@ -50,6 +50,7 @@ import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
+import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
@@ -372,7 +373,7 @@ public class PlanoMetasController {
       map.put("rodizioList", rodizioList);
     } else {
       Rodizio rodizio = rodizioService.findById(ciclo);
-      planoMetasForm.setRodizio(rodizio);
+      planoMetasForm.setRodizio( new RodizioVO( rodizio ));
       request.getSession().setAttribute("CICLO_CONTROLE", rodizio);
     }
 
@@ -576,7 +577,7 @@ public class PlanoMetasController {
     }
     planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
     
-    planoMetasForm.setRodizio(planoMetasAtual.getRodizio());
+    planoMetasForm.setRodizio( new RodizioVO( planoMetasAtual.getRodizio() ) );
     planoMetasForm.setInstituto(planoMetasAtual.getInstituto());
     planoMetasForm.setEntidade(planoMetasAtual.getEntidade());
     
@@ -645,7 +646,7 @@ public class PlanoMetasController {
   private void preparaAnotacoes(PlanoMetasForm contratoForm, PlanoMetas contratoEntity) {
     if (contratoForm.getAnotacoes() != null) {
       Anotacao novaNota = null;
-      for (Anotacao anot : contratoForm.getAnotacoes()) {
+      for (AnotacaoVO anot : contratoForm.getAnotacoes()) {
         if (anot.getId() == null && (anot.getTexto() == null || anot.getTexto().trim().equals(""))) {
           continue;
         }
@@ -671,22 +672,33 @@ public class PlanoMetasController {
           anot.setData(new Date());
           if (contratoForm.getEvento() == EventoMeta.RODIZIO) {
             if (contratoEntity.getFacilitador() != null && contratoEntity.getFacilitador().getId() != null)
-              anot.setResponsavel(contratoEntity.getFacilitador());
+              anot.setResponsavel( new PessoaOptionForm( contratoEntity.getFacilitador() ) );
           } else {
             if (contratoEntity.getContratante() != null && contratoEntity.getContratante().getId() != null)
-              anot.setResponsavel(contratoEntity.getContratante());
+              anot.setResponsavel(new PessoaOptionForm( contratoEntity.getContratante() ) );
           }
-          contratoEntity.getAnotacoes().add(anot);
+          Anotacao nova = new Anotacao();
+          nova.setData(anot.getData());
+          nova.setId(anot.getId());
+          nova.setNivel(anot.getNivel());
+          nova.setSinalizador(anot.getSinalizador());
+          nova.setTexto(anot.getTexto());
+          if(anot.getResponsavel() != null) { 
+        	  	Pessoa pessoa = pessoaService.getPessoa(anot.getResponsavel().getId());
+        	  	nova.setResponsavel(pessoa);
+          }
+          contratoEntity.getAnotacoes().add(nova);
         }
       }
     }
   }
 
   private void mapAnotacoesPlanoMetasToPlanoMetasForm(PlanoMetas planoMetasAtual, PlanoMetasForm planoMetasForm) {
-    planoMetasForm.setAnotacoes(new ArrayList<Anotacao>());
+    planoMetasForm.setAnotacoes(new ArrayList<AnotacaoVO>());
     if (planoMetasAtual.getAnotacoes() != null) {
       for (Anotacao anot : planoMetasAtual.getAnotacoes()) {
-        planoMetasForm.getAnotacoes().add(anot);
+    	  	AnotacaoVO nova = new AnotacaoVO(anot);
+        planoMetasForm.getAnotacoes().add(nova);
       }
     }
   }
@@ -910,7 +922,7 @@ public class PlanoMetasController {
     
   }
 
-  private void processaMetas(Rodizio ciclo, EventoMeta evento, List<MetaForm> metasForm, List<MetaEntidade> metas, PlanoMetas plano, MetaEntidade pai) {
+  private void processaMetas(RodizioVO ciclo, EventoMeta evento, List<MetaForm> metasForm, List<MetaEntidade> metas, PlanoMetas plano, MetaEntidade pai) {
     metasForm.removeAll(Collections.singleton(null));
 
     for (MetaForm metaForm : metasForm) {
@@ -1145,11 +1157,12 @@ public class PlanoMetasController {
           anotAux.setNivel(anot.getNivel());
 
           Rodizio cicloAux = null; 
+          Rodizio cicloLoaded = rodizioService.findById(ciclo.getId());
           if(anot.getId() != null && anot.getCiclo() != null && anot.getCiclo().getId() != null){
             cicloAux = new Rodizio();
             cicloAux.setId(anot.getCiclo().getId());
           } else if(anot.getId() == null ) {
-            cicloAux = ciclo;
+            cicloAux = cicloLoaded;
           } else {
             continue;
           }
@@ -1251,8 +1264,8 @@ public class PlanoMetasController {
              planoMetas.getContratante(), 
              EventoMeta.RODIZIO, 
              planoMetas.getEntidade(), 
-             planoMetas.getRodizio());
-        planoMetasForm.setDependencias(metas);
+             new RodizioVO( planoMetas.getRodizio() ) );
+        		planoMetasForm.setDependencias(metas);
       }
       listanova.add(planoMetasForm);
     }
@@ -1265,7 +1278,7 @@ public class PlanoMetasController {
     if (planoMetasForm.getRodizio() != null
         && planoMetasForm.getRodizio().getId() != null) {
       Rodizio rodizio = rodizioService.findById(planoMetasForm.getRodizio().getId());
-      planoMetasForm.setRodizio(rodizio);
+      planoMetasForm.setRodizio( new RodizioVO( rodizio ) );
       return rodizio;
     } else {
       planoMetasForm.setRodizio(null);

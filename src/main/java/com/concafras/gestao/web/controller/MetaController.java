@@ -30,6 +30,7 @@ import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.ContatoBasico;
 import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.MetaForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.ContatoInternet;
@@ -48,328 +49,317 @@ import com.concafras.gestao.service.PlanoMetasService;
 @Controller
 @RequestMapping("/gestao/metas")
 public class MetaController {
-  
-  private static final Logger logger = LoggerFactory.getLogger(MetaController.class);
 
-  @Autowired
-  private MetaService metaService;
+	private static final Logger logger = LoggerFactory.getLogger(MetaController.class);
 
-  @Autowired
-  private PlanoMetasService planoMetasService;
+	@Autowired
+	private MetaService metaService;
 
-  @Autowired
-  private PessoaService pessoaService;
+	@Autowired
+	private PlanoMetasService planoMetasService;
 
-  /**
-   * Bind date.
-   * 
-   * @param binder
-   *          the binder
-   */
-  protected void bindDate(WebDataBinder binder) {
-    binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-      @Override
-      public void setAsText(String value) {
-        try {
-          Date parsedDate = new SimpleDateFormat("MM/yyyy").parse(value);
-          setValue(parsedDate);
-        } catch (ParseException e) {
-          setValue(null);
-        }
-      }
+	@Autowired
+	private PessoaService pessoaService;
 
-      @Override
-      public String getAsText() {
-        try {
-          String parsedDate = new SimpleDateFormat("MM/yyyy")
-              .format((Date) getValue());
-          return parsedDate;
-        } catch (Exception e) {
-          return "";
-        }
-      }
-    });
-  }
+	/**
+	 * Bind date.
+	 * 
+	 * @param binder
+	 *            the binder
+	 */
+	protected void bindDate(WebDataBinder binder) {
+		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String value) {
+				try {
+					Date parsedDate = new SimpleDateFormat("MM/yyyy").parse(value);
+					setValue(parsedDate);
+				} catch (ParseException e) {
+					setValue(null);
+				}
+			}
 
-  @RequestMapping("/preview/{ciclo}/{id}")
-  public ModelAndView previewMeta(@PathVariable Integer ciclo, @PathVariable Integer id,
-      HttpServletRequest request, Authentication authentication) {
-    return editarMeta("metas.preview", ciclo, id, request, authentication, false);
-  }
+			@Override
+			public String getAsText() {
+				try {
+					String parsedDate = new SimpleDateFormat("MM/yyyy").format((Date) getValue());
+					return parsedDate;
+				} catch (Exception e) {
+					return "";
+				}
+			}
+		});
+	}
 
-  @RequestMapping("/edit/{ciclo}/{id}")
-  public ModelAndView editarMeta(@PathVariable Integer ciclo, @PathVariable Integer id,
-      HttpServletRequest request, Authentication authentication) {
-    if ("ROLE_METAS_PRESIDENTE".equals(request.getSession().getAttribute("ROLE_CONTROLE"))){
-      return editarMeta("metas.editar", ciclo,  id, request, authentication, true);
-    } else {
-      return editarMeta("metas.editar", ciclo,  id, request, authentication, false);
-    }
-  }
+	@RequestMapping("/preview/{ciclo}/{id}")
+	public ModelAndView previewMeta(@PathVariable Integer ciclo, @PathVariable Integer id, HttpServletRequest request,
+			Authentication authentication) {
+		return editarMeta("metas.preview", ciclo, id, request, authentication, false);
+	}
 
-  @RequestMapping(value = "/edit/save/{metaId}", method = RequestMethod.POST)
-  public String editMeta(@ModelAttribute("metaForm") MetaForm meta, HttpServletRequest request,
-      @PathVariable("metaId") Integer metaId, RedirectAttributes metaForm) {
+	@RequestMapping("/edit/{ciclo}/{id}")
+	public ModelAndView editarMeta(@PathVariable Integer ciclo, @PathVariable Integer id, HttpServletRequest request,
+			Authentication authentication) {
+		if ("ROLE_METAS_PRESIDENTE".equals(request.getSession().getAttribute("ROLE_CONTROLE"))) {
+			return editarMeta("metas.editar", ciclo, id, request, authentication, true);
+		} else {
+			return editarMeta("metas.editar", ciclo, id, request, authentication, false);
+		}
+	}
 
-    Rodizio ciclo = (Rodizio) request.getSession().getAttribute("CICLO_CONTROLE");
-    
-    meta.getDescricao();
-    
-    MetaEntidade metaEntity = metaService.findById(metaId);
-    
-    SituacaoMeta situacao = null;
-    
-    TipoSituacaoMeta sm = meta.getSituacaoDesejada().getTipoSituacao();
-    if(sm.equals(TipoSituacaoMeta.REPLANEJAR)){
-      situacao = SituacaoMeta.REPLANEJADA;
-    } else if (sm.equals(TipoSituacaoMeta.CONCLUIR)){
-      situacao = SituacaoMeta.IMPLANTADA;
-    } else if (sm.equals(TipoSituacaoMeta.CONCLUIR_PARCIALMENTE)){
-      situacao = SituacaoMeta.IMPLPARCIAL;
-    } else if (sm.equals(TipoSituacaoMeta.CANCELAR)){
-      situacao = SituacaoMeta.CANCELADA;
-    }
-    Pessoa responsavel = pessoaService.getPessoa(meta.getSituacaoDesejada().getResponsavel().getId());
-    
-    HistoricoMetaEntidade hme = new HistoricoMetaEntidade();
-    hme.setRodizio(ciclo);
-    hme.setMeta(metaEntity);
-    hme.setNotificar(true);
-    hme.setTipoSituacao(meta.getSituacaoDesejada().getTipoSituacao());
-    hme.setDataSituacao(new Date());
-    hme.setConclusao(meta.getSituacaoDesejada().getConclusao());
-    hme.setPrevisao(meta.getSituacaoDesejada().getPrevisao());
-    hme.setRealizado(meta.getSituacaoDesejada().getRealizado());
-    hme.setPrevisto(meta.getSituacaoDesejada().getPrevisto());
-    hme.setResponsavel(responsavel);
-    hme.setSituacao(situacao);
-    
-    //TODO: REMOVER CAMPOS NAO NECESSARIOS
-//    metaEntity.setTipoSituacao(meta.getSituacaoDesejada().getTipoSituacao());
-//    metaEntity.setDataSituacao(new Date());
-//    metaEntity.setConclusao(meta.getSituacaoDesejada().getConclusao());
-//    metaEntity.setPrevisao(meta.getSituacaoDesejada().getPrevisao());
-//    metaEntity.setRealizado(meta.getSituacaoDesejada().getRealizado());
-//    metaEntity.setPrevisto(meta.getSituacaoDesejada().getPrevisto());
-//    metaEntity.setResponsavel(responsavel);
-//    metaEntity.setSituacao(situacao);
-//    
-    metaEntity.getHistorico().add(hme);
-    
-    //Pega o ultimo registro inserido na lista
-    AnotacaoVO anot = meta.getObservacoes().get(meta.getObservacoes().size() - 1);
-    Anotacao anotAux = new Anotacao();
-    anotAux.setId(anot.getId());
-    anotAux.setNivel(anot.getNivel());
-    anotAux.setData(new Date());
-    anotAux.setResponsavel(responsavel);
-    anotAux.setSinalizador(anot.getSinalizador());
-    anotAux.setTexto(anot.getTexto());
-    MetaEntidadeAnotacao metaAnot = new MetaEntidadeAnotacao(metaEntity, ciclo, anotAux);
-    metaEntity.getAnotacoes().add(metaAnot);
-    
-    metaService.update(metaEntity);
-    
-    return "redirect:/gestao/home/dashboard/listagem";
-  }
+	@RequestMapping(value = "/edit/save/{metaId}", method = RequestMethod.POST)
+	public String editMeta(@ModelAttribute("metaForm") MetaForm meta, HttpServletRequest request,
+			@PathVariable("metaId") Integer metaId, RedirectAttributes metaForm) {
 
-  private ModelAndView editarMeta(String forward, Integer ciclo, Integer metaId,
-      HttpServletRequest request, Authentication authentication,
-      boolean editMode) {
+		Rodizio ciclo = (Rodizio) request.getSession().getAttribute("CICLO_CONTROLE");
 
-    UserDetails user = (UserDetails) authentication.getPrincipal();
+		meta.getDescricao();
 
-    Pessoa contratante = null;
+		MetaEntidade metaEntity = metaService.findById(metaId);
 
-    if (user instanceof UsuarioAutenticado) {
-      UsuarioAutenticado usuario = (UsuarioAutenticado) user;
+		SituacaoMeta situacao = null;
 
-      contratante = usuario.getPessoa();
-    }
+		TipoSituacaoMeta sm = meta.getSituacaoDesejada().getTipoSituacao();
+		if (sm.equals(TipoSituacaoMeta.REPLANEJAR)) {
+			situacao = SituacaoMeta.REPLANEJADA;
+		} else if (sm.equals(TipoSituacaoMeta.CONCLUIR)) {
+			situacao = SituacaoMeta.IMPLANTADA;
+		} else if (sm.equals(TipoSituacaoMeta.CONCLUIR_PARCIALMENTE)) {
+			situacao = SituacaoMeta.IMPLPARCIAL;
+		} else if (sm.equals(TipoSituacaoMeta.CANCELAR)) {
+			situacao = SituacaoMeta.CANCELADA;
+		}
+		Pessoa responsavel = pessoaService.getPessoa(meta.getSituacaoDesejada().getResponsavel().getId());
 
-    MetaForm form = new MetaForm();
+		HistoricoMetaEntidade hme = new HistoricoMetaEntidade();
+		hme.setRodizio(ciclo);
+		hme.setMeta(metaEntity);
+		hme.setNotificar(true);
+		hme.setTipoSituacao(meta.getSituacaoDesejada().getTipoSituacao());
+		hme.setDataSituacao(new Date());
+		hme.setConclusao(meta.getSituacaoDesejada().getConclusao());
+		hme.setPrevisao(meta.getSituacaoDesejada().getPrevisao());
+		hme.setRealizado(meta.getSituacaoDesejada().getRealizado());
+		hme.setPrevisto(meta.getSituacaoDesejada().getPrevisto());
+		hme.setResponsavel(responsavel);
+		hme.setSituacao(situacao);
 
-    MetaEntidade meta = metaService.findById(metaId);
+		// TODO: REMOVER CAMPOS NAO NECESSARIOS
+		// metaEntity.setTipoSituacao(meta.getSituacaoDesejada().getTipoSituacao());
+		// metaEntity.setDataSituacao(new Date());
+		// metaEntity.setConclusao(meta.getSituacaoDesejada().getConclusao());
+		// metaEntity.setPrevisao(meta.getSituacaoDesejada().getPrevisao());
+		// metaEntity.setRealizado(meta.getSituacaoDesejada().getRealizado());
+		// metaEntity.setPrevisto(meta.getSituacaoDesejada().getPrevisto());
+		// metaEntity.setResponsavel(responsavel);
+		// metaEntity.setSituacao(situacao);
+		//
+		metaEntity.getHistorico().add(hme);
 
-    //TODO: Obter plano a partir dos dados;
-    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(meta.getEntidade().getId(), meta.getInstituto().getId(), ciclo);
+		// Pega o ultimo registro inserido na lista
+		AnotacaoVO anot = meta.getObservacoes().get(meta.getObservacoes().size() - 1);
+		Anotacao anotAux = new Anotacao();
+		anotAux.setId(anot.getId());
+		anotAux.setNivel(anot.getNivel());
+		anotAux.setData(new Date());
+		anotAux.setResponsavel(responsavel);
+		anotAux.setSinalizador(anot.getSinalizador());
+		anotAux.setTexto(anot.getTexto());
+		MetaEntidadeAnotacao metaAnot = new MetaEntidadeAnotacao(metaEntity, ciclo, anotAux);
+		metaEntity.getAnotacoes().add(metaAnot);
 
-    String rota = metaService.getCaminhoMeta(meta.getMeta().getId());
+		metaService.update(metaEntity);
 
-    form.setDescricaoCompleta(rota);
-    
-    HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService).getUltimoHistorico(meta.getId(), plano.getRodizio().getId(), true);
-    
-    if(hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR || 
-        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR || 
-        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR_PARCIALMENTE ||
-        hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CANCELAR) {
-      editMode = false;
-    }
+		return "redirect:/gestao/home/dashboard/listagem";
+	}
 
-    form = new MetasHelper(metaService).preencheSituacaoDesejada(meta, 
-        form, 
-        EventoMeta.POSRODIZIO, 
-        plano.getRodizio());
-    
-    form = new MetasHelper(metaService).preencheAnotacoes(meta, 
-        form, 
-        contratante,
-        null, 
-        EventoMeta.POSRODIZIO, 
-        plano.getRodizio(),
-        editMode);
-    
-    //PlanoMetasForm planoForm = new PlanoMetasForm(plano);
+	private ModelAndView editarMeta(String forward, Integer ciclo, Integer metaId, HttpServletRequest request,
+			Authentication authentication, boolean editMode) {
 
-    List<ContatoBasico> contatos = processaContatosDoPlano(plano);
+		UserDetails user = (UserDetails) authentication.getPrincipal();
 
-    for (HistoricoMetaEntidadeVO historicoMetaEntidade : form.getHistorico()) {
-      if (historicoMetaEntidade.getResponsavel() != null) {
-        if (plano.getFacilitador() != null) {
-          if (historicoMetaEntidade.getResponsavel().getId() == plano
-              .getFacilitador().getId()) {
-            historicoMetaEntidade.setTipoResponsavel("Facil.");
-            continue;
-          }
-        }
-        if (plano.getPresidente() != null) {
-          if (historicoMetaEntidade.getResponsavel().getId() == plano
-              .getPresidente().getId()) {
-            historicoMetaEntidade.setTipoResponsavel("Pres.");
-            continue;
-          }
-        }
-        if (plano.getCoordenador() != null) {
-          if (historicoMetaEntidade.getResponsavel().getId() == plano
-              .getCoordenador().getId()) {
-            historicoMetaEntidade.setTipoResponsavel("Coord.");
-            continue;
-          }
-        }
-        if (plano.getContratante() != null) {
-          if (historicoMetaEntidade.getResponsavel().getId() == plano
-              .getContratante().getId()) {
-            historicoMetaEntidade.setTipoResponsavel("Outro");
-            continue;
-          }
-        }
-      }
-    }
+		Pessoa contratante = null;
 
-    ModelAndView model = new ModelAndView(forward, "metaForm", form);
+		if (user instanceof UsuarioAutenticado) {
+			UsuarioAutenticado usuario = (UsuarioAutenticado) user;
 
-    model.addObject("listContatos", contatos);
+			contratante = usuario.getPessoa();
+		}
 
-    model.addObject("editMode", editMode);
+		MetaForm form = new MetaForm();
 
-    return model;
-  }
+		MetaEntidade meta = metaService.findById(metaId);
 
-  private List<ContatoBasico> processaContatosDoPlano(PlanoMetas plano) {
+		// TODO: Obter plano a partir dos dados;
+		PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(meta.getEntidade().getId(),
+				meta.getInstituto().getId(), ciclo);
 
-    Pessoa presidente = plano.getPresidente();
-    Pessoa coordenador = plano.getCoordenador();
-    Pessoa contratante = plano.getContratante();
+		String rota = metaService.getCaminhoMeta(meta.getMeta().getId());
 
-    String nomePresidente = plano.getNomePresidente();
-    String nomeCoordenador = plano.getNomeCoordenador();
-    String nomeContratante = plano.getNomeContratante();
-    String telefonePresidente = plano.getTelefonePresidente();
-    String telefoneCoordenador = plano.getTelefoneCoordenador();
-    String telefoneContratante = plano.getTelefoneContratante();
-    String emailPresidente = plano.getEmailPresidente();
-    String emailCoordenador = plano.getEmailCoordenador();
-    String emailContratante = plano.getEmailContratante();
+		form.setDescricaoCompleta(rota);
 
-    List<ContatoBasico> contatos = new ArrayList<ContatoBasico>();
+		HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService).getUltimoHistorico(meta.getId(),
+				plano.getRodizio().getId(), true);
 
-    // Add presidente
-    ContatoBasico novocontato = new ContatoBasico("Presidente");
-    if (presidente != null) {
-      novocontato.setNomeCompleto(presidente.getNomeCompleto());
+		if (hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR
+				|| hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR
+				|| hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CONCLUIR_PARCIALMENTE
+				|| hmeAtual.getTipoSituacao() == TipoSituacaoMeta.CANCELAR) {
+			editMode = false;
+		}
 
-      for (Telefone tel : presidente.getTelefones()) {
-        novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
-            + (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
-      }
-      for (ContatoInternet inter : presidente.getEmails()) {
-        novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
-      }
+		form = new MetasHelper(metaService).preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
+				new RodizioVO(plano.getRodizio()));
 
-      if (nomePresidente != null && nomePresidente.trim().length() > 0) {
-        if (presidente.getNomeCompleto().trim().equals(nomePresidente.trim())) {
-          novocontato.addTelefone(telefonePresidente);
-          novocontato.addEmail(emailPresidente);
-        }
-      }
+		form = new MetasHelper(metaService).preencheAnotacoes(meta, form, contratante, null, EventoMeta.POSRODIZIO,
+				new RodizioVO(plano.getRodizio()), editMode);
 
-      contatos.add(novocontato);
+		// PlanoMetasForm planoForm = new PlanoMetasForm(plano);
 
-    } else if (nomePresidente != null && nomePresidente.trim().length() > 0) {
-      novocontato.setNomeCompleto(nomePresidente);
-      novocontato.addTelefone(telefonePresidente);
-      novocontato.addEmail(emailPresidente);
-      contatos.add(novocontato);
-    }
-    // Add coordenador
-    novocontato = new ContatoBasico("Coordenador");
-    if (coordenador != null) {
-      novocontato.setNomeCompleto(coordenador.getNomeCompleto());
+		List<ContatoBasico> contatos = processaContatosDoPlano(plano);
 
-      for (Telefone tel : coordenador.getTelefones()) {
-        novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
-            + (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
-      }
-      for (ContatoInternet inter : coordenador.getEmails()) {
-        novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
-      }
+		for (HistoricoMetaEntidadeVO historicoMetaEntidade : form.getHistorico()) {
+			if (historicoMetaEntidade.getResponsavel() != null) {
+				if (plano.getFacilitador() != null) {
+					if (historicoMetaEntidade.getResponsavel().getId() == plano.getFacilitador().getId()) {
+						historicoMetaEntidade.setTipoResponsavel("Facil.");
+						continue;
+					}
+				}
+				if (plano.getPresidente() != null) {
+					if (historicoMetaEntidade.getResponsavel().getId() == plano.getPresidente().getId()) {
+						historicoMetaEntidade.setTipoResponsavel("Pres.");
+						continue;
+					}
+				}
+				if (plano.getCoordenador() != null) {
+					if (historicoMetaEntidade.getResponsavel().getId() == plano.getCoordenador().getId()) {
+						historicoMetaEntidade.setTipoResponsavel("Coord.");
+						continue;
+					}
+				}
+				if (plano.getContratante() != null) {
+					if (historicoMetaEntidade.getResponsavel().getId() == plano.getContratante().getId()) {
+						historicoMetaEntidade.setTipoResponsavel("Outro");
+						continue;
+					}
+				}
+			}
+		}
 
-      if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
-        if (coordenador.getNomeCompleto().trim().equals(nomeCoordenador.trim())) {
-          novocontato.addTelefone(telefoneCoordenador);
-          novocontato.addEmail(emailCoordenador);
-        }
-      }
-      contatos.add(novocontato);
+		ModelAndView model = new ModelAndView(forward, "metaForm", form);
 
-    } else if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
-      novocontato.setNomeCompleto(nomeCoordenador);
-      novocontato.addTelefone(telefoneCoordenador);
-      novocontato.addEmail(emailCoordenador);
-      contatos.add(novocontato);
-    }
-    // Add contratante
-    novocontato = new ContatoBasico("Contratante");
-    if (contratante != null && !contratante.getId().equals(presidente.getId())
-        && !contratante.getId().equals(coordenador.getId())) {
-      novocontato.setNomeCompleto(contratante.getNomeCompleto());
+		model.addObject("listContatos", contatos);
 
-      for (Telefone tel : contratante.getTelefones()) {
-        novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
-            + (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
-      }
-      for (ContatoInternet inter : contratante.getEmails()) {
-        novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
-      }
+		model.addObject("editMode", editMode);
 
-      if (nomeContratante != null && nomeContratante.trim().length() > 0) {
-        if (contratante.getNomeCompleto().trim().equals(nomeContratante.trim())) {
-          novocontato.addTelefone(telefoneContratante);
-          novocontato.addEmail(emailContratante);
-        }
-      }
-      contatos.add(novocontato);
+		return model;
+	}
 
-    } else if (nomeContratante != null && nomeContratante.trim().length() > 0) {
-      novocontato.setNomeCompleto(nomeContratante);
-      novocontato.addTelefone(telefoneContratante);
-      novocontato.addEmail(emailContratante);
-      contatos.add(novocontato);
-    }
+	private List<ContatoBasico> processaContatosDoPlano(PlanoMetas plano) {
 
-    return contatos;
+		Pessoa presidente = plano.getPresidente();
+		Pessoa coordenador = plano.getCoordenador();
+		Pessoa contratante = plano.getContratante();
 
-  }
+		String nomePresidente = plano.getNomePresidente();
+		String nomeCoordenador = plano.getNomeCoordenador();
+		String nomeContratante = plano.getNomeContratante();
+		String telefonePresidente = plano.getTelefonePresidente();
+		String telefoneCoordenador = plano.getTelefoneCoordenador();
+		String telefoneContratante = plano.getTelefoneContratante();
+		String emailPresidente = plano.getEmailPresidente();
+		String emailCoordenador = plano.getEmailCoordenador();
+		String emailContratante = plano.getEmailContratante();
+
+		List<ContatoBasico> contatos = new ArrayList<ContatoBasico>();
+
+		// Add presidente
+		ContatoBasico novocontato = new ContatoBasico("Presidente");
+		if (presidente != null) {
+			novocontato.setNomeCompleto(presidente.getNomeCompleto());
+
+			for (Telefone tel : presidente.getTelefones()) {
+				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
+						+ (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
+			}
+			for (ContatoInternet inter : presidente.getEmails()) {
+				novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
+			}
+
+			if (nomePresidente != null && nomePresidente.trim().length() > 0) {
+				if (presidente.getNomeCompleto().trim().equals(nomePresidente.trim())) {
+					novocontato.addTelefone(telefonePresidente);
+					novocontato.addEmail(emailPresidente);
+				}
+			}
+
+			contatos.add(novocontato);
+
+		} else if (nomePresidente != null && nomePresidente.trim().length() > 0) {
+			novocontato.setNomeCompleto(nomePresidente);
+			novocontato.addTelefone(telefonePresidente);
+			novocontato.addEmail(emailPresidente);
+			contatos.add(novocontato);
+		}
+		// Add coordenador
+		novocontato = new ContatoBasico("Coordenador");
+		if (coordenador != null) {
+			novocontato.setNomeCompleto(coordenador.getNomeCompleto());
+
+			for (Telefone tel : coordenador.getTelefones()) {
+				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
+						+ (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
+			}
+			for (ContatoInternet inter : coordenador.getEmails()) {
+				novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
+			}
+
+			if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
+				if (coordenador.getNomeCompleto().trim().equals(nomeCoordenador.trim())) {
+					novocontato.addTelefone(telefoneCoordenador);
+					novocontato.addEmail(emailCoordenador);
+				}
+			}
+			contatos.add(novocontato);
+
+		} else if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
+			novocontato.setNomeCompleto(nomeCoordenador);
+			novocontato.addTelefone(telefoneCoordenador);
+			novocontato.addEmail(emailCoordenador);
+			contatos.add(novocontato);
+		}
+		// Add contratante
+		novocontato = new ContatoBasico("Contratante");
+		if (contratante != null && !contratante.getId().equals(presidente.getId())
+				&& !contratante.getId().equals(coordenador.getId())) {
+			novocontato.setNomeCompleto(contratante.getNomeCompleto());
+
+			for (Telefone tel : contratante.getTelefones()) {
+				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
+						+ (tel.getOperadora() != null ? " " + tel.getOperadora() : ""));
+			}
+			for (ContatoInternet inter : contratante.getEmails()) {
+				novocontato.addEmail(inter.getTipo() + " " + inter.getContato());
+			}
+
+			if (nomeContratante != null && nomeContratante.trim().length() > 0) {
+				if (contratante.getNomeCompleto().trim().equals(nomeContratante.trim())) {
+					novocontato.addTelefone(telefoneContratante);
+					novocontato.addEmail(emailContratante);
+				}
+			}
+			contatos.add(novocontato);
+
+		} else if (nomeContratante != null && nomeContratante.trim().length() > 0) {
+			novocontato.setNomeCompleto(nomeContratante);
+			novocontato.addTelefone(telefoneContratante);
+			novocontato.addEmail(emailContratante);
+			contatos.add(novocontato);
+		}
+
+		return contatos;
+
+	}
 
 }

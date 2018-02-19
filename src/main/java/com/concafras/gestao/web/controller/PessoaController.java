@@ -43,7 +43,6 @@ import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.Telefone;
 import com.concafras.gestao.model.view.PessoaExcel;
 import com.concafras.gestao.rest.utils.RestUtils;
-import com.concafras.gestao.service.CidadeService;
 import com.concafras.gestao.service.EmailService;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.PessoaService;

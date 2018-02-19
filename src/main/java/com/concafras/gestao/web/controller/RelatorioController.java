@@ -57,6 +57,7 @@ import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.form.RelatorioForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
@@ -604,7 +605,7 @@ public class RelatorioController {
 
     planoMetasForm.setFacilitador(facilitador);
 
-    planoMetasForm.setRodizio(rodizio);
+    planoMetasForm.setRodizio( new RodizioVO( rodizio ) );
     planoMetasForm.setInstituto(instituto);
     planoMetasForm.setEvento(planoMetasForm.getEvento());
     
@@ -670,7 +671,7 @@ public class RelatorioController {
         planoMeta.setFacilitador(facilitador);
       }
 
-      planoMeta.setRodizio(rodizio);
+      planoMeta.setRodizio( new RodizioVO( rodizio ) );
       planoMeta.setInstituto(instituto);
       planoMeta.setEvento(planoMetasForm.getEvento());
 
@@ -1226,7 +1227,7 @@ public class RelatorioController {
         && planoMetasForm.getRodizio().getId() != null) {
       Rodizio rodizio = rodizioService
           .findById(planoMetasForm.getRodizio().getId());
-      planoMetasForm.setRodizio(rodizio);
+      planoMetasForm.setRodizio( new RodizioVO( rodizio ) );
       return rodizio;
     } else {
       planoMetasForm.setRodizio(null);

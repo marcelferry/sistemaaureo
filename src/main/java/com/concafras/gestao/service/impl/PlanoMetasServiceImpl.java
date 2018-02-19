@@ -36,7 +36,6 @@ import com.concafras.gestao.model.view.StatusAtualInstitutoGraphicData;
 import com.concafras.gestao.model.view.StatusValor;
 import com.concafras.gestao.service.MetaService;
 import com.concafras.gestao.service.PlanoMetasService;
-import com.concafras.gestao.web.controller.GlobalExceptionHandler;
 
 @Service
 public class PlanoMetasServiceImpl implements PlanoMetasService {

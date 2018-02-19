@@ -9,7 +9,6 @@ import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
-import com.concafras.gestao.model.Rodizio;
 
 public class AnotacaoVO {
 
@@ -20,9 +19,9 @@ public class AnotacaoVO {
   public AnotacaoVO() {
   }
 
-  public AnotacaoVO(Anotacao anot, Rodizio ciclo) {
+  public AnotacaoVO(Anotacao anot, RodizioVO ciclo) {
     this.id = anot.getId();
-    this.ciclo = new RodizioVO(ciclo);
+    this.ciclo = ciclo;
     this.data = anot.getData();
     this.nivel = anot.getNivel();
     this.responsavel = new PessoaOptionForm(anot.getResponsavel());

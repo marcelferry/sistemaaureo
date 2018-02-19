@@ -7,102 +7,120 @@ import javax.validation.constraints.NotNull;
 import com.concafras.gestao.model.Rodizio;
 
 public class RodizioVO {
-	
+
 	@NotNull
 	private Integer id;
-	
+
 	private String ciclo;
-	
+
 	/**
-   * Inicio do período de ajustes
-   */
-  private Date inicioAjustes;
-  
-  /**
-   * Termino do período de ajustes
-   */
-  private Date terminoAjustes;
-  
-  /** 
-   * Data em que o rodizio será realizado.
-   */
-  private Date dataAprovacao;
-  
-  private Date inicio;
-  
-  private Date termino;
-	
+	 * Inicio do período de ajustes
+	 */
+	private Date inicioAjustes;
+
+	/**
+	 * Termino do período de ajustes
+	 */
+	private Date terminoAjustes;
+
+	/**
+	 * Data em que o rodizio será realizado.
+	 */
+	private Date dataAprovacao;
+
+	private Date inicio;
+
+	private Date termino;
+
+	private RodizioVO cicloAnterior;
+
 	public RodizioVO() {
-    // TODO Auto-generated constructor stub
-  }
-	
-	public RodizioVO(Rodizio rodizio) {
-	  if(rodizio != null){
-  	  this.id = rodizio.getId();
-  	  this.ciclo = rodizio.getCiclo();
-	  }
+		// TODO Auto-generated constructor stub
 	}
-	
-  public Integer getId() {
-    return id;
-  }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+	public RodizioVO(Rodizio rodizio) {
+		if (rodizio != null) {
 
-  public String getCiclo() {
-    return ciclo;
-  }
+			this.id = rodizio.getId();
+			this.ciclo = rodizio.getCiclo();
+			this.inicioAjustes = rodizio.getInicioAjustes();
+			this.terminoAjustes = rodizio.getTerminoAjustes();
+			this.inicio = rodizio.getInicio();
+			this.termino = rodizio.getTermino();
+			this.dataAprovacao = rodizio.getDataAprovacao();
+			if (rodizio.getCicloAnterior() != null) {
+				this.cicloAnterior = new RodizioVO(rodizio.getCicloAnterior());
+			}
+		}
+	}
 
-  public void setCiclo(String ano) {
-    this.ciclo = ano;
-  }
+	public Integer getId() {
+		return id;
+	}
 
-  public Date getInicioAjustes() {
-    return inicioAjustes;
-  }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-  public void setInicioAjustes(Date inicioAjustes) {
-    this.inicioAjustes = inicioAjustes;
-  }
+	public String getCiclo() {
+		return ciclo;
+	}
 
-  public Date getTerminoAjustes() {
-    return terminoAjustes;
-  }
+	public void setCiclo(String ano) {
+		this.ciclo = ano;
+	}
 
-  public void setTerminoAjustes(Date terminoAjustes) {
-    this.terminoAjustes = terminoAjustes;
-  }
+	public Date getInicioAjustes() {
+		return inicioAjustes;
+	}
 
-  public Date getDataAprovacao() {
-    return dataAprovacao;
-  }
+	public void setInicioAjustes(Date inicioAjustes) {
+		this.inicioAjustes = inicioAjustes;
+	}
 
-  public void setDataAprovacao(Date dataRodizio) {
-    this.dataAprovacao = dataRodizio;
-  }
-  
-  public Date getInicio() {
-    return inicio;
-  }
-  
-  public void setInicio(Date inicio) {
-    this.inicio = inicio;
-  }
-  
-  public Date getTermino() {
-    return termino;
-  }
-  
-  public void setTermino(Date termino) {
-    this.termino = termino;
-  }
+	public Date getTerminoAjustes() {
+		return terminoAjustes;
+	}
 
-  @Override
-  public String toString() {
-    return "RodizioVO [id=" + id + ", ciclo=" + ciclo + "]";
-  }
-  
-  
+	public void setTerminoAjustes(Date terminoAjustes) {
+		this.terminoAjustes = terminoAjustes;
+	}
+
+	public Date getDataAprovacao() {
+		return dataAprovacao;
+	}
+
+	public void setDataAprovacao(Date dataRodizio) {
+		this.dataAprovacao = dataRodizio;
+	}
+
+	public Date getInicio() {
+		return inicio;
+	}
+
+	public void setInicio(Date inicio) {
+		this.inicio = inicio;
+	}
+
+	public Date getTermino() {
+		return termino;
+	}
+
+	public void setTermino(Date termino) {
+		this.termino = termino;
+	}
+
+	public RodizioVO getCicloAnterior() {
+		return cicloAnterior;
+	}
+
+	public void setCicloAnterior(RodizioVO cicloAnterior) {
+		this.cicloAnterior = cicloAnterior;
+	}
+
+	@Override
+	public String toString() {
+		return "RodizioVO [id=" + id + ", ciclo=" + ciclo + "]";
+	}
+
 }

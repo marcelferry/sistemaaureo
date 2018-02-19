@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.concafras.gestao.form.validator.PasswordMatches;
-import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.security.AlcadaUsuario;
 import com.concafras.gestao.model.security.Usuario;
 

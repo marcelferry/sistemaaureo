@@ -10,12 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
-import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
-import com.concafras.gestao.model.MetaInstituto;
-import com.concafras.gestao.service.MetaService;
 
 public class MetaForm {
 	
@@ -33,7 +30,7 @@ public class MetaForm {
 	
 	private TipoMeta tipoMeta;
 	
-	private MetaInstituto atividade;
+	private MetaInstitutoVO atividade;
 	
 	private PessoaOptionForm responsavel;
   
@@ -125,11 +122,11 @@ public class MetaForm {
     this.tipoMeta = tipoMeta;
   }
 
-	public MetaInstituto getAtividade() {
+	public MetaInstitutoVO getAtividade() {
 		return atividade;
 	}
 
-	public void setAtividade(MetaInstituto atividade) {
+	public void setAtividade(MetaInstitutoVO atividade) {
 		this.atividade = atividade;
 	}
 	
@@ -269,7 +266,7 @@ public class MetaForm {
     this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
     this.setDescricao(metaEntidade.getDescricao());
     this.setTipoMeta(metaEntidade.getTipoMeta());
-    this.setAtividade(metaEntidade.getMeta());
+    this.setAtividade( new MetaInstitutoVO( metaEntidade.getMeta() ) );
     
     // Estado Atual 
     this.responsavel = new PessoaOptionForm(atual.getResponsavel());

@@ -3,7 +3,6 @@ package com.concafras.gestao.service;
 import java.util.List;
 
 import com.concafras.gestao.model.BaseInstituto;
-import com.concafras.gestao.model.Instituto;
 import com.concafras.gestao.model.Pessoa;
 
 public interface BaseInstitutoService {

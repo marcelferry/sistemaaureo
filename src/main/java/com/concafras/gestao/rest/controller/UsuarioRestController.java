@@ -33,8 +33,6 @@ import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.rest.model.ResultAuthentication;
-import com.concafras.gestao.rest.utils.RestUtils;
-import com.concafras.gestao.security.UsuarioAutenticado;
 import com.concafras.gestao.security.rest.TokenTransfer;
 import com.concafras.gestao.security.rest.TokenUtils;
 import com.concafras.gestao.service.EntidadeService;

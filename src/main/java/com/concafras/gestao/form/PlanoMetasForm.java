@@ -4,20 +4,15 @@ import java.util.List;
 
 import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.TipoContratante;
-import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
-import com.concafras.gestao.model.Cidade;
-import com.concafras.gestao.model.Dirigente;
 import com.concafras.gestao.model.Pessoa;
-import com.concafras.gestao.model.PlanoMetas;
-import com.concafras.gestao.model.Rodizio;
 
 public class PlanoMetasForm {
 
   private Integer id;
 
-  private Rodizio rodizio;
+  private RodizioVO rodizio;
 
   private BaseEntidade entidade;
 
@@ -59,7 +54,7 @@ public class PlanoMetasForm {
   
   private List<MetaForm> dependencias;
 
-  private List<Anotacao> anotacoes;
+  private List<AnotacaoVO> anotacoes;
   
   /*
    * 01 - Selecao Rodizio / Instituto 02 - Selecao Cidade / Entidade /
@@ -67,9 +62,9 @@ public class PlanoMetasForm {
    */
   private Integer fase;
 
-  private Cidade cidade;
+  private CidadeVO cidade;
 
-  private Dirigente dirigenteInstituto;
+  private DirigenteOptionForm dirigenteInstituto;
 
   private Pessoa outro;
   
@@ -88,11 +83,11 @@ public class PlanoMetasForm {
     this.id = id;
   }
 
-  public Rodizio getRodizio() {
+  public RodizioVO getRodizio() {
     return rodizio;
   }
 
-  public void setRodizio(Rodizio rodizio) {
+  public void setRodizio(RodizioVO rodizio) {
     this.rodizio = rodizio;
   }
 
@@ -160,11 +155,11 @@ public class PlanoMetasForm {
     this.dependencias = metas;
   }
 
-  public List<Anotacao> getAnotacoes() {
+  public List<AnotacaoVO> getAnotacoes() {
     return anotacoes;
   }
 
-  public void setAnotacoes(List<Anotacao> listaAnotacoes) {
+  public void setAnotacoes(List<AnotacaoVO> listaAnotacoes) {
     this.anotacoes = listaAnotacoes;
   }
 
@@ -288,19 +283,19 @@ public class PlanoMetasForm {
     this.fase = fase;
   }
 
-  public Cidade getCidade() {
+  public CidadeVO getCidade() {
     return cidade;
   }
 
-  public void setCidade(Cidade cidade) {
+  public void setCidade(CidadeVO cidade) {
     this.cidade = cidade;
   }
   
-  public Dirigente getDirigenteInstituto() {
+  public DirigenteOptionForm getDirigenteInstituto() {
     return dirigenteInstituto;
   }
 
-  public void setDirigenteInstituto(Dirigente dirigenteInstituto) {
+  public void setDirigenteInstituto(DirigenteOptionForm dirigenteInstituto) {
     this.dirigenteInstituto = dirigenteInstituto;
   }
 

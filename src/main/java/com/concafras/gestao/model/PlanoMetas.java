@@ -21,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 
-import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.TipoContratante;
 
 @Entity

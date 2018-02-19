@@ -1,6 +1,5 @@
 package com.concafras.gestao.form;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -9,13 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.concafras.gestao.enums.EstadoCivil;
 import com.concafras.gestao.enums.TipoContatoInternet;
-import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.ContatoInternet;
-import com.concafras.gestao.model.Endereco;
-import com.concafras.gestao.model.Estado;
 import com.concafras.gestao.model.ObjetoGerenciado;
 import com.concafras.gestao.model.Telefone;
-import com.concafras.gestao.model.TrabalhadorPosto;
 import com.concafras.gestao.util.Util;
 
 public class PessoaVO extends ObjetoGerenciado {

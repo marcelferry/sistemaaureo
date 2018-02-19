@@ -12,8 +12,6 @@ import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -26,7 +24,6 @@ import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
-import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PlanoMetasForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
@@ -21,7 +22,6 @@ import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
-import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.InstitutoService;
@@ -69,7 +69,7 @@ public class PlanoMetasRestController {
 		
 		BaseEntidade baseEntidade = entidadeService.findById(entidade);
 		BaseInstituto baseInstitulo = institutoService.findById(instituto);
-		Rodizio rodizio = rodizioService.findById(ciclo);
+		RodizioVO rodizio = new RodizioVO( rodizioService.findById(ciclo) );
 
 	    PlanoMetasForm plano = preparaPlanoMetasForm(baseEntidade, baseInstitulo, rodizio, null);
 	    retorno.add(plano);
@@ -88,7 +88,7 @@ public class PlanoMetasRestController {
 		
 	}
 
-	private PlanoMetasForm preparaPlanoMetasForm(BaseEntidade entidade, BaseInstituto instituto, Rodizio rodizio,
+	private PlanoMetasForm preparaPlanoMetasForm(BaseEntidade entidade, BaseInstituto instituto, RodizioVO rodizio,
 			Pessoa facilitador) {
 
 		PlanoMetasForm planoMetasForm = new PlanoMetasForm();
