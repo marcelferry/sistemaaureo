@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
@@ -19,12 +20,14 @@ import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
+import com.concafras.gestao.helper.PlanoMetasHelper;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.InstitutoService;
@@ -62,12 +65,66 @@ public class PlanoMetasRestController {
 	
 	
 	@RequestMapping(value = "/api/v1/planometas/ciclo/{ciclo}/entidade/{entidade}/instituto/{instituto}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	  public @ResponseBody String listarMetasPorInstituto(
+	public @ResponseBody String listarPlanoMetasPorInstituto(
 	      HttpServletRequest request, 
 	      @PathVariable("ciclo") int ciclo,
 	      @PathVariable("entidade") int entidade,
 	      @PathVariable("instituto") int instituto){
 		
+	    EventoMeta evento = EventoMeta.PRERODIZIO;
+
+	    // Verificar existencia do plano para esse ciclo
+	    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade, instituto, ciclo);
+	    
+	    BaseEntidade entidadeLoaded = entidadeService.findById(entidade);
+	    BaseInstituto institutoLoaded = institutoService.findById(instituto);
+	    Rodizio rodizioLoaded = rodizioService.findById(ciclo);
+
+	    //Nao existe plano de metas?
+	    if (plano == null) {
+	      plano = new PlanoMetas();
+	      plano.setEntidade(entidadeLoaded);
+	      plano.setInstituto(institutoLoaded);
+	      plano.setRodizio(rodizioLoaded);	      
+	    }
+	    
+	    PlanoMetasForm planoMetasForm = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasToPlanoMetasForm(plano);
+
+	    planoMetasForm.setEvento(evento);
+
+	    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapMetasFromPlanoMetasToPlanoMetasForm(planoMetasForm, plano);
+	    
+	    Long prioridades = metaService.countListMetaEntidadePrioridade(instituto);
+	    
+	    planoMetasForm.setPrioridades(prioridades);
+
+	    planoMetasForm.setFase(3);
+	    
+	    List<PlanoMetasForm> retorno = new ArrayList<PlanoMetasForm>();
+	    
+	    retorno.add(planoMetasForm);
+		
+		DatatableResponse<PlanoMetasForm> result = new DatatableResponse<PlanoMetasForm>();
+	    result.setiTotalDisplayRecords(retorno.size());
+	    result.setiTotalRecords(retorno.size());
+	    result.setAaData(retorno);
+	    result.setSuccess(true);
+	    
+	    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	    
+	    String json2 = gson.toJson(result);
+	    
+	    return json2;
+		
+	}
+		
+	@RequestMapping(value = "/api/v1/planometas/print/ciclo/{ciclo}/entidade/{entidade}/instituto/{instituto}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	public @ResponseBody String listarMetasPorInstituto(
+				HttpServletRequest request, 
+				@PathVariable("ciclo") int ciclo,
+				@PathVariable("entidade") int entidade,
+				@PathVariable("instituto") int instituto){
+			
 		List<PlanoMetasForm> retorno = new ArrayList<PlanoMetasForm>();
 		
 		BaseEntidade baseEntidade = entidadeService.findById(entidade);
