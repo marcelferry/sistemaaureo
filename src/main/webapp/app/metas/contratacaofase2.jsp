@@ -206,14 +206,14 @@
 	               	<div class="col-sm-6 col-xs-9 control-label" style="text-align: left;">
 	               	    <form:hidden path="entidade.id" />
 	               	    <form:hidden path="entidade.razaoSocial" />
-	               	    <span id="entidade.razaoSocial">${planoMetasForm.entidade.razaoSocial} - ${planoMetasForm.entidade.endereco.cidade.nome}/${planoMetasForm.entidade.endereco.cidade.estado.sigla}</span>
+	               	    <span id="entidade.razaoSocial">${planoMetasForm.entidade.razaoSocial} - ${planoMetasForm.entidade.cidade}/${planoMetasForm.entidade.uf}</span>
 	                </div>
 	            </div>
 				<div id="div_endereco" class="col-sm-12 small">
 		            <label class="col-sm-2 col-xs-3 control-label"><spring:message code="label.endereco" />:</label>
-	                <div class="col-sm-3 col-xs-9 control-label" style="text-align: left;"><span id="entidade.endereco">${planoMetasForm.entidade.endereco.enderecoFormatado}</span></div>
+	                <div class="col-sm-3 col-xs-9 control-label" style="text-align: left;"><span id="entidade.endereco">${planoMetasForm.entidade.endereco}</span></div>
 		            <label class="col-sm-2 col-xs-3 control-label">Telefone:</label>
-	                <div class="col-sm-5 col-xs-9 control-label" style="text-align: left;"><span id="entidade.telefone">${planoMetasForm.entidade.primeiroTelefone}&nbsp;</span></div>
+	                <div class="col-sm-5 col-xs-9 control-label" style="text-align: left;"><span id="entidade.telefone">${planoMetasForm.entidade.telefone}&nbsp;</span></div>
 	            </div>
 	            <c:if test="${ ! empty planoMetasForm.presidente.nome}">
 	            <div id="div_presidente" class="col-sm-12 small">
