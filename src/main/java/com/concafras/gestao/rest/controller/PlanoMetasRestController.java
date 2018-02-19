@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.concafras.gestao.form.MetaForm;
+import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
@@ -97,7 +98,9 @@ public class PlanoMetasRestController {
 			planoMetasForm.setEntidade(entidade);
 		}
 
-		planoMetasForm.setFacilitador(facilitador);
+		PessoaOptionForm pessoaFacilitador = new PessoaOptionForm(facilitador);
+		
+		planoMetasForm.setFacilitador(pessoaFacilitador);
 
 		planoMetasForm.setRodizio(rodizio);
 		planoMetasForm.setInstituto(instituto);
@@ -115,21 +118,23 @@ public class PlanoMetasRestController {
 		if (planoMetasAtual != null) {
 			planoMetasForm.setId(planoMetasAtual.getId());
 			planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
-			planoMetasForm.setContratante(planoMetasAtual.getContratante());
+			PessoaOptionForm pessoaContratante = new PessoaOptionForm(planoMetasAtual.getContratante());
+			planoMetasForm.setContratante(pessoaContratante);
 			Pessoa presidente = pessoaService
 					.getPessoa(planoMetasAtual.getEntidade().getPresidente().getPessoa().getId());
-			planoMetasForm.setPresidente(presidente);
+			PessoaOptionForm pessoaPresidente = new PessoaOptionForm(presidente);
+			planoMetasForm.setPresidente(pessoaPresidente);
 
 			planoMetasAtual.setMetas(listaMetas);
 		}
 
 		if (planoMetasAtual == null) {
-			metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(metasIntituto,
+			metasForm = new MetasHelper(metaService, pessoaService).mapMetaInstitutoToMetaForm(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
 					planoMetasForm.getRodizio());
 
 		} else if (planoMetasAtual.getMetas().size() > 0) {
-			metasForm = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(metasIntituto,
+			metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
 					planoMetasForm.getEntidade(), planoMetasForm.getRodizio());
 		} else {

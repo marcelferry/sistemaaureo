@@ -14,6 +14,7 @@ import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.MetaInstitutoVO;
+import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.BaseEntidade;
@@ -26,13 +27,16 @@ import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.service.MetaService;
+import com.concafras.gestao.service.PessoaService;
 
 public class MetasHelper {
 
 	private MetaService metaService;
+	private PessoaService pessoaService;
 
-	public MetasHelper(MetaService metaService) {
+	public MetasHelper(MetaService metaService, PessoaService pessoaService) {
 		this.metaService = metaService;
+		this.pessoaService = pessoaService;
 	}
 
 	private MetaForm preencheSituacaoAnteriorAtual(MetaForm meta, MetaEntidade metaEntidade, RodizioVO cicloAtual) {
@@ -111,8 +115,8 @@ public class MetasHelper {
 		}
 	}
 
-	public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, Pessoa facilitador,
-			Pessoa contratante, EventoMeta evento, BaseEntidade entidade, RodizioVO ciclo) {
+	public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
+			PessoaOptionForm contratante, EventoMeta evento, BaseEntidade entidade, RodizioVO ciclo) {
 
 		List<MetaForm> metasForm = new ArrayList<MetaForm>();
 
@@ -139,7 +143,7 @@ public class MetasHelper {
 		return metasForm;
 	}
 
-	private MetaForm mapMetaEntidadeToMetaForm(MetaInstitutoVO metaInstituto, Pessoa facilitador, Pessoa contratante,
+	private MetaForm mapMetaEntidadeToMetaForm(MetaInstitutoVO metaInstituto, PessoaOptionForm facilitador, PessoaOptionForm contratante,
 			EventoMeta evento, BaseEntidade entidade, RodizioVO ciclo) {
 		MetaForm metaForm = new MetaForm();
 		metaForm.setAtividade(  metaInstituto );
@@ -160,11 +164,11 @@ public class MetasHelper {
 		return metaForm;
 	}
 
-	public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, Pessoa facilitador,
-			Pessoa contratante, EventoMeta evento, RodizioVO ciclo) {
+	public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
+			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo) {
 
 		List<MetaForm> metas = new ArrayList<MetaForm>();
-
+		
 		metasInstituto.removeAll(Collections.singleton(null));
 
 		for (MetaInstituto metaInstituto : metasInstituto) {
@@ -189,23 +193,25 @@ public class MetasHelper {
 			// Primeiro Rodizio - Nova Anotacao em Branco
 			meta.setObservacoes(new ArrayList<AnotacaoVO>());
 			if (evento == EventoMeta.PRERODIZIO) {
-				Anotacao anot = new Anotacao();
+				AnotacaoVO anot = new AnotacaoVO();
 				anot.setNivel(NivelAnotacao.META_PRERODIZIO);
 				if (contratante != null && contratante.getId() != null)
 					anot.setResponsavel(contratante);
 				anot.setSinalizador(Sinalizador.VERDE);
 				anot.setData(new Date());
-				meta.getObservacoes().add(new AnotacaoVO(anot, ciclo));
+				anot.setCiclo(ciclo);
+				meta.getObservacoes().add(anot);
 			}
 
 			if (evento == EventoMeta.RODIZIO) {
-				Anotacao anot = new Anotacao();
+				AnotacaoVO anot = new AnotacaoVO();
 				anot.setNivel(NivelAnotacao.META_RODIZIO);
 				if (facilitador != null && facilitador.getId() != null)
 					anot.setResponsavel(facilitador);
 				anot.setSinalizador(Sinalizador.VERDE);
 				anot.setData(new Date());
-				meta.getObservacoes().add(new AnotacaoVO(anot, ciclo));
+				anot.setCiclo(ciclo);
+				meta.getObservacoes().add(anot);
 			}
 
 			List<MetaInstituto> subAtividades = metaInstituto.getItens();
@@ -247,8 +253,8 @@ public class MetasHelper {
 			PlanoMetas planoMetasAtual, boolean editMode) {
 		metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, evento,
 				new RodizioVO(planoMetasAtual.getRodizio()));
-		return preencheAnotacoes(metaEntidade, metaForm, planoMetasAtual.getContratante(),
-				planoMetasAtual.getFacilitador(), evento, new RodizioVO(planoMetasAtual.getRodizio()), editMode);
+		return preencheAnotacoes(metaEntidade, metaForm, new PessoaOptionForm( planoMetasAtual.getContratante() ),
+				new PessoaOptionForm( planoMetasAtual.getFacilitador() ), evento, new RodizioVO(planoMetasAtual.getRodizio()), editMode);
 	}
 
 	public MetaForm preencheSituacaoDesejada(MetaEntidade metaEntidade, MetaForm metaForm, EventoMeta evento,
@@ -273,22 +279,20 @@ public class MetasHelper {
 		return metaForm;
 	}
 
-	public MetaForm preencheAnotacoes(MetaEntidade metaEntidade, MetaForm metaForm, Pessoa contratante,
-			Pessoa facilitador, EventoMeta evento, RodizioVO ciclo, boolean editMode) {
+	public MetaForm preencheAnotacoes(MetaEntidade metaEntidade, MetaForm metaForm, PessoaOptionForm contratante,
+			PessoaOptionForm facilitador, EventoMeta evento, RodizioVO ciclo, boolean editMode) {
 
 		if (metaEntidade != null) {
 			if (editMode) { // Se nao for mode de visualizacao adicionar uma anotacao em branco para
 							// preenchimento
 				if (evento == EventoMeta.PRERODIZIO) {
-					Pessoa responsavel = contratante; // Presidente
 					verificaValidaAnotacoes(ciclo, evento, metaEntidade.getAnotacoes(), metaForm.getObservacoes(),
-							responsavel);
+							contratante); // Presidente
 				}
 
 				if (evento == EventoMeta.RODIZIO) {
-					Pessoa responsavel = facilitador; // Facilitador
 					verificaValidaAnotacoes(ciclo, evento, metaEntidade.getAnotacoes(), metaForm.getObservacoes(),
-							responsavel);
+							facilitador); // Facilitador
 				}
 
 				if (evento == EventoMeta.POSRODIZIO) {
@@ -376,7 +380,7 @@ public class MetasHelper {
 	}
 
 	private void verificaValidaAnotacoes(RodizioVO ciclo, EventoMeta evento, final List<MetaEntidadeAnotacao> anotacoes,
-			final List<AnotacaoVO> observacoes, final Pessoa responsavel) {
+			final List<AnotacaoVO> observacoes, final PessoaOptionForm responsavel) {
 
 		NivelAnotacao nivel = null;
 
@@ -402,13 +406,14 @@ public class MetasHelper {
 		}
 
 		if (!poosuiAnot) {
-			Anotacao anot = new Anotacao();
+			AnotacaoVO anot = new AnotacaoVO();
 			anot.setNivel(nivel);
 			if (responsavel != null && responsavel.getId() != null)
 				anot.setResponsavel(responsavel);
 			anot.setSinalizador(Sinalizador.VERDE);
 			anot.setData(new Date());
-			observacoes.add(new AnotacaoVO(anot, ciclo));
+			anot.setCiclo(ciclo);
+			observacoes.add(anot);
 		}
 	}
 

@@ -351,7 +351,7 @@ public class PlanoMetasController {
           planoMetasForm.setInstituto(novoFac.getInstituto());
         }
         
-        planoMetasForm.setFacilitador(facilitadorSearch);
+        planoMetasForm.setFacilitador(new PessoaOptionForm( facilitadorSearch ) );
 
         if (ciclo == null) {
           ciclo = rodizio.getId();
@@ -506,7 +506,7 @@ public class PlanoMetasController {
       if (planoMetasAtual != null) {
         planoMetasForm = mapPlanoMetasToPlanoMetasForm(planoMetasAtual);
         if (facilitador != null) {
-          planoMetasForm.setFacilitador(facilitador);
+          planoMetasForm.setFacilitador( new PessoaOptionForm( facilitador ) );
         }
         planoMetasForm.setEvento(evento);
       }
@@ -522,16 +522,20 @@ public class PlanoMetasController {
           for (Dirigente dirigente : listaDirigente) {
             if (dirigente.getInstituto().getId()
                 .equals(planoMetasForm.getInstituto().getId())) {
-              planoMetasForm.setCoordenador(dirigente.getTrabalhador());
+            		if(dirigente.getTrabalhador() != null) {
+            			planoMetasForm.setCoordenador(  new PessoaOptionForm(  dirigente.getTrabalhador() ) );
+            		}
             }
           }
         }
         
         planoMetasForm.setEntidade(entidade);
         planoMetasForm.setTipoContratante(TipoContratante.PRESIDENTE);
-        planoMetasForm.setPresidente(entidade.getPresidente().getPessoa());
-        planoMetasForm.setContratante(entidade.getPresidente().getPessoa());
-
+        if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null) { 
+        		planoMetasForm.setPresidente(  new PessoaOptionForm(  entidade.getPresidente().getPessoa() ) );
+        		planoMetasForm.setContratante(  new PessoaOptionForm(  entidade.getPresidente().getPessoa() ) );
+        }
+        
         redirect.addFlashAttribute("planoMetasForm", planoMetasForm);
 
         return listAtividades(planoMetasForm, result);
@@ -557,17 +561,23 @@ public class PlanoMetasController {
     planoMetasForm.setFinalizado(planoMetasAtual.isFinalizado());
     planoMetasForm.setTipoContratante(planoMetasAtual.getTipoContratante());
 
-    planoMetasForm.setPresidente( planoMetasAtual.getPresidente() );
+    if(planoMetasAtual.getPresidente() != null) {
+    		planoMetasForm.setPresidente(  new PessoaOptionForm(  planoMetasAtual.getPresidente() ) );
+    }
     planoMetasForm.setNomePresidente(planoMetasAtual.getNomePresidente());
     planoMetasForm.setEmailPresidente(planoMetasAtual.getEmailPresidente());
     planoMetasForm.setTelefonePresidente(planoMetasAtual.getTelefonePresidente());
 
-    planoMetasForm.setCoordenador(planoMetasAtual.getCoordenador());
+    if(planoMetasAtual.getCoordenador() != null) {
+    		planoMetasForm.setCoordenador( new PessoaOptionForm( planoMetasAtual.getCoordenador() ) );
+    }
     planoMetasForm.setNomeCoordenador(planoMetasAtual.getNomeCoordenador());
     planoMetasForm.setEmailCoordenador(planoMetasAtual.getEmailCoordenador());
     planoMetasForm.setTelefoneCoordenador(planoMetasAtual.getTelefoneCoordenador());
 
-    planoMetasForm.setContratante(planoMetasAtual.getContratante());
+    if(planoMetasAtual.getContratante() != null) {
+    		planoMetasForm.setContratante( new PessoaOptionForm( planoMetasAtual.getContratante() ) );
+    }
     planoMetasForm.setNomeContratante(planoMetasAtual.getNomeContratante());
     planoMetasForm.setEmailContratante(planoMetasAtual.getEmailContratante());
     planoMetasForm.setTelefoneContratante(planoMetasAtual.getTelefoneContratante());
@@ -575,7 +585,9 @@ public class PlanoMetasController {
     if (planoMetasAtual.getTipoContratante() == TipoContratante.OUTRO) {
       planoMetasForm.setOutro( new PessoaOptionForm( planoMetasAtual.getContratante() ) );
     }
-    planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
+    if(planoMetasAtual.getFacilitador() != null) {
+    		planoMetasForm.setFacilitador(  new PessoaOptionForm( planoMetasAtual.getFacilitador() ) );
+    }
     
     planoMetasForm.setRodizio( new RodizioVO( planoMetasAtual.getRodizio() ) );
     planoMetasForm.setInstituto(planoMetasAtual.getInstituto());
@@ -713,14 +725,14 @@ public class PlanoMetasController {
 
     // Primeiro Rodizio
     if (metasEntidade == null || metasEntidade.size() == 0) {
-      metasForm = new MetasHelper(metaService).mapMetaInstitutoToMetaForm(
+      metasForm = new MetasHelper(metaService, pessoaService).mapMetaInstitutoToMetaForm(
           metasIntituto, 
           contratoForm.getFacilitador(),
           contratoForm.getContratante(), 
           contratoForm.getEvento(),
           contratoForm.getRodizio());
     } else if (metasEntidade.size() > 0) {
-      metasForm = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(
+      metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(
           metasIntituto, 
           contratoForm.getFacilitador(),
           contratoForm.getContratante(), 
@@ -888,13 +900,13 @@ public class PlanoMetasController {
     if (planoMetasForm.getPresidente() != null && planoMetasForm.getPresidente().getId() != null) {
       Pessoa presidente = pessoaService.getPessoa(planoMetasForm.getPresidente().getId());
       planoMetas.setPresidente(presidente);
-      planoMetas.setNomePresidente(planoMetasForm.getPresidente().getNomeCompleto());
+      planoMetas.setNomePresidente(planoMetasForm.getPresidente().getNome());
     }
     
     if (planoMetasForm.getCoordenador() != null && planoMetasForm.getCoordenador().getId() != null) {
       Pessoa coordenador = pessoaService.getPessoa(planoMetasForm.getCoordenador().getId());
       planoMetas.setCoordenador(coordenador);
-      planoMetas.setNomeCoordenador(planoMetasForm.getCoordenador().getNomeCompleto());
+      planoMetas.setNomeCoordenador(planoMetasForm.getCoordenador().getNome());
     }
 
     if (planoMetasForm.getTipoContratante() == TipoContratante.PRESIDENTE) {
@@ -1108,7 +1120,7 @@ public class PlanoMetasController {
 
         HistoricoMetaEntidade statusDesejado = null;
         if (meta.getId() != null) {
-          statusDesejado = new MetasHelper(metaService)
+          statusDesejado = new MetasHelper(metaService, pessoaService)
               .getUltimoHistorico(meta.getId(), plano.getRodizio().getId(), acaoDefault, true);
         }
 
@@ -1256,12 +1268,24 @@ public class PlanoMetasController {
 
       List<MetaEntidade> listaMetas = metaService.findByEntidadeIdAndInstitutoId(planoMetas.getEntidade().getId(), planoMetas.getInstituto().getId());
       planoMetas.setMetas(listaMetas);
+      
+      PessoaOptionForm facilitador = null;
+      PessoaOptionForm contratante = null;
+      
+      if(planoMetas.getFacilitador() != null) {
+    	  	facilitador = new PessoaOptionForm(planoMetas.getFacilitador());
+      }
+    	  
+      if(planoMetas.getContratante() != null) {
+    	  	contratante = new PessoaOptionForm(planoMetas.getContratante());
+      }
+      
 
       if (planoMetas.getMetas().size() > 0) {
-        List<MetaForm> metas = new MetasHelper(metaService).mapMetaEntidadeToMetaForm(
+        List<MetaForm> metas = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(
              atividades, 
-             planoMetas.getFacilitador(),
-             planoMetas.getContratante(), 
+             facilitador,
+             contratante, 
              EventoMeta.RODIZIO, 
              planoMetas.getEntidade(), 
              new RodizioVO( planoMetas.getRodizio() ) );
@@ -1320,7 +1344,8 @@ public class PlanoMetasController {
         && planoMetasForm.getFacilitador().getId() != null) {
       Pessoa facilitador = pessoaService
           .getPessoa(planoMetasForm.getFacilitador().getId());
-      planoMetasForm.setFacilitador(facilitador);
+      PessoaOptionForm pessoaFacilitador = new PessoaOptionForm(facilitador);
+      planoMetasForm.setFacilitador(pessoaFacilitador);
       return facilitador;
     } else {
       planoMetasForm.setFacilitador(null);
@@ -1334,7 +1359,8 @@ public class PlanoMetasController {
         && planoMetasForm.getPresidente().getId() != null) {
       Pessoa presidente = pessoaService
           .getPessoa(planoMetasForm.getPresidente().getId());
-      planoMetasForm.setPresidente(presidente);
+      PessoaOptionForm pessoaPresidente = new PessoaOptionForm(presidente);
+      planoMetasForm.setPresidente(pessoaPresidente);
       return presidente;
     } else {
       planoMetasForm.setPresidente(null);
@@ -1348,7 +1374,8 @@ public class PlanoMetasController {
         && planoMetasForm.getCoordenador().getId() != null) {
       Pessoa coordenador = pessoaService
           .getPessoa(planoMetasForm.getCoordenador().getId());
-      planoMetasForm.setCoordenador(coordenador);
+      PessoaOptionForm pessoaCoordenador = new PessoaOptionForm(coordenador);
+      planoMetasForm.setCoordenador(pessoaCoordenador);
       return coordenador;
     } else {
       planoMetasForm.setCoordenador(null);
@@ -1362,7 +1389,8 @@ public class PlanoMetasController {
         && planoMetasForm.getContratante().getId() != null) {
       Pessoa contratante = pessoaService
           .getPessoa(planoMetasForm.getContratante().getId());
-      planoMetasForm.setContratante(contratante);
+      PessoaOptionForm pessoaContratante = new PessoaOptionForm(contratante);
+      planoMetasForm.setContratante(pessoaContratante);
       return contratante;
     } else {
       planoMetasForm.setContratante(null);

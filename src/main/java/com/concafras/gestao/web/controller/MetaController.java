@@ -30,6 +30,7 @@ import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.ContatoBasico;
 import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.MetaForm;
+import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
 import com.concafras.gestao.model.Anotacao;
@@ -198,7 +199,7 @@ public class MetaController {
 
 		form.setDescricaoCompleta(rota);
 
-		HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService).getUltimoHistorico(meta.getId(),
+		HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService, pessoaService).getUltimoHistorico(meta.getId(),
 				plano.getRodizio().getId(), true);
 
 		if (hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR
@@ -208,10 +209,10 @@ public class MetaController {
 			editMode = false;
 		}
 
-		form = new MetasHelper(metaService).preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
+		form = new MetasHelper(metaService, pessoaService).preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()));
 
-		form = new MetasHelper(metaService).preencheAnotacoes(meta, form, contratante, null, EventoMeta.POSRODIZIO,
+		form = new MetasHelper(metaService, pessoaService).preencheAnotacoes(meta, form, new PessoaOptionForm( contratante ), null, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()), editMode);
 
 		// PlanoMetasForm planoForm = new PlanoMetasForm(plano);
