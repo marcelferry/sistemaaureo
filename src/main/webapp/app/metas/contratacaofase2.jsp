@@ -189,14 +189,14 @@
 					<div class="col-sm-3 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.rodizio.ciclo}</div>
 					<c:if test="${planoMetasForm.evento == 'RODIZIO'}">
 						<label class="col-sm-2 col-xs-3 control-label">Facilitador:</label>
-						<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.facilitador.nomeCompleto} </div>
+						<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.facilitador.nome} </div>
 					</c:if>
 				</div>
 				<div id="div_entidade" class="col-sm-12 small">
 					<label class="col-sm-2 col-xs-3 control-label">Instituto:</label>
 					<div class="col-sm-3 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.descricao}</div>
 					<label class="col-sm-2 col-xs-3 control-label">Dirigente Nacional:</label>
-					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.dirigenteNacional.nomeCompleto}</div>
+					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.dirigenteNacional.nome}</div>
 				</div>
 			</fieldset>
 			<fieldset>
@@ -215,26 +215,26 @@
 		            <label class="col-sm-2 col-xs-3 control-label">Telefone:</label>
 	                <div class="col-sm-5 col-xs-9 control-label" style="text-align: left;"><span id="entidade.telefone">${planoMetasForm.entidade.primeiroTelefone}&nbsp;</span></div>
 	            </div>
-	            <c:if test="${ ! empty planoMetasForm.presidente.nomeCompleto}">
+	            <c:if test="${ ! empty planoMetasForm.presidente.nome}">
 	            <div id="div_presidente" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="presidente.nome">Presidente:</label>
 	               	<div class="col-sm-6 control-label" style="text-align: left;">
 	               		<form:hidden path="presidente.id" />
-	               		<form:hidden path="presidente.nomeCompleto" />
-	               		<span id="presidente.nomeCompleto">${planoMetasForm.presidente.nomeCompleto}</span>
+	               		<form:hidden path="presidente.nome" />
+	               		<span id="presidente.nome">${planoMetasForm.presidente.nome}</span>
 	                </div>
 	            </div>
 	            </c:if>
-	            <c:if test="${ ! empty planoMetasForm.coordenador.nomeCompleto}">
+	            <c:if test="${ ! empty planoMetasForm.coordenador.nome}">
 	            <div id="div_coordenador" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="coordenador.nome">Coordenador:</label>
 	               	<div class="col-sm-6 control-label" style="text-align: left;">
-	               		<form:hidden path="coordenador.nomeCompleto" />
-	               		<span id="coordenador.nomeCompleto">${planoMetasForm.nomeCoordenador}</span>
+	               		<form:hidden path="coordenador.nome" />
+	               		<span id="coordenador.nome">${planoMetasForm.nomeCoordenador}</span>
 	                </div>
 	            </div>
 	            </c:if>
-	            <c:if test="${ empty planoMetasForm.coordenador.nomeCompleto && ! empty planoMetasForm.nomeCoordenador}">
+	            <c:if test="${ empty planoMetasForm.coordenador.nome && ! empty planoMetasForm.nomeCoordenador}">
 	            <div id="div_coordenador" class="col-sm-12 small">
 		            <label class="col-sm-2 control-label" for="coordenador.nome">Coordenador:</label>
 	               	<div class="col-sm-6 control-label" style="text-align: left;">
@@ -249,10 +249,10 @@
 	     					<form:hidden path="tipoContratante"/>
 	     					<c:if test="${ planoMetasForm.tipoContratante == 'PRESIDENTE' }">Presidente</c:if>
 	     					<c:if test="${ planoMetasForm.tipoContratante == 'COORDENADOR' }">Coordenador</c:if>
-	               		<c:if test="${ ! empty planoMetasForm.outro.nomeCompleto}">
+	               		<c:if test="${ ! empty planoMetasForm.outro.nome}">
 	               			<form:hidden path="outro.id" />
-	               			<form:hidden path="outro.nomeCompleto" />
-	               			<b>Trabalhador</b> - ${planoMetasForm.outro.nomeCompleto}
+	               			<form:hidden path="outro.nome" />
+	               			<b>Trabalhador</b> - ${planoMetasForm.outro.nome}
 	               		</c:if>
 	                </div>
 	            </div>

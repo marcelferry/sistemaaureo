@@ -6,7 +6,6 @@ import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.TipoContratante;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
-import com.concafras.gestao.model.Pessoa;
 
 public class PlanoMetasForm {
 
@@ -18,13 +17,13 @@ public class PlanoMetasForm {
 
   private BaseInstituto instituto;
 
-  private Pessoa facilitador;
+  private PessoaOptionForm facilitador;
 
-  private Pessoa presidente;
+  private PessoaOptionForm presidente;
 
-  private Pessoa coordenador;
+  private PessoaOptionForm coordenador;
 
-  private Pessoa contratante;
+  private PessoaOptionForm contratante;
 
   private String nomePresidente;
 
@@ -91,11 +90,11 @@ public class PlanoMetasForm {
     this.rodizio = rodizio;
   }
 
-  public Pessoa getFacilitador() {
+  public PessoaOptionForm getFacilitador() {
     return facilitador;
   }
 
-  public void setFacilitador(Pessoa facilitador) {
+  public void setFacilitador(PessoaOptionForm facilitador) {
     this.facilitador = facilitador;
   }
 
@@ -115,27 +114,27 @@ public class PlanoMetasForm {
     this.entidade = entidade;
   }
 
-  public Pessoa getPresidente() {
+  public PessoaOptionForm getPresidente() {
     return presidente;
   }
 
-  public void setPresidente(Pessoa presidente) {
+  public void setPresidente(PessoaOptionForm presidente) {
     this.presidente = presidente;
   }
 
-  public Pessoa getCoordenador() {
+  public PessoaOptionForm getCoordenador() {
     return coordenador;
   }
 
-  public void setCoordenador(Pessoa coordenador) {
+  public void setCoordenador(PessoaOptionForm coordenador) {
     this.coordenador = coordenador;
   }
 
-  public Pessoa getContratante() {
+  public PessoaOptionForm getContratante() {
     return contratante;
   }
 
-  public void setContratante(Pessoa contratante) {
+  public void setContratante(PessoaOptionForm contratante) {
     this.contratante = contratante;
   }
 
@@ -173,7 +172,7 @@ public class PlanoMetasForm {
 
   public String getNomeCoordenador() {
     if (coordenador != null) {
-      return coordenador.getNomeCompleto();
+      return coordenador.getNome();
     } else {
       return nomeCoordenador;
     }
@@ -185,7 +184,7 @@ public class PlanoMetasForm {
 
   public String getNomeContratante() {
     if (contratante != null) {
-      return contratante.getNomeCompleto();
+      return contratante.getNome();
     } else {
       return nomeContratante;
     }
@@ -229,7 +228,7 @@ public class PlanoMetasForm {
 
   public String getEmailCoordenador() {
     if (coordenador != null) {
-      return coordenador.getPrimeiroEmail();
+      return coordenador.getEmail();
     } else {
       return emailCoordenador;
     }
@@ -241,7 +240,7 @@ public class PlanoMetasForm {
 
   public String getEmailContratante() {
     if (contratante != null) {
-      return contratante.getPrimeiroEmail();
+      return contratante.getEmail();
     } else {
       return emailContratante;
     }
