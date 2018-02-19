@@ -12,10 +12,10 @@
     
     <global-method-security secured-annotations="enabled" />
 	
-   	<http pattern="/css/**" 			security="none"/>
-    <http pattern="/js/**" 				security="none"/>
-    <http pattern="/fonts/**" 			security="none"/>
-    <http pattern="/font-awesome/**" 	security="none"/>
+   	<http pattern="/css/**" 						 security="none"/>
+    <http pattern="/js/**" 						 security="none"/>
+    <http pattern="/fonts/**" 					 security="none"/>
+    <http pattern="/font-awesome/**" 			 security="none"/>
     <http pattern="/api/v1/usuarios/authenticate" security="none" />
     
     <!-- Rest authentication entry point configuration -->
@@ -36,18 +36,20 @@
         <logout />
 	</http>
     
-    <http auto-config="true" use-expressions="true"> 
+    <http
+    		pattern="/gestao/**" 
+    		auto-config="true" 
+    		use-expressions="true"> 
         <headers>
 			<cache-control />
 		</headers>
         
 		<access-denied-handler error-page="/gestao/home/403" />
 		
-		<intercept-url pattern="/gestao/home/login*" access="permitAll"/>
-	    <intercept-url pattern="/gestao/userprofile/recuperarsenha*" access="permitAll"/>
-	    <intercept-url pattern="/gestao/graphicData/**" access="permitAll"/>
-		<intercept-url pattern="/" access="permitAll" />
-        <intercept-url pattern="/gestao/**" access="isAuthenticated()" />
+		<intercept-url pattern="/home/login*" access="permitAll"/>
+	    <intercept-url pattern="/userprofile/recuperarsenha*" access="permitAll"/>
+	    <intercept-url pattern="/graphicData/**" access="permitAll"/>
+        <intercept-url pattern="/**" access="isAuthenticated()" />
         
         <form-login
                 login-processing-url="/authentication"
