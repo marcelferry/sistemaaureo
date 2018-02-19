@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.service.MetasInstitutoService;
@@ -27,11 +25,11 @@ public class PlanoModeloRestController {
   @RequestMapping(value = "/api/v1/planomodelo/ciclo/{ciclo}/instituto/{instituto}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
   public @ResponseBody String listarMetasPorInstituto(
       HttpServletRequest request, 
-      @PathVariable("ciclo") String ciclo,
-      @PathVariable("instituto") String instituto){
+      @PathVariable("ciclo") int ciclo,
+      @PathVariable("instituto") int instituto){
     
     //TODO: Regra diferente 
-    List<MetaInstituto> retorno = null;
+    List<MetaInstituto> retorno = metasInstitutoService.listMetaInstitutoByInstitutoRodizio(instituto, ciclo);
     
     DatatableResponse<MetaInstituto> result = new DatatableResponse<MetaInstituto>();
     result.setiTotalDisplayRecords(retorno.size());

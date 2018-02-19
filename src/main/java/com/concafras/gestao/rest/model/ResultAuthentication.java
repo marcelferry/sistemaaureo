@@ -2,11 +2,13 @@ package com.concafras.gestao.rest.model;
 
 import java.util.List;
 
+import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.UsuarioVO;
 
 public class ResultAuthentication extends ResultBase {
   private UsuarioVO usuario;
   private List<String> authorities;
+  private List<EntidadeOptionForm> entidades;
 
   public ResultAuthentication() {
 
@@ -30,6 +32,14 @@ public class ResultAuthentication extends ResultBase {
   
   public List<String> getAuthorities() {
 	return authorities;
+  }
+
+  public void setEntidades(List<EntidadeOptionForm> entidades) {
+	this.entidades = entidades;
+  }
+  
+  public List<EntidadeOptionForm> getEntidades() {
+	return entidades;
   }
 
 }

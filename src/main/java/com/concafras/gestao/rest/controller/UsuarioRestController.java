@@ -24,15 +24,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.LoginHistoryVO;
 import com.concafras.gestao.form.UsuarioVO;
+import com.concafras.gestao.model.Entidade;
+import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.security.LoginHistory;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.rest.model.DatatableResponse;
 import com.concafras.gestao.rest.model.ResultAuthentication;
 import com.concafras.gestao.rest.utils.RestUtils;
+import com.concafras.gestao.security.UsuarioAutenticado;
 import com.concafras.gestao.security.rest.TokenTransfer;
 import com.concafras.gestao.security.rest.TokenUtils;
+import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.LoginHistoryService;
 import com.concafras.gestao.service.UsuarioService;
 import com.google.gson.Gson;
@@ -43,6 +48,9 @@ public class UsuarioRestController {
 
   @Autowired
   UsuarioService usuarioService;
+  
+  @Autowired
+  EntidadeService entidadeService;
   
   @Autowired
   LoginHistoryService loginHistoryService;
@@ -91,8 +99,18 @@ public class UsuarioRestController {
         listaRoles.add(auth.getAuthority());
       }
       
+      List<EntidadeOptionForm> entidades = new ArrayList<EntidadeOptionForm>();
+      if(listaRoles.contains("ROLE_PRESIDENTE")) {
+          Pessoa pessoa = usuario.getPessoa();
+          List<Entidade> entidadesLoaded = entidadeService.getEntidade(pessoa);
+          for (Entidade entidade : entidadesLoaded) {
+			entidades.add(new EntidadeOptionForm(entidade));
+		}
+      }
+      
       ResultAuthentication result = new ResultAuthentication();
       result.setAuthorities(listaRoles);
+      result.setEntidades(entidades);
       result.setSuccess(true);
       result.setUsuario(new UsuarioVO(usuario));
       result.getUsuario().setToken(token.getToken());
