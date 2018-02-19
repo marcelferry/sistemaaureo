@@ -573,7 +573,7 @@ public class PlanoMetasController {
     planoMetasForm.setTelefoneContratante(planoMetasAtual.getTelefoneContratante());
 
     if (planoMetasAtual.getTipoContratante() == TipoContratante.OUTRO) {
-      planoMetasForm.setOutro(planoMetasAtual.getContratante());
+      planoMetasForm.setOutro( new PessoaOptionForm( planoMetasAtual.getContratante() ) );
     }
     planoMetasForm.setFacilitador(planoMetasAtual.getFacilitador());
     

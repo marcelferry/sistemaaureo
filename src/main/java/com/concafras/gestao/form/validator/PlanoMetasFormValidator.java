@@ -88,7 +88,7 @@ public class PlanoMetasFormValidator implements Validator {
 							plano.getOutro().getId() == null ||  
 							plano.getOutro().getId() <= 0 ) && 
               (plano.getOutro() != null && 
-              plano.getOutro().getNomeCompleto() == null)
+              plano.getOutro().getNome() == null)
               ){
 							errors.rejectValue("outro.id", "negativeValue", new Object[]{"'outro.id'"}, "Contratante não selecionado");
 						}

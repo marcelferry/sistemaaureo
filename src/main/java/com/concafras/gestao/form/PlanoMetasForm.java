@@ -66,7 +66,7 @@ public class PlanoMetasForm {
 
   private DirigenteOptionForm dirigenteInstituto;
 
-  private Pessoa outro;
+  private PessoaOptionForm outro;
   
   private Long prioridades;
   
@@ -299,11 +299,11 @@ public class PlanoMetasForm {
     this.dirigenteInstituto = dirigenteInstituto;
   }
 
-  public Pessoa getOutro() {
+  public PessoaOptionForm getOutro() {
     return outro;
   }
 
-  public void setOutro(Pessoa outro) {
+  public void setOutro(PessoaOptionForm outro) {
     this.outro = outro;
   }
 
