@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.form.EntidadeOptionForm;
@@ -39,7 +40,7 @@ import com.concafras.gestao.service.RodizioService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-@Controller
+@RestController
 public class PlanoMetasRestController {
 
 	@Autowired
@@ -65,7 +66,7 @@ public class PlanoMetasRestController {
 	
 	
 	@RequestMapping(value = "/api/v1/planometas/ciclo/{ciclo}/entidade/{entidade}/instituto/{instituto}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	public @ResponseBody String listarPlanoMetasPorInstituto(
+	public @ResponseBody PlanoMetasForm listarPlanoMetasPorInstituto(
 	      HttpServletRequest request, 
 	      @PathVariable("ciclo") int ciclo,
 	      @PathVariable("entidade") int entidade,
@@ -100,21 +101,7 @@ public class PlanoMetasRestController {
 
 	    planoMetasForm.setFase(3);
 	    
-	    List<PlanoMetasForm> retorno = new ArrayList<PlanoMetasForm>();
-	    
-	    retorno.add(planoMetasForm);
-		
-		DatatableResponse<PlanoMetasForm> result = new DatatableResponse<PlanoMetasForm>();
-	    result.setiTotalDisplayRecords(retorno.size());
-	    result.setiTotalRecords(retorno.size());
-	    result.setAaData(retorno);
-	    result.setSuccess(true);
-	    
-	    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	    
-	    String json2 = gson.toJson(result);
-	    
-	    return json2;
+	    return planoMetasForm;
 		
 	}
 		

@@ -2,10 +2,13 @@ package com.concafras.gestao.form;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class LoginHistoryVO {
   
   private Long id;
   
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss")
   private Date loggedIn;
   
   private String userIp;

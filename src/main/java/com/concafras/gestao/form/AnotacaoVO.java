@@ -9,6 +9,7 @@ import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class AnotacaoVO {
 
@@ -54,6 +55,7 @@ public class AnotacaoVO {
   
   private RodizioVO ciclo;
 
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
   @DateTimeFormat(pattern = "dd/MM/yyyy")
   private Date data;
 

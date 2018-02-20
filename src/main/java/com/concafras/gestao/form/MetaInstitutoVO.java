@@ -43,27 +43,31 @@ public class MetaInstitutoVO {
 		this.prioridade = prioridade;
 		this.viewOrder = viewOrder;
 	}
-
+	
 	public MetaInstitutoVO(MetaInstituto meta) {
+		this(meta, true, true);
+	}
+
+	public MetaInstitutoVO(MetaInstituto meta, boolean dependencias, boolean pai) {
 		this.id = meta.getId();
 		this.descricao = meta.getDescricao();
 		this.prioridade = meta.getPrioridade();
 		this.tipoMeta = meta.getTipoMeta();
 		this.viewOrder = meta.getViewOrder();
-		if(meta.getDependencias() != null) {
+		if(meta.getDependencias() != null && dependencias) {
 			this.dependencias = new ArrayList<MetaInstitutoVO>();
 			for (MetaInstituto metaInstituto : meta.getDependencias()) {
-				MetaInstitutoVO aux = new MetaInstitutoVO(metaInstituto);
+				MetaInstitutoVO aux = new MetaInstitutoVO(metaInstituto, false, false);
 				this.dependencias.add(aux);
 			}
 		}
-		if(meta.getPai() != null) { 
-			this.pai = new MetaInstitutoVO(meta.getPai());
+		if(meta.getPai() != null && pai) { 
+			this.pai = new MetaInstitutoVO(meta.getPai(), false, false);
 		}
 		if(meta.getItens() != null) {
 			this.itens = new ArrayList<MetaInstitutoVO>();
 			for (MetaInstituto metaInstituto : meta.getItens()) {
-				MetaInstitutoVO aux = new MetaInstitutoVO(metaInstituto);
+				MetaInstitutoVO aux = new MetaInstitutoVO(metaInstituto, false, false);
 				this.itens.add(aux);
 			}
 		}

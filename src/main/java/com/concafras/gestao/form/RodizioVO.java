@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.concafras.gestao.model.Rodizio;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class RodizioVO {
 
@@ -13,23 +16,24 @@ public class RodizioVO {
 
 	private String ciclo;
 
-	/**
-	 * Inicio do período de ajustes
-	 */
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicioAjustes;
 
-	/**
-	 * Termino do período de ajustes
-	 */
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date terminoAjustes;
 
-	/**
-	 * Data em que o rodizio será realizado.
-	 */
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataAprovacao;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date inicio;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date termino;
 
 	private RodizioVO cicloAnterior;
@@ -39,6 +43,10 @@ public class RodizioVO {
 	}
 
 	public RodizioVO(Rodizio rodizio) {
+		this(rodizio, true);
+	}
+	
+	public RodizioVO(Rodizio rodizio, boolean anterior) {
 		if (rodizio != null) {
 
 			this.id = rodizio.getId();
@@ -48,8 +56,8 @@ public class RodizioVO {
 			this.inicio = rodizio.getInicio();
 			this.termino = rodizio.getTermino();
 			this.dataAprovacao = rodizio.getDataAprovacao();
-			if (rodizio.getCicloAnterior() != null) {
-				this.cicloAnterior = new RodizioVO(rodizio.getCicloAnterior());
+			if (rodizio.getCicloAnterior() != null && anterior) {
+				this.cicloAnterior = new RodizioVO(rodizio.getCicloAnterior(), false);
 			}
 		}
 	}
