@@ -75,38 +75,38 @@ public class PlanoMetasRestController {
 	    EventoMeta evento = EventoMeta.PRERODIZIO;
 
 	    // Verificar existencia do plano para esse ciclo
-	    PlanoMetas plano = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade, instituto, ciclo);
+	    PlanoMetas planoLoaded = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade, instituto, ciclo);
 	    
 	    BaseEntidade entidadeLoaded = entidadeService.findById(entidade);
 	    BaseInstituto institutoLoaded = institutoService.findById(instituto);
 	    Rodizio rodizioLoaded = rodizioService.findById(ciclo);
 
 	    //Nao existe plano de metas?
-	    if (plano == null) {
-	      plano = new PlanoMetas();
-	      plano.setEntidade(entidadeLoaded);
-	      plano.setInstituto(institutoLoaded);
-	      plano.setRodizio(rodizioLoaded);	      
+	    if (planoLoaded == null) {
+	      planoLoaded = new PlanoMetas();
+	      planoLoaded.setEntidade(entidadeLoaded);
+	      planoLoaded.setInstituto(institutoLoaded);
+	      planoLoaded.setRodizio(rodizioLoaded);	      
 	    }
 	    
-	    PlanoMetasForm planoMetasForm = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasToPlanoMetasForm(plano);
+	    PlanoMetasForm plano = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasToPlanoMetasForm(planoLoaded);
 
-	    planoMetasForm.setEvento(evento);
+	    plano.setEvento(evento);
 
-	    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapMetasFromPlanoMetasToPlanoMetasForm(planoMetasForm, plano);
+	    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapMetasFromPlanoMetasToPlanoMetasForm(plano, planoLoaded);
 	    
 	    Long prioridades = metaService.countListMetaEntidadePrioridade(instituto);
 	    
-	    planoMetasForm.setPrioridades(prioridades);
+	    plano.setPrioridades(prioridades);
 
-	    planoMetasForm.setFase(3);
+	    plano.setFase(3);
 	    
-	    return planoMetasForm;
+	    return plano;
 		
 	}
 		
 	@RequestMapping(value = "/api/v1/planometas/print/ciclo/{ciclo}/entidade/{entidade}/instituto/{instituto}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	public @ResponseBody String listarMetasPorInstituto(
+	public @ResponseBody PlanoMetasForm listarMetasPorInstituto(
 				HttpServletRequest request, 
 				@PathVariable("ciclo") int ciclo,
 				@PathVariable("entidade") int entidade,
@@ -120,18 +120,8 @@ public class PlanoMetasRestController {
 
 	    PlanoMetasForm plano = preparaPlanoMetasForm(baseEntidade, baseInstitulo, rodizio, null);
 	    retorno.add(plano);
-	
-		DatatableResponse<PlanoMetasForm> result = new DatatableResponse<PlanoMetasForm>();
-	    result.setiTotalDisplayRecords(retorno.size());
-	    result.setiTotalRecords(retorno.size());
-	    result.setAaData(retorno);
-	    result.setSuccess(true);
 	    
-	    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	    
-	    String json2 = gson.toJson(result);
-	    
-	    return json2;
+	    return plano;
 		
 	}
 
