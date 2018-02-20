@@ -86,7 +86,7 @@ td.fixMergedLastRow {
 				<td width="14%"><b>Instituto:</b></td>
 				<td width="32%" colspan="4"><b>${planoMetasForm.instituto.descricao}</b></td>
 				<td width="6%"><b>Dir.Nac:</b></td>
-				<td width="33%" colspan="4">${planoMetasForm.instituto.dirigenteNacional.nomeCompleto}</td>
+				<td width="33%" colspan="4">${planoMetasForm.instituto.dirigenteNacional.nome}</td>
 				<td width="5%"><b>Ano:</b></td>
 				<td width="10%"><b>${planoMetasForm.rodizio.ciclo}</b></td>
 			</tr>
@@ -96,7 +96,7 @@ td.fixMergedLastRow {
 				<td colspan="5">${planoMetasForm.entidade.razaoSocial}&nbsp;</td>
 				<c:if test="${planoMetasForm.evento == 'RODIZIO'}">
 					<td><b>Facilitador:</b></td>
-					<td colspan="5">${planoMetasForm.facilitador.nomeCompleto} &nbsp;</td>
+					<td colspan="5">${planoMetasForm.facilitador.nome} &nbsp;</td>
 				</c:if>
 				<c:if test="${planoMetasForm.evento == 'PRERODIZIO'}">
 					<td><b>Facilitador:</b></td>
@@ -110,7 +110,7 @@ td.fixMergedLastRow {
 				<td colspan="5">&nbsp;</td>
 				<c:if test="${planoMetasForm.evento == 'RODIZIO'}">
 					<td rowspan="2"><b>Facilitador:</b></td>
-					<td colspan="5">${planoMetasForm.facilitador.nomeCompleto} &nbsp;</td>
+					<td colspan="5">${planoMetasForm.facilitador.nome} &nbsp;</td>
 				</c:if>
 				<c:if test="${planoMetasForm.evento == 'PRERODIZIO'}">
 					<td rowspan="2"><b>Facilitador:</b></td>
@@ -125,37 +125,37 @@ td.fixMergedLastRow {
 		<c:if test="${ !empty planoMetasForm.entidade.razaoSocial}">
 			<tr>
 				<td><b><spring:message code="label.endereco" />:</b></td>
-				<td  colspan="5">${planoMetasForm.entidade.endereco.enderecoFormatado} &nbsp;</td>
+				<td  colspan="5">${planoMetasForm.entidade.endereco} &nbsp;</td>
 				<td  width="8.5%"><b>Cidade:</b></td>
-				<td  width="17%" colspan="3">${planoMetasForm.entidade.endereco.cidade.nome} &nbsp;</td>
+				<td  width="17%" colspan="3">${planoMetasForm.entidade.cidade} &nbsp;</td>
 				<td  width="5%"><b>UF:</b></td>
-				<td  width="10%">${planoMetasForm.entidade.endereco.cidade.estado.sigla} &nbsp;</td>
+				<td  width="10%">${planoMetasForm.entidade.uf} &nbsp;</td>
 			</tr>
 		</c:if>
 		<c:if test="${ empty planoMetasForm.entidade.razaoSocial}">
 			<tr>
 				<td rowspan="2"><b><spring:message code="label.endereco" />:</b></td>
-				<td colspan="5">${planoMetasForm.entidade.endereco.enderecoFormatado} &nbsp;</td>
+				<td colspan="5">${planoMetasForm.entidade.endereco} &nbsp;</td>
 				<td rowspan="2" width="8.5%"><b>Cidade:</b></td>
-				<td rowspan="2" width="17%" colspan="3">${planoMetasForm.entidade.endereco.cidade.nome} &nbsp;</td>
+				<td rowspan="2" width="17%" colspan="3">${planoMetasForm.entidade.cidade} &nbsp;</td>
 				<td rowspan="2" width="5%"><b>UF:</b></td>
-				<td rowspan="2" width="10%">${planoMetasForm.entidade.endereco.cidade.estado.sigla} &nbsp;</td>
+				<td rowspan="2" width="10%">${planoMetasForm.entidade.uf} &nbsp;</td>
 			</tr>
 			<tr>
 				<td colspan="5" class="fixMergedLast" >&nbsp;</td>
 			</tr>
 		</c:if>
-		<c:if test="${ ! empty planoMetasForm.presidente.nomeCompleto}">
+		<c:if test="${ ! empty planoMetasForm.presidente.nome}">
 			<tr>
 				<td><c:if test="${ planoMetasForm.tipoContratante == 'PRESIDENTE' }">( X )</c:if>&nbsp;<b>Presidente:</b></td>
-				<td  colspan="4">${planoMetasForm.presidente.nomeCompleto}</td>
+				<td  colspan="4">${planoMetasForm.presidente.nome}</td>
 				<td><b>Email:</b></td>
-				<td  colspan="4">${planoMetasForm.presidente.primeiroEmail}</td>
+				<td  colspan="4">${planoMetasForm.presidente.email}</td>
 				<td><b>Fone:</b></td>
-				<td>${planoMetasForm.presidente.primeiroTelefone}</td>
+				<td>${planoMetasForm.presidente.telefone}</td>
 			</tr>
 		</c:if>
-		<c:if test="${ empty planoMetasForm.presidente.nomeCompleto}">
+		<c:if test="${ empty planoMetasForm.presidente.nome}">
 			<tr>
 				<td rowspan="2"><c:if test="${ planoMetasForm.tipoContratante != 'PRESIDENTE' }">( &nbsp;&nbsp; )</c:if>&nbsp;<b>Presidente:</b></td>
 				<td  colspan="4">&nbsp;</td>
@@ -170,17 +170,17 @@ td.fixMergedLastRow {
 				<td>&nbsp;</td>
 			</tr>
 		</c:if>
-		<c:if test="${ ! empty planoMetasForm.coordenador.nomeCompleto}">
+		<c:if test="${ ! empty planoMetasForm.coordenador.nome}">
 			<tr>
 				<td><c:if test="${ planoMetasForm.tipoContratante == 'COORDENADOR' }">( X )</c:if>&nbsp;<b>Coord.:</b></td>
-				<td colspan="4">${planoMetasForm.coordenador.nomeCompleto}</td>
+				<td colspan="4">${planoMetasForm.coordenador.nome}</td>
 				<td><b>Email:</b></td>
 				<td colspan="4">&nbsp;</td>
 				<td><b>Fone:</b></td>
 				<td>&nbsp;</td>
 			</tr>
 		</c:if>
-		<c:if test="${ empty planoMetasForm.coordenador.nomeCompleto}">
+		<c:if test="${ empty planoMetasForm.coordenador.nome}">
 			<tr>
 				<td rowspan="2"><c:if test="${ planoMetasForm.tipoContratante != 'COORDENADOR' }">( &nbsp;&nbsp; )</c:if>&nbsp;<b>Coord.:</b></td>
 				<td colspan="4">&nbsp;</td>
@@ -195,17 +195,17 @@ td.fixMergedLastRow {
 				<td>&nbsp;</td>
 			</tr>
 		</c:if>
-		<c:if test="${ ! empty planoMetasForm.outro.nomeCompleto}">
+		<c:if test="${ ! empty planoMetasForm.outro.nome}">
 			<tr>
 				<td class="fixMergedLastRow"><c:if test="${ planoMetasForm.tipoContratante == 'OUTRO' }">( X )</c:if>&nbsp;<b>Trabalhador:</b></td>
-				<td colspan="4">${planoMetasForm.outro.nomeCompleto}</td>
+				<td colspan="4">${planoMetasForm.outro.nome}</td>
 				<td class="fixMergedLastRow"><b>Email:</b></td>
 				<td colspan="4">&nbsp;</td>
 				<td class="fixMergedLastRow"><b>Fone:</b></td>
 				<td>&nbsp;</td>
 			</tr>
 		</c:if>
-		<c:if test="${ empty planoMetasForm.outro.nomeCompleto}">
+		<c:if test="${ empty planoMetasForm.outro.nome}">
 			<tr>
 				<td rowspan="2" class="fixMergedLastRow"><c:if test="${ planoMetasForm.tipoContratante != 'OUTRO' }">( &nbsp;&nbsp; )</c:if>&nbsp;<b>Trabalhador:</b></td>
 				<td colspan="4">&nbsp;</td>

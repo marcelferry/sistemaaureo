@@ -117,21 +117,21 @@ public class MetasHelper {
 	}
 
 	public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo) {
+			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean full) {
 
 		List<MetaForm> metasForm = new ArrayList<MetaForm>();
 
 		metasInstituto.removeAll(Collections.singleton(null));
 
 		for (MetaInstituto metaInstituto : metasInstituto) {
-			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto);
+			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto, false, false);
 			MetaForm metaForm = mapMetaEntidadeToMetaForm(metaInstitutoVO, facilitador, contratante, evento, entidade,
 					ciclo);
 
 			List<MetaInstituto> subAtividades = metaInstituto.getItens();
 			if (subAtividades != null && subAtividades.size() > 0) {
 				List<MetaForm> metas1 = mapMetaEntidadeToMetaForm(subAtividades, facilitador, contratante, evento,
-						entidade, ciclo);
+						entidade, ciclo, full);
 
 				if (metas1.size() > 0) {
 					metaForm.setDependencias(metas1);
@@ -165,7 +165,7 @@ public class MetasHelper {
 		return metaForm;
 	}
 
-	public List<MetaForm> mapMetaInstitutoToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
+	public List<MetaForm> createMetaFormFromMetaInstituto(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
 			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo) {
 
 		List<MetaForm> metas = new ArrayList<MetaForm>();
@@ -217,7 +217,7 @@ public class MetasHelper {
 
 			List<MetaInstituto> subAtividades = metaInstituto.getItens();
 			if (subAtividades != null) {
-				List<MetaForm> metas1 = mapMetaInstitutoToMetaForm(subAtividades, facilitador, contratante, evento,
+				List<MetaForm> metas1 = createMetaFormFromMetaInstituto(subAtividades, facilitador, contratante, evento,
 						ciclo);
 
 				if (metas1.size() > 0) {

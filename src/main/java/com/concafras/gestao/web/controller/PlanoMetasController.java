@@ -506,6 +506,7 @@ public class PlanoMetasController {
       planoMetasAtual = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade.getId(), instituto.getId(), rodizio.getId());
       if (planoMetasAtual != null) {
         planoMetasForm = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService  ).mapPlanoMetasToPlanoMetasForm(planoMetasAtual);
+	    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasAnotacoesToPlanoMetasFormAnotacoes(planoMetasAtual, planoMetasForm);
         if (facilitador != null) {
           planoMetasForm.setFacilitador( new PessoaOptionForm( facilitador ) );
         }
@@ -592,10 +593,20 @@ public class PlanoMetasController {
     plano = planoMetasService.saveOrUpdate(plano, null);
     
     planoMetasForm = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasToPlanoMetasForm(plano);
+    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapPlanoMetasAnotacoesToPlanoMetasFormAnotacoes(plano, planoMetasForm);
 
     planoMetasForm.setEvento(evento);
 
-    new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).mapMetasFromPlanoMetasToPlanoMetasForm(planoMetasForm, plano);
+    List<MetaForm> dependencias = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).loadMetaForm(
+    		planoMetasForm.getInstituto(),
+    		planoMetasForm.getFacilitador(),
+    		planoMetasForm.getContratante(), 
+    		planoMetasForm.getEvento(), 
+    		planoMetasForm.getEntidade(), 
+    		planoMetasForm.getRodizio(),
+			true);
+    
+    planoMetasForm.setDependencias(dependencias);
     
     Long prioridades = metaService.countListMetaEntidadePrioridade(instituto.getId());
     
@@ -1204,7 +1215,8 @@ public class PlanoMetasController {
              contratante, 
              EventoMeta.RODIZIO, 
              new EntidadeOptionForm( planoMetas.getEntidade() ) , 
-             new RodizioVO( planoMetas.getRodizio() ) );
+             new RodizioVO( planoMetas.getRodizio() ),
+             true);
         		planoMetasForm.setDependencias(metas);
       }
       listanova.add(planoMetasForm);
