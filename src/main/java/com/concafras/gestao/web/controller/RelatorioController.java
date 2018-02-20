@@ -395,7 +395,7 @@ public class RelatorioController {
     if (planoMetasAtual == null) {
       metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-          planoMetasForm.getEvento(), planoMetasForm.getRodizio());
+          planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
     }
 
     planoMetasForm.setDependencias(metasForm);
@@ -638,7 +638,7 @@ public class RelatorioController {
     if (planoMetasAtual == null) {
       metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-          planoMetasForm.getEvento(), planoMetasForm.getRodizio());
+          planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
 
     } else if (planoMetasAtual.getMetas().size() > 0) {
       metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto, 
@@ -694,7 +694,7 @@ public class RelatorioController {
       if (planoMetasAtual == null) {
         metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
             planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-            planoMetasForm.getEvento(), planoMetasForm.getRodizio());
+            planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
       }
 
       planoMeta.setDependencias(metasForm);

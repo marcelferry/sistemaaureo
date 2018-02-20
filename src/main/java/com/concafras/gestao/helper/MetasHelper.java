@@ -126,7 +126,7 @@ public class MetasHelper {
 		for (MetaInstituto metaInstituto : metasInstituto) {
 			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto, false, false);
 			MetaForm metaForm = mapMetaEntidadeToMetaForm(metaInstitutoVO, facilitador, contratante, evento, entidade,
-					ciclo);
+					ciclo, full);
 
 			List<MetaInstituto> subAtividades = metaInstituto.getItens();
 			if (subAtividades != null && subAtividades.size() > 0) {
@@ -145,9 +145,11 @@ public class MetasHelper {
 	}
 
 	private MetaForm mapMetaEntidadeToMetaForm(MetaInstitutoVO metaInstituto, PessoaOptionForm facilitador, PessoaOptionForm contratante,
-			EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo) {
+			EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean full) {
 		MetaForm metaForm = new MetaForm();
-		metaForm.setAtividade(  metaInstituto );
+		if(full) {
+			metaForm.setAtividade(  metaInstituto );
+		}
 
 		MetaEntidade metaEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(),
 				metaInstituto.getId()); // searchMeta(metas, planoMetasAtual.getEntidade(),
@@ -166,7 +168,7 @@ public class MetasHelper {
 	}
 
 	public List<MetaForm> createMetaFormFromMetaInstituto(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo) {
+			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo, boolean full) {
 
 		List<MetaForm> metas = new ArrayList<MetaForm>();
 		
@@ -175,7 +177,9 @@ public class MetasHelper {
 		for (MetaInstituto metaInstituto : metasInstituto) {
 			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto);
 			MetaForm meta = new MetaForm();
-			meta.setAtividade(metaInstitutoVO);
+			if(full) {
+				meta.setAtividade(metaInstitutoVO);
+			}
 
 			String rota = metaService.getCaminhoMeta(metaInstituto.getId());
 			meta.setDescricaoCompleta(rota);
@@ -218,7 +222,7 @@ public class MetasHelper {
 			List<MetaInstituto> subAtividades = metaInstituto.getItens();
 			if (subAtividades != null) {
 				List<MetaForm> metas1 = createMetaFormFromMetaInstituto(subAtividades, facilitador, contratante, evento,
-						ciclo);
+						ciclo, full);
 
 				if (metas1.size() > 0) {
 					meta.setDependencias(metas1);

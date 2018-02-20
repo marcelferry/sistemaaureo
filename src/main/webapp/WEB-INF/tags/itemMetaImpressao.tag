@@ -188,7 +188,7 @@
 			        Não Informado
 			        </c:if>
 			        <c:if test="${branco}">
-			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NP )<br/><br/>
+			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NI )<br/><br/>
 			        DESDE: _____/______.
 			        </c:if>
 			    </c:otherwise>
@@ -221,7 +221,7 @@
 			        Não Informado
 			        </c:if>
 			        <c:if test="${branco}">
-			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NP )<br/><br/>
+			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NI )<br/><br/>
 			        DESDE: _____/______.
 			        </c:if>
 			    </c:otherwise>
@@ -318,7 +318,7 @@
 			        Não Informado
 			        </c:if>
 			        <c:if test="${branco}">
-			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NP )<br/><br/>
+			        (&nbsp; I &nbsp;) &nbsp;&nbsp;&nbsp; ( IP ) &nbsp;&nbsp;&nbsp; ( NI )<br/><br/>
 			        DESDE: _____/______.
 			        </c:if>
 			    </c:otherwise>

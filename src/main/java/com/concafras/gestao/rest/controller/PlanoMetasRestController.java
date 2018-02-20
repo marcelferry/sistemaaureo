@@ -127,7 +127,7 @@ public class PlanoMetasRestController {
     				evento, 
     				entidadeForm, 
     				rodizioForm,
-    				true);
+    				false);
     		
     		return dependencias;
 	    				
@@ -277,7 +277,7 @@ public class PlanoMetasRestController {
 		if (planoMetasAtual == null) {
 			metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
-					planoMetasForm.getRodizio());
+					planoMetasForm.getRodizio(), true);
 
 		} else if (planoMetasAtual.getMetas().size() > 0) {
 			

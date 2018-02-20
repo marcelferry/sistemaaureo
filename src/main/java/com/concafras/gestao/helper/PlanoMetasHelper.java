@@ -112,7 +112,7 @@ public class PlanoMetasHelper {
 		          facilitador,
 		          contratante, 
 		          evento,
-		          rodizio);
+		          rodizio, full);
 		    } else if (metasEntidade.size() > 0) {
 		      metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(
 		          metasIntituto, 

@@ -227,7 +227,7 @@ td.fixMergedLastRow {
 	<b>Legenda:</b><br/>
 	<b>( &nbsp;I&nbsp; ) - Implantado: </b> <spring:message code="label.legenda.implantada.texto" /><br/>
 	<b>( IP ) - Implantado Parcialmente: </b> <spring:message code="label.legenda.implantadaparcialmente.texto" /><br/>
-	<b>( NP ) - Nao Implantado: </b> <spring:message code="label.legenda.naoimplantada.texto" /><br/>
+	<b>( NI ) - Nao Implantado: </b> <spring:message code="label.legenda.naoimplantada.texto" /><br/>
 	<b>( R ) - Realizou: </b> <spring:message code="label.legenda.implantadaparcialmente.texto" /><br/>
 	<b>( NR ) - Nao realizou: </b> <spring:message code="label.legenda.naoimplantada.texto" /><br/>
 	
