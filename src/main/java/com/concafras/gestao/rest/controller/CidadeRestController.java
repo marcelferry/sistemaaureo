@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.concafras.gestao.form.CidadeVO;
 import com.concafras.gestao.model.Cidade;
+import com.concafras.gestao.rest.model.CidadeVO;
 import com.concafras.gestao.rest.utils.RestUtils;
 import com.concafras.gestao.service.CidadeService;
 

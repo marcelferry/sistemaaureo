@@ -48,5 +48,7 @@ public interface MetaService {
   MetaEntidade saveOrUpdate(MetaEntidade metaEntidade);
 
   Long countListMetaEntidadePrioridade(Integer idInstituto);
+  
+  Long countListMetaEntidade(Integer entidade, Integer instituto);
 
 }

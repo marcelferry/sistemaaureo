@@ -10,11 +10,8 @@ import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
-import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.EntidadeOptionForm;
-import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.MetaForm;
-import com.concafras.gestao.form.MetaInstitutoVO;
 import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.Anotacao;
@@ -27,6 +24,9 @@ import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
+import com.concafras.gestao.rest.model.AnotacaoVO;
+import com.concafras.gestao.rest.model.HistoricoMetaEntidadeVO;
+import com.concafras.gestao.rest.model.MetaInstitutoVO;
 import com.concafras.gestao.service.MetaService;
 import com.concafras.gestao.service.PessoaService;
 
@@ -117,26 +117,16 @@ public class MetasHelper {
 	}
 
 	public List<MetaForm> mapMetaEntidadeToMetaForm(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean full) {
+			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean loadAtividade, boolean loadDependencias) {
 
 		List<MetaForm> metasForm = new ArrayList<MetaForm>();
 
 		metasInstituto.removeAll(Collections.singleton(null));
 
 		for (MetaInstituto metaInstituto : metasInstituto) {
-			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto, false, false);
-			MetaForm metaForm = mapMetaEntidadeToMetaForm(metaInstitutoVO, facilitador, contratante, evento, entidade,
-					ciclo, full);
-
-			List<MetaInstituto> subAtividades = metaInstituto.getItens();
-			if (subAtividades != null && subAtividades.size() > 0) {
-				List<MetaForm> metas1 = mapMetaEntidadeToMetaForm(subAtividades, facilitador, contratante, evento,
-						entidade, ciclo, full);
-
-				if (metas1.size() > 0) {
-					metaForm.setDependencias(metas1);
-				}
-			}
+			
+			MetaForm metaForm = mapMetaEntidadeToMetaForm(metaInstituto, facilitador, contratante, evento, entidade,
+					ciclo, loadAtividade, loadDependencias);
 
 			metasForm.add(metaForm);
 		}
@@ -144,11 +134,16 @@ public class MetasHelper {
 		return metasForm;
 	}
 
-	private MetaForm mapMetaEntidadeToMetaForm(MetaInstitutoVO metaInstituto, PessoaOptionForm facilitador, PessoaOptionForm contratante,
-			EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean full) {
+	public MetaForm mapMetaEntidadeToMetaForm(MetaInstituto metaInstituto, PessoaOptionForm facilitador, PessoaOptionForm contratante,
+			EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean loadAtividade, boolean loadDependencias) {
 		MetaForm metaForm = new MetaForm();
-		if(full) {
-			metaForm.setAtividade(  metaInstituto );
+		
+		if(loadAtividade) {
+			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto, false, false);
+			metaForm.setAtividade(  metaInstitutoVO );
+		} else {
+			metaForm.setAtividade(new MetaInstitutoVO());
+			metaForm.getAtividade().setId(metaInstituto.getId());
 		}
 
 		MetaEntidade metaEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(),
@@ -160,9 +155,19 @@ public class MetasHelper {
 
 		metaForm = preencheSituacaoAnteriorAtual(metaForm, metaEntidade, ciclo);
 
-		metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, evento, ciclo);
+		metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, evento, ciclo, loadAtividade );
 
 		metaForm = preencheAnotacoes(metaEntidade, metaForm, contratante, facilitador, evento, ciclo, true);
+		
+		List<MetaInstituto> subAtividades = metaInstituto.getItens();
+		if (subAtividades != null && subAtividades.size() > 0 && loadDependencias) {
+			List<MetaForm> metas1 = mapMetaEntidadeToMetaForm(subAtividades, facilitador, contratante, evento,
+					entidade, ciclo, loadAtividade, loadDependencias);
+
+			if (metas1.size() > 0) {
+				metaForm.setDependencias(metas1);
+			}
+		}
 
 		return metaForm;
 	}
@@ -175,64 +180,81 @@ public class MetasHelper {
 		metasInstituto.removeAll(Collections.singleton(null));
 
 		for (MetaInstituto metaInstituto : metasInstituto) {
-			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto);
-			MetaForm meta = new MetaForm();
-			if(full) {
-				meta.setAtividade(metaInstitutoVO);
-			}
-
-			String rota = metaService.getCaminhoMeta(metaInstituto.getId());
-			meta.setDescricaoCompleta(rota);
-
-			// Primeiro rodizio - Sem meta anterior
-			meta.setSituacaoAnterior(null);
-
-			// Primeiro rodizio - Situacao Atual - Inicial
-			meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
-			meta.getSituacaoAtual().setCiclo(ciclo);
-			meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
-
-			// Primeiro rodizio - Situacao Desejada vazia
-			meta.setSituacaoDesejada(new HistoricoMetaEntidadeVO());
-
-			// Primeiro Rodizio - Nova Anotacao em Branco
-			meta.setObservacoes(new ArrayList<AnotacaoVO>());
-			if (evento == EventoMeta.PRERODIZIO) {
-				AnotacaoVO anot = new AnotacaoVO();
-				anot.setNivel(NivelAnotacao.META_PRERODIZIO);
-				if (contratante != null && contratante.getId() != null)
-					anot.setResponsavel(contratante);
-				anot.setSinalizador(Sinalizador.VERDE);
-				anot.setData(new Date());
-				anot.setCiclo(ciclo);
-				meta.getObservacoes().add(anot);
-			}
-
-			if (evento == EventoMeta.RODIZIO) {
-				AnotacaoVO anot = new AnotacaoVO();
-				anot.setNivel(NivelAnotacao.META_RODIZIO);
-				if (facilitador != null && facilitador.getId() != null)
-					anot.setResponsavel(facilitador);
-				anot.setSinalizador(Sinalizador.VERDE);
-				anot.setData(new Date());
-				anot.setCiclo(ciclo);
-				meta.getObservacoes().add(anot);
-			}
-
-			List<MetaInstituto> subAtividades = metaInstituto.getItens();
-			if (subAtividades != null) {
-				List<MetaForm> metas1 = createMetaFormFromMetaInstituto(subAtividades, facilitador, contratante, evento,
-						ciclo, full);
-
-				if (metas1.size() > 0) {
-					meta.setDependencias(metas1);
-				}
-			}
+			MetaForm meta = createMetaFormFromMetaInstituto(metaInstituto,
+					facilitador,
+					contratante,
+					evento,
+					ciclo,
+					full);
 
 			metas.add(meta);
 		}
 
 		return metas;
+	}
+
+	public MetaForm createMetaFormFromMetaInstituto(MetaInstituto metaInstituto, PessoaOptionForm facilitador,
+			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo, boolean full) {
+		
+		
+		MetaForm meta = new MetaForm();
+		if(full) {
+			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto);
+			meta.setAtividade(metaInstitutoVO);
+		} else {
+			meta.setAtividade(new MetaInstitutoVO());
+			meta.getAtividade().setId(metaInstituto.getId());
+		}
+
+		String rota = metaService.getCaminhoMeta(metaInstituto.getId());
+		meta.setDescricaoCompleta(rota);
+
+		// Primeiro rodizio - Sem meta anterior
+		meta.setSituacaoAnterior(null);
+
+		// Primeiro rodizio - Situacao Atual - Inicial
+		meta.setSituacaoAtual(new HistoricoMetaEntidadeVO());
+		meta.getSituacaoAtual().setCiclo(ciclo);
+		meta.getSituacaoAtual().setTipoSituacao(TipoSituacaoMeta.INICIAL);
+
+		// Primeiro rodizio - Situacao Desejada vazia
+		meta.setSituacaoDesejada(new HistoricoMetaEntidadeVO());
+
+		// Primeiro Rodizio - Nova Anotacao em Branco
+		meta.setObservacoes(new ArrayList<AnotacaoVO>());
+		if (evento == EventoMeta.PRERODIZIO) {
+			AnotacaoVO anot = new AnotacaoVO();
+			anot.setNivel(NivelAnotacao.META_PRERODIZIO);
+			if (contratante != null && contratante.getId() != null)
+				anot.setResponsavel(contratante);
+			anot.setSinalizador(Sinalizador.VERDE);
+			anot.setData(new Date());
+			anot.setCiclo(ciclo);
+			meta.getObservacoes().add(anot);
+		}
+
+		if (evento == EventoMeta.RODIZIO) {
+			AnotacaoVO anot = new AnotacaoVO();
+			anot.setNivel(NivelAnotacao.META_RODIZIO);
+			if (facilitador != null && facilitador.getId() != null)
+				anot.setResponsavel(facilitador);
+			anot.setSinalizador(Sinalizador.VERDE);
+			anot.setData(new Date());
+			anot.setCiclo(ciclo);
+			meta.getObservacoes().add(anot);
+		}
+
+		List<MetaInstituto> subAtividades = metaInstituto.getItens();
+		if (subAtividades != null) {
+			List<MetaForm> metas1 = createMetaFormFromMetaInstituto(subAtividades, facilitador, contratante, evento,
+					ciclo, full);
+
+			if (metas1.size() > 0) {
+				meta.setDependencias(metas1);
+			}
+		}
+		
+		return meta;
 	}
 
 	public MetaEntidade searchMeta(List<MetaEntidade> metasEntidade, BaseEntidade entidadeId, BaseInstituto institutoId,
@@ -257,17 +279,17 @@ public class MetasHelper {
 	public MetaForm processaMetaEntidade(MetaEntidade metaEntidade, MetaForm metaForm, EventoMeta evento,
 			PlanoMetas planoMetasAtual, boolean editMode) {
 		metaForm = preencheSituacaoDesejada(metaEntidade, metaForm, evento,
-				new RodizioVO(planoMetasAtual.getRodizio()));
+				new RodizioVO(planoMetasAtual.getRodizio()), true);
 		return preencheAnotacoes(metaEntidade, metaForm, new PessoaOptionForm( planoMetasAtual.getContratante() ),
 				new PessoaOptionForm( planoMetasAtual.getFacilitador() ), evento, new RodizioVO(planoMetasAtual.getRodizio()), editMode);
 	}
 
 	public MetaForm preencheSituacaoDesejada(MetaEntidade metaEntidade, MetaForm metaForm, EventoMeta evento,
-			RodizioVO ciclo) {
+			RodizioVO ciclo, boolean loadAtividade) {
 
 		if (metaEntidade != null) {
 			HistoricoMetaEntidade atual = getUltimoHistorico(metaEntidade.getId(), ciclo.getId(), false);
-			metaForm.load(metaEntidade, atual);
+			metaForm.load(metaEntidade, atual, loadAtividade);
 			// TODO: Remove Depois do Rodizio
 			if (evento == null)
 				evento = EventoMeta.RODIZIO;

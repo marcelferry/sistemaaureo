@@ -1,4 +1,4 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -7,6 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
+import com.concafras.gestao.form.MetaForm;
+import com.concafras.gestao.form.PessoaOptionForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

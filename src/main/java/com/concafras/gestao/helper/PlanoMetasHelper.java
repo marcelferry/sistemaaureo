@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.TipoContratante;
-import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.EntidadeOptionForm;
 import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
@@ -18,6 +17,7 @@ import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaInstituto;
 import com.concafras.gestao.model.PlanoMetas;
+import com.concafras.gestao.rest.model.AnotacaoVO;
 import com.concafras.gestao.service.BaseInstitutoService;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.FacilitadorService;
@@ -97,36 +97,69 @@ public class PlanoMetasHelper {
 	  }
 	  
 	  public List<MetaForm> loadMetaForm(InstitutoOptionForm instituto, PessoaOptionForm facilitador, PessoaOptionForm contratante, 
-			  EventoMeta evento, EntidadeOptionForm entidade, RodizioVO rodizio, boolean full) {
+			  EventoMeta evento, EntidadeOptionForm entidade, RodizioVO rodizio, boolean loadAtividade, boolean loadDependencias) {
 		    
 		    List<MetaForm> metasForm = null;
 
 		    List<MetaInstituto> metasIntituto = metaInstitutoService.listMetaInstitutoByInstitutoResumo(instituto.getId());
 
-		    List<MetaEntidade> metasEntidade = metaService.findByEntidadeIdAndInstitutoId( entidade.getId(), instituto.getId());
+		    //List<MetaEntidade> metasEntidade = metaService.findByEntidadeIdAndInstitutoId( entidade.getId(), instituto.getId());
 
+		    Long countMetasEntidade = metaService.countListMetaEntidade(entidade.getId(), instituto.getId());
+		    
 		    // Primeiro Rodizio
-		    if (metasEntidade == null || metasEntidade.size() == 0) {
+		    if (countMetasEntidade == 0) {
 		      metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(
 		          metasIntituto, 
 		          facilitador,
 		          contratante, 
 		          evento,
-		          rodizio, full);
-		    } else if (metasEntidade.size() > 0) {
+		          rodizio, loadAtividade);
+		    } else if (countMetasEntidade > 0) {
 		      metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(
 		          metasIntituto, 
 		          facilitador,
 		          contratante, 
 		          evento, 
 		          entidade, 
-		          rodizio, full);
+		          rodizio, loadAtividade, loadDependencias);
 		    } else {
 		      metasForm = new ArrayList<MetaForm>();
 		    }
 		    
 		    return metasForm;
 	}
+	  
+	public MetaForm loadMetaForm(MetaInstituto metaInstituto, InstitutoOptionForm instituto, PessoaOptionForm facilitador, PessoaOptionForm contratante, 
+			  EventoMeta evento, EntidadeOptionForm entidade, RodizioVO rodizio, boolean loadAtividade, boolean loadDependencias) {
+		  
+		MetaEntidade metasEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(), metaInstituto.getId());
+
+		MetaForm metaForm = null;
+		  // Primeiro Rodizio
+		  if (metasEntidade == null) {
+			  metaForm = new MetasHelper(metaService, pessoaService).
+					  createMetaFormFromMetaInstituto(metaInstituto,
+						facilitador,
+						contratante,
+						evento,
+						rodizio,
+						loadAtividade);
+		  } else {
+			  metaForm = new MetasHelper(metaService, pessoaService).
+					  mapMetaEntidadeToMetaForm(
+							  metaInstituto, 
+							  facilitador, 
+							  contratante, 
+							  evento, 
+							  entidade,
+							  rodizio, 
+							  loadAtividade, 
+							  loadDependencias);
+		  } 
+		  
+		  return metaForm;
+	  }
 	
 
 }

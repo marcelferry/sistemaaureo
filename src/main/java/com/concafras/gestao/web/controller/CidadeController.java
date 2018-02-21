@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.concafras.gestao.form.CidadeVO;
 import com.concafras.gestao.model.Cidade;
 import com.concafras.gestao.model.exception.JqueryBussinessException;
+import com.concafras.gestao.rest.model.CidadeVO;
 import com.concafras.gestao.rest.utils.RestUtils;
 import com.concafras.gestao.service.CidadeService;
 

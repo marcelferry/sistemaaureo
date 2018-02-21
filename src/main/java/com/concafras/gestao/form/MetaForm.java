@@ -13,6 +13,9 @@ import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
+import com.concafras.gestao.rest.model.AnotacaoVO;
+import com.concafras.gestao.rest.model.HistoricoMetaEntidadeVO;
+import com.concafras.gestao.rest.model.MetaInstitutoVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MetaForm {
@@ -262,7 +265,7 @@ public class MetaForm {
 		this.historico.add(hmeform);
 	}
 
-	public void load(MetaEntidade metaEntidade, HistoricoMetaEntidade atual) {
+	public void load(MetaEntidade metaEntidade, HistoricoMetaEntidade atual, boolean loadAtividade) {
 
 		this.setId(metaEntidade.getId());
 		// TODO: Como setar rodizio

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.TipoContratante;
+import com.concafras.gestao.rest.model.AnotacaoVO;
+import com.concafras.gestao.rest.model.CidadeVO;
 
 public class PlanoMetasForm {
 

@@ -45,9 +45,7 @@ import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoContratante;
 import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
-import com.concafras.gestao.form.AnotacaoVO;
 import com.concafras.gestao.form.EntidadeOptionForm;
-import com.concafras.gestao.form.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PessoaOptionForm;
@@ -69,7 +67,9 @@ import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.view.PreContrato;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
+import com.concafras.gestao.rest.model.AnotacaoVO;
 import com.concafras.gestao.rest.model.DatatableResponse;
+import com.concafras.gestao.rest.model.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.rest.utils.RestUtils;
 import com.concafras.gestao.security.UsuarioAutenticado;
 import com.concafras.gestao.service.BaseInstitutoService;
@@ -604,7 +604,7 @@ public class PlanoMetasController {
     		planoMetasForm.getEvento(), 
     		planoMetasForm.getEntidade(), 
     		planoMetasForm.getRodizio(),
-			true);
+			true, true);
     
     planoMetasForm.setDependencias(dependencias);
     
@@ -1216,6 +1216,7 @@ public class PlanoMetasController {
              EventoMeta.RODIZIO, 
              new EntidadeOptionForm( planoMetas.getEntidade() ) , 
              new RodizioVO( planoMetas.getRodizio() ),
+             true,
              true);
         		planoMetasForm.setDependencias(metas);
       }

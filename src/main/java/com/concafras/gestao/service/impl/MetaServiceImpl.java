@@ -459,5 +459,24 @@ public class MetaServiceImpl implements MetaService {
     return em.createQuery(cq).getSingleResult();
 
   }
+  
+  @Transactional
+  public Long countListMetaEntidade(Integer idEntidade, Integer idInstituto) {
+	  
+	  BaseInstituto base = em.find(BaseInstituto.class, idInstituto);
+	    BaseEntidade entidade  = em.find(BaseEntidade.class, idEntidade);
+	    
+	    CriteriaBuilder cb = em.getCriteriaBuilder();
+	    CriteriaQuery<Long> c = cb.createQuery(Long.class);
+	    Root<MetaEntidade> emp = c.from(MetaEntidade.class);
+	    c.select(cb.count(emp));
+	    
+	    List<Predicate> criteria = new ArrayList<Predicate>();
+	    criteria.add( cb.equal( emp.<BaseInstituto>get("instituto") , base ));
+	    criteria.add( cb.equal( emp.<BaseEntidade>get("entidade") , entidade ));
+	    c.where(criteria.toArray(new Predicate[]{}));
+	    
+	    return em.createQuery(c).getSingleResult();
+  }
 
 }

@@ -1,4 +1,4 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import java.util.Date;
 import java.util.List;
@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
+import com.concafras.gestao.form.PessoaOptionForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.Anotacao;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
 import com.fasterxml.jackson.annotation.JsonFormat;

@@ -1,4 +1,4 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import java.util.Date;
 import java.util.List;
@@ -7,6 +7,7 @@ import javax.persistence.Transient;
 
 import com.concafras.gestao.enums.DiaSemana;
 import com.concafras.gestao.enums.TipoFrequencia;
+import com.concafras.gestao.form.InstitutoOptionForm;
 
 public class AtividadeVO  {
 

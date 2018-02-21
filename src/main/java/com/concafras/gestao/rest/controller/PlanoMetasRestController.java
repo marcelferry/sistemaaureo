@@ -30,6 +30,7 @@ import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.rest.model.DatatableResponse;
+import com.concafras.gestao.rest.model.PessoaVO;
 import com.concafras.gestao.service.BaseInstitutoService;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.InstitutoService;
@@ -38,6 +39,7 @@ import com.concafras.gestao.service.MetasInstitutoService;
 import com.concafras.gestao.service.PessoaService;
 import com.concafras.gestao.service.PlanoMetasService;
 import com.concafras.gestao.service.RodizioService;
+import com.concafras.gestao.service.mapper.PessoaServiceMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -64,6 +66,16 @@ public class PlanoMetasRestController {
 	
 	@Autowired
 	private RodizioService rodizioService;
+	
+	@Autowired
+	private PessoaServiceMapper pessoaServiceMapper;
+	
+	@RequestMapping(value="/api/v1/teste", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	public @ResponseBody PessoaVO teste() {
+		Pessoa pessoa = pessoaService.getPessoa(1);
+		PessoaVO pessoaVO = pessoaServiceMapper.mapPessoaOptionFormEntityToPessoaOptionForm(pessoa);
+		return pessoaVO;
+	}
 	
 	
 	@RequestMapping(value = "/api/v1/planometas/ciclo/{ciclo}/entidade/{entidade}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
@@ -127,10 +139,57 @@ public class PlanoMetasRestController {
     				evento, 
     				entidadeForm, 
     				rodizioForm,
+    				false,
     				false);
     		
     		return dependencias;
 	    				
+	}
+	
+	@RequestMapping(value = "/api/v1/metas/ciclo/{ciclo}/entidade/{entidade}/instituto/{instituto}/meta/{meta}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	public @ResponseBody List<MetaForm> listarMeta(
+			HttpServletRequest request, 
+			@PathVariable("ciclo") int ciclo,
+			@PathVariable("entidade") int entidade,
+			@PathVariable("instituto") int instituto,
+			@PathVariable("meta") int meta
+			){
+		
+		EventoMeta evento = EventoMeta.PRERODIZIO;
+		
+		// Verificar existencia do plano para esse ciclo
+		PlanoMetas planoLoaded = planoMetasService.findByEntidadeIdAndInstitutoIdAndRodizioId(entidade, instituto, ciclo);
+		
+		BaseEntidade entidadeLoaded = entidadeService.findById(entidade);
+		BaseInstituto institutoLoaded = institutoService.findById(instituto);
+		Rodizio rodizioLoaded = rodizioService.findById(ciclo);
+		
+		InstitutoOptionForm institutoForm = new InstitutoOptionForm(institutoLoaded);
+		EntidadeOptionForm entidadeForm = new EntidadeOptionForm(entidadeLoaded);
+		RodizioVO rodizioForm = new RodizioVO(rodizioLoaded);
+		PessoaOptionForm facilitadorForm = null;
+		PessoaOptionForm contratanteForm = null;
+		
+		//Nao existe plano de metas?
+		if (planoLoaded != null) {
+			if(planoLoaded.getFacilitador() != null)
+				facilitadorForm = new PessoaOptionForm(planoLoaded.getFacilitador());
+			if(planoLoaded.getContratante() != null)
+				contratanteForm = new PessoaOptionForm(planoLoaded.getContratante());
+		} 
+		
+		List<MetaForm> dependencias = new PlanoMetasHelper( metaService, metaInstitutoService, pessoaService ).loadMetaForm(
+				institutoForm,
+				facilitadorForm,
+				contratanteForm, 
+				evento, 
+				entidadeForm, 
+				rodizioForm,
+				false,
+				false);
+		
+		return dependencias;
+		
 	}
 		
 	private PlanoMetasForm loadPlanoMetas(Integer entidade, Integer instituto, Integer ciclo, EventoMeta evento, boolean loadMetas) {
@@ -167,6 +226,7 @@ public class PlanoMetasRestController {
 	    				plano.getEvento(), 
 	    				plano.getEntidade(), 
 	    				plano.getRodizio(),
+	    				true,
 	    				true);
 	    		
 	    		plano.setDependencias(dependencias);
@@ -207,6 +267,7 @@ public class PlanoMetasRestController {
 				plano.getEvento(), 
 				plano.getEntidade(), 
 				plano.getRodizio(),
+				true,
 				true);
 		
 		return dependencias;
@@ -283,7 +344,7 @@ public class PlanoMetasRestController {
 			
 			metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
-					planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true);
+					planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
 		} else {
 			metasForm = new ArrayList<MetaForm>();
 		}

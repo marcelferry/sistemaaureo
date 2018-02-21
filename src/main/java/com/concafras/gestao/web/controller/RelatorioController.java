@@ -647,6 +647,7 @@ public class RelatorioController {
           planoMetasForm.getEvento(), 
           planoMetasForm.getEntidade(), 
           planoMetasForm.getRodizio(),
+          true,
           true);
     } else {
       metasForm = new ArrayList<MetaForm>();

@@ -1,4 +1,4 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import com.concafras.gestao.model.Estado;
 import com.concafras.gestao.model.Pais;

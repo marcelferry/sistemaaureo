@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.rest.model.PessoaVO;
 
 /**
  * Mapping between entity beans and display beans.
@@ -32,31 +33,31 @@ public class PessoaServiceMapper extends AbstractServiceMapper {
 
 	/**
 	 * Mapping from 'PessoaOptionFormEntity' to 'PessoaOptionForm'
-	 * @param canalVendaEntity
+	 * @param pessoaEntity
 	 */
-	public PessoaOptionForm mapPessoaOptionFormEntityToPessoaOptionForm(Pessoa canalVendaEntity) {
-		if(canalVendaEntity == null) {
+	public PessoaVO mapPessoaOptionFormEntityToPessoaOptionForm(Pessoa pessoaEntity) {
+		if(pessoaEntity == null) {
 			return null;
 		}
 
 		//--- Generic mapping 
-		PessoaOptionForm canalVenda = map(canalVendaEntity, PessoaOptionForm.class);
+		PessoaVO pessoa = map(pessoaEntity, PessoaVO.class);
 
-		return canalVenda;
+		return pessoa;
 	}
 	
 	/**
 	 * Mapping from 'PessoaOptionForm' to 'PessoaOptionFormEntity'
-	 * @param canalVenda
-	 * @param canalVendaEntity
+	 * @param pessoa
+	 * @param pessoaEntity
 	 */
-	public void mapPessoaOptionFormToPessoaOptionFormEntity(PessoaOptionForm canalVenda, Pessoa canalVendaEntity) {
-		if(canalVenda == null) {
+	public void mapPessoaOptionFormToPessoaOptionFormEntity(PessoaOptionForm pessoa, Pessoa pessoaEntity) {
+		if(pessoa == null) {
 			return;
 		}
 
 		//--- Generic mapping 
-		map(canalVenda, canalVendaEntity);
+		map(pessoa, pessoaEntity);
 
 	}
 

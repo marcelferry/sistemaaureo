@@ -1,4 +1,4 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -12,58 +12,61 @@ import com.concafras.gestao.model.ContatoInternet;
 import com.concafras.gestao.model.ObjetoGerenciado;
 import com.concafras.gestao.model.Telefone;
 import com.concafras.gestao.util.Util;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PessoaVO extends ObjetoGerenciado {
 
-  /**
-   * Generated SerialVerionUID
-   */
-  private static final long serialVersionUID = -8553743859436274485L;
+	/**
+	 * Generated SerialVerionUID
+	 */
+	private static final long serialVersionUID = -8553743859436274485L;
 
-    private Integer id;
-    
-    private Integer codigo;
+	private Integer id;
 
-    private String nomeCompleto;
-    
-    private String nomeCracha;
-    
-    private String documentoId;
-    
-    private String orgaoEmissor;
-    
-    private String ufEmissor;
-    
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataEmissao;
-    
-    private String cpf;
-    
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataNascimento;
-    
-    private String naturalidade;
-    
-    private String nacionalidade;
-    
-    private EstadoCivil estadoCivil;
-    
-  	private EnderecoVO endereco;
-    
-    private String profissao;
-    
-    private boolean associado;
-    
-    private List<AnotacaoVO> anotacoes;
-    
-    public PessoaVO() {
+	private Integer codigo;
+
+	private String nomeCompleto;
+
+	private String nomeCracha;
+
+	private String documentoId;
+
+	private String orgaoEmissor;
+
+	private String ufEmissor;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date dataEmissao;
+
+	private String cpf;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date dataNascimento;
+
+	private String naturalidade;
+
+	private String nacionalidade;
+
+	private EstadoCivil estadoCivil;
+
+	private EnderecoVO endereco;
+
+	private String profissao;
+
+	private boolean associado;
+
+	private List<AnotacaoVO> anotacoes;
+
+	public PessoaVO() {
 		// TODO Auto-generated constructor stub
 	}
 
-    public PessoaVO(Integer id, String nomeCompleto, String cpf, String cidade, String estado) {
-      this(id,nomeCompleto, cpf, cidade, estado, null);
-    }
-    
+	public PessoaVO(Integer id, String nomeCompleto, String cpf, String cidade, String estado) {
+		this(id, nomeCompleto, cpf, cidade, estado, null);
+	}
+
 	public PessoaVO(Integer id, String nomeCompleto, String cpf, String cidade, String estado, String email) {
 		super();
 		this.id = id;
@@ -89,27 +92,27 @@ public class PessoaVO extends ObjetoGerenciado {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public Integer getCodigo() {
 		return codigo;
 	}
-	
+
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
-	
+
 	public String getNomeCompleto() {
 		return nomeCompleto;
 	}
-	
+
 	public void setNomeCompleto(String nomeCompleto) {
 		this.nomeCompleto = nomeCompleto;
 	}
-	
+
 	public String getNomeCracha() {
 		return nomeCracha;
 	}
-	
+
 	public void setNomeCracha(String nomeCracha) {
 		this.nomeCracha = nomeCracha;
 	}
@@ -121,31 +124,31 @@ public class PessoaVO extends ObjetoGerenciado {
 	public void setDocumentoId(String rg) {
 		this.documentoId = rg;
 	}
-	
+
 	public String getOrgaoEmissor() {
 		return orgaoEmissor;
 	}
-	
+
 	public void setOrgaoEmissor(String orgaoEmissor) {
 		this.orgaoEmissor = orgaoEmissor;
 	}
-	
+
 	public String getUfEmissor() {
 		return ufEmissor;
 	}
-	
+
 	public void setUfEmissor(String ufEmissor) {
 		this.ufEmissor = ufEmissor;
 	}
-	
+
 	public Date getDataEmissao() {
 		return dataEmissao;
 	}
-	
+
 	public void setDataEmissao(Date dataEmissao) {
 		this.dataEmissao = dataEmissao;
 	}
-	
+
 	public String getCpf() {
 		return cpf;
 	}
@@ -165,11 +168,11 @@ public class PessoaVO extends ObjetoGerenciado {
 	public String getNaturalidade() {
 		return naturalidade;
 	}
-	
+
 	public String getNacionalidade() {
 		return nacionalidade;
 	}
-	
+
 	public void setNacionalidade(String nacionalidade) {
 		this.nacionalidade = nacionalidade;
 	}
@@ -185,7 +188,7 @@ public class PessoaVO extends ObjetoGerenciado {
 	public void setEstadoCivil(EstadoCivil estadoCivil) {
 		this.estadoCivil = estadoCivil;
 	}
-	
+
 	public EnderecoVO getEndereco() {
 		return endereco;
 	}
@@ -210,55 +213,59 @@ public class PessoaVO extends ObjetoGerenciado {
 		this.associado = associado;
 	}
 
-	public String getNome(){
+	public String getNome() {
 		return this.nomeCompleto;
 	}
-	
-	public String getPrimeiroNome(){
+
+	public String getPrimeiroNome() {
 		String importado = getNomeCompleto();
-		String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ') != -1? importado.substring(0, importado.indexOf(' ')): importado:""; 
+		String primeiroNome = !Util.isNullOrEmpty(importado)
+				? importado.indexOf(' ') != -1 ? importado.substring(0, importado.indexOf(' ')) : importado
+				: "";
 		return primeiroNome;
 	}
-	
-	public void setNome(String importado){
-		//String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ') != -1? importado.substring(0, importado.indexOf(' ')): "":""; 
-		//String sobreNome = !Util.isNullOrEmpty(importado) ? importado.indexOf(' ') != -1? importado.substring(importado.indexOf(' ') + 1): "":""; 
+
+	public void setNome(String importado) {
+		// String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ')
+		// != -1? importado.substring(0, importado.indexOf(' ')): "":"";
+		// String sobreNome = !Util.isNullOrEmpty(importado) ? importado.indexOf(' ') !=
+		// -1? importado.substring(importado.indexOf(' ') + 1): "":"";
 		this.nomeCompleto = importado;
 	}
-	
-  public String getEmail(List<ContatoInternet> emails) {
-    String fone = "";
-    if (emails != null){
-      
-      for (Iterator<ContatoInternet> iterator = emails.iterator(); iterator.hasNext();) {
-        ContatoInternet email = iterator.next();
-        if (email.isPrincipal()) {
-          return email.getContato();
-        }
-      }
-      
-      for (Iterator<ContatoInternet> iterator = emails.iterator(); iterator.hasNext();) {
-        ContatoInternet email = iterator.next();
-        if (email.getTipo() == TipoContatoInternet.EMAILPES
-            || email.getTipo() == TipoContatoInternet.EMAILCOM) {
-          return email.getContato();
-        }
-      }
-    }
-    return fone;
-  }
-	
+
+	public String getEmail(List<ContatoInternet> emails) {
+		String fone = "";
+		if (emails != null) {
+
+			for (Iterator<ContatoInternet> iterator = emails.iterator(); iterator.hasNext();) {
+				ContatoInternet email = iterator.next();
+				if (email.isPrincipal()) {
+					return email.getContato();
+				}
+			}
+
+			for (Iterator<ContatoInternet> iterator = emails.iterator(); iterator.hasNext();) {
+				ContatoInternet email = iterator.next();
+				if (email.getTipo() == TipoContatoInternet.EMAILPES
+						|| email.getTipo() == TipoContatoInternet.EMAILCOM) {
+					return email.getContato();
+				}
+			}
+		}
+		return fone;
+	}
+
 	protected String getTelefone(List<Telefone> telefones) {
-    	String fone = "";
-    	if(telefones != null)
-	    	for (Iterator<Telefone> iterator = telefones.iterator(); iterator.hasNext();) {
+		String fone = "";
+		if (telefones != null)
+			for (Iterator<Telefone> iterator = telefones.iterator(); iterator.hasNext();) {
 				Telefone telefone = iterator.next();
 				fone = telefone.getDdd() + " " + telefone.getNumero();
-				if(fone.length() > 1){
+				if (fone.length() > 1) {
 					return fone;
 				}
 			}
-    	return fone;
+		return fone;
 	}
 
 	@Override
@@ -266,31 +273,29 @@ public class PessoaVO extends ObjetoGerenciado {
 		return this.nomeCompleto;
 	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    return result;
-  }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    PessoaVO other = (PessoaVO) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    return true;
-  }
-	
-	
-    
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PessoaVO other = (PessoaVO) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 }

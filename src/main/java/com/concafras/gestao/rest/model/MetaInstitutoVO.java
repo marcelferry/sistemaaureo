@@ -1,9 +1,11 @@
-package com.concafras.gestao.form;
+package com.concafras.gestao.rest.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.concafras.gestao.enums.TipoMeta;
+import com.concafras.gestao.form.InstitutoOptionForm;
+import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.MetaInstituto;
 
 public class MetaInstitutoVO {
