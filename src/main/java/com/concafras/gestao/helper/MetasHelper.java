@@ -289,7 +289,7 @@ public class MetasHelper {
 
 		if (metaEntidade != null) {
 			HistoricoMetaEntidade atual = getUltimoHistorico(metaEntidade.getId(), ciclo.getId(), false);
-			metaForm.load(metaEntidade, atual, loadAtividade);
+			metaForm.load(metaEntidade, atual, ciclo, loadAtividade);
 			// TODO: Remove Depois do Rodizio
 			if (evento == null)
 				evento = EventoMeta.RODIZIO;

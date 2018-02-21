@@ -265,7 +265,7 @@ public class MetaForm {
 		this.historico.add(hmeform);
 	}
 
-	public void load(MetaEntidade metaEntidade, HistoricoMetaEntidade atual, boolean loadAtividade) {
+	public void load(MetaEntidade metaEntidade, HistoricoMetaEntidade atual, RodizioVO ciclo, boolean loadAtividade) {
 
 		this.setId(metaEntidade.getId());
 		// TODO: Como setar rodizio
@@ -273,6 +273,7 @@ public class MetaForm {
 		this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
 		this.setDescricao(metaEntidade.getDescricao());
 		this.setTipoMeta(metaEntidade.getTipoMeta());
+		this.setCiclo(ciclo);
 		if(loadAtividade) {
 			this.setAtividade(new MetaInstitutoVO(metaEntidade.getMeta()));
 		}
