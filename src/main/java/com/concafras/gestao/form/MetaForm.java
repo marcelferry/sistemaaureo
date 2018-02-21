@@ -267,13 +267,15 @@ public class MetaForm {
 
 	public void load(MetaEntidade metaEntidade, HistoricoMetaEntidade atual, boolean loadAtividade) {
 
-		this.setId(metaEntidade.getId());
-		// TODO: Como setar rodizio
-		this.setInstituto(new InstitutoOptionForm(metaEntidade.getInstituto()));
-		this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
-		this.setDescricao(metaEntidade.getDescricao());
-		this.setTipoMeta(metaEntidade.getTipoMeta());
-		this.setAtividade(new MetaInstitutoVO(metaEntidade.getMeta()));
+		if(loadAtividade) {
+			this.setId(metaEntidade.getId());
+			// TODO: Como setar rodizio
+			this.setInstituto(new InstitutoOptionForm(metaEntidade.getInstituto()));
+			this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
+			this.setDescricao(metaEntidade.getDescricao());
+			this.setTipoMeta(metaEntidade.getTipoMeta());
+			this.setAtividade(new MetaInstitutoVO(metaEntidade.getMeta()));
+		}
 
 		// Estado Atual
 		this.responsavel = new PessoaOptionForm(atual.getResponsavel());
