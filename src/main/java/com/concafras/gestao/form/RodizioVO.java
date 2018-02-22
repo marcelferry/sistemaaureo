@@ -43,21 +43,23 @@ public class RodizioVO {
 	}
 
 	public RodizioVO(Rodizio rodizio) {
-		this(rodizio, true);
+		this(rodizio, true, true);
 	}
 	
-	public RodizioVO(Rodizio rodizio, boolean anterior) {
+	public RodizioVO(Rodizio rodizio, boolean anterior, boolean full) {
 		if (rodizio != null) {
 
 			this.id = rodizio.getId();
 			this.ciclo = rodizio.getCiclo();
-			this.inicioAjustes = rodizio.getInicioAjustes();
-			this.terminoAjustes = rodizio.getTerminoAjustes();
-			this.inicio = rodizio.getInicio();
-			this.termino = rodizio.getTermino();
-			this.dataAprovacao = rodizio.getDataAprovacao();
+			if(full) {
+				this.inicioAjustes = rodizio.getInicioAjustes();
+				this.terminoAjustes = rodizio.getTerminoAjustes();
+				this.inicio = rodizio.getInicio();
+				this.termino = rodizio.getTermino();
+				this.dataAprovacao = rodizio.getDataAprovacao();
+			}
 			if (rodizio.getCicloAnterior() != null && anterior) {
-				this.cicloAnterior = new RodizioVO(rodizio.getCicloAnterior(), false);
+				this.cicloAnterior = new RodizioVO(rodizio.getCicloAnterior(), false, full);
 			}
 		}
 	}
