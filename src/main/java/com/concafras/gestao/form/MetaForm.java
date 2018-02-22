@@ -271,8 +271,8 @@ public class MetaForm {
 		// TODO: Como setar rodizio
 		this.setInstituto(new InstitutoOptionForm(metaEntidade.getInstituto()));
 		this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
-		this.setDescricao(metaEntidade.getDescricao());
-		this.setTipoMeta(metaEntidade.getTipoMeta());
+		this.setDescricao(metaEntidade.getMeta().getDescricao());
+		this.setTipoMeta(metaEntidade.getMeta().getTipoMeta());
 		this.setCiclo(ciclo);
 		if(loadAtividade) {
 			this.setAtividade(new MetaInstitutoVO(metaEntidade.getMeta()));

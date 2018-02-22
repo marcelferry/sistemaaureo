@@ -53,7 +53,7 @@ public class MetasHelper {
 
 			if (historico != null) {
 				System.out.println("\n========================================================");
-				System.out.println(metaEntidade.getDescricao());
+				System.out.println(metaEntidade.getMeta().getDescricao());
 				System.out.println(cicloAtual.getCicloAnterior().getCiclo());
 				System.out.println("========================================================");
 				System.out.println("RECUPERADO: " + historico.getTipoSituacao() + " - " + historico.getSituacao()
@@ -144,6 +144,9 @@ public class MetasHelper {
 		} else {
 			metaForm.setAtividade(new MetaInstitutoVO());
 			metaForm.getAtividade().setId(metaInstituto.getId());
+			metaForm.getAtividade().setDescricao(metaInstituto.getDescricao());
+			metaForm.getAtividade().setTipoMeta(metaInstituto.getTipoMeta());
+			metaForm.getAtividade().setViewOrder(metaInstituto.getViewOrder());
 		}
 
 		MetaEntidade metaEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(),
@@ -204,7 +207,10 @@ public class MetasHelper {
 		} else {
 			meta.setAtividade(new MetaInstitutoVO());
 			meta.getAtividade().setId(metaInstituto.getId());
+			meta.getAtividade().setDescricao(metaInstituto.getDescricao());
 		}
+		
+		
 
 		String rota = metaService.getCaminhoMeta(metaInstituto.getId());
 		meta.setDescricaoCompleta(rota);

@@ -6,10 +6,7 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,8 +19,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
-
-import com.concafras.gestao.enums.TipoMeta;
 
 @Entity
 @Table(name = "METAS_ENTIDADE")
@@ -63,14 +58,6 @@ public class MetaEntidade implements Serializable {
   @JoinColumn(name = "idMetasInstituto", referencedColumnName = "id")
   @XmlElement
   private MetaInstituto meta;
-  
-  private String descricao;
-
-  @Enumerated(EnumType.STRING)
-  @Column(name = "tipo_meta")
-  private TipoMeta tipoMeta;
-  
-  private int viewOrder;
   
   @ManyToOne
   @JoinColumn(name = "idPai", referencedColumnName = "id")
@@ -135,30 +122,6 @@ public class MetaEntidade implements Serializable {
 
   public void setInstituto(BaseInstituto instituto) {
     this.instituto = instituto;
-  }
-
-  public String getDescricao() {
-    return descricao;
-  }
-
-  public void setDescricao(String descricao) {
-    this.descricao = descricao;
-  }
-
-  public TipoMeta getTipoMeta() {
-    return tipoMeta;
-  }
-  
-  public int getViewOrder() {
-    return viewOrder;
-  }
-  
-  public void setViewOrder(int viewOrder) {
-    this.viewOrder = viewOrder;
-  }
-
-  public void setTipoMeta(TipoMeta tipoMeta) {
-    this.tipoMeta = tipoMeta;
   }
 
   public List<MetaEntidadeAnotacao> getAnotacoes() {
@@ -256,8 +219,7 @@ public class MetaEntidade implements Serializable {
   @Override
   public String toString() {
     return "MetaEntidade [id=" + id + ", entidade=" + entidade + ", instituto="
-        + instituto + ", meta=" + meta + ", descricao=" + descricao
-        + ", tipoMeta=" + tipoMeta + "]";
+        + instituto + ", meta=" + meta + "]";
   }
   
   

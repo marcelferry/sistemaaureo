@@ -884,11 +884,8 @@ public class PlanoMetasController {
         meta.setPrimeiroRodizio(plano.getRodizio());
         MetaInstituto metaInstituto = metaInstitutoService.getMetasInstituto(
             new Long(metaForm.getAtividade().getId()).intValue());
-        meta.setPai(meta);
+        meta.setPai(pai);
         meta.setMeta(metaInstituto);
-        meta.setDescricao(metaInstituto.getDescricao());
-        meta.setTipoMeta(metaInstituto.getTipoMeta());
-        meta.setViewOrder(metaInstituto.getViewOrder());
         meta.setHistorico(new ArrayList<HistoricoMetaEntidade>());
       }
 

@@ -205,7 +205,7 @@ public class MetaServiceImpl implements MetaService {
         return retorno.get(0);
       } if(retorno.size() > 1) {
         System.out.println("===============================================");
-        System.out.println("Caso com histórico duplicado: " + retorno.get(0).getDescricao());
+        System.out.println("Caso com histórico duplicado: " + retorno.get(0).getMeta().getDescricao());
         System.out.println("===============================================");
         return retorno.get(0); 
       } else {
