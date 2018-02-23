@@ -16,6 +16,7 @@
     <context:annotation-config />
     
     <context:component-scan base-package="com.concafras.gestao.service" />
+    <context:component-scan base-package="com.concafras.gestao.helper" />
     <context:component-scan base-package="com.concafras.gestao.form" />
     <context:component-scan base-package="com.concafras.gestao.web" />
     <context:component-scan base-package="com.concafras.gestao.rest" />

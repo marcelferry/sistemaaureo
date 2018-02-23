@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.concafras.gestao.enums.EventoMeta;
 import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
 import com.concafras.gestao.enums.SituacaoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.form.EntidadeOptionForm;
+import com.concafras.gestao.form.InstitutoOptionForm;
 import com.concafras.gestao.form.MetaForm;
 import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.RodizioVO;
@@ -30,14 +34,13 @@ import com.concafras.gestao.rest.model.MetaInstitutoVO;
 import com.concafras.gestao.service.MetaService;
 import com.concafras.gestao.service.PessoaService;
 
+@Service
 public class MetasHelper {
 
+	@Autowired
 	private MetaService metaService;
-	private PessoaService pessoaService;
 
-	public MetasHelper(MetaService metaService, PessoaService pessoaService) {
-		this.metaService = metaService;
-		this.pessoaService = pessoaService;
+	public MetasHelper() {
 	}
 
 	private MetaForm preencheSituacaoAnteriorAtual(MetaForm meta, MetaEntidade metaEntidade, RodizioVO cicloAtual) {
@@ -175,8 +178,8 @@ public class MetasHelper {
 		return metaForm;
 	}
 
-	public List<MetaForm> createMetaFormFromMetaInstituto(List<MetaInstituto> metasInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo, boolean full) {
+	public List<MetaForm> createMetaFormFromMetaInstituto(List<MetaInstituto> metasInstituto, InstitutoOptionForm instituto, PessoaOptionForm facilitador,
+			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean loadAtividade, boolean loadDependencias) {
 
 		List<MetaForm> metas = new ArrayList<MetaForm>();
 		
@@ -184,11 +187,14 @@ public class MetasHelper {
 
 		for (MetaInstituto metaInstituto : metasInstituto) {
 			MetaForm meta = createMetaFormFromMetaInstituto(metaInstituto,
+					instituto, 
 					facilitador,
 					contratante,
 					evento,
+					entidade,
 					ciclo,
-					full);
+					loadAtividade,
+					loadDependencias);
 
 			metas.add(meta);
 		}
@@ -196,22 +202,27 @@ public class MetasHelper {
 		return metas;
 	}
 
-	public MetaForm createMetaFormFromMetaInstituto(MetaInstituto metaInstituto, PessoaOptionForm facilitador,
-			PessoaOptionForm contratante, EventoMeta evento, RodizioVO ciclo, boolean full) {
+	public MetaForm createMetaFormFromMetaInstituto(MetaInstituto metaInstituto, InstitutoOptionForm instituto, PessoaOptionForm facilitador,
+			PessoaOptionForm contratante, EventoMeta evento, EntidadeOptionForm entidade, RodizioVO ciclo, boolean loadAtividade, boolean loadDependencias) {
 		
 		
 		MetaForm meta = new MetaForm();
-		if(full) {
+		meta.setInstituto(instituto);
+		meta.setEntidade(entidade);
+		meta.setCiclo(ciclo);
+		
+		if(loadAtividade) {
 			MetaInstitutoVO metaInstitutoVO = new MetaInstitutoVO(metaInstituto);
 			meta.setAtividade(metaInstitutoVO);
 		} else {
 			meta.setAtividade(new MetaInstitutoVO());
 			meta.getAtividade().setId(metaInstituto.getId());
 			meta.getAtividade().setDescricao(metaInstituto.getDescricao());
+			meta.getAtividade().setTipoMeta(metaInstituto.getTipoMeta());
+			meta.getAtividade().setViewOrder(metaInstituto.getViewOrder());
+			meta.getAtividade().setPrioridade(metaInstituto.getPrioridade());
 		}
-		
-		
-
+				
 		String rota = metaService.getCaminhoMeta(metaInstituto.getId());
 		meta.setDescricaoCompleta(rota);
 
@@ -251,9 +262,10 @@ public class MetasHelper {
 		}
 
 		List<MetaInstituto> subAtividades = metaInstituto.getItens();
-		if (subAtividades != null) {
-			List<MetaForm> metas1 = createMetaFormFromMetaInstituto(subAtividades, facilitador, contratante, evento,
-					ciclo, full);
+		if (subAtividades != null && loadDependencias) {
+			List<MetaForm> metas1 = createMetaFormFromMetaInstituto(
+					subAtividades, instituto, facilitador, contratante, evento,
+					entidade, ciclo, loadAtividade, loadDependencias);
 
 			if (metas1.size() > 0) {
 				meta.setDependencias(metas1);

@@ -65,6 +65,12 @@ public class PlanoMetasRestController {
 
 	@Autowired
 	private PessoaServiceMapper pessoaServiceMapper;
+	
+	@Autowired
+	private PlanoMetasHelper planoMetasHelper;
+	
+	@Autowired
+	private MetasHelper metasHelper;
 
 	@RequestMapping(value = "/api/v1/teste", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	public @ResponseBody PessoaVO teste() {
@@ -135,7 +141,7 @@ public class PlanoMetasRestController {
 				contratanteForm = new PessoaOptionForm(planoLoaded.getContratante());
 		}
 
-		List<MetaForm> dependencias = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+		List<MetaForm> dependencias = planoMetasHelper
 				.loadMetaForm(institutoForm, facilitadorForm, contratanteForm, evento, entidadeForm, rodizioForm, false,
 						false);
 
@@ -173,7 +179,7 @@ public class PlanoMetasRestController {
 				contratanteForm = new PessoaOptionForm(planoLoaded.getContratante());
 		}
 
-		MetaForm metaForm = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService).loadMetaForm(
+		MetaForm metaForm = planoMetasHelper.loadMetaForm(
 				metaInstitutoLoaded, institutoForm, facilitadorForm, contratanteForm, evento, entidadeForm, rodizioForm,
 				false, false);
 
@@ -211,7 +217,7 @@ public class PlanoMetasRestController {
 				contratanteForm = new PessoaOptionForm(planoLoaded.getContratante());
 		}
 
-		List<MetaForm> dependencias = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(
+		List<MetaForm> dependencias = metasHelper.mapMetaEntidadeToMetaForm(
 				metaInstitutoLoaded.getItens(), facilitadorForm, contratanteForm, evento, entidadeForm, rodizioForm,
 				false, false);
 
@@ -239,18 +245,18 @@ public class PlanoMetasRestController {
 			planoLoaded.setRodizio(rodizioLoaded);
 		}
 
-		PlanoMetasForm plano = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+		PlanoMetasForm plano = planoMetasHelper
 				.mapPlanoMetasToPlanoMetasForm(planoLoaded);
 
 		plano.setEvento(evento);
 		plano.setPrioridades(prioridades);
 		plano.setFase(3);
 
-		new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+		planoMetasHelper
 				.mapPlanoMetasAnotacoesToPlanoMetasFormAnotacoes(planoLoaded, plano);
 
 		if (loadMetas) {
-			List<MetaForm> dependencias = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+			List<MetaForm> dependencias = planoMetasHelper
 					.loadMetaForm(plano.getInstituto(), plano.getFacilitador(), plano.getContratante(),
 							plano.getEvento(), plano.getEntidade(), plano.getRodizio(), true, true);
 
@@ -279,14 +285,14 @@ public class PlanoMetasRestController {
 			planoLoaded.setRodizio(rodizioLoaded);
 		}
 
-		PlanoMetasForm plano = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+		PlanoMetasForm plano = planoMetasHelper
 				.mapPlanoMetasToPlanoMetasForm(planoLoaded);
 
 		plano.setEvento(evento);
 		plano.setPrioridades(prioridades);
 		plano.setFase(3);
 
-		List<MetaForm> dependencias = new PlanoMetasHelper(metaService, metaInstitutoService, pessoaService)
+		List<MetaForm> dependencias = planoMetasHelper
 				.loadMetaForm(plano.getInstituto(), plano.getFacilitador(), plano.getContratante(), plano.getEvento(),
 						plano.getEntidade(), plano.getRodizio(), true, true);
 
@@ -353,13 +359,14 @@ public class PlanoMetasRestController {
 		}
 
 		if (planoMetasAtual == null) {
-			metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
+			metasForm = metasHelper.createMetaFormFromMetaInstituto(metasIntituto,
+					planoMetasForm.getInstituto(),
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
-					planoMetasForm.getRodizio(), true);
+					planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
 
 		} else if (planoMetasAtual.getMetas().size() > 0) {
 
-			metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto,
+			metasForm = metasHelper.mapMetaEntidadeToMetaForm(metasIntituto,
 					planoMetasForm.getFacilitador(), planoMetasForm.getContratante(), planoMetasForm.getEvento(),
 					planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
 		} else {

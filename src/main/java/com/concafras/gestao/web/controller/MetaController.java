@@ -61,6 +61,9 @@ public class MetaController {
 
 	@Autowired
 	private PessoaService pessoaService;
+	
+	@Autowired
+	private MetasHelper metasHelper;
 
 	/**
 	 * Bind date.
@@ -113,8 +116,6 @@ public class MetaController {
 			@PathVariable("metaId") Integer metaId, RedirectAttributes metaForm) {
 
 		Rodizio ciclo = (Rodizio) request.getSession().getAttribute("CICLO_CONTROLE");
-
-		meta.getDescricao();
 
 		MetaEntidade metaEntity = metaService.findById(metaId);
 
@@ -199,7 +200,7 @@ public class MetaController {
 
 		form.setDescricaoCompleta(rota);
 
-		HistoricoMetaEntidade hmeAtual = new MetasHelper(metaService, pessoaService).getUltimoHistorico(meta.getId(),
+		HistoricoMetaEntidade hmeAtual = metasHelper.getUltimoHistorico(meta.getId(),
 				plano.getRodizio().getId(), true);
 
 		if (hmeAtual.getTipoSituacao() == TipoSituacaoMeta.PRECONTRATAR
@@ -210,10 +211,10 @@ public class MetaController {
 		}
 
 		//FIX-ME
-		form = new MetasHelper(metaService, pessoaService).preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
+		form = metasHelper.preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()), true);
 
-		form = new MetasHelper(metaService, pessoaService).preencheAnotacoes(meta, form, new PessoaOptionForm( contratante ), null, EventoMeta.POSRODIZIO,
+		form = metasHelper.preencheAnotacoes(meta, form, new PessoaOptionForm( contratante ), null, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()), editMode);
 
 		// PlanoMetasForm planoForm = new PlanoMetasForm(plano);

@@ -60,6 +60,7 @@ import com.concafras.gestao.form.PlanoMetasForm;
 import com.concafras.gestao.form.RelatorioForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.helper.MetasHelper;
+import com.concafras.gestao.helper.PlanoMetasHelper;
 import com.concafras.gestao.model.BaseEntidade;
 import com.concafras.gestao.model.BaseInstituto;
 import com.concafras.gestao.model.MetaEntidade;
@@ -104,6 +105,9 @@ public class RelatorioController {
 
   @Autowired
   private BaseInstitutoService baseInstitutoService;
+  
+  @Autowired
+  private MetasHelper metasHelper;
 
   @RequestMapping("/statusEntidadePreenchimentoCiclo")
   public ModelAndView statusEntidadePreenchimentoCiclo(
@@ -393,9 +397,10 @@ public class RelatorioController {
     PlanoMetas planoMetasAtual = null;
 
     if (planoMetasAtual == null) {
-      metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
+      metasForm = metasHelper.createMetaFormFromMetaInstituto(metasIntituto,
+    		  planoMetasForm.getInstituto(), 
           planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-          planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
+          planoMetasForm.getEvento(),  planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
     }
 
     planoMetasForm.setDependencias(metasForm);
@@ -636,12 +641,13 @@ public class RelatorioController {
     }
 
     if (planoMetasAtual == null) {
-      metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
-          planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-          planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
+      metasForm = metasHelper.createMetaFormFromMetaInstituto(metasIntituto,
+          planoMetasForm.getInstituto(),
+    		  planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
+          planoMetasForm.getEvento(), planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
 
     } else if (planoMetasAtual.getMetas().size() > 0) {
-      metasForm = new MetasHelper(metaService, pessoaService).mapMetaEntidadeToMetaForm(metasIntituto, 
+      metasForm = metasHelper.mapMetaEntidadeToMetaForm(metasIntituto, 
           planoMetasForm.getFacilitador(),
           planoMetasForm.getContratante(), 
           planoMetasForm.getEvento(), 
@@ -693,9 +699,10 @@ public class RelatorioController {
       PlanoMetas planoMetasAtual = null;
 
       if (planoMetasAtual == null) {
-        metasForm = new MetasHelper(metaService, pessoaService).createMetaFormFromMetaInstituto(metasIntituto,
-            planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
-            planoMetasForm.getEvento(), planoMetasForm.getRodizio(), true);
+        metasForm = metasHelper.createMetaFormFromMetaInstituto(metasIntituto,
+            planoMetasForm.getInstituto(),
+        		planoMetasForm.getFacilitador(), planoMetasForm.getContratante(),
+            planoMetasForm.getEvento(), planoMetasForm.getEntidade(), planoMetasForm.getRodizio(), true, true);
       }
 
       planoMeta.setDependencias(metasForm);

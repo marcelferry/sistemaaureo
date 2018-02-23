@@ -28,13 +28,9 @@ public class MetaForm {
 
 	private InstitutoOptionForm instituto;
 
-	private String descricao;
+	private MetaInstitutoVO atividade;
 
 	private String descricaoCompleta;
-
-	private TipoMeta tipoMeta;
-
-	private MetaInstitutoVO atividade;
 
 	private PessoaOptionForm responsavel;
 
@@ -105,28 +101,12 @@ public class MetaForm {
 		this.entidade = entidade;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
 	public String getDescricaoCompleta() {
 		return descricaoCompleta;
 	}
 
 	public void setDescricaoCompleta(String descricaoCompleta) {
 		this.descricaoCompleta = descricaoCompleta;
-	}
-
-	public TipoMeta getTipoMeta() {
-		return tipoMeta;
-	}
-
-	public void setTipoMeta(TipoMeta tipoMeta) {
-		this.tipoMeta = tipoMeta;
 	}
 
 	public MetaInstitutoVO getAtividade() {
@@ -271,11 +251,15 @@ public class MetaForm {
 		// TODO: Como setar rodizio
 		this.setInstituto(new InstitutoOptionForm(metaEntidade.getInstituto()));
 		this.setEntidade(new EntidadeOptionForm(metaEntidade.getEntidade()));
-		this.setDescricao(metaEntidade.getMeta().getDescricao());
-		this.setTipoMeta(metaEntidade.getMeta().getTipoMeta());
 		this.setCiclo(ciclo);
 		if(loadAtividade) {
 			this.setAtividade(new MetaInstitutoVO(metaEntidade.getMeta()));
+		} else {
+			this.setAtividade(new MetaInstitutoVO());
+			this.getAtividade().setId(metaEntidade.getMeta().getId());
+			this.getAtividade().setDescricao(metaEntidade.getMeta().getDescricao());
+			this.getAtividade().setTipoMeta(metaEntidade.getMeta().getTipoMeta());
+			this.getAtividade().setViewOrder(metaEntidade.getMeta().getViewOrder());
 		}
 
 		// Estado Atual
@@ -304,7 +288,7 @@ public class MetaForm {
 	@Override
 	public String toString() {
 		return "MetaForm [id=" + id + ", ciclo=" + ciclo + ", entidade=" + entidade + ", instituto=" + instituto
-				+ ", descricao=" + descricao + ", situacao=" + situacao + "]";
+				+ ", situacao=" + situacao + "]";
 	}
 
 }
