@@ -150,6 +150,7 @@ public class MetasHelper {
 			metaForm.getAtividade().setDescricao(metaInstituto.getDescricao());
 			metaForm.getAtividade().setTipoMeta(metaInstituto.getTipoMeta());
 			metaForm.getAtividade().setViewOrder(metaInstituto.getViewOrder());
+			metaForm.getAtividade().setPrioridade(metaInstituto.getPrioridade());
 		}
 
 		MetaEntidade metaEntidade = metaService.findByEntidadeIdAndMetaInstitutoId(entidade.getId(),
