@@ -141,7 +141,7 @@
 				<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE' }">
 				<div class="tab-pane" id="institutos">
 					<br />
-					<!-- Início Graficos Institutos -->
+					<!-- Inï¿½cio Graficos Institutos -->
 					<div id="institutochart" class="row"></div>
 					<!-- Termino Graficos Institutos -->
 				</div>
@@ -150,12 +150,12 @@
 
 		</c:if>
 
-		<!-- Visão Presidente -->
+		<!-- Visï¿½o Presidente -->
 		<c:if test="${not empty INSTITUICAO_CONTROLE}">
 			<ul class="nav nav-tabs" id="tabpresidente" role="tablist">
 				<li class="active"><a href="#ultimas" role="tab" data-toggle="tab">Metas Vencidas</a></li>
 				<li><a href="#metascontratadas" role="tab" data-toggle="tab">Metas Contratadas</a></li>
-				<li><a href="#situacaoatual" role="tab" data-toggle="tab">Situação Atual</a></li>
+				<li><a href="#situacaoatual" role="tab" data-toggle="tab">Situaï¿½ï¿½o Atual</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="ultimas">
@@ -168,13 +168,13 @@
 				</div>
 				<div class="tab-pane" id="metascontratadas">
 					<div class="col-md-12">
-						<h4>Situação das Metas Contratadas</h4>
+						<h4>Situaï¿½ï¿½o das Metas Contratadas</h4>
 						<div id="institutochart"></div>
 					</div>
 				</div>
 				<div class="tab-pane" id="situacaoatual">
 					<div class="col-md-12">
-						<h4>Situação Atual das Atividades</h4>
+						<h4>Situaï¿½ï¿½o Atual das Atividades</h4>
 						<div id="presidentedesejadachart"></div>
 					</div>
 				</div>
@@ -201,15 +201,15 @@
 <!-- Page-Level Plugin Scripts - Tables -->
 <script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
 <script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.13/js/dataTables.bootstrap.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/dataTables.buttons.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.bootstrap.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.colVis.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.html5.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.2.4/js/buttons.print.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.1.1/js/dataTables.responsive.js"></script>
-<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.0/js/dataTables.select.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.16/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/DataTables-1.10.16/media/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.5.1/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.5.1/js/buttons.bootstrap.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.5.1/js/buttons.colVis.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.5.1/js/buttons.html5.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Buttons-1.5.1/js/buttons.print.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Responsive-2.2.1/js/dataTables.responsive.js"></script>
+<script type="text/javascript" src="/js/plugins/dataTables/Select-1.2.5/js/dataTables.select.js"></script>
 
 <!-- Page-Level Plugin Scripts - Flot -->
 <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
@@ -308,7 +308,7 @@
             		$("#institutochart").html(
             				'<div class="alert alert-danger alert-dismissable">'+ 
             					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-  								'<h4>Não há dados para o período selecionado</h4>' + 
+  								'<h4>Nï¿½o hï¿½ dados para o perï¿½odo selecionado</h4>' + 
 							'</div>');
             	}
             }        
@@ -624,7 +624,7 @@
 				class="display table table-bordered table-striped table-hover">\
 				<thead>\
 					<tr>\
-						<th>Previsão</th>\
+						<th>Previsï¿½o</th>\
 						<th>Entidade</th>\
 						<th>Cidade</th>\
 						<th>Instituto</th>\
@@ -633,7 +633,7 @@
 				</thead>\
 				<tfoot>\
 					<tr>\
-						<th>Previsão</th>\
+						<th>Previsï¿½o</th>\
 						<th>Entidade</th>\
 						<th>Cidade</th>\
 						<th>Instituto</th>\

@@ -1068,7 +1068,7 @@ public class RelatorioController {
 
       renderer.setListener(fspcl);
 
-      content = content.replace("&nbsp;", ".");
+      //content = content.replace("&nbsp;", ".");
       content = content.replace("<br>", "<br/>");
 
       renderer.setDocumentFromString(content);
@@ -1076,7 +1076,7 @@ public class RelatorioController {
       renderer.createPDF(outStream);
 
     } catch (Exception e) {
-      throw new RuntimeException();
+      throw new RuntimeException(e);
     } finally {
       try {
         outStream.flush();

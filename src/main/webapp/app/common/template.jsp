@@ -21,15 +21,18 @@
     <link href="/css/cupertino/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">    
     <link href="/css/plugins/tooltipster/tooltipster.css" rel="stylesheet" type="text/css" />
     
-    <link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/DataTables-1.10.13/css/dataTables.bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Buttons-1.2.4/css/buttons.bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Responsive-2.1.1/css/responsive.bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Select-1.2.0/css/select.bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/DataTables-1.10.16/media/css/dataTables.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Buttons-1.5.1/css/buttons.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Responsive-2.2.1/css/responsive.bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="/js/plugins/dataTables/Select-1.2.5/css/select.bootstrap.css"/>
     
     <link href="/js/plugins/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/css/datepicker3.css" rel="stylesheet">
     <link href="/css/loading-overlay.css" rel="stylesheet">
+    
+    <link href="/css/plugins/pace/pace.css" rel="stylesheet" />
+    <script src="/js/plugins/pace/pace.js"></script>
 
     <!-- SB Admin CSS - Include with every page -->
     <link href="/css/sb-admin.css" rel="stylesheet">

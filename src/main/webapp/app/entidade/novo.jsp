@@ -15,11 +15,11 @@
 	<form:form method="post" action="add" commandName="entidade" class="form-horizontal">
     <ul class="nav nav-tabs" id="tabpessoa" role="tablist">
 	  <li class="active"><a href="#dadosgerais" role="tab" data-toggle="tab">Dados Gerais</a></li>
-	  <li><a href="#endereco" role="tab" data-toggle="tab">Endereço</a></li>
+	  <li><a href="#endereco" role="tab" data-toggle="tab"><spring:message code="entidade.endereco"/></a></li>
 	  <li><a href="#contato" role="tab" data-toggle="tab">Contato</a></li>
 	  <li><a href="#diretoria" role="tab" data-toggle="tab">Diretoria</a></li>
 	  <li><a href="#institutos" role="tab" data-toggle="tab">Institutos</a></li>
- 	  <li><a href="#observacoes" role="tab" data-toggle="tab">Observações</a></li>
+ 	  <li><a href="#observacoes" role="tab" data-toggle="tab"><spring:message code="entidade.observacoes"/></a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="dadosgerais">
@@ -56,11 +56,11 @@
                 	<form:input path="cnpj" cssClass="form-control" 
                 	data-rule-cnpj="true" 
                 	data-rule-remote="/gestao/entidade/validateCnpjUnique"
-                	data-msg-remote="CNPJ Já cadastrado."/>
+                	data-msg-remote="CNPJ JÃ¡ cadastrado."/>
                 </div>
             </div>
             <div class="form-group">
-                <form:label  class="col-sm-2 control-label" path="razaoSocial" cssErrorClass="error-label">Razão Social</form:label>
+                <form:label  class="col-sm-2 control-label" path="razaoSocial" cssErrorClass="error-label"><spring:message code="entidade.razaoSocial" /></form:label>
                	<div class="col-sm-10">
                		<form:input path="razaoSocial" cssClass="form-control upper" />
                	</div>
@@ -72,7 +72,7 @@
                	</div>
             </div>
             <div class="form-group">
-                <form:label  class="col-sm-2 control-label" path="dataFundacao" cssErrorClass="error-label">Data Fundação</form:label>
+                <form:label  class="col-sm-2 control-label" path="dataFundacao" cssErrorClass="error-label"><spring:message code="entidade.dataFundacao" /></form:label>
                	<div class="col-sm-4">
                		<form:input path="dataFundacao" cssClass="form-control datepicker"  />
                	</div>
@@ -99,7 +99,7 @@
                	</div>
             </div>
             <div class="form-group">
-                <form:label  class="col-sm-2 control-label" path="endereco.numero" cssErrorClass="error-label">Número</form:label>
+                <form:label  class="col-sm-2 control-label" path="endereco.numero" cssErrorClass="error-label"><spring:message code="entidade.numero"/></form:label>
                	<div class="col-sm-2">
                		<form:input path="endereco.numero" cssClass="form-control upper" />
                	</div>
@@ -140,9 +140,9 @@
   						<tr>
   							<td>Tipo</td>
   							<td>DDD</td>
-  							<td>Número</td>
+  							<td><spring:message code="entidade.numero"/></td>
   							<td>Operadora</td>
-  							<td>Ação</td>
+  							<td><spring:message code="entidade.acoes"/></td>
   						</tr>
                     <c:forEach items="${entidade.telefones}" varStatus="loop">
                         <!-- Add a wrapping div -->
@@ -181,7 +181,7 @@
                            		 <form:input path="telefones[${loop.index}].ddd" placeholder="DDD"  class="form-control input-sm" />
                             </td>
                             <td>
-                            	<form:input path="telefones[${loop.index}].numero" placeholder="Número Telefone" class="form-control input-sm" />
+                            	<form:input path="telefones[${loop.index}].numero" placeholder="Numero Telefone" class="form-control input-sm" />
                             </td>
                             <td>
                             	<form:select path="telefones[${loop.index}].operadora" class="form-control input-sm" >
@@ -222,7 +222,7 @@
 					<tr>
 						<td class="col-sm-2">Tipo</td>
 						<td class="col-sm-8">Contato</td>
-						<td class="col-sm-2">Ação</td>
+						<td class="col-sm-2"><spring:message code="entidade.acao" /></td>
 					</tr>
                     <c:forEach items="${entidade.emails}" varStatus="loop">
                         <!-- Add a wrapping div -->
@@ -293,26 +293,26 @@
 	            </div>
 	            <div class="form-group">
 	            	<fmt:formatDate value="${entidade.presidente.inicioMandato}" var="inicioMandato" type="date" pattern="dd/MM/yyyy" />
-	                <form:label  class="col-sm-2 control-label" path="presidente.inicioMandato" cssErrorClass="error-label">Início Mandato</form:label>
+	                <form:label  class="col-sm-2 control-label" path="presidente.inicioMandato" cssErrorClass="error-label">Inicio Mandato</form:label>
                 	<div class="col-sm-2">
                 		<form:input path="presidente.inicioMandato" value="${ inicioMandato }" cssClass="form-control datepicker" />
                 	</div>
 	            </div>
 	            <div class="form-group">
 	            	<fmt:formatDate value="${entidade.presidente.terminoMandato}" var="terminoMandato" type="date" pattern="dd/MM/yyyy" />
-	                <form:label  class="col-sm-2 control-label" path="presidente.terminoMandato" cssErrorClass="error-label">Término Mandato</form:label>
+	                <form:label  class="col-sm-2 control-label" path="presidente.terminoMandato" cssErrorClass="error-label">Termino Mandato</form:label>
                 	<div class="col-sm-2">
                 		<form:input path="presidente.terminoMandato" value="${ terminoMandato }"  cssClass="form-control datepicker" />
                 	</div>
 	            </div>
 				<div class="form-group">
-		            <form:label class="col-sm-2 control-label" path="presidentes" cssErrorClass="error-label">Histórico Presidentes</form:label>
+		            <form:label class="col-sm-2 control-label" path="presidentes" cssErrorClass="error-label">Historico Presidentes</form:label>
                 	<div class="col-sm-10">
 	    			<table class="table small" id="presidentes">
    						<tr>
    							<td class="col-sm-7">Nome</td>
    							<td class="col-sm-2">Inicio Mandato</td>
-   							<td class="col-sm-2">Término Mandato</td>
+   							<td class="col-sm-2">Termino Mandato</td>
    							<td class="col-sm-1">Ativo</td>
    						</tr>
 	                    <c:forEach items="${entidade.presidentes}" varStatus="loop">
@@ -375,7 +375,7 @@
    							<td class="col-sm-3">Instituto</td>
    							<td class="col-sm-4">Nome</td>
    							<td class="col-sm-2">Inicio Mandato</td>
-   							<td class="col-sm-2">Término Mandato</td>
+   							<td class="col-sm-2">Termino Mandato</td>
    							<td class="col-sm-1">Ativo</td>
    						</tr>
 	                    <c:forEach items="${entidade.dirigentes}" varStatus="loop">
@@ -392,7 +392,7 @@
 	                        	<td>
 	               			 	    <form:hidden path="dirigentes[${loop.index}].id"/>
 	               			 		<form:hidden path="dirigentes[${loop.index}].instituto.id"/>
-	                        		<form:input path="dirigentes[${loop.index}].instituto.descricao" placeholder="Selecione o Instituto/Comissão"  class="form-control input-sm" readonly="true"/>	
+	                        		<form:input path="dirigentes[${loop.index}].instituto.descricao" placeholder="Selecione o Instituto/Comissao"  class="form-control input-sm" readonly="true"/>	
 								</td>
 	               			 	<td>
 	               			 	    <form:hidden path="dirigentes[${loop.index}].id"/>
@@ -436,13 +436,13 @@
 			<div class="tab-pane" id="observacoes">
 				<br/>
 				<div class="form-group">
-	            <form:label class="col-sm-2 control-label" path="anotacoes">Anotações</form:label>
+	            <form:label class="col-sm-2 control-label" path="anotacoes"><spring:message code="entidade.anotacoes" /></form:label>
                	<div class="col-sm-10">
     			<table class="table small" id="anotacoes">
   						<tr>
   							<td class="col-sm-2">Tipo</td>
-  							<td class="col-sm-8">Anotação</td>
-  							<td class="col-sm-2">Ação</td>
+  							<td class="col-sm-8"><spring:message code="entidade.anotacao" /></td>
+  							<td class="col-sm-2"><spring:message code="entidade.acao" /></td>
   						</tr>
                     <c:forEach items="${entidade.anotacoes}" varStatus="loop">
                         <!-- Add a wrapping div -->
@@ -478,7 +478,8 @@
 							</td>
                             <td>
                             <!-- Generate the fields -->
-                           		 <form:input path="anotacoes[${loop.index}].texto" placeholder="Anotação"  class="form-control input-sm" />
+                            		 <spring:message code="entidade.anotacao" var="label.anotacao"/>
+                           		 <form:input path="anotacoes[${loop.index}].texto" placeholder="${label.anotacao}"  class="form-control input-sm" />
                             </td>
                             <td>
                             <!-- Add the remove flag -->
@@ -496,7 +497,7 @@
                         </tr>
                     </c:forEach>
                     </table>
-                    <button id="addAnotacoes" type="button" class="btn btn-primary btn-xs">Nova Anotação</button>
+                    <button id="addAnotacoes" type="button" class="btn btn-primary btn-xs">Nova ${label.anotacao}</button>
                 </div>
               </div>
             </div>
@@ -533,7 +534,7 @@ $(function() {
 
 
 	// Start indexing at the size of the current list
-    var indexTelefones = '${fn:length(entidade.telefones)}'';
+    var indexTelefones = '${fn:length(entidade.telefones)}';
     var indexEmails = '${fn:length(entidade.emails)}';
     var indexA = '${fn:length(entidade.anotacoes)}';
     var indexPresidentes = '${fn:length(entidade.presidentes)}';
@@ -555,7 +556,7 @@ $(function() {
 	  html += '</td><td>';                  
             html += '<input type="text" size="4" id="telefones' + indexTelefones + '.ddd" name="telefones[' + indexTelefones + '].ddd" placeholder="DDD"  class="form-control input-sm" />';
             html += '</td><td>';
-            html += '<input type="text" size="10" id="telefones' + indexTelefones + '.numero" name="telefones[' + indexTelefones + '].numero" placeholder="Número Telefone"  class="form-control input-sm" />';
+            html += '<input type="text" size="10" id="telefones' + indexTelefones + '.numero" name="telefones[' + indexTelefones + '].numero" placeholder="Numero Telefone"  class="form-control input-sm" />';
             html += '</td><td>';
             html += '<select id="telefones' + indexTelefones + '.operadora" name="telefones[' + indexTelefones + '].operadora" class="form-control input-sm" >';
             html += '<option value="">Selecione</option>';
@@ -647,7 +648,7 @@ $(function() {
 	        </c:forEach>
 	  html += '</select>';	
 	  html += '</td><td>';                  
-            html += '<input type="text" id="anotacoes' + indexA + '.texto" name="anotacoes[' + indexA + '].texto" placeholder="Anotação"  class="form-control input-sm" />';
+            html += '<input type="text" id="anotacoes' + indexA + '.texto" name="anotacoes[' + indexA + '].texto" placeholder="Anotacao"  class="form-control input-sm" />';
             html += '</td><td>';
             html += '<input type="hidden" id="anotacoes' + indexA + '.remove" name="anotacoes[' + indexA + '].remove" value="0" />';
             html += '<button class="btn btn-danger btn-xs anotacoes.remove" data-index="' + indexA + '"><span class="glyphicon glyphicon-remove-sign"></span></button>';                    
@@ -1062,35 +1063,35 @@ $(function() {
 
     /**
      * Atribuo ao elemento #cep, o evento blur
-     * Blur, dispara uma ação, quando o foco
+     * Blur, dispara uma acao, quando o foco
      * sair do elemento, no nosso caso cep
      */
     $("#buscarcep").click(function(){
         /**
          * Resgatamos o valor do campo #cep
-         * usamos o replace, pra remover tudo que não for numérico,
-         * com uma expressão regular
+         * usamos o replace, pra remover tudo que nao for numerico,
+         * com uma expressao regular
          */
         var cep     = $("#endereco\\.cep").val().replace(/[^0-9]/, '');
-         //Armazena a referência da div#mensagemErro
+         //Armazena a referencia da div#mensagemErro
         var msgErro = $("#mensagemErro");
          
         /**
-         * Por padrão, vamos ocultar
-         * div#boxCampos e também #mensagemErro
+         * Por padrao, vamos ocultar
+         * div#boxCampos e tambem #mensagemErro
          */
         msgErro.addClass('ocultar');
          
-        //Verifica se não está vazio
+        //Verifica se nao esta vazio
         if(cep !== ""){
-             //Cria variável com a URL da consulta, passando o CEP
+             //Cria variavel com a URL da consulta, passando o CEP
              var url = 'http://cep.correiocontrol.com.br/'+cep+'.json';
               
              /**
-              * Fazemos um requisição a URL, como vamos retornar json,
-              * usamos o método $.getJSON;
-              * Que é composta pela URL, e a função que vai retorna os dados
-              * o qual passamos a variável json, para recuperar os valores
+              * Fazemos um requisicao a URL, como vamos retornar json,
+              * usamos o metodo $.getJSON;
+              * Que e composta pela URL, e a funcao que vai retorna os dados
+              * o qual passamos a variavel json, para recuperar os valores
               */
              $.getJSON(url, function(json){
                     //Atribuimos o valor aos inputs
@@ -1117,9 +1118,9 @@ $(function() {
                      * preenchidos
                      */
                      
-                    //Usamos o método fail, caso não retorne nada
+                    //Usamos o metodo fail, caso nao retorne nada
                 }).fail(function(){
-                 //Não retornando um valor válido, ele mostra a mensagem
+                 //Nao retornando um valor valido, ele mostra a mensagem
                  msgErro.removeClass('ocultar').html('CEP inexistente');
                   $("#endereco\\.cepUnico").val(false);
                   $("#endereco\\.buscaCep").val(false);
