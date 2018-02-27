@@ -356,11 +356,15 @@ public class EntidadeController {
 			return "entidade.novo";
 		}
 
+		
 		Integer id = entidade.getEndereco().getCidade().getId();
 
-		Cidade c = cidadeService.getCidade(id);
-
-		entidade.getEndereco().setCidade(c);
+		if(id != null) {
+			Cidade c = cidadeService.getCidade(id);
+			entidade.getEndereco().setCidade(c);
+		} else {
+			entidade.getEndereco().setCidade(null);
+		}
 
 		List<Telefone> telefones2remove = manageTelefones(entidade);
 		List<ContatoInternet> contatos2remove = manageContatoInternets(entidade);
