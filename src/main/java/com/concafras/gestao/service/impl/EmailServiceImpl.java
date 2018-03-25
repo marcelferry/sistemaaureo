@@ -1,6 +1,13 @@
 package com.concafras.gestao.service.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,6 +34,7 @@ import org.apache.velocity.tools.generic.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
@@ -41,6 +49,8 @@ import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.service.EmailService;
 import com.concafras.gestao.service.EstadoService;
 import com.concafras.gestao.web.controller.EntidadeController;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -247,10 +257,11 @@ public class EmailServiceImpl implements EmailService {
 
     
     
+    //public void sendMessage(JavaMailSender mailSender, MimeMessagePreparator preparator) {
+    //		mailSender.send(preparator);
+    //}
+    
     public void sendMessage(JavaMailSender mailSender, MimeMessagePreparator preparator) {
-    		mailSender.send(preparator);
-    }
-    /*public void sendMessage(JavaMailSender mailSender, MimeMessagePreparator preparator) {
         if(System.currentTimeMillis() > tokenExpires) {
             try {
                 String request = "client_id="+URLEncoder.encode(oauthClientId, "UTF-8")
@@ -285,7 +296,7 @@ public class EmailServiceImpl implements EmailService {
         ((JavaMailSenderImpl)mailSender).setPassword(accessToken);
         // Now send mail like normal
         mailSender.send(preparator);
-    }*/
+    }
     
     
     public void sendInviteEmail(final Pessoa pessoa, final String instituto) {

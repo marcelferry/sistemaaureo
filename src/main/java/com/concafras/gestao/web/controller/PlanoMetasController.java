@@ -341,7 +341,7 @@ public class PlanoMetasController {
       if (user instanceof UsuarioAutenticado) {
         UsuarioAutenticado usuario = (UsuarioAutenticado) user;
 
-        Pessoa facilitadorSearch = usuario.getPessoa();
+        Pessoa facilitadorSearch = pessoaService.getPessoa(usuario.getPessoa().getId());
 
         Rodizio rodizio = rodizioService.findByAtivoTrue();
         
