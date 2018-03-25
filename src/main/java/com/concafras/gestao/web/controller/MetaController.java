@@ -280,7 +280,7 @@ public class MetaController {
 		// Add presidente
 		ContatoBasico novocontato = new ContatoBasico("Presidente");
 		if (presidente != null) {
-			novocontato.setNomeCompleto(presidente.getNomeCompleto());
+			novocontato.setNome(presidente.getNome());
 
 			for (Telefone tel : presidente.getTelefones()) {
 				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
@@ -291,7 +291,7 @@ public class MetaController {
 			}
 
 			if (nomePresidente != null && nomePresidente.trim().length() > 0) {
-				if (presidente.getNomeCompleto().trim().equals(nomePresidente.trim())) {
+				if (presidente.getNome().trim().equals(nomePresidente.trim())) {
 					novocontato.addTelefone(telefonePresidente);
 					novocontato.addEmail(emailPresidente);
 				}
@@ -300,7 +300,7 @@ public class MetaController {
 			contatos.add(novocontato);
 
 		} else if (nomePresidente != null && nomePresidente.trim().length() > 0) {
-			novocontato.setNomeCompleto(nomePresidente);
+			novocontato.setNome(nomePresidente);
 			novocontato.addTelefone(telefonePresidente);
 			novocontato.addEmail(emailPresidente);
 			contatos.add(novocontato);
@@ -308,7 +308,7 @@ public class MetaController {
 		// Add coordenador
 		novocontato = new ContatoBasico("Coordenador");
 		if (coordenador != null) {
-			novocontato.setNomeCompleto(coordenador.getNomeCompleto());
+			novocontato.setNome(coordenador.getNome());
 
 			for (Telefone tel : coordenador.getTelefones()) {
 				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
@@ -319,7 +319,7 @@ public class MetaController {
 			}
 
 			if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
-				if (coordenador.getNomeCompleto().trim().equals(nomeCoordenador.trim())) {
+				if (coordenador.getNome().trim().equals(nomeCoordenador.trim())) {
 					novocontato.addTelefone(telefoneCoordenador);
 					novocontato.addEmail(emailCoordenador);
 				}
@@ -327,7 +327,7 @@ public class MetaController {
 			contatos.add(novocontato);
 
 		} else if (nomeCoordenador != null && nomeCoordenador.trim().length() > 0) {
-			novocontato.setNomeCompleto(nomeCoordenador);
+			novocontato.setNome(nomeCoordenador);
 			novocontato.addTelefone(telefoneCoordenador);
 			novocontato.addEmail(emailCoordenador);
 			contatos.add(novocontato);
@@ -336,7 +336,7 @@ public class MetaController {
 		novocontato = new ContatoBasico("Contratante");
 		if (contratante != null && !contratante.getId().equals(presidente.getId())
 				&& !contratante.getId().equals(coordenador.getId())) {
-			novocontato.setNomeCompleto(contratante.getNomeCompleto());
+			novocontato.setNome(contratante.getNome());
 
 			for (Telefone tel : contratante.getTelefones()) {
 				novocontato.addTelefone(tel.getDdd() + " " + tel.getNumero()
@@ -347,7 +347,7 @@ public class MetaController {
 			}
 
 			if (nomeContratante != null && nomeContratante.trim().length() > 0) {
-				if (contratante.getNomeCompleto().trim().equals(nomeContratante.trim())) {
+				if (contratante.getNome().trim().equals(nomeContratante.trim())) {
 					novocontato.addTelefone(telefoneContratante);
 					novocontato.addEmail(emailContratante);
 				}
@@ -355,7 +355,7 @@ public class MetaController {
 			contatos.add(novocontato);
 
 		} else if (nomeContratante != null && nomeContratante.trim().length() > 0) {
-			novocontato.setNomeCompleto(nomeContratante);
+			novocontato.setNome(nomeContratante);
 			novocontato.addTelefone(telefoneContratante);
 			novocontato.addEmail(emailContratante);
 			contatos.add(novocontato);

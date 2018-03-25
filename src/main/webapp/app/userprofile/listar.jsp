@@ -21,7 +21,7 @@
                     <tbody>
                     <c:forEach items="${userprofileList}" var="usuario">
                         <tr>
-                            <td>${usuario.pessoa.nomeCompleto}</td>
+                            <td>${usuario.pessoa.nome}</td>
                             <td>${usuario.username}</td>
                             <td>
                             	<form action="edit/${usuario.id}" method="post">

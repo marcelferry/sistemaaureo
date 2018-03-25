@@ -128,7 +128,7 @@ public class EmailController {
         try{
           logger.debug("============================================");
           logger.debug("E:" + entidade.getRazaoSocial());
-          logger.debug("P:" + pessoa.getNomeCompleto());
+          logger.debug("P:" + pessoa.getNome());
           enviarLembrete(ciclo, entidade.getId(), pessoa.getId());
           logger.debug("OK:");
         }catch(Exception e){

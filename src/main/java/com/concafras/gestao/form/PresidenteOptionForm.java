@@ -7,15 +7,15 @@ public class PresidenteOptionForm {
 	private Integer id;
 	private String nome;
 
-	public PresidenteOptionForm(Integer id, String nomeCompleto) {
+	public PresidenteOptionForm(Integer id, String nome) {
 		this.id = id;
-		this.nome = nomeCompleto;
+		this.nome = nome;
 	}
 
 	public PresidenteOptionForm(Presidente presidente) {
 		if (presidente != null) {
 			this.id = presidente.getId();
-			this.nome = presidente.getPessoa().getNomeCompleto();
+			this.nome = presidente.getPessoa().getNome();
 		}
 	}
 

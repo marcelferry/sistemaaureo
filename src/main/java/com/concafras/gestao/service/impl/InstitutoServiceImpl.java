@@ -92,7 +92,7 @@ public class InstitutoServiceImpl implements InstitutoService {
     			root.get("id"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
-    			pessoa.get("nomeCompleto")
+    			pessoa.get("nome")
     			);
     	
     	Expression exp = root.get("descricao");
@@ -120,7 +120,7 @@ public class InstitutoServiceImpl implements InstitutoService {
     			root.get("id"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
-    			pessoa.get("nomeCompleto")
+    			pessoa.get("nome")
     			);
     	
     	Expression exp = root.get("descricao");

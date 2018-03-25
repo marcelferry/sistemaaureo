@@ -413,7 +413,7 @@ public class PlanoMetasController {
     Map<String, String> facilitadorList = new HashMap<String, String>();
     for (Facilitador facilitador : listaFacilitador) {
       facilitadorList.put(String.valueOf(facilitador.getId()),
-          facilitador.getTrabalhador().getNomeCompleto());
+          facilitador.getTrabalhador().getNome());
     }
     map.put("profiles", environment.getActiveProfiles());
     Date hoje = trim( new Date());
@@ -472,7 +472,7 @@ public class PlanoMetasController {
       Map<String, String> facilitadorList = new HashMap<String, String>();
       for (Facilitador facilitador : listaFacilitador) {
         facilitadorList.put(String.valueOf(facilitador.getId()),
-            facilitador.getTrabalhador().getNomeCompleto());
+            facilitador.getTrabalhador().getNome());
       }
       model.addObject("facilitadorList", facilitadorList);
 

@@ -135,7 +135,7 @@ public class EntidadeController {
 			if (entidade.getPresidente() != null) {
 				e.setPresidente(new PresidenteOptionForm(entidade
 						.getPresidente().getPessoa().getId(), entidade
-						.getPresidente().getPessoa().getNomeCompleto()));
+						.getPresidente().getPessoa().getNome()));
 			}
 			PlanoMetas planoMetasAtual = null;
 			if( rodizio != null && instituto != null){
@@ -143,7 +143,7 @@ public class EntidadeController {
 			  if(planoMetasAtual != null){
 	        if( planoMetasAtual.getPresidente() != null){
 	          Pessoa presidente = pessoaService.getPessoa( planoMetasAtual.getPresidente().getId() );
-	          e.setPresidente(new PresidenteOptionForm(presidente.getId(), presidente.getNomeCompleto()));
+	          e.setPresidente(new PresidenteOptionForm(presidente.getId(), presidente.getNome()));
 	        } else {
 	          String nome = null;
   	        if(planoMetasAtual.getNomePresidente() != null){
@@ -157,7 +157,7 @@ public class EntidadeController {
 	          Pessoa coordenador = pessoaService.getPessoa( planoMetasAtual.getCoordenador().getId()  );
 	          e.setDirigente(new DirigenteOptionForm(
 	              coordenador.getId(), 
-	              coordenador.getNomeCompleto(),
+	              coordenador.getNome(),
 	              coordenador.getPrimeiroEmail(),
 	              coordenador.getPrimeiroTelefone()               
 	              ));
@@ -186,7 +186,7 @@ public class EntidadeController {
             Pessoa coordenador = pessoaService.getPessoa( planoMetasAtual.getContratante().getId()  );
             e.setOutro(new DirigenteOptionForm(
                 coordenador.getId(), 
-                coordenador.getNomeCompleto(),
+                coordenador.getNome(),
                 coordenador.getPrimeiroEmail(),
                 coordenador.getPrimeiroTelefone()               
                 ));
@@ -233,7 +233,7 @@ public class EntidadeController {
 							&& dirigenteAtivo.getTrabalhador() != null)
 						e.setDirigente(new DirigenteOptionForm(
 						    dirigenteAtivo.getTrabalhador().getId(), 
-						    dirigenteAtivo.getTrabalhador().getNomeCompleto(),
+						    dirigenteAtivo.getTrabalhador().getNome(),
 						    dirigenteAtivo.getTrabalhador().getPrimeiroEmail(),
 						    dirigenteAtivo.getTrabalhador().getPrimeiroTelefone()						    
 						 )
@@ -740,7 +740,7 @@ public class EntidadeController {
 			if (entidade.getPresidente() != null) {
 				e.setPresidente(new PresidenteOptionForm(entidade
 						.getPresidente().getPessoa().getId(), entidade
-						.getPresidente().getPessoa().getNomeCompleto()));
+						.getPresidente().getPessoa().getNome()));
 			}
 
 			if (entidade.getEndereco() != null

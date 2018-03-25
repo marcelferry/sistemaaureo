@@ -459,7 +459,7 @@ public class PessoaExcel implements Serializable{
 			//Nome
 			String primeiroNome = !Util.isNullOrEmpty( importado.getNome() )? importado.getNome().indexOf(' ') != -1? importado.getNome().substring(0, importado.getNome().indexOf(' ')): "":""; 
 			String sobreNome = !Util.isNullOrEmpty(importado.getNome() ) ? importado.getNome().indexOf(' ') != -1? importado.getNome().substring(importado.getNome().indexOf(' ') + 1): "":""; 
-			pessoa.setNomeCompleto(importado.getNome());
+			pessoa.setNome(importado.getNome());
 			pessoa.setNomeCracha(primeiroNome);
 
 			//RG

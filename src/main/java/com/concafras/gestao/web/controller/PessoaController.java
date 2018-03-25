@@ -220,7 +220,7 @@ public class PessoaController {
     	
     	Pessoa pessoaBase = pessoaService.getPessoa(pessoa.getId());
     	
-    	pessoaBase.setNomeCompleto(pessoa.getNomeCompleto());
+    	pessoaBase.setNome(pessoa.getNome());
     	pessoaBase.setCpf(pessoa.getCpf());
     	if(pessoa.getEndereco() == null){
     		pessoa.setEndereco(new Endereco());
@@ -649,7 +649,7 @@ public class PessoaController {
 		if(sortCol.equals("0")){
 			sortCol = "id";
 		} else if(sortCol.equals("1")){
-			sortCol = "nomeCompleto";
+			sortCol = "nome";
 		} else if(sortCol.equals("3")){
 			sortCol = "cidade";
 		} else {
@@ -662,7 +662,7 @@ public class PessoaController {
 		for (Pessoa entidade : lista) {
 		  PessoaOptionForm e = new PessoaOptionForm();
 			e.setId(entidade.getId());
-			e.setNome(entidade.getNomeCompleto());
+			e.setNome(entidade.getNome());
 
 			String email = entidade.getPrimeiroEmail();
 			e.setEmail(email);

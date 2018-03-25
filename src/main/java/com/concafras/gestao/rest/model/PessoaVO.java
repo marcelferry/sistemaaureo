@@ -25,7 +25,7 @@ public class PessoaVO extends ObjetoGerenciado {
 
 	private Integer codigo;
 
-	private String nomeCompleto;
+	private String nome;
 
 	private String nomeCracha;
 
@@ -63,14 +63,14 @@ public class PessoaVO extends ObjetoGerenciado {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PessoaVO(Integer id, String nomeCompleto, String cpf, String cidade, String estado) {
-		this(id, nomeCompleto, cpf, cidade, estado, null);
+	public PessoaVO(Integer id, String nome, String cpf, String cidade, String estado) {
+		this(id, nome, cpf, cidade, estado, null);
 	}
 
-	public PessoaVO(Integer id, String nomeCompleto, String cpf, String cidade, String estado, String email) {
+	public PessoaVO(Integer id, String nome, String cpf, String cidade, String estado, String email) {
 		super();
 		this.id = id;
-		this.nomeCompleto = nomeCompleto;
+		this.nome = nome;
 		this.cpf = cpf;
 		this.endereco = new EnderecoVO();
 		this.endereco.setCidade(new CidadeVO());
@@ -79,10 +79,10 @@ public class PessoaVO extends ObjetoGerenciado {
 		this.endereco.getCidade().getEstado().setSigla(estado);
 	}
 
-	public PessoaVO(Integer id, String nomeCompleto) {
+	public PessoaVO(Integer id, String nome) {
 		super();
 		this.id = id;
-		this.nomeCompleto = nomeCompleto;
+		this.nome = nome;
 	}
 
 	public Integer getId() {
@@ -101,12 +101,12 @@ public class PessoaVO extends ObjetoGerenciado {
 		this.codigo = codigo;
 	}
 
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getNomeCracha() {
@@ -213,24 +213,12 @@ public class PessoaVO extends ObjetoGerenciado {
 		this.associado = associado;
 	}
 
-	public String getNome() {
-		return this.nomeCompleto;
-	}
-
 	public String getPrimeiroNome() {
-		String importado = getNomeCompleto();
+		String importado = getNome();
 		String primeiroNome = !Util.isNullOrEmpty(importado)
 				? importado.indexOf(' ') != -1 ? importado.substring(0, importado.indexOf(' ')) : importado
 				: "";
 		return primeiroNome;
-	}
-
-	public void setNome(String importado) {
-		// String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ')
-		// != -1? importado.substring(0, importado.indexOf(' ')): "":"";
-		// String sobreNome = !Util.isNullOrEmpty(importado) ? importado.indexOf(' ') !=
-		// -1? importado.substring(importado.indexOf(' ') + 1): "":"";
-		this.nomeCompleto = importado;
 	}
 
 	public String getEmail(List<ContatoInternet> emails) {
@@ -270,7 +258,7 @@ public class PessoaVO extends ObjetoGerenciado {
 
 	@Override
 	public String toString() {
-		return this.nomeCompleto;
+		return this.nome;
 	}
 
 	@Override

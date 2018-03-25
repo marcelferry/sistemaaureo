@@ -50,7 +50,7 @@
               			<tbody>
 							<c:forEach items="${pessoaList}" var="pessoa">
 							<tr>
-							    <td>${pessoa.nomeCompleto}</td>
+							    <td>${pessoa.nome}</td>
 								<td>${pessoa.primeiroEmail}</td>
 								<td>${pessoa.endereco.cidade.nome}/${pessoa.endereco.cidade.estado.sigla}</td>
 								<td>

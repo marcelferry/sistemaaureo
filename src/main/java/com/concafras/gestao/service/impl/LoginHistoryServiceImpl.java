@@ -78,7 +78,7 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
                       + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           cb.like(
               cb.function("UNACCENT", String.class,
-                  cb.lower(pessoa.get("nomeCompleto"))), "%"
+                  cb.lower(pessoa.get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%")));
 
       c.where(criteria.toArray(new Predicate[] {}));
@@ -93,7 +93,7 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
     } else if (sortCol.equals("loggedIn")) {
       exp = root.<Date> get("loggedIn");
     } else if (sortCol.equals("nome")) {
-      exp = pessoa.get("nomeCompleto");
+      exp = pessoa.get("nome");
     } else if (sortCol.equals("username")) {
       exp = usuario.get("username");
     }
@@ -132,7 +132,7 @@ public class LoginHistoryServiceImpl implements LoginHistoryService {
                       + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           qb.like(
               qb.function("UNACCENT", String.class,
-                  qb.lower(pessoa.get("nomeCompleto"))), "%"
+                  qb.lower(pessoa.get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%")));
       cq.where(criteria.toArray(new Predicate[] {}));
     }

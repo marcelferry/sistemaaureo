@@ -23,9 +23,9 @@
 					<br/>
 	                <div class="form-group">
 	                	<form:hidden path="id"/>
-			            <form:label class="col-sm-2 control-label" path="nomeCompleto">Nome Completo</form:label>
+			            <form:label class="col-sm-2 control-label" path="nome">Nome Completo</form:label>
 	                	<div class="col-sm-4">
-	                		<form:input path="nomeCompleto"  cssClass="form-control" />
+	                		<form:input path="nome"  cssClass="form-control" />
 	                	</div>
 		            </div>
 		            

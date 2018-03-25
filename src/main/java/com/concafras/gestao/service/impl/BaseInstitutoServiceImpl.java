@@ -116,7 +116,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
     			root.get("nome"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
-    			pessoa.get("nomeCompleto")
+    			pessoa.get("nome")
     			);
     	
     	Expression exp = root.get("descricao");
@@ -145,7 +145,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
     			root.get("nome"), 
     			root.get("descricao"), 
     			pessoa.get("id"),
-    			pessoa.get("nomeCompleto")
+    			pessoa.get("nome")
     			);
     	
     	Expression exp = root.get("descricao");
@@ -177,7 +177,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
 				root.get("nome"), 
 				root.get("descricao"), 
 				pessoa.get("id"),
-				pessoa.get("nomeCompleto")
+				pessoa.get("nome")
 				);
 		
 		Expression exp = root.get("descricao");
@@ -210,7 +210,7 @@ public class BaseInstitutoServiceImpl implements BaseInstitutoService {
 				root.get("nome"), 
 				root.get("descricao"), 
 				pessoa.get("id"),
-				pessoa.get("nomeCompleto")
+				pessoa.get("nome")
 				);
 		
 		Expression<String> exp = root.get("descricao");

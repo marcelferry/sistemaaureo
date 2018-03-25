@@ -140,7 +140,7 @@ public class EntidadeServiceImpl implements EntidadeService {
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           cb.like(
               cb.function("UNACCENT", String.class,
-                  cb.lower(pessoa.get("nomeCompleto"))), "%"
+                  cb.lower(pessoa.get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%")));
 
       c.where(criteria.toArray(new Predicate[] {}));
@@ -148,7 +148,7 @@ public class EntidadeServiceImpl implements EntidadeService {
 
     c.multiselect(root.get("id"), root.get("razaoSocial"), root.get("cnpj"),
         endereco.get("logradouro"), endereco.get("numero"), cidade.get("nome"),
-        estado.get("sigla"), pessoa.get("id"), pessoa.get("nomeCompleto"));
+        estado.get("sigla"), pessoa.get("id"), pessoa.get("nome"));
 
     Expression exp = null;
 
@@ -161,7 +161,7 @@ public class EntidadeServiceImpl implements EntidadeService {
     } else if (sortCol.equals("cidade")) {
       exp = cidade.get("nome");
     } else if (sortCol.equals("presidente")) {
-      exp = pessoa.get("nomeCompleto");
+      exp = pessoa.get("nome");
     }
 
     if (sortDir.equals("desc")) {
@@ -198,7 +198,7 @@ public class EntidadeServiceImpl implements EntidadeService {
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           qb.like(
               qb.function("UNACCENT", String.class,
-                  qb.lower(pessoa.get("nomeCompleto"))), "%"
+                  qb.lower(pessoa.get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%")));
 
       cq.where(criteria.toArray(new Predicate[] {}));
@@ -241,7 +241,7 @@ public class EntidadeServiceImpl implements EntidadeService {
 
     c.multiselect(root.get("id"), root.get("razaoSocial"), root.get("cnpj"),
         endereco.get("logradouro"), endereco.get("numero"), cidade.get("nome"),
-        estado.get("sigla"), pessoa.get("id"), pessoa.get("nomeCompleto"));
+        estado.get("sigla"), pessoa.get("id"), pessoa.get("nome"));
 
     Query q = em.createQuery(c);
 
@@ -377,7 +377,7 @@ public class EntidadeServiceImpl implements EntidadeService {
 
     c.where(criteria.toArray(new Predicate[] {}));
 
-    c.multiselect(root.get("id"), pessoa.get("id"), pessoa.get("nomeCompleto"),
+    c.multiselect(root.get("id"), pessoa.get("id"), pessoa.get("nome"),
         instituto.get("id"), instituto.get("descricao"));
 
     Query q = em.createQuery(c);

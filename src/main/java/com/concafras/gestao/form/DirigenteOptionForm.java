@@ -11,9 +11,9 @@ public class DirigenteOptionForm {
 	private String email;
 	private String telefone;
 
-	public DirigenteOptionForm(Integer id, String nomeCompleto, String email, String telefone) {
+	public DirigenteOptionForm(Integer id, String nome, String email, String telefone) {
 		this.id = id;
-		this.nome = nomeCompleto;
+		this.nome = nome;
 		this.email = email;
 		this.telefone = telefone;
 	}
@@ -21,7 +21,7 @@ public class DirigenteOptionForm {
 	public DirigenteOptionForm(List<Dirigente> dirigentes) {
 		if (dirigentes != null && dirigentes.size() > 0) {
 			this.id = dirigentes.get(0).getId();
-			this.nome = dirigentes.get(0).getTrabalhador().getNomeCompleto();
+			this.nome = dirigentes.get(0).getTrabalhador().getNome();
 		}
 	}
 

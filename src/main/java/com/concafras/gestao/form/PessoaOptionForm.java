@@ -19,7 +19,7 @@ public class PessoaOptionForm {
 	public PessoaOptionForm(Pessoa pessoa) {
 		if (pessoa != null) {
 			this.id = pessoa.getId();
-			this.nome = pessoa.getNomeCompleto();
+			this.nome = pessoa.getNome();
 			this.cpf = pessoa.getCpf();
 			if (pessoa.getEndereco() != null && pessoa.getEndereco().getCidade() != null) {
 				this.cidade = pessoa.getEndereco().getCidade().getNome();

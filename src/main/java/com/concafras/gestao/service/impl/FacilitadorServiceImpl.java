@@ -51,7 +51,7 @@ public class FacilitadorServiceImpl implements FacilitadorService {
       Root<Facilitador> emp = c.from(Facilitador.class);
       
       List<Predicate> criteria = new ArrayList<Predicate>();
-      criteria.add( cb.like( cb.lower( emp.<String>get("nomeCompleto") ), "%" + name.toLowerCase().trim().replaceAll(" ", "%") + "%"));
+      criteria.add( cb.like( cb.lower( emp.<String>get("nome") ), "%" + name.toLowerCase().trim().replaceAll(" ", "%") + "%"));
       c.where(criteria.get(0));
       
       List<Facilitador> retorno = em.createQuery(c).setMaxResults(maxRows).getResultList();

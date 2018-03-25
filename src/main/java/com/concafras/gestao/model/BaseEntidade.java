@@ -141,7 +141,7 @@ public class BaseEntidade extends ObjetoGerenciado {
     this.setPresidente(new Presidente());
     this.getPresidente().setPessoa(new Pessoa());
     this.getPresidente().getPessoa().setId(idPresidente);
-    this.getPresidente().getPessoa().setNomeCompleto(presidente);
+    this.getPresidente().getPessoa().setNome(presidente);
 
   }
 

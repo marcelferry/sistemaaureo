@@ -39,7 +39,7 @@
 				<td width="15%"><b>Instituto:</b></td>
 				<td width="35%" colspan="4"><b>${meta.atividade.instituto.descricao}</b></td>
 				<td width="15%"><b>Dir.Nac.:</b></td>
-				<td width="35%" colspan="4">${meta.atividade.instituto.dirigenteNacional.nomeCompleto}</td>
+				<td width="35%" colspan="4">${meta.atividade.instituto.dirigenteNacional.nome}</td>
 			</tr>
 		</table>
 		<table border="0" cellpadding="5" cellspacing="0" class="metas"  width="100%" style="margin-top: 5px;">

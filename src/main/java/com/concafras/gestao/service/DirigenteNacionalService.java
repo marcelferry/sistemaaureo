@@ -19,7 +19,7 @@ public interface DirigenteNacionalService {
 
   List<DirigenteNacional> findByInstitutoId(Integer id);
   
-  List<DirigenteNacional> findByDirigenteNomeCompleto(String query);
+  List<DirigenteNacional> findByDirigenteNome(String query);
 
   List<DirigenteNacional> findByDirigente(Pessoa pessoa);
   

@@ -6,7 +6,7 @@ import java.util.List;
 public class ContatoBasico {
 
   private String tipo;
-  private String nomeCompleto;
+  private String nome;
   private List<String> telefones;
   private List<String> emails;
   
@@ -26,12 +26,12 @@ public class ContatoBasico {
     this.tipo = tipo;
   }
   
-  public String getNomeCompleto() {
-    return nomeCompleto;
+  public String getNome() {
+    return nome;
   }
   
-  public void setNomeCompleto(String nomeCompleto) {
-    this.nomeCompleto = nomeCompleto;
+  public void setNome(String nome) {
+    this.nome = nome;
   }
   
   public List<String> getTelefones() {
@@ -66,7 +66,7 @@ public class ContatoBasico {
 
   @Override
   public String toString() {
-    return "ContatoBasico [tipo=" + tipo + ", nomeCompleto=" + nomeCompleto
+    return "ContatoBasico [tipo=" + tipo + ", nome=" + nome
         + ", telefones=" + telefones + ", emails=" + emails + "]";
   }
   

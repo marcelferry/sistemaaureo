@@ -113,10 +113,10 @@ public class PessoaServiceImpl implements PessoaService {
     Join cidade = endereco.join("cidade", JoinType.LEFT);
     Join estado = cidade.join("estado", JoinType.LEFT);
 
-    c.multiselect(root.get("id"), root.get("nomeCompleto"), root.get("cpf"),
+    c.multiselect(root.get("id"), root.get("nome"), root.get("cpf"),
         cidade.get("nome"), estado.get("sigla"));
 
-    c.orderBy(cb.asc(root.<String> get("nomeCompleto")));
+    c.orderBy(cb.asc(root.<String> get("nome")));
 
     List<Pessoa> retorno = em.createQuery(c).getResultList();
 
@@ -156,11 +156,11 @@ public class PessoaServiceImpl implements PessoaService {
     Root<Pessoa> emp = c.from(Pessoa.class);
 
     List<Predicate> criteria = new ArrayList<Predicate>();
-    criteria.add(cb.like( cb.function("UNACCENT", String.class,  cb.lower( emp.<String>get("nomeCompleto") ) ), "%"
+    criteria.add(cb.like( cb.function("UNACCENT", String.class,  cb.lower( emp.<String>get("nome") ) ), "%"
         + name.toLowerCase().trim().replaceAll(" ", "%") + "%"));
     c.where(criteria.get(0));
 
-    c.orderBy(cb.asc(emp.<String> get("nomeCompleto")));
+    c.orderBy(cb.asc(emp.<String> get("nome")));
 
     List<Pessoa> retorno = em.createQuery(c).setMaxResults(maxRows)
         .getResultList();
@@ -205,7 +205,7 @@ public class PessoaServiceImpl implements PessoaService {
 
     c.where(criteria.toArray(new Predicate[] {}));
 
-    c.orderBy(cb.asc(emp.<String> get("nomeCompleto")));
+    c.orderBy(cb.asc(emp.<String> get("nome")));
 
     List<Pessoa> pessoas = em.createQuery(c).getResultList();
 
@@ -233,7 +233,7 @@ public class PessoaServiceImpl implements PessoaService {
       criteria.add(cb.or(
           cb.like(
               cb.function("UNACCENT", String.class,
-                  cb.lower(root.<String> get("nomeCompleto"))), "%"
+                  cb.lower(root.<String> get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           cb.like(
               cb.function("UNACCENT", String.class,
@@ -249,17 +249,17 @@ public class PessoaServiceImpl implements PessoaService {
       c.where(criteria.toArray(new Predicate[] {}));
     }
 
-    c.multiselect(root.get("id"), root.get("nomeCompleto"), root.get("cpf"),
+    c.multiselect(root.get("id"), root.get("nome"), root.get("cpf"),
         cidade.get("nome"), estado.get("sigla"), emails.get("contato"));
 
     Expression exp = null;
 
     if (sortCol == null) {
-      exp = root.<String> get("nomeCompleto");
+      exp = root.<String> get("nome");
     } else if (sortCol.equals("id")) {
       exp = root.<String> get("id");
-    } else if (sortCol.equals("nomeCompleto")) {
-      exp = root.<String> get("nomeCompleto");
+    } else if (sortCol.equals("nome")) {
+      exp = root.<String> get("nome");
     } else if (sortCol.equals("cidade")) {
       exp = cidade.get("nome");
     }
@@ -297,7 +297,7 @@ public class PessoaServiceImpl implements PessoaService {
       criteria.add(qb.or(
           qb.like(
               qb.function("UNACCENT", String.class,
-                  qb.lower(root.<String> get("nomeCompleto"))), "%"
+                  qb.lower(root.<String> get("nome"))), "%"
                   + name.toLowerCase().trim().replaceAll(" ", "%") + "%"),
           qb.like(
               qb.function("UNACCENT", String.class,

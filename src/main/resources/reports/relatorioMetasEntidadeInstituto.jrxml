@@ -15,7 +15,7 @@
      Presidente.ativo AS Presidente_ativo,
      Presidente.idTrabalhador AS Presidente_idTrabalhador,
      Pessoa.id AS Pessoa_id,
-     Pessoa.nomeCompleto AS Pessoa_nomeCompleto,
+     Pessoa.nome AS Pessoa_nome,
      Endereco.id AS Endereco_id,
      Endereco.bairro AS Endereco_bairro,
      Endereco.cep AS Endereco_cep,
@@ -45,7 +45,7 @@ ORDER by ENTIDADE_razaoSocial asc]]>
 	<field name="Presidente_ativo" class="java.lang.Boolean"/>
 	<field name="Presidente_idTrabalhador" class="java.lang.Integer"/>
 	<field name="Pessoa_id" class="java.lang.Integer"/>
-	<field name="Pessoa_nomeCompleto" class="java.lang.String"/>
+	<field name="Pessoa_nome" class="java.lang.String"/>
 	<field name="Endereco_id" class="java.lang.Integer"/>
 	<field name="Endereco_bairro" class="java.lang.String"/>
 	<field name="Endereco_cep" class="java.lang.String"/>
@@ -154,7 +154,7 @@ ORDER by ENTIDADE_razaoSocial asc]]>
 				<textElement verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Helvetica" size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{Pessoa_nomeCompleto}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Pessoa_nome}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="0" y="6" width="90" height="20" forecolor="#000000" backcolor="#FFFFFF"/>

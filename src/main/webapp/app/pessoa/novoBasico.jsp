@@ -13,9 +13,9 @@
             
 	                <div class="form-group">
 	                	<form:hidden path="id"/>
-			            <form:label class="col-sm-2 control-label" path="nomeCompleto">Nome Completo</form:label>
+			            <form:label class="col-sm-2 control-label" path="nome">Nome Completo</form:label>
 	                	<div class="col-sm-4">
-	                		<form:input path="nomeCompleto"  cssClass="form-control upper"
+	                		<form:input path="nome"  cssClass="form-control upper"
 	                		data-rule-required="true" 
 	                		data-msg-required="Nome é obrigatório"
 	                		autocomplete="off"
@@ -247,7 +247,7 @@
 	        return item.name;
 		}, false);
 		
-	  completePessoa($('#nomeCompleto'), $('#id'), BASEURL, function(item){
+	  completePessoa($('#nome'), $('#id'), BASEURL, function(item){
 			  var myUrl = BASEURL + "/gestao/pessoa/editBase/" + item.id;// + " #principal";
 			  //window.location.replace(myUrl);
 

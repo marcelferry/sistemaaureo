@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -48,7 +49,8 @@ public class Pessoa extends ObjetoGerenciado {
     
     private Integer codigo;
 
-    private String nomeCompleto;
+    @Column(name = "nomeCompleto")
+    private String nome;
     
     private String nomeCracha;
     
@@ -133,14 +135,14 @@ public class Pessoa extends ObjetoGerenciado {
 		// TODO Auto-generated constructor stub
 	}
 
-    public Pessoa(Integer id, String nomeCompleto, String cpf, String cidade, String estado) {
-      this(id,nomeCompleto, cpf, cidade, estado, null);
+    public Pessoa(Integer id, String nome, String cpf, String cidade, String estado) {
+      this(id,nome, cpf, cidade, estado, null);
     }
     
-	public Pessoa(Integer id, String nomeCompleto, String cpf, String cidade, String estado, String email) {
+	public Pessoa(Integer id, String nome, String cpf, String cidade, String estado, String email) {
 		super();
 		this.id = id;
-		this.nomeCompleto = nomeCompleto;
+		this.nome = nome;
 		this.cpf = cpf;
 		this.endereco = new Endereco();
 		this.endereco.setCidade(new Cidade());
@@ -154,10 +156,10 @@ public class Pessoa extends ObjetoGerenciado {
 		}
 	}
 
-	public Pessoa(Integer id, String nomeCompleto) {
+	public Pessoa(Integer id, String nome) {
 		super();
 		this.id = id;
-		this.nomeCompleto = nomeCompleto;
+		this.nome = nome;
 	}
 
 	public Integer getId() {
@@ -176,12 +178,12 @@ public class Pessoa extends ObjetoGerenciado {
 		this.codigo = codigo;
 	}
 	
-	public String getNomeCompleto() {
-		return nomeCompleto;
+	public String getNome() {
+		return nome;
 	}
 	
-	public void setNomeCompleto(String nomeCompleto) {
-		this.nomeCompleto = nomeCompleto;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	
 	public String getNomeCracha() {
@@ -334,20 +336,10 @@ public class Pessoa extends ObjetoGerenciado {
 		this.anotacoes = anotacoes;
 	}
 	
-	public String getNome(){
-		return this.nomeCompleto;
-	}
-	
 	public String getPrimeiroNome(){
-		String importado = getNomeCompleto();
+		String importado = getNome();
 		String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ') != -1? importado.substring(0, importado.indexOf(' ')): importado:""; 
 		return primeiroNome;
-	}
-	
-	public void setNome(String importado){
-		//String primeiroNome = !Util.isNullOrEmpty( importado)? importado.indexOf(' ') != -1? importado.substring(0, importado.indexOf(' ')): "":""; 
-		//String sobreNome = !Util.isNullOrEmpty(importado) ? importado.indexOf(' ') != -1? importado.substring(importado.indexOf(' ') + 1): "":""; 
-		this.nomeCompleto = importado;
 	}
 	
 	public String getPrimeiroEmail(){
@@ -395,7 +387,7 @@ public class Pessoa extends ObjetoGerenciado {
 
 	@Override
 	public String toString() {
-		return this.nomeCompleto;
+		return this.nome;
 	}
 
   @Override

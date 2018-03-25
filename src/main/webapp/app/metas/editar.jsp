@@ -185,7 +185,7 @@
 						<c:forEach items="${listContatos}" var="contato">
 						<tr>
 							<td>${contato.tipo}</td>
-							<td>${contato.nomeCompleto}</td>
+							<td>${contato.nome}</td>
 							<td>
 							<c:forEach items="${contato.telefones}" var="telefone">
 								${ telefone } <br/>

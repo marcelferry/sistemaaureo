@@ -46,7 +46,7 @@
 		                    <tbody id="ComTratativas">
 		                    <c:forEach items="${facilitadorForm.facilitadores}" var="facilitador" varStatus="status">
 								<tr>
-									<td>${facilitador.trabalhador.nomeCompleto}</td>
+									<td>${facilitador.trabalhador.nome}</td>
 									<td>${facilitador.trabalhador.primeiroEmail}</td>
 		                        	<c:if test="${ROLE_CONTROLE == 'ROLE_METAS_CONSELHO' || ROLE_CONTROLE == 'ROLE_METAS_SECRETARIA'}">
 									 <td>

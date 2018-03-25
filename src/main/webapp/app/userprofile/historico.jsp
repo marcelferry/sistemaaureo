@@ -107,7 +107,7 @@
 	                      return date;//(day.length > 1 ? day : "0" + day) + "/" + (month.length > 1 ? month : "0" + month) + "/" + date.getFullYear();
 	                   } 
 	              },
-	              { "mData": "user.pessoa.nomeCompleto", "sDefaultContent" : "" },
+	              { "mData": "user.pessoa.nome", "sDefaultContent" : "" },
 	              { "mData": "user.username", "sDefaultContent" : "" },
 	              { "mData": "userIp", "sDefaultContent" : "" },
 	              { "mData": "status", "sDefaultContent" : "" },

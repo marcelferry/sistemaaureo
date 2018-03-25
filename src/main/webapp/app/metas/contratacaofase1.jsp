@@ -50,14 +50,14 @@
 					<div class="col-sm-3 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.rodizio.ciclo}</div>
 					<c:if test="${planoMetasForm.evento == 'RODIZIO'}">
 					<label class="col-sm-2 col-xs-3 control-label">Facilitador:</label>
-					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.facilitador.nomeCompleto} </div>
+					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.facilitador.nome} </div>
 					</c:if>
 				</div>
 				<div class="form-group small">
 					<label class="col-sm-2 col-xs-3 control-label">Instituto:</label>
 					<div class="col-sm-3 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.descricao}</div>
 					<label class="col-sm-2 col-xs-3 control-label">Dirigente Nacional:</label>
-					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.dirigenteNacional.nomeCompleto}</div>
+					<div class="col-sm-5 col-xs-9 control-label" style="text-align: left;">${planoMetasForm.instituto.dirigenteNacional.nome}</div>
 				</div>
 			</fieldset>
 		</div>
@@ -97,7 +97,7 @@
 		               			<form:radiobutton path="tipoContratante" value="PRESIDENTE" data-rule-required="true" data-msg-required="Selecione o contratante"/>
 		               		</span>
 		               		<form:hidden path="presidente.id" />
-		               		<form:input path="presidente.nomeCompleto" class="form-control  input-sm" placeholder="Selecione o presidente da entidade" onblur="limparOcultos(this, 'presidente.id')" autocomplete="false"/>
+		               		<form:input path="presidente.nome" class="form-control  input-sm" placeholder="Selecione o presidente da entidade" onblur="limparOcultos(this, 'presidente.id')" autocomplete="false"/>
 							<!--<span class="input-group-btn">
 		               			<button class="btn btn-primary" type="button" >Novo</button>
 		               		</span>-->
@@ -144,10 +144,10 @@
 		               		<form:hidden path="outro.id" />
 		               		<spring:message code="hint.selecione.responsavel" var="hint_selecione_responsavel" />
 		               		<c:if test="${not empty planoMetasForm.outro.id }">
-		               		<form:input path="outro.nomeCompleto" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
+		               		<form:input path="outro.nome" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
 							</c:if>
 		               		<c:if test="${ empty planoMetasForm.outro.id }">
-		               		<form:input path="outro.nomeCompleto"  value="${ planoMetasForm.nomeContratante }" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
+		               		<form:input path="outro.nome"  value="${ planoMetasForm.nomeContratante }" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
 							</c:if>
 							<!--<span class="input-group-btn">
 		               			<button class="btn btn-primary" type="button" >Novo</button>
@@ -218,7 +218,7 @@
 		               			<form:radiobutton path="tipoContratante" value="PRESIDENTE" data-rule-required="true" data-msg-required="Selecione o contratante"/>
 		               		</span>
 		               		<form:hidden path="presidente.id" />
-		               		<form:input path="presidente.nomeCompleto" class="form-control  input-sm" placeholder="Selecione o presidente da entidade" onblur="limparOcultos(this, 'presidente.id')" autocomplete="false"/>
+		               		<form:input path="presidente.nome" class="form-control  input-sm" placeholder="Selecione o presidente da entidade" onblur="limparOcultos(this, 'presidente.id')" autocomplete="false"/>
 							<!--<span class="input-group-btn">
 		               			<button class="btn btn-primary" type="button" >Novo</button>
 		               		</span>-->
@@ -268,10 +268,10 @@
 		                		<form:hidden path="outro.id" />
 		                		<spring:message code="hint.selecione.responsavel" var="hint_selecione_responsavel" />
 		                		<c:if test="${not empty planoMetasForm.outro.id }">
-		                		<form:input path="outro.nomeCompleto" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
+		                		<form:input path="outro.nome" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
 								</c:if>
 		                		<c:if test="${ empty planoMetasForm.outro.id }">
-		                		<form:input path="outro.nomeCompleto"  value="${ planoMetasForm.nomeContratante }" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
+		                		<form:input path="outro.nome"  value="${ planoMetasForm.nomeContratante }" class="form-control input-sm" placeholder="${hint_selecione_responsavel}" onblur="limparOcultos(this, 'outro.id')" autocomplete="false"/>
 								</c:if>
 								<!--<span class="input-group-btn">
 		                			<button class="btn btn-primary" type="button" >Novo</button>
@@ -316,9 +316,9 @@
 	
    $(function() {
 
-  	 completePessoa($('#presidente\\.nomeCompleto'), $("#presidente\\.id"), BASEURL );
+  	 completePessoa($('#presidente\\.nome'), $("#presidente\\.id"), BASEURL );
   	 completePessoa($('#nomeCoordenador'), $("#coordenador\\.id"), BASEURL , updateCoordenador);
-  	 completePessoa($('#outro\\.nomeCompleto'), $("#outro\\.id"), BASEURL );
+  	 completePessoa($('#outro\\.nome'), $("#outro\\.id"), BASEURL );
   	 completeCidade($('#cidade\\.nome'), $('#cidade\\.id'), BASEURL , function(item){
 		$("#div_entidade").fadeIn('slow');
 	    $("#entidade\\.razaoSocial").focus();
@@ -423,7 +423,7 @@
 		           $('#entidade\\.telefone').text(item.telefone);
 		           $('#entidade\\.telefone').text(item.telefone);
 		           $('#presidente\\.id').val(item.idPresidente);
-		           $('#presidente\\.nomeCompleto').val(item.nomePresidente);
+		           $('#presidente\\.nome').val(item.nomePresidente);
 		           if(item.nomeDirigente != undefined && item.nomeDirigente != '' ){
 			           $('#coordenador\\.id').val(item.idDirigente);
 			           $('#nomeCoordenador').val(item.nomeDirigente);
@@ -437,12 +437,12 @@
 		           }
 		          if(item.nomeOutro != undefined && item.nomeOutro != '' ){
 			           $('#outro\\.id').val(item.idOutro);
-			           $('#outro\\.nomeCompleto').val(item.nomeOutro);
+			           $('#outro\\.nome').val(item.nomeOutro);
 			           $('#emailContratante').val(item.emailOutro);
 			           $('#telefoneContratante').val(item.telefoneOutro);
 	           		} else {
 	           			$('#outro\\.id').val("");
-				           $('#outro\\.nomeCompleto').val("");
+				           $('#outro\\.nome').val("");
 				           $('#emailContratante').val("");
 				           $('#telefoneContratante').val("");
 	           		}

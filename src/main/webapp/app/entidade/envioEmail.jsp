@@ -49,7 +49,7 @@
       	<div class="col-sm-10">
        	<div class="col-sm-12">Use os seguintes código para inserir informações dentro do seu email:</div>
        	<div class="col-sm-6"><b>&#36;{email}</b> - Email do Presidente.</div>
-       	<div class="col-sm-6"><b>&#36;{presidente.nomeCompleto}</b> - Nome do Presidente.</div>
+       	<div class="col-sm-6"><b>&#36;{presidente.nome}</b> - Nome do Presidente.</div>
        	<div class="col-sm-6"><b>&#36;{entidade.razaoSocial}</b> - Nome da Entidade.</div>
        	<div class="col-sm-6"><b>&#36;{entidade.endereco.logradouro}</b> - Endereço Entidade.</div>
        	<div class="col-sm-6"><b>&#36;{entidade.endereco.numero}</b> - Numero Entidade.</div>
