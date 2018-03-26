@@ -113,7 +113,10 @@
 
 	<filter-mapping>
 		<filter-name>OpenEntityManagerInViewFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/gestao/*</url-pattern>
+		<url-pattern>/app/*</url-pattern>
+	    <dispatcher>REQUEST</dispatcher>
+	    <dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 	
 	<!-- Encoding utility -->
