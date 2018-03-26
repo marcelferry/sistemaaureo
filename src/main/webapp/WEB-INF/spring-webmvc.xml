@@ -28,6 +28,10 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/favicon.ico"/>
+            <mvc:exclude-mapping path="/*.png"/>
+            <mvc:exclude-mapping path="/*.jpg"/>
+            <mvc:exclude-mapping path="/*.jpeg"/>
             <mvc:exclude-mapping path="/css/**"/>
             <mvc:exclude-mapping path="/fonts/**"/>
             <mvc:exclude-mapping path="/font-awesome/**"/>
