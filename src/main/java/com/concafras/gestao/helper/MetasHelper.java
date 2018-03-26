@@ -445,7 +445,9 @@ public class MetasHelper {
 		if (anotacoes != null) {
 			for (MetaEntidadeAnotacao an : anotacoes) {
 				Anotacao anot = an.getAnotacao();
-				if (anot.getNivel().equals(nivel) && an.getCiclo().equals(ciclo)) {
+				if (anot.getNivel() != null && anot.getNivel().equals(nivel) &&
+						an.getCiclo() != null && ciclo != null &&
+						an.getCiclo().getId().equals(ciclo.getId())) {
 					poosuiAnot = true;
 				}
 			}
