@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.concafras.gestao.enums.NivelAnotacao;
 import com.concafras.gestao.enums.Sinalizador;
+import com.concafras.gestao.rest.model.AnotacaoVO;
 
 @Entity
 @Table(name = "ANOTACOES")
@@ -129,6 +130,7 @@ public class Anotacao implements Serializable {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((nivel == null) ? 0 : nivel.hashCode());
     return result;
   }
 
@@ -138,14 +140,26 @@ public class Anotacao implements Serializable {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (getClass() != obj.getClass() && obj.getClass() != AnotacaoVO.class)
       return false;
-    Anotacao other = (Anotacao) obj;
+
+    if(obj instanceof Anotacao) {
+    		Anotacao other = (Anotacao) obj;
+	    if (id == null) {
+	      if (other.id != null)
+	        return false;
+	    } else if (!id.equals(other.id))
+	      return false;
+    } 
+    
+    if(obj instanceof AnotacaoVO) {
+		AnotacaoVO other = (AnotacaoVO) obj;
     if (id == null) {
-      if (other.id != null)
+      if (other.getId() != null)
         return false;
-    } else if (!id.equals(other.id))
+    } else if (!id.equals(other.getId()))
       return false;
+}
     return true;
   }
 

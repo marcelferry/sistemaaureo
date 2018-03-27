@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.concafras.gestao.form.RodizioVO;
+
 @Entity
 @Table(name="CICLOS_AVALIACAO")
 @Access(AccessType.FIELD)
@@ -164,14 +166,27 @@ public class Rodizio extends ObjetoGerenciado {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (getClass() != obj.getClass() && obj.getClass() != RodizioVO.class)
       return false;
-    Rodizio other = (Rodizio) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
+    
+    if(obj instanceof Rodizio) {
+	    Rodizio other = (Rodizio) obj;
+	    if (id == null) {
+	      if (other.id != null)
+	        return false;
+	    } else if (!id.equals(other.id))
+	      return false;
+    }
+    
+    if(obj instanceof RodizioVO) {
+	    RodizioVO other = (RodizioVO) obj;
+	    if (id == null) {
+	      if (other.getId() != null)
+	        return false;
+	    } else if (!id.equals(other.getId()))
+	      return false;
+    }
+    
     return true;
   }
 	

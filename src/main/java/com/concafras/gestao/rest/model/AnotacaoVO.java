@@ -144,16 +144,26 @@ public class AnotacaoVO {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (getClass() != obj.getClass() && obj.getClass() != Anotacao.class)
       return false;
-    AnotacaoVO other = (AnotacaoVO) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (nivel != other.nivel)
-      return false;
+    if(obj instanceof AnotacaoVO) {
+	    AnotacaoVO other = (AnotacaoVO) obj;
+	    if (id == null) {
+	      if (other.id != null)
+	        return false;
+	    } else if (!id.equals(other.id))
+	      return false;
+	    if (nivel != other.nivel)
+	      return false;
+    }
+    if(obj instanceof Anotacao) {
+			Anotacao other = (Anotacao) obj;
+	    if (id == null) {
+	      if (other.getId() != null)
+	        return false;
+	    } else if (!id.equals(other.getId()))
+	      return false;
+	} 
     return true;
   }
 

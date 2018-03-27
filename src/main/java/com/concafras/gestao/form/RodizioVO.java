@@ -132,5 +132,43 @@ public class RodizioVO {
 	public String toString() {
 		return "RodizioVO [id=" + id + ", ciclo=" + ciclo + "]";
 	}
+	
+	@Override
+	  public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result + ((id == null) ? 0 : id.hashCode());
+	    return result;
+	  }
+
+	  @Override
+	  public boolean equals(Object obj) {
+	    if (this == obj)
+	      return true;
+	    if (obj == null)
+	      return false;
+	    if (getClass() != obj.getClass() && obj.getClass() != Rodizio.class)
+	      return false;
+	    
+	    if(obj instanceof RodizioVO) {
+		    RodizioVO other = (RodizioVO) obj;
+		    if (id == null) {
+		      if (other.id != null)
+		        return false;
+		    } else if (!id.equals(other.id))
+		      return false;
+	    }
+	    
+	    if(obj instanceof Rodizio) {
+		    Rodizio other = (Rodizio) obj;
+		    if (id == null) {
+		      if (other.getId() != null)
+		        return false;
+		    } else if (!id.equals(other.getId()))
+		      return false;
+	    }
+	    
+	    return true;
+	  }
 
 }
