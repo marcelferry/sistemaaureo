@@ -1,17 +1,10 @@
-# Spring MVC and Hibernate template application
+# Projeto base do Sistema de Metas
 
-This is a template for a web application that uses Spring MVC and Hibernate. The sample code is a simple CRUD page that manipulates records for a single model object.
+## Setup do servidor na Digital Ocean
 
-## Running the application locally
+Vamos criar um servidor na digital ocean utilizando One-Click Apps com Dokku.
 
-First build with:
+Defina a **public key** e depois use no **hostname** o valor "cloud.contratacaodemetas.com.br".
 
-    $mvn clean install
-
-Then run it with:
-
-    $java -jar target/dependency/webapp-runner.jar target/*.war
-
-
-
+E marque a opção: Use virtualhost naming for apps.
 
