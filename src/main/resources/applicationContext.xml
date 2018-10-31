@@ -39,7 +39,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 	
-	<bean id="mailSenderSite" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="mail.contratacaodemetas.com.br" />
 		<property name="port" value="587" />
 		<property name="username" value="contato@contratacaodemetas.com.br" />
@@ -53,7 +53,7 @@
 		</property>
 	</bean>
 	
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSenderSite" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="465"/>
 		<property name="username" value="sistemadegestaodemetas@gmail.com"/>
