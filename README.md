@@ -33,3 +33,11 @@ Crie o banco de dados.
 ```
 dokku postgres:create aureo
 ```
+
+Faça o link da aplicação com a base.
+
+```
+dokku postgres:link aureo sistema
+```
+
+
