@@ -94,7 +94,7 @@
 	<properties>
 		<org.aspectj-version>1.7.0</org.aspectj-version>
 		<org.slf4j-version>1.7.2</org.slf4j-version>
-		<jackson.version>2.5.2</jackson.version>
+		<jackson.version>[2.8.11.1,)</jackson.version>
 		<tiles-version>2.2.2</tiles-version>
 		<hibernate.version>4.2.11.Final</hibernate.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
