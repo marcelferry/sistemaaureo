@@ -40,8 +40,6 @@ Faça o link da aplicação com a base.
 dokku postgres:link aureo sistema
 ```
 
+dokku postgres:export aureo > aureo_20181030.sql
 
-pg_dump --host=172.17.0.2 --port=5432 -U postgres aureo -f aureo_prod.sql
-
-psql --host=172.17.0.3 --port=5432 -U postgres -d aureobeta -f aureo.sql
-
+dokku postgres:import aureo < aureo_20181030.sql
