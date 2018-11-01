@@ -40,6 +40,21 @@ Faça o link da aplicação com a base.
 dokku postgres:link aureo sistema
 ```
 
-dokku postgres:export aureo > aureo_20181030.sql
+Se precisar fazer o backup antes das restauração
 
+```
+dokku postgres:export aureo > aureo_20181030.sql
+```
+
+Para fazer a restauração
+
+```
 dokku postgres:import aureo < aureo_20181030.sql
+```
+
+Adicione o servidor remoto no seu projeto de fonte.
+
+```
+git remote add dokku dokku@contratacaodemetas:sistema
+```
+
