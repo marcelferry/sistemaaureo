@@ -41,3 +41,7 @@ dokku postgres:link aureo sistema
 ```
 
 
+pg_dump --host=172.17.0.2 --port=5432 -U postgres aureo -f aureo_prod.sql
+
+psql --host=172.17.0.3 --port=5432 -U postgres -d aureobeta -f aureo.sql
+
