@@ -160,6 +160,13 @@
                             </ul>
                             <!-- /.nav-second-level -->
                          </li>
+                         <li ${utilidades?"class=\"active\"":""}>
+                       		<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Utilidades<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+					            <li><a href="/gestao/email/entidade/envio">Envio de email</a></li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                         </li>
                          <sec:authorize access="hasRole('ROLE_ADMIN')">
                          <li ${admin?"class=\"active\"":""}>
                        		<a href="#"><i class="fa fa-coffee fa-fw"></i> Administrador<span class="fa arrow"></span></a>

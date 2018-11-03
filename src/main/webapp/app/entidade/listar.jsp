@@ -40,7 +40,6 @@
 		<form action="" method="get">
 			<button type="button" onclick="this.form.action = 'add';submit();" class="btn btn-primary">Novo</button>
 			<button type="button" onclick="this.form.action = 'addBase';submit();" class="btn btn-primary">Rápido</button>
-			<button type="button" onclick="this.form.action = '/gestao/email/entidade/envio';submit();" class="btn btn-primary">Envio de email</button>
 			<button type="button" onclick="this.form.action = '/gestao/email/entidade/sendLembreteTodos/${CICLO_CONTROLE.id}';submit();" class="btn btn-primary">Enviar metas vencidas</button>
 		</form>
 	</div>
