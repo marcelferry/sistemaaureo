@@ -56,21 +56,6 @@
 	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"/>
-		<property name="port" value="587"/>
-		<property name="username" value="sistemadegestaodemetas@gmail.com"/>
-		<property name="password" value="autadesouza" />
-		
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-				<prop key="mail.debug">true</prop>
-			</props>
-		</property>
-	</bean>
-	
-	<bean id="mailSenderSite" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com"/>
 		<property name="port" value="465"/>
 		<property name="username" value="sistemadegestaodemetas@gmail.com"/>
 		<property name="javaMailProperties">
