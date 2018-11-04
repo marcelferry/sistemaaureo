@@ -51,7 +51,7 @@ public class EmailController {
   
   @RequestMapping("/entidade/envio")
   public String envioEmail(Map<String, Object> map) {
-    map.put("basicos", true);
+    map.put("utilidades", true);
     return "entidade.enviar";
   }
   
