@@ -283,7 +283,7 @@ $(document).ready(function() {
  	 	htmlContent.find('script').remove();
  	 	htmlContent.find('form').remove();
 
- 		var conteudo = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html>' + htmlContent + '</html>';
+ 		var conteudo = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n<html>' + htmlContent.html() + '</html>';
 
  		$('#impPdf').append('<input type="hidden" id="content" name="content" value="" />');
  		$('#impPdf').append('<input type="hidden" id="filename" name="filename" value="" />');
