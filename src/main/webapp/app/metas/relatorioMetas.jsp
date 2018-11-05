@@ -276,8 +276,10 @@ $(document).ready(function() {
  <script>
  	function imprimirPdf(){
 
- 	 	var htmlContent = $('html').html();
+ 	 	var htmlContentString = $('html').html();
 
+ 	 	var htmlContent = $(htmlContentString); 
+ 	 	
  	 	htmlContent.find('script').remove();
  	 	htmlContent.find('form').remove();
 
