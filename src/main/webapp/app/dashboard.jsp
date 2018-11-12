@@ -141,7 +141,7 @@
 				<c:if test="${ROLE_CONTROLE != 'ROLE_METAS_DIRIGENTE' }">
 				<div class="tab-pane" id="institutos">
 					<br />
-					<!-- In�cio Graficos Institutos -->
+					<!-- Início Graficos Institutos -->
 					<div id="institutochart" class="row"></div>
 					<!-- Termino Graficos Institutos -->
 				</div>
@@ -150,12 +150,12 @@
 
 		</c:if>
 
-		<!-- Vis�o Presidente -->
+		<!-- Visao Presidente -->
 		<c:if test="${not empty INSTITUICAO_CONTROLE}">
 			<ul class="nav nav-tabs" id="tabpresidente" role="tablist">
 				<li class="active"><a href="#ultimas" role="tab" data-toggle="tab">Metas Vencidas</a></li>
 				<li><a href="#metascontratadas" role="tab" data-toggle="tab">Metas Contratadas</a></li>
-				<li><a href="#situacaoatual" role="tab" data-toggle="tab">Situa��o Atual</a></li>
+				<li><a href="#situacaoatual" role="tab" data-toggle="tab"><spring:message code="label.situacao.atual"/></a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="ultimas">
@@ -168,13 +168,13 @@
 				</div>
 				<div class="tab-pane" id="metascontratadas">
 					<div class="col-md-12">
-						<h4>Situa��o das Metas Contratadas</h4>
+						<h4><spring:message code="titulo.situacao.contratadas" /></h4>
 						<div id="institutochart"></div>
 					</div>
 				</div>
 				<div class="tab-pane" id="situacaoatual">
 					<div class="col-md-12">
-						<h4>Situa��o Atual das Atividades</h4>
+						<h4><spring:message code="titulo.situacao.atual" /></h4>
 						<div id="presidentedesejadachart"></div>
 					</div>
 				</div>
@@ -308,7 +308,7 @@
             		$("#institutochart").html(
             				'<div class="alert alert-danger alert-dismissable">'+ 
             					'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-  								'<h4>N�o h� dados para o per�odo selecionado</h4>' + 
+  								'<h4>N&atilde;o h&aacute; dados para o per&iacute;odo selecionado</h4>' + 
 							'</div>');
             	}
             }        
@@ -624,7 +624,7 @@
 				class="display table table-bordered table-striped table-hover">\
 				<thead>\
 					<tr>\
-						<th>Previs�o</th>\
+						<th>Previs&atilde;o</th>\
 						<th>Entidade</th>\
 						<th>Cidade</th>\
 						<th>Instituto</th>\
@@ -633,7 +633,7 @@
 				</thead>\
 				<tfoot>\
 					<tr>\
-						<th>Previs�o</th>\
+						<th>Previs&atilde;o</th>\
 						<th>Entidade</th>\
 						<th>Cidade</th>\
 						<th>Instituto</th>\

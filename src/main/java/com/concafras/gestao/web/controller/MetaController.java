@@ -213,6 +213,8 @@ public class MetaController {
 		//FIX-ME
 		form = metasHelper.preencheSituacaoDesejada(meta, form, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()), true);
+		
+		contratante = pessoaService.getPessoa(contratante.getId());
 
 		form = metasHelper.preencheAnotacoes(meta, form, new PessoaOptionForm( contratante ), null, EventoMeta.POSRODIZIO,
 				new RodizioVO(plano.getRodizio()), editMode);
