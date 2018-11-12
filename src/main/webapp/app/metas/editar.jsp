@@ -8,7 +8,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h4>${metaForm.descricao}</h4>
+        <h4>${metaForm.atividade.descricao}</h4>
         <form:form method="post" action="save/${metaForm.id}" commandName="metaForm" class="form-horizontal" onsubmit="return validaForm(this); return false;">
         	<form:hidden path="id"/>
         	<form:hidden path="previsao"/>
