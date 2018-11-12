@@ -37,11 +37,11 @@
         			<td class="col-md-2"><label class="control-label">Estado Atual</label></td>
         			<td class="col-md-4">${metaForm.situacao}</td>
 <c:if test="${metaForm.tipoSituacao == 'PRECONTRATAR' || metaForm.tipoSituacao == 'CONTRATAR' || metaForm.tipoSituacao == 'REPLANEJAR'}">
-<c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta != 'META_QUANTITATIVA'}">
         			<td class="col-md-2"><label class="control-label">Previsão</label></td>
         			<td class="col-md-4"><fmt:formatDate value="${metaForm.previsao}" pattern="MMM/yyyy"/></td>
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA'}">
         			<td class="col-md-2"><label class="control-label">Previsto</label></td>
         			<td class="col-md-4">${metaForm.previsto}</td>
 </c:if>
@@ -56,7 +56,7 @@
         					<form:options />
         				</form:select>
         			</td>
-<c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta != 'META_QUANTITATIVA'}">
         			<td class="col-md-2">
         				<label id="previsaolbl" class="control-label">Previsão</label>
         				<label id="conclusaolbl" class="control-label">Conclusão</label>
@@ -66,7 +66,7 @@
         				<input:monthYear id="situacaoDesejadaconclusao" name="situacaoDesejada.conclusao" />
         			</td>
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA'}">
         			<td class="col-md-2">
 						<label id="previsaolbl" class="control-label">Previsto</label>
         				<label id="conclusaolbl" class="control-label">Realizado</label>
@@ -144,12 +144,12 @@
 							</td>
 							<td>${historico.responsavel.nome}<sup style="color: red;">${historico.tipoResponsavel}</sup></td>
 							<td>
-<c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
-	<c:if test="${metaForm.tipoMeta == 'META_EXECUCAO' || metaForm.tipoMeta == 'GRUPO_EXECUCAO'}">
+<c:if test="${metaForm.atividade.tipoMeta != 'META_QUANTITATIVA'}">
+	<c:if test="${metaForm.atividade.tipoMeta == 'META_EXECUCAO' || metaForm.atividade.tipoMeta == 'GRUPO_EXECUCAO'}">
 								<c:if test="${historico.situacao == 'IMPLANTADA'}">Realizado</c:if>
 								<c:if test="${historico.situacao == 'NAOIMPLANTADA'}">Não Realizada</c:if>
 	</c:if>
-	<c:if test="${metaForm.tipoMeta == 'META_IMPLANTACAO' || metaForm.tipoMeta == 'GRUPO_IMPLANTACAO'}">
+	<c:if test="${metaForm.atividade.tipoMeta == 'META_IMPLANTACAO' || metaForm.atividade.tipoMeta == 'GRUPO_IMPLANTACAO'}">
 								<c:if test="${historico.situacao == 'IMPLANTADA'}">Implantada</c:if>
 								<c:if test="${historico.situacao == 'IMPLPARCIAL'}">Impl. Parcial.</c:if>
 								<c:if test="${historico.situacao == 'NAOIMPLANTADA'}">Não Implantada</c:if>
@@ -159,10 +159,10 @@
 								<c:if test="${historico.situacao == 'REPLANEJADA'}">Replanejada</c:if>
 								<c:if test="${historico.situacao == 'CANCELADA'}">Canelada</c:if>
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA' && ( historico.tipoSituacao == 'INICIAL' || historico.tipoSituacao == 'CONCLUIR' || historico.tipoSituacao == 'CONCLUIR_PARCIALMENTE')}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA' && ( historico.tipoSituacao == 'INICIAL' || historico.tipoSituacao == 'CONCLUIR' || historico.tipoSituacao == 'CONCLUIR_PARCIALMENTE')}">
 								${historico.realizado}
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA' && ( historico.tipoSituacao == 'PRECONTRATAR' || historico.tipoSituacao == 'CONTRATAR' || historico.tipoSituacao == 'REPLANEJAR')}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA' && ( historico.tipoSituacao == 'PRECONTRATAR' || historico.tipoSituacao == 'CONTRATAR' || historico.tipoSituacao == 'REPLANEJAR')}">
 								${historico.previsto}
 </c:if>
 							</td>
@@ -217,11 +217,11 @@
 
 	    var conclusaolbl = $("#conclusaolbl");
 		var previsaolbl = $("#previsaolbl");
-<c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta != 'META_QUANTITATIVA'}">
 		var campoconclusao = $("#situacaoDesejadaconclusao");
 		var campoprevisao = $("#situacaoDesejadaprevisao");
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA'}">
 		var campoconclusao = $("#situacaoDesejada\\.realizado");
 		var campoprevisao = $("#situacaoDesejada\\.previsto");
 </c:if>
@@ -267,10 +267,10 @@
 
 
     function validaForm(form0){
-<c:if test="${metaForm.tipoMeta != 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta != 'META_QUANTITATIVA'}">
     	return validaFormData(form0);
 </c:if>
-<c:if test="${metaForm.tipoMeta == 'META_QUANTITATIVA'}">
+<c:if test="${metaForm.atividade.tipoMeta == 'META_QUANTITATIVA'}">
     	return validaFormNumerico(form0);
 </c:if>
     }
