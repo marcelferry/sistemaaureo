@@ -111,9 +111,10 @@ public class MetaController {
 		}
 	}
 
-	@RequestMapping(value = "/edit/save/{metaId}", method = RequestMethod.POST)
-	public String editMeta(@ModelAttribute("metaForm") MetaForm meta, HttpServletRequest request,
-			@PathVariable("metaId") Integer metaId, RedirectAttributes metaForm) {
+	@RequestMapping(value = "/edit/{cicloId}/save/{metaId}", method = RequestMethod.POST)
+	public String editMeta(@PathVariable("cicloId") Integer cicloId, @PathVariable("metaId") Integer metaId, 
+			 @ModelAttribute("metaForm") MetaForm meta, HttpServletRequest request,
+			 RedirectAttributes metaForm) {
 
 		Rodizio ciclo = (Rodizio) request.getSession().getAttribute("CICLO_CONTROLE");
 
@@ -170,9 +171,9 @@ public class MetaController {
 		MetaEntidadeAnotacao metaAnot = new MetaEntidadeAnotacao(metaEntity, ciclo, anotAux);
 		metaEntity.getAnotacoes().add(metaAnot);
 
-		metaService.update(metaEntity);
+		metaService.saveOrUpdate(metaEntity);
 
-		return "redirect:/gestao/home/dashboard/listagem";
+		return "redirect:/gestao/home/dashboard/listagem/" + cicloId;
 	}
 
 	private ModelAndView editarMeta(String forward, Integer ciclo, Integer metaId, HttpServletRequest request,

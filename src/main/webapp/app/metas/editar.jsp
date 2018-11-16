@@ -11,6 +11,7 @@
         <h4>${metaForm.atividade.descricao}</h4>
         <form:form method="post" action="save/${metaForm.id}" commandName="metaForm" class="form-horizontal" onsubmit="return validaForm(this); return false;">
         	<form:hidden path="id"/>
+        	<form:hidden path="ciclo.id"/>
         	<form:hidden path="previsao"/>
         	<form:hidden path="previsto"/>
         	<form:hidden path="tipoSituacao"/>
@@ -401,7 +402,7 @@
     		var twomonth = twodate[0];
     		var twoyear = twodate[1];
 
-    		if (new Date(oneyear, onemonth) < new Date(twoyear, twomonth)){
+    		if (new Date(oneyear, onemonth) > new Date(twoyear, twomonth)){
    			  alert('Você está concluindo isto antes do prazo previsto. Parabéns!');
    			}
 

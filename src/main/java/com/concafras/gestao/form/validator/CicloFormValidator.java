@@ -16,7 +16,7 @@ public class CicloFormValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		Rodizio ciclo = (Rodizio) obj;
+		//Rodizio ciclo = (Rodizio) obj;
 		
 	}
 }

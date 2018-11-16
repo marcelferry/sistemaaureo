@@ -25,14 +25,12 @@ import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;
 import com.concafras.gestao.model.MetaEntidadeAnotacao;
 import com.concafras.gestao.model.MetaInstituto;
-import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.model.PlanoMetas;
 import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.rest.model.AnotacaoVO;
 import com.concafras.gestao.rest.model.HistoricoMetaEntidadeVO;
 import com.concafras.gestao.rest.model.MetaInstitutoVO;
 import com.concafras.gestao.service.MetaService;
-import com.concafras.gestao.service.PessoaService;
 
 @Service
 public class MetasHelper {

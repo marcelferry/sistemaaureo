@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.concafras.gestao.enums.SituacaoMeta;
-import com.concafras.gestao.enums.TipoMeta;
 import com.concafras.gestao.enums.TipoSituacaoMeta;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.concafras.gestao.model.MetaEntidade;

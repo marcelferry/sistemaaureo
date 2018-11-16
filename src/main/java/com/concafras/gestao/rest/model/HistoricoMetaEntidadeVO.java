@@ -12,8 +12,6 @@ import com.concafras.gestao.form.PessoaOptionForm;
 import com.concafras.gestao.form.RodizioVO;
 import com.concafras.gestao.model.HistoricoMetaEntidade;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 
 public class HistoricoMetaEntidadeVO {
 

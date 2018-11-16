@@ -9,7 +9,7 @@ import com.concafras.gestao.model.security.Usuario;
 public class PasswordValidator implements Validator{
  
 	@Override
-	public boolean supports(Class clazz) {
+	public boolean supports(Class<?> clazz) {
 		//just validate the Customer instances
 		return UsuarioVO.class.isAssignableFrom(clazz);
 	}
