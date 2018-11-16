@@ -75,7 +75,7 @@ public class PlanoMetasRestController {
 	@RequestMapping(value = "/api/v1/teste", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	public @ResponseBody PessoaVO teste() {
 		Pessoa pessoa = pessoaService.getPessoa(1);
-		PessoaVO pessoaVO = pessoaServiceMapper.mapPessoaOptionFormEntityToPessoaOptionForm(pessoa);
+		PessoaVO pessoaVO = pessoaServiceMapper.mapPessoaEntityToPessoaVO(pessoa);
 		return pessoaVO;
 	}
 
