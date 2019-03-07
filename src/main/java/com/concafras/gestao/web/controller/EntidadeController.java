@@ -403,7 +403,7 @@ public class EntidadeController {
 		for (Dirigente dirigente : dirigentes2remove) {
 			if (dirigente.getId() != null) {
 				// Implementar serviço que deleta telefone.
-				dirigenteService.removeDirigente(dirigente.getId());
+				dirigenteService.delete(dirigente.getId());
 			}
 		}
 
@@ -494,7 +494,7 @@ public class EntidadeController {
 		for (Dirigente dirigente : dirigentes2remove) {
 			if (dirigente.getId() != null) {
 				// Implementar serviço que deleta telefone.
-				dirigenteService.removeDirigente(dirigente.getId());
+				dirigenteService.delete(dirigente.getId());
 			}
 		}
 		

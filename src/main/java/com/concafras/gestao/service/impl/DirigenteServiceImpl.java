@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.concafras.gestao.model.Dirigente;
+import com.concafras.gestao.model.Pessoa;
 import com.concafras.gestao.service.DirigenteService;
 import com.concafras.gestao.service.EstadoService;
 
@@ -28,24 +29,24 @@ public class DirigenteServiceImpl implements DirigenteService {
     EstadoService estadoService;
         
     @Transactional
-    public void addDirigente(Dirigente dirigente) {
+    public void save(Dirigente dirigente) {
         em.persist(dirigente);
     }
     
     @Transactional
-    public void updateDirigente(Dirigente dirigente) {
+    public void update(Dirigente dirigente) {
     	em.merge(dirigente);
     }
 
     @Transactional
-    public List<Dirigente> listDirigente() {
+    public List<Dirigente> findAll() {
         CriteriaQuery<Dirigente> c = em.getCriteriaBuilder().createQuery(Dirigente.class);
         c.from(Dirigente.class);
         return em.createQuery(c).getResultList();
     }
     
     @Transactional
-    public List<Dirigente> listDirigente(String name) {
+    public List<Dirigente> findByNome(String name) {
     	CriteriaBuilder cb = em.getCriteriaBuilder();
     	CriteriaQuery<Dirigente> c = cb.createQuery(Dirigente.class);
     	Root<Dirigente> emp = c.from(Dirigente.class);
@@ -56,9 +57,25 @@ public class DirigenteServiceImpl implements DirigenteService {
     	
     	return em.createQuery(c).getResultList();
     }
+    
+    @Transactional
+    public List<Dirigente> findByTrabalhador(Pessoa pessoa) {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Dirigente> c = cb
+          .createQuery(Dirigente.class);
+      Root<Dirigente> emp = c.from(Dirigente.class);
+
+      if (pessoa != null) {
+        List<Predicate> criteria = new ArrayList<Predicate>();
+        criteria.add(cb.equal(emp.<Pessoa> get("trabalhador"), pessoa));
+        c.where(criteria.get(0));
+      }
+
+      return em.createQuery(c).getResultList();
+    }
 
     @Transactional
-    public void removeDirigente(Integer id) {
+    public void delete(Integer id) {
         Dirigente dirigente = em.find(Dirigente.class, id);
         if (null != dirigente) {
             em.remove(dirigente);
@@ -66,7 +83,7 @@ public class DirigenteServiceImpl implements DirigenteService {
     }
 
     @Transactional
-	public Dirigente getDirigente(Integer id) {
+	public Dirigente findById(Integer id) {
 		Dirigente dirigente = em.find(Dirigente.class, id);
 		return dirigente;
 	}

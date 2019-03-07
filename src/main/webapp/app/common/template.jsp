@@ -18,6 +18,7 @@
     
     <!-- Core CSS - Include with every page -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="/css/cupertino/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">    
     <link href="/css/plugins/tooltipster/tooltipster.css" rel="stylesheet" type="text/css" />
     

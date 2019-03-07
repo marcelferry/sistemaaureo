@@ -112,6 +112,41 @@ public class EmailController {
       return true;
   }
   
+  @RequestMapping("/entidade/sendConviteTodos")
+  public @ResponseBody
+  boolean enviarConviteTodos() {
+    logger.debug("Action 'enviarConviteTodos'");
+    
+    List<Entidade> entidades = entidadeService.listEntidade();
+    for (Entidade entidade : entidades) {
+      if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null){
+        Integer pessoaId = entidade.getPresidente().getPessoa().getId();
+        Pessoa pessoa = pessoaService.getPessoa(pessoaId);
+        if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
+          continue;
+        }
+        try{
+          logger.debug("============================================");
+          logger.debug("E:" + entidade.getRazaoSocial());
+          logger.debug("P:" + pessoa.getNome());
+          enviarConvite(pessoa.getId(), entidade.getId());
+          logger.debug("OK:");
+        }catch(Exception e){
+          e.printStackTrace();
+          logger.debug("Erro:" + e.getMessage());
+        }
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    }
+    
+    return true;
+  }
+  
   @RequestMapping("/entidade/sendLembreteTodos/{ciclo}")
   public @ResponseBody
   boolean enviarLembreteTodos( @PathVariable("ciclo") Integer ciclo ) {
@@ -146,6 +181,8 @@ public class EmailController {
     
     return true;
   }
+  
+  
   @RequestMapping("/entidade/sendLembrete/{ciclo}/{entidade}/{pessoa}")
   public @ResponseBody
   boolean enviarLembrete(@PathVariable("ciclo") Integer ciclo,  @PathVariable("entidade") Integer entidade, @PathVariable("pessoa") Integer pessoa) {

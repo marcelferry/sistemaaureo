@@ -25,10 +25,12 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionR
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.concafras.gestao.model.Dirigente;
 import com.concafras.gestao.model.DirigenteNacional;
 import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.service.DirigenteNacionalService;
+import com.concafras.gestao.service.DirigenteService;
 import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.UsuarioService;
 
@@ -46,6 +48,9 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
   
   @Autowired
   private DirigenteNacionalService dirigenteNacionalService;
+  @Autowired
+
+  private DirigenteService dirigenteService;
   
   
   @Override
@@ -108,6 +113,21 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             session.setAttribute("INSTITUTO_CONTROLE",
                 institutos.get(0).getInstituto());
           }
+        }
+        
+        if(roleDefault.equals("ROLE_METAS_COORDENADOR")){
+        	List<Dirigente> institutos = dirigenteService.findByTrabalhador(user.getPessoa());
+        	
+        	if (institutos != null && institutos.size() == 1) {
+        		
+        		session.setAttribute("INSTITUTO_CONTROLE",
+        				institutos.get(0).getInstituto());
+        		
+        		session.setAttribute("INSTITUICAO_CONTROLE",
+        				institutos.get(0).getEntidade());
+        		
+        	}
+        	
         }
       }
       
