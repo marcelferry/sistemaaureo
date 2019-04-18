@@ -4,6 +4,12 @@
 
 Usar Ubuntu 16.04+ (Testado no 16.04)
 
+Vamos instalar o SSH Server:
+
+```
+sudo apt-get install openssh-server 
+```
+
 Vamos instalar o dooku:
 
 ```
@@ -17,6 +23,20 @@ Agora instalar a versão do postgres para o dokku:
 ```
 sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
 ```
+
+Adicionar a chave via root.
+
+```
+cat ~/.ssh/id_rsa.pub | ssh root@<SEUIP> dokku ssh-keys:add KEY_NAME
+```
+
+Adicionar a chave local:
+
+```
+ssh-keygen
+sudo dokku ssh-keys:add KEY_NAME ~/.ssh/id_rsa.pub
+```
+
 
 ### Preparação na máquina cliente
 
@@ -119,5 +139,10 @@ Adicione o servidor remoto no seu projeto de fonte.
 
 ```
 git remote add dokku dokku@contratacaodemetas:sistema
+```
+Para publicar a aplicaçâo
+
+```
+git push dokku master
 ```
 
