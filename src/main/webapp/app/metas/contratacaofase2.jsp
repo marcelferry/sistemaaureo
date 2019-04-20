@@ -290,7 +290,7 @@
 	                 	</div>
 	                 	<div class="form-group">
 					<div class="col-md-12">
-						<c:set var="indexAnot" value="${fn:length(planoMetasForm.anotacoes)}" scope="request"/>
+						<c:set var="indexAnot" value="${fn:length(planoMetasForm.anotacoes) - 1}" scope="request"/>
 						<c:if test="${indexAnot > 0}">
 						<script>
 							var nivel = 1;
@@ -322,6 +322,9 @@
 						</c:if>
 					</div>
 					<div class="col-md-12">
+							<c:if test="${indexAnot < 0}">
+								<c:set var="indexAnot" value="0" scope="request"/>
+							</c:if>
 							<form:hidden path="anotacoes[${indexAnot}].id" />
 						  	<form:hidden path="anotacoes[${indexAnot}].remove" />
 						  	<form:hidden path="anotacoes[${indexAnot}].nivel" />
@@ -338,6 +341,7 @@
 							    caracteresRestantes.innerHTML=(4000-this.value.length);
 							}
 							</script>
+							
 					</div>
 					<!--  div class="col-md-1">
 						<button type="button" class="btn btn-success btn-xs btnAnotacaoSuccess" data-toggle="modal" data-id="${meta.id}">
