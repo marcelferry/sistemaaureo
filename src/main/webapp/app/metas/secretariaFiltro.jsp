@@ -386,6 +386,8 @@
 				
 				entidade = $("#tableEntidade").DataTable().row( this ).data().id;
 
+				alert(entidade);
+
 				if ( ! $.fn.DataTable.isDataTable( '#tableInstituto' ) ) {
 					 
 					$("#tableInstituto").dataTable( {
@@ -394,7 +396,7 @@
 			            },
 			            "bProcessing": true,
 			            "iDisplayLength": 15,
-			            "sAjaxSource": BASEURL + '/gestao/planodemetas/secretaria/${action}/' + ciclo + '/' + entidade,
+			            "sAjaxSource": BASEURL + '/gestao/planodemetas/secretaria/${action}/' + rodizio + '/' + entidade,
 			            "fnServerData": function ( sSource, aoData, fnCallback ) {
 				            $.ajax( {
 				                "dataType": 'json',
