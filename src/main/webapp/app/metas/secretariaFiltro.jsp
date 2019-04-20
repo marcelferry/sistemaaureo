@@ -268,7 +268,9 @@
 	                { "mData": "count", "sDefaultContent" : "" },
 	                { "mData": null,
 	  	              "mRender": function(data, type, full){
-	                       return '<button type="button" class="btn btn-primary btn-xs atual" data-entidade="' + full.id + '">Atual</button>&nbsp' + '<button type="button" class="btn btn-primary btn-xs proposto" data-entidade="' + full.id + '">Proposto</button>';   // replace this with button 
+	                       return '<button type="button" class="btn btn-primary btn-xs lista" data-entidade="' + full.id + '"><i class="glyphicon glyphicon-list"></i></button>&nbsp' +
+	                       '<button type="button" class="btn btn-primary btn-xs proposto" data-entidade="' + full.id + '"><i class="glyphicon glyphicon-list"></i></button>';   // replace this with button 
+	                       //'<button type="button" class="btn btn-primary btn-xs atual" data-entidade="' + full.id + '">atual</i></button>&nbsp' + 
 	                      }
                		}, 
 	            ]
@@ -380,13 +382,12 @@
 			});
 			
 
-			$('#tableEntidade tbody').on( 'dblclick', 'tr', function () {
+			$('#tableEntidade tbody').on( 'click', '.lista', function () {
 				$('#panelEntidade').hide();
 				$('#panelInstituto').removeClass('hidden');
 				
-				entidade = $("#tableEntidade").DataTable().row( this ).data().id;
-
-				alert(entidade);
+				//entidade = $("#tableEntidade").DataTable().row( this ).data().id;
+				entidade = $(this).data('entidade');
 
 				if ( ! $.fn.DataTable.isDataTable( '#tableInstituto' ) ) {
 					 
