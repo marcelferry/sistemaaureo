@@ -83,7 +83,7 @@
 							</c:if>
                         </form>
                         <br/>
-                        <c:if test="${false}">
+                        <c:if test="${ not empty profiles && profiles[0] == 'prod'  }">
                         Primeiro acesso? Esqueceu sua senha? <b><a href="/gestao/userprofile/recuperarsenha">Entre Aqui</a></b>
                         </c:if>
                     </div>
