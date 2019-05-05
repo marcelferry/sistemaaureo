@@ -654,12 +654,12 @@ public class PlanoMetasController {
       return model;
     }
     
-    try {
+    /* try {
       String file = "metas_r_" + 2017 + "_e_" + ( entidade != null ? entidade.getId() : "null" ) + "_i_" + (instituto != null ? instituto.getId() : "null") + ".json";
       FileUtils.writeStringToFile(new File("/data/metas/" +  file), jsonInString);
     } catch (Exception e) {
       e.printStackTrace();
-    }
+    } */
 
     
     ModelAndView model = new ModelAndView("metas.conclusao");

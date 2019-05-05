@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.concafras.gestao.model.ContatoInternet;
 import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.security.Usuario;
 
 public interface EmailService {
@@ -20,7 +21,8 @@ public interface EmailService {
     public void removeEmail(Integer id);
     public void sendConfirmationEmail(Usuario usuario, String novaSenha);
     public void sendInviteEmail(Pessoa pessoa, Entidade entidade);
-    public void sendLembreteEmail(Pessoa pessoa, Entidade entidade, List vencidas, List avencer, String mesAtual, String mesAnterior);
+    public void sendLembreteTodos(Rodizio ciclo);
+    public void sendLembrete(Rodizio ciclo, Entidade entidade, Pessoa pessoa);
     public void sendInviteEmail(Pessoa pessoa, String descricao);
     public void sendEmail(Pessoa pessoa, Entidade entidade, String assunto, String mensagem);
     public void sendEmail(HttpServletRequest request, Exception ex);

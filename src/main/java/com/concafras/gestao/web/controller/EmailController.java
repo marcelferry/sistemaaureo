@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.Facilitador;
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.model.Rodizio;
 import com.concafras.gestao.model.exception.JqueryBussinessException;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.service.EmailService;
@@ -149,77 +150,28 @@ public class EmailController {
   
   @RequestMapping("/entidade/sendLembreteTodos/{ciclo}")
   public @ResponseBody
-  boolean enviarLembreteTodos( @PathVariable("ciclo") Integer ciclo ) {
-    logger.debug("Action 'enviarLembrete'");
-    
-    List<Entidade> entidades = entidadeService.listEntidade();
-    for (Entidade entidade : entidades) {
-      if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null){
-        Integer pessoaId = entidade.getPresidente().getPessoa().getId();
-        Pessoa pessoa = pessoaService.getPessoa(pessoaId);
-        if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
-          continue;
-        }
-        try{
-          logger.debug("============================================");
-          logger.debug("E:" + entidade.getRazaoSocial());
-          logger.debug("P:" + pessoa.getNome());
-          enviarLembrete(ciclo, entidade.getId(), pessoa.getId());
-          logger.debug("OK:");
-        }catch(Exception e){
-          e.printStackTrace();
-          logger.debug("Erro:" + e.getMessage());
-        }
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-      }
-    }
-    
+  boolean enviarLembreteTodos( @PathVariable("ciclo") Integer cicloId ) {
+	Rodizio ciclo = new Rodizio();
+	ciclo.setId(cicloId);
+	//TODO: change to rodizio object from session
+    emailService.sendLembreteTodos(ciclo);
     return true;
   }
   
   
   @RequestMapping("/entidade/sendLembrete/{ciclo}/{entidade}/{pessoa}")
   public @ResponseBody
-  boolean enviarLembrete(@PathVariable("ciclo") Integer ciclo,  @PathVariable("entidade") Integer entidade, @PathVariable("pessoa") Integer pessoa) {
-
-    logger.debug("Action 'enviarLembrete'");
-    
-    Calendar calendar = Calendar.getInstance();
-    Date mesAtual = calendar.getTime();
-    calendar.add(Calendar.MONTH, -1);
-    Date mesAnterior = calendar.getTime();
-    
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
-    String mesAtualtexto = sdf.format(mesAtual);
-    String mesAnteriortexto = sdf.format(mesAnterior);
-    
-    
-    Pessoa pessoaLoaded = pessoaService.getPessoa(pessoa);
-    Entidade entidadeLoaded = entidadeService.findById(entidade);
-    
-    List<ResumoMetaEntidade> vencidas = null;
-    vencidas = planoMetasService.getListaContratadoGeralData(ciclo, null,
-        entidade, null, "ATRASADO");
-    
-    List<ResumoMetaEntidade> vencer = null;
-    vencer = planoMetasService.getListaContratadoGeralData(ciclo, null,
-        entidade, null, "NO PRAZO");
-    
-    if(pessoaLoaded.getEmails() == null || pessoaLoaded.getEmails().size() == 0){
-      throw new JqueryBussinessException("Pessoa não possui email cadastrado.");
-    }
-    
-    if( 
-        (vencidas != null && !vencidas.isEmpty()) || 
-        (vencer != null && !vencer.isEmpty()) ) {
-      emailService.sendLembreteEmail(pessoaLoaded, entidadeLoaded, vencidas, vencer, mesAtualtexto, mesAnteriortexto);
-    }
-    
+  boolean enviarLembrete(@PathVariable("ciclo") Integer cicloId,  @PathVariable("entidade") Integer entidadeId, @PathVariable("pessoa") Integer pessoaId) {
+	//TODO: change to rodizio object from session
+	Rodizio ciclo = new Rodizio();
+	ciclo.setId(cicloId);
+	//TODO: Validade if exist entidade
+	Entidade entidade = new Entidade();
+	entidade.setId(entidadeId);
+	//TODO: Validade if exist pessoa
+	Pessoa pessoa = new Pessoa();
+	pessoa.setId(pessoaId);
+    emailService.sendLembrete(ciclo, entidade, pessoa);
     return true;
   }
   

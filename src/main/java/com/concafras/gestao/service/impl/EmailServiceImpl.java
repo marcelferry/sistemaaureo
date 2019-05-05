@@ -8,7 +8,10 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepositoryImpl;
 import org.apache.velocity.tools.generic.DateTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -44,22 +49,39 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import com.concafras.gestao.model.ContatoInternet;
 import com.concafras.gestao.model.Entidade;
 import com.concafras.gestao.model.Pessoa;
+import com.concafras.gestao.model.Rodizio;
+import com.concafras.gestao.model.exception.JqueryBussinessException;
 import com.concafras.gestao.model.security.Usuario;
 import com.concafras.gestao.model.view.ResumoMetaEntidade;
 import com.concafras.gestao.service.EmailService;
+import com.concafras.gestao.service.EntidadeService;
 import com.concafras.gestao.service.EstadoService;
+import com.concafras.gestao.service.PessoaService;
+import com.concafras.gestao.service.PlanoMetasService;
+import com.concafras.gestao.web.controller.EmailController;
 import com.concafras.gestao.web.controller.EntidadeController;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(EmailController.class);
 
     @PersistenceContext
     EntityManager em;
     
     @Autowired
     EstadoService estadoService;
+    
+    @Autowired
+    EntidadeService entidadeService;
+    
+    @Autowired
+    PessoaService pessoaService;
+    
+    @Autowired
+    PlanoMetasService planoMetasService;
     
     @Autowired
     private JavaMailSender mailSender;
@@ -143,7 +165,75 @@ public class EmailServiceImpl implements EmailService {
       sendMessage(this.mailSender, preparator);
    }
     
-    public void sendLembreteEmail(final Pessoa pessoa, final Entidade entidade, final List vencidas, final List avencer, final String mesAtual, final String mesAnterior) {
+    public void sendLembreteTodos(Rodizio ciclo) {
+    	logger.debug("Action 'enviarLembrete'");
+        
+        List<Entidade> entidades = entidadeService.listEntidade();
+        for (Entidade entidade : entidades) {
+          if(entidade.getPresidente() != null && entidade.getPresidente().getPessoa() != null){
+            Integer pessoaId = entidade.getPresidente().getPessoa().getId();
+            Pessoa pessoa = pessoaService.getPessoa(pessoaId);
+            if(pessoa.getEmails() == null || pessoa.getEmails().size() == 0){
+              continue;
+            }
+            try{
+              logger.debug("============================================");
+              logger.debug("E:" + entidade.getRazaoSocial());
+              logger.debug("P:" + pessoa.getNome());
+              sendLembrete(ciclo, entidade, pessoa);
+              logger.debug("OK:");
+            }catch(Exception e){
+              e.printStackTrace();
+              logger.debug("Erro:" + e.getMessage());
+            }
+            try {
+              Thread.sleep(100);
+            } catch (InterruptedException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+          }
+        }
+    }
+    
+    public void sendLembrete(Rodizio ciclo, Entidade entidade, Pessoa pessoa) {
+    	
+    	logger.debug("Action 'enviarLembrete'");
+        
+        Calendar calendar = Calendar.getInstance();
+        Date mesAtual = calendar.getTime();
+        calendar.add(Calendar.MONTH, -1);
+        Date mesAnterior = calendar.getTime();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+        String mesAtualtexto = sdf.format(mesAtual);
+        String mesAnteriortexto = sdf.format(mesAnterior);
+        
+        
+        Pessoa pessoaLoaded = pessoaService.getPessoa(pessoa.getId());
+        Entidade entidadeLoaded = entidadeService.findById(entidade.getId());
+        
+        List<ResumoMetaEntidade> vencidas = null;
+        vencidas = planoMetasService.getListaContratadoGeralData(ciclo.getId(), null,
+            entidade.getId(), null, "ATRASADO");
+        
+        List<ResumoMetaEntidade> vencer = null;
+        vencer = planoMetasService.getListaContratadoGeralData(ciclo.getId(), null,
+            entidade.getId(), null, "NO PRAZO");
+        
+        if(pessoaLoaded.getEmails() == null || pessoaLoaded.getEmails().size() == 0){
+          throw new JqueryBussinessException("Pessoa não possui email cadastrado.");
+        }
+        
+        if( 
+            (vencidas != null && !vencidas.isEmpty()) || 
+            (vencer != null && !vencer.isEmpty()) ) {
+          sendLembreteEmail(pessoaLoaded, entidadeLoaded, vencidas, vencer, mesAtualtexto, mesAnteriortexto);
+        }
+        
+    }
+    
+    private void sendLembreteEmail(final Pessoa pessoa, final Entidade entidade, final List vencidas, final List avencer, final String mesAtual, final String mesAnterior) {
       MimeMessagePreparator preparator = new MimeMessagePreparator() {
         public void prepare(MimeMessage mimeMessage) throws Exception {
           MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
