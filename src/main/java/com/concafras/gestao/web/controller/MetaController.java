@@ -337,8 +337,10 @@ public class MetaController {
 		}
 		// Add contratante
 		novocontato = new ContatoBasico("Contratante");
-		if (contratante != null && !contratante.getId().equals(presidente.getId())
-				&& !contratante.getId().equals(coordenador.getId())) {
+		if (contratante != null 
+				&& (presidente == null || !contratante.getId().equals(presidente.getId()) )
+				&& (coordenador == null || !contratante.getId().equals(coordenador.getId()) )
+			) {
 			novocontato.setNome(contratante.getNome());
 
 			for (Telefone tel : contratante.getTelefones()) {
