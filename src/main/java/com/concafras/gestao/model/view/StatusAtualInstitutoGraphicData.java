@@ -7,6 +7,7 @@ public class StatusAtualInstitutoGraphicData {
 	
 	private Integer idinstituto;
 	private String nomeInstituto;
+	private String nomeCurto;
 	private List<StatusValor> statusValor;
 	
 	public StatusAtualInstitutoGraphicData() {
@@ -14,10 +15,11 @@ public class StatusAtualInstitutoGraphicData {
 	}
 	
 	public StatusAtualInstitutoGraphicData(Integer idinstituto,
-			String nomeInstituto) {
+			String nomeInstituto, String nomeCurto) {
 		super();
 		this.idinstituto = idinstituto;
 		this.nomeInstituto = nomeInstituto;
+		this.nomeCurto = nomeCurto;
 	}
 
 
@@ -36,6 +38,14 @@ public class StatusAtualInstitutoGraphicData {
 	
 	public void setNomeInstituto(String nomeInstituto) {
 		this.nomeInstituto = nomeInstituto;
+	}
+	
+	public String getNomeCurto() {
+		return nomeCurto;
+	}
+	
+	public void setNomeCurto(String nomeCurto) {
+		this.nomeCurto = nomeCurto;
 	}
 	
 	public List<StatusValor> getStatusValor() {

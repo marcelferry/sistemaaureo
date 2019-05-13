@@ -319,12 +319,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 					if (institutoAtual != null)
 						result.add(institutoAtual);
 					institutoAtual = new StatusAtualInstitutoGraphicData((Integer) resultElement[0],
-							(String) resultElement[1]);
+							(String) resultElement[1], (String) resultElement[2]);
 					idInstituto = idAux;
 					institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 				}
 				institutoAtual.getStatusValor()
-						.add(new StatusValor((String) resultElement[2], ((BigInteger) resultElement[3]).intValue()));
+						.add(new StatusValor((String) resultElement[3], ((BigInteger) resultElement[4]).intValue()));
 				idAux = null;
 			}
 
@@ -361,12 +361,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 					if (institutoAtual != null)
 						result.add(institutoAtual);
 					institutoAtual = new StatusAtualInstitutoGraphicData((Integer) resultElement[0],
-							(String) resultElement[1]);
+							(String) resultElement[1], (String) resultElement[2]);
 					idInstituto = idAux;
 					institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 				}
 				institutoAtual.getStatusValor()
-						.add(new StatusValor((String) resultElement[3], ((BigInteger) resultElement[4]).intValue()));
+						.add(new StatusValor((String) resultElement[4], ((BigInteger) resultElement[5]).intValue()));
 
 				idAux = null;
 			}
@@ -404,12 +404,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 					if (institutoAtual != null)
 						result.add(institutoAtual);
 					institutoAtual = new StatusAtualInstitutoGraphicData((Integer) resultElement[0],
-							(String) resultElement[1]);
+							(String) resultElement[1], (String) resultElement[2]);
 					idInstituto = idAux;
 					institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 				}
 				institutoAtual.getStatusValor()
-						.add(new StatusValor((String) resultElement[2], ((BigInteger) resultElement[3]).intValue()));
+						.add(new StatusValor((String) resultElement[3], ((BigInteger) resultElement[4]).intValue()));
 
 				idAux = null;
 			}
@@ -572,7 +572,7 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 
 			List<Object[]> result2 = query.getResultList();
 
-			StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos");
+			StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos", "Todos");
 			institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 
 			for (Object[] resultElement : result2) {
@@ -700,7 +700,7 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 					if (institutoAtual != null)
 						result.add(institutoAtual);
 					institutoAtual = new StatusAtualInstitutoGraphicData((Integer) resultElement[0],
-							(String) resultElement[1]);
+							(String) resultElement[1], (String) resultElement[1]);
 					idInstituto = idAux;
 					institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 				}
@@ -753,12 +753,12 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 					if (institutoAtual != null)
 						result.add(institutoAtual);
 					institutoAtual = new StatusAtualInstitutoGraphicData((Integer) resultElement[0],
-							(String) resultElement[1]);
+							(String) resultElement[1], (String) resultElement[2]);
 					idInstituto = idAux;
 					institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 				}
 				institutoAtual.getStatusValor()
-						.add(new StatusValor((String) resultElement[2], ((BigInteger) resultElement[3]).intValue()));
+						.add(new StatusValor((String) resultElement[3], ((BigInteger) resultElement[4]).intValue()));
 
 				idAux = null;
 			}
@@ -790,7 +790,7 @@ public class PlanoMetasServiceImpl implements PlanoMetasService {
 
 		List<StatusAtualInstitutoGraphicData> result = new ArrayList<StatusAtualInstitutoGraphicData>();
 
-		StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos");
+		StatusAtualInstitutoGraphicData institutoAtual = new StatusAtualInstitutoGraphicData(0, "Todos", "Todos");
 		institutoAtual.setStatusValor(new ArrayList<StatusValor>());
 
 		for (Object[] resultElement : result2) {

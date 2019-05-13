@@ -4,6 +4,7 @@
 <!-- Page-Level Plugin CSS - Dashboard -->
 <link href="/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
 <link href="/css/plugins/timeline/timeline.css" rel="stylesheet">
+<link href="/js/plugins/ChartJs/Chart.css" rel="stylesheet">
 
 <style>
 <!--
@@ -193,10 +194,13 @@
 </div>
 
 <div id="modals" class="hidden"></div>
+<canvas id="chart-situacao-atual"></canvas>
 
 <!-- Page-Level Plugin Scripts - Dashboard -->
 <script src="/js/plugins/morris/raphael-2.1.0.min.js"></script>
 <script src="/js/plugins/morris/morris.js"></script>
+
+<script src="/js/plugins/ChartJs/Chart.js"></script>
 
 <!-- Page-Level Plugin Scripts - Tables -->
 <script type="text/javascript" src="/js/plugins/dataTables/pdfmake-0.1.18/build/pdfmake.js"></script>
@@ -225,6 +229,28 @@
 </sec:authorize>
 
 <script type="text/javascript">
+
+   var dadosStacked = {
+	        labels: [],
+	        datasets: [
+	          {
+	            label: 'Implantada',
+	            data: [],
+	            backgroundColor: '#D6E9C6',
+	          },
+	          {
+	            label: 'Previsto',
+	            data: [],
+	            backgroundColor: '#FAEBCC',
+	          },
+	          {
+	            label: 'Não Implantado',
+	            data: [],
+	            backgroundColor: '#EBCCD1',
+	          }
+	        ]
+	      };
+   
   //Flot Pie Chart
     $(function() {
     	var options = {
@@ -373,9 +399,12 @@
             	$("#presidentedesejadachart").unblock();            	
             },
             success: function (data) {
+            	
             	$.each( data, function( key, item ) {
+            		console.log(item);
             		var resultList = item.statusValor.map(function (status) {
                         var situacao = status.situacao;
+                        var situacaoOriginal = status.situacao;
                         var cor = '#fff';
                         var colors = ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2b3e50', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
                         
@@ -406,11 +435,68 @@
                         }
                         
                         situacao = situacao + " ( " + status.quantidade + " )";
-                        var bItem = { label: situacao, data: status.quantidade, color: cor };
+                        var bItem = { label: situacao, situacao: situacaoOriginal, data: status.quantidade, color: cor };
                         return bItem;//JSON.stringify(bItem);
                     });
+            		console.log(resultList);
+            		
+            		dadosStacked.labels.push(item.nomeCurto);
+            		
+           			var implantada = 0;
+           			var planejada = 0;
+           			var naoimplantada = 0;
+           			
+            		
+           			$.each( resultList, function( key, item ) {
+           				console.log(item);
+            			var situacao = item.situacao;
+            			if(situacao == 'NAOPLANEJADA'){
+	                    	naoimplantada += item.data;
+	                    } else if(situacao == 'IMPLANTADA'){
+	                    	implantada += item.data;
+	                    } else if(situacao == 'NAOINFORMADA'){
+	                    	naoimplantada += item.data;
+	                    } else if(situacao == 'PLANEJADA'){
+	                    	planejada += item.data;
+	                    } else if(situacao == 'CANCELADA'){
+	                    	naoimplantada += item.data;
+	                    } else if(situacao == 'NAOIMPLANTADA'){
+	                    	naoimplantada += item.data;
+	                    } else if(situacao == 'REPLANEJADA'){
+	                    	planejada += item.data;
+	                    } else if(situacao == 'IMPLPARCIAL'){
+	                    	implantada += item.data;
+                        }
+            		});
+
+            		var total = implantada + planejada + naoimplantada;
+           			
+            		dadosStacked.datasets[0].data.push( Math.round( implantada / total * 10000 ) / 100 );
+            		dadosStacked.datasets[1].data.push( Math.round( planejada / total * 10000 ) / 100 );
+            		dadosStacked.datasets[2].data.push( Math.round( naoimplantada / total * 10000 ) / 100);            			
+            		
+            		//dadosStacked.datasets[0].data.push( implantada  );
+            		//dadosStacked.datasets[1].data.push( planejada  );
+            		//dadosStacked.datasets[2].data.push( naoimplantada );            			
+            		
+            		console.log(dadosStacked);
+            		
                     $("#presidentedesejadachart").append(templateGrafico(item.nomeInstituto, 'des', key));
                 	var plotObj = $.plot($("#flot-pie-chart-des-" + key), resultList, options);
+                	
+                });
+            	
+            	var ctx = document.getElementById('chart-situacao-atual');
+
+                var myChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: dadosStacked,
+                  options: {
+                    scales: {
+                      xAxes: [{ stacked: true }],
+                      yAxes: [{ stacked: true }]
+                    }
+                  }
                 });
 
             }

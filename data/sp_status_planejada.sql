@@ -6,7 +6,7 @@ $BODY$
 DECLARE
     ref refcursor;
 BEGIN
-  OPEN ref FOR SELECT i.id, i.descricao, 
+  OPEN ref FOR SELECT i.id, i.descricao, i.nome,
 			-- hme.tipo_situacao, 
 			hme.situacao,
 		    CASE 
@@ -31,7 +31,7 @@ BEGIN
               where me.tipo_meta != 'GRUPO_METAS' and 
                 ( pEntidade = 0 OR me.identidade = pEntidade ) and 
                 ( pCiclo = 0 OR hme.idrodizio <= pCiclo ) 
-                group by i.id, i.descricao, 
+                group by i.id, i.descricao, i.nome, 
 			-- hme.tipo_situacao, 
 			hme.situacao   
               order by i.descricao;

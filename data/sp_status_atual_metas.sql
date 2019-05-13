@@ -10,7 +10,7 @@ DECLARE
 BEGIN
 
   CREATE TEMP TABLE TMP_STATUS_METAS ON COMMIT DROP AS
-	SELECT i.id, i.descricao, COALESCE(hme.situacao,  
+	SELECT i.id, i.descricao, i.nome, COALESCE(hme.situacao,  
 		CASE WHEN hme.realizado > 0 THEN 'IMPLANTADA'             
 		ELSE NULL        
 		END, 'NAOINFORMADA') AS situacao, count(*) AS total          
@@ -29,7 +29,7 @@ BEGIN
 		mi.tipo_meta != 'GRUPO_METAS' AND          
 		(hme.tipo_situacao = 0 OR hme.tipo_situacao IS null) AND          
 		me.identidade = pEntidade 
-	GROUP BY i.id, i.descricao, COALESCE(hme.situacao,  
+	GROUP BY i.id, i.descricao, i.nome, COALESCE(hme.situacao,  
 		CASE WHEN hme.realizado > 0 THEN 'IMPLANTADA'             
 		ELSE NULL        
 		END, 'NAOINFORMADA') 

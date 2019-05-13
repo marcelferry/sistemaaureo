@@ -6,9 +6,9 @@ $BODY$
 DECLARE
     ref refcursor;
 BEGIN
-  OPEN ref FOR SELECT idinstituto, instituto, status, count(*) 
+  OPEN ref FOR SELECT idinstituto, instituto, nomeinstituto, status, count(*) 
 	from ( 
-	  select e.id, e.razaosocial, c.nome, uf.sigla, r.ciclo, i.id as idInstituto, i.descricao as instituto, 
+	  select e.id, e.razaosocial, c.nome, uf.sigla, r.ciclo, i.id as idInstituto, i.descricao as instituto, i.nome as nomeinstituto,
           m.id, m.descricao, hme.tipo_situacao, hme.previsao, hme.conclusao, hme.previsto, hme.realizado, hme.situacao,  
           case  
 		when uf.id >= 10 and uf.id < 20 then 10 
@@ -50,7 +50,7 @@ BEGIN
 			m.tipo_meta <> 'META_QUANTITATIVA'
           order by hme.previsao, e.id, r.ciclo, m.id, hme.tipo_situacao 
       ) relstatus 
-      group by idinstituto, instituto, status 
+      group by idinstituto, instituto, nomeinstituto, status 
       order by idinstituto;
     
   RETURN ref;

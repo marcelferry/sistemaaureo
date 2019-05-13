@@ -6,7 +6,7 @@ $BODY$
 DECLARE
     ref refcursor;
 BEGIN
-  OPEN ref FOR SELECT i.id, i.descricao, 
+  OPEN ref FOR SELECT i.id, i.descricao, i.nome, 
               CASE 
                 WHEN hme.tipo_situacao = 0 AND hme.situacao = 'IMPLANTADA'  THEN 
                  hme.situacao 
@@ -25,7 +25,7 @@ BEGIN
                 ( pEntidade = 0 OR pme.identidade = pEntidade ) and 
                 ( pCiclo = 0 OR pme.idrodizio = pCiclo ) and 
                 hme.tipo_situacao <> 1 
-              group by i.id, i.descricao, hme.tipo_situacao,  
+              group by i.id, i.descricao, i.nome, hme.tipo_situacao,  
                 CASE 
                 WHEN hme.tipo_situacao = 0 AND hme.situacao = 'IMPLANTADA'  THEN 
                    hme.situacao 
